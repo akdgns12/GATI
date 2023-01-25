@@ -1,21 +1,17 @@
-import './App.css';
-import { Link, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
+import "./App.css";
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-      </Routes>
-      <Link to="/">Home</Link>
-      
-      <Link to="/about">About</Link>
-    </div>
-  );
+import AppBar from "./components/AppBar";
+
+
+class App extends React.Component {
+  render() {
+    return (
+      <div className="App">
+        <AppBar />
+      </div>
+    );
+  }
 }
 
 export default App;
