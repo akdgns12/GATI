@@ -8,6 +8,8 @@ import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
 import Diversity1OutlinedIcon from "@mui/icons-material/Diversity1Outlined";
 import PortraitOutlinedIcon from "@mui/icons-material/PortraitOutlined";
 
+import { Link } from "react-router-dom";
+
 export default function SimpleBottomNavigation() {
   const [value, setValue] = React.useState(0);
 
@@ -29,21 +31,32 @@ export default function SimpleBottomNavigation() {
           setValue(newValue);
         }}
       >
-        <BottomNavigationAction label="Home" icon={<HomeOutlinedIcon />} />
+        <BottomNavigationAction 
+          component={Link}
+          to="/"
+          label="Home" 
+          icon={<HomeOutlinedIcon />} />
         <BottomNavigationAction
+          component={Link}
+          to="/calendar"
           label="Calendar"
           icon={<CalendarMonthOutlinedIcon />}
         />
         <BottomNavigationAction
+          component={Link}
+          to="/photobook"
           label="PhotoBook"
           icon={<PhotoOutlinedIcon />}
         />
         <BottomNavigationAction
+          component={Link}
+          to="/gotg"
           label="가치가자"
           icon={<Diversity1OutlinedIcon />}
         />
-
         <BottomNavigationAction
+          component={Link}
+          to="/pictg"
           label="가치한장"
           icon={<PortraitOutlinedIcon />}
         />
