@@ -11,12 +11,24 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User getUser(String userId){
+    public User join(User user){
+        return userRepository.join(user);
+    }
+
+    public User getUserByUserId(String userId){
         return userRepository.findByUserId(userId);
     }
 
     public User getUserByUserSeq(Long userSeq){
         return userRepository.findByUserSeq(userSeq);
+    }
+
+    public User modify(User user){
+        return userRepository.modify(user);
+    }
+
+    public void deleteUser(Long userSeq){
+        userRepository.deleteByUserSeq(userSeq);
     }
 
 }
