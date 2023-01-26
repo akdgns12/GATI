@@ -22,11 +22,26 @@ export default function ArticleCard() {
     alert("move to detail page");
   };
 
+  function showOptions() {
+    console.log("show options");
+    alert("show options");
+  };
+
+  function toggleFav() {
+    console.log("add/remove this article to/from favorite");
+    alert("toggle icon effects");
+  };
+
+  function addToPhotoBook() {
+    console.log("add article to Photo Book");
+    alert("add article to photo book");
+  }
+
   return (
     <Card sx={{ maxWidth: "100%" }} style={{ marginBottom: "10px" }}>
       <CardHeader
         action={
-          <IconButton aria-label="settings">
+          <IconButton aria-label="settings" onClick={showOptions}>
             <MoreHorizIcon />
           </IconButton>
         }
@@ -42,13 +57,13 @@ export default function ArticleCard() {
       />
       
       <CardActions disableSpacing={true}>
-        <IconButton aria-label="add to favorites">
+        <IconButton aria-label="add to favorites" onClick={toggleFav}>
           <FavoriteIcon />
         </IconButton>
         { like_count }
         <div style={{ marginLeft: "auto" }}>
           <Typography variant='body4'>2023.01.26</Typography>
-          <IconButton aria-label="share">
+          <IconButton aria-label="bookmark" onClick={addToPhotoBook}>
             <BookmarkBorderIcon />
           </IconButton>
         </div>
