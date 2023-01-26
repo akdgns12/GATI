@@ -1,5 +1,6 @@
 package com.family.gati.api;
 
+import com.family.gati.dto.UserDto;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.service.UserService;
@@ -12,10 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +30,31 @@ public class UserApiController {
     private static final String FAIL = "fail";
 
     private final UserRepository userRepository;
+
     private final UserService userService;
 
+    // 회원가입
+    @PostMapping("/join")
+    @ApiOperation(value = "유저 회원가입")
+    public ResponseEntity<?> join(@RequestBody User user){
+        logger.debug("user: {}", user.toString());
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            // 로그인 처리 & token 작업시 암호화 예정
+            userService.join(user);
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.CREATED;
+        }catch (Exception e){
+            logger.debug("회원가입 실패: {}", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+    
+    
     // userSeq로 유저 정보 가져오기
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "유저 정보 리턴")
@@ -44,7 +65,7 @@ public class UserApiController {
         HttpStatus status = null;
 
         try{
-            User userInfo =  userRepository.findByUserSeq(userSeq);
+            User userInfo =  userService.getUserByUserSeq(userSeq);
             logger.debug("userInfo: {}", userInfo);
             if(userInfo == null){ // 해당 유저가 없을 때
                 status = HttpStatus.NO_CONTENT;
@@ -54,7 +75,7 @@ public class UserApiController {
                 status = HttpStatus.OK;
             }
         }catch (Exception e){
-            logger.error("유저 정보 불러오기 실패: {}", e);
+            logger.error("유저 정보 불러오기 실패: {}", e.getMessage());
             resultMap.put("msg", e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
@@ -72,7 +93,7 @@ public class UserApiController {
         HttpStatus status = null;
 
         try{
-            User userInfo = userRepository.findByUserId(userId);
+            User userInfo = userService.getUserByUserId(userId);
             logger.debug("userInfo: {}", userInfo);
             if(userInfo == null){
                 status = HttpStatus.NO_CONTENT;
@@ -88,4 +109,49 @@ public class UserApiController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
+
+    // 회원정보 변경
+    @PutMapping
+    @ApiOperation(value = "회원정보 변경")
+    public ResponseEntity<?> modify(@RequestBody User user){
+        logger.debug("user: {}", user);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            // 본인 확인 추가해야함
+            userService.modify(user);
+            String userId = new UserDto().getUserId(); // 이게 맞아? 흠..
+            User modifiedUser = userRepository.findByUserId(userId);
+            resultMap.put("msg", SUCCESS);
+            resultMap.put("modifiedUser", modifiedUser);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.error("회원정보 변경 실패: {}", e);
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    // 회원삭제
+    @DeleteMapping
+    @ApiOperation(value = "회원탈퇴", notes = "넘어온 id와 일치하는 회원 삭제")
+    public ResponseEntity<?> delete(@PathVariable Long userSeq){ // 추후 Token으로 교체해야함
+        logger.debug("userId: {}", userSeq);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            userService.deleteUser(userSeq);
+        }catch (Exception e){
+            logger.debug("회원 삭제 실패: {}", e);
+            resultMap.put("msg", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
 }
