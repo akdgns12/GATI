@@ -34,8 +34,8 @@ public class UserApiController {
     private final UserService userService;
 
     // 회원가입
-    @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입")
+    @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody User user){
         logger.debug("user: {}", user.toString());
         Map<String, Object> resultMap = new HashMap<>();
@@ -56,8 +56,8 @@ public class UserApiController {
     
     
     // userSeq로 유저 정보 가져오기
-    @GetMapping("/{userSeq}")
     @ApiOperation(value = "유저 정보 리턴")
+    @GetMapping("/{userSeq}")
     public ResponseEntity<?> getUserByUserSeq(@ApiParam(value = "path로 userSeq 전달받음") @PathVariable("userSeq") Long userSeq){
         logger.debug("userSeq: {}", userSeq);
 
@@ -84,8 +84,8 @@ public class UserApiController {
     }
 
     // userId로 유저 정보 가져오기
-    @GetMapping("/{userId}")
     @ApiOperation("유저 정보 리턴")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getUserByUserId(@ApiParam(value = "path로 userId 전달받음")@PathVariable("userId") String userId){
         logger.debug("userId: {}", userId);
 
@@ -111,8 +111,8 @@ public class UserApiController {
     }
 
     // 회원정보 변경
-    @PutMapping
     @ApiOperation(value = "회원정보 변경")
+    @PutMapping
     public ResponseEntity<?> modify(@RequestBody User user){
         logger.debug("user: {}", user);
         Map<String, Object> resultMap = new HashMap<>();
@@ -136,8 +136,8 @@ public class UserApiController {
     }
 
     // 회원삭제
-    @DeleteMapping
     @ApiOperation(value = "회원탈퇴", notes = "넘어온 id와 일치하는 회원 삭제")
+    @DeleteMapping
     public ResponseEntity<?> delete(@PathVariable Long userSeq){ // 추후 Token으로 교체해야함
         logger.debug("userId: {}", userSeq);
         Map<String, Object> resultMap = new HashMap<>();
