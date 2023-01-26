@@ -1,27 +1,24 @@
 package com.family.gati.dto;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.type.descriptor.sql.TinyIntTypeDescriptor;
-
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @RequiredArgsConstructor
-@ApiModel(value = "UserDto", description = "User info")
 public class UserDto {
 
-    private String Id;
+    private Long userSeq;
+    private String userId;
     private String email;
-    private char password;
+    private String password;
     private String nickName;
-    private char birth;
-    private char phoneNumber;
+    private String birth;
+    private String phoneNumber;
     private int mainGroup;
-    private TinyIntTypeDescriptor plusMinus;
-    private Timestamp createTime;
-    private Timestamp updateTime;
+    private int plusMinus;
+    private Date createTime;
+    private Date updateTime;
     private String accessToken;
     private String refreshToken;
     private String salt;
