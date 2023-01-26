@@ -13,11 +13,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 
 export default function ArticleCard() {
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   var comment_count = 4;
   var like_count = 3;
