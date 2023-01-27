@@ -49,12 +49,16 @@ export default function ArticleCard(props) {
         titleTypographyProps={{ variant: 'body1' }}
         style={{ textAlign: 'left' }}
       />
-      <CardMedia
+      {
+        article.img != null
+        ? <CardMedia
         component="img"
         width="100%"
         image={ article.img }
         alt="No photo"
-      />
+          />
+        : "no img"
+      }
       
       <CardActions disableSpacing={true}>
         <IconButton aria-label="add to favorites" onClick={toggleFav}>
@@ -71,13 +75,16 @@ export default function ArticleCard(props) {
 
       <CardContent>
         <Typography variant="body2" style={{ textAlign: 'left' }}>
-          { article.content }
+          {
+            article.content
+          }
         </Typography>
       </CardContent>
 
       <CardActions onClick={mvToDetail} style={{ height: "30px" }}>
         <Typography variant='body2' style={{ marginLeft: 10}}>
-          Comment { article.comment }
+          Comment &nbsp;
+          {(article.comment > 0) && article.comment}
         </Typography>
       </CardActions>
 
