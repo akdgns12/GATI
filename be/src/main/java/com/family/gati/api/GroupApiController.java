@@ -40,7 +40,7 @@ public class GroupApiController {
 
         try{
             // 그룹명 중복체크(front or back)?
-            groupService.createNewGroup(group);
+            groupService.createGroup(group);
             resultMap.put("created Group", group);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.CREATED;
@@ -98,6 +98,27 @@ public class GroupApiController {
             }
         }catch (Exception e){
             logger.debug("메인 그룹 조회 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    // 그룹 삭제
+    @ApiOperation(value = "그룹 삭제")
+    @DeleteMapping("/groupId")
+    public ResponseEntity<?> deleteGroup(@PathVariable String groupId){
+        logger.debug("groupId: {}", groupId);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            groupService.deleteGroup(groupId);
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("그룹 삭제 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }

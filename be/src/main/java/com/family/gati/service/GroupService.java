@@ -19,7 +19,10 @@ public class GroupService {
     public Group getMainGroupByUserId(String userId){
         return groupRepository.findMainByUserId(userId);
     }
-    public Group createNewGroup(Group group){
-        return groupRepository.createGroup(group);
+    public Group createGroup(Group group){
+        return groupRepository.createNewGroup(group);
+    }
+    public void deleteGroup(String groupId){
+        groupRepository.deleteByGroupId(groupId);
     }
 }
