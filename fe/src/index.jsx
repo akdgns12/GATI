@@ -9,13 +9,17 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
 import App from "./App";
+import rootReducer from "./store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const store = configureStore({ reducer: rootReducer });
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );
