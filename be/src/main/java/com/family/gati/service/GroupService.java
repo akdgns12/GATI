@@ -13,7 +13,13 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
 
-    public List<Group> getGroupByUserId(String userId){
+    public List<Group> getGroupListByUserId(String userId){
         return groupRepository.findByUserId(userId);
+    }
+    public Group getMainGroupByUserId(String userId){
+        return groupRepository.findMainByUserId(userId);
+    }
+    public Group createNewGroup(Group group){
+        return groupRepository.createGroup(group);
     }
 }
