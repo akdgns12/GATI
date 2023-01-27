@@ -12,10 +12,10 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 
-export default function ArticleCard() {
+export default function ArticleCard(props) {
 
   var comment_count = 4;
-  var like_count = 3;
+  const article = props.article;
 
   const mvToDetail = () => {
     console.log("move to detail page");
@@ -45,14 +45,14 @@ export default function ArticleCard() {
             <MoreHorizIcon />
           </IconButton>
         }
-        title="user_name"
+        title={ article.userId }
         titleTypographyProps={{ variant: 'body1' }}
         style={{ textAlign: 'left' }}
       />
       <CardMedia
         component="img"
-        height="100%"
-        image="https://picsum.photos/400/300"
+        width="100%"
+        image={ article.img }
         alt="No photo"
       />
       
@@ -60,9 +60,9 @@ export default function ArticleCard() {
         <IconButton aria-label="add to favorites" onClick={toggleFav}>
           <FavoriteIcon />
         </IconButton>
-        { like_count }
+        { article.like }
         <div style={{ marginLeft: "auto" }}>
-          <Typography variant='body4'>2023.01.26</Typography>
+          <Typography variant='body4'>{ article.createTime }</Typography>
           <IconButton aria-label="bookmark" onClick={addToPhotoBook}>
             <BookmarkBorderIcon />
           </IconButton>
@@ -71,13 +71,13 @@ export default function ArticleCard() {
 
       <CardContent>
         <Typography variant="body2" style={{ textAlign: 'left' }}>
-          short description
+          { article.content }
         </Typography>
       </CardContent>
 
       <CardActions onClick={mvToDetail} style={{ height: "30px" }}>
         <Typography variant='body2' style={{ marginLeft: 10}}>
-          Comment {comment_count}
+          Comment { article.comment }
         </Typography>
       </CardActions>
 
