@@ -19,7 +19,7 @@ export default function NotInGroup() {
 
   return (
     <div css={contStyle}>
-      <div class="head">
+      <div className="head">
         <WarningAmberIcon />
         <Typography>아직 속한 그룹이 없습니다.</Typography>
       </div>
