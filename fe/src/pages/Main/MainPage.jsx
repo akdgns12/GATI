@@ -1,33 +1,38 @@
-import React from "react";
+import { React, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { useDispatch, useSelector } from "react-redux";
 
 import ArticleCard from "../../components/Main/ArticleCard";
 import NotInGroup from "../../components/Main/NotInGroup";
 import AddButton from "../../components/Main/AddButton";
+import NoGroupAlertDialog from "../../components/Main/NoGroupAlert";
 
 const Home = () => {
   // console.log(state);
-  const { articles } = useSelector(state => state.board);
+  const { articles } = useSelector((state) => state.board);
   // const groupId = 11;
   const groupId = null;
+
+  const [show, setShow] = useState(true);
 
   if (groupId) {
     return (
       <div>
         <AddButton />
         {articles.map((article, index) => {
-          return (<ArticleCard key={index} article={article} style={{ 'margin-top': "10px" }} />)
+          return <ArticleCard key={index} article={article} style={{ "margin-top": "10px" }} />;
         })}
       </div>
     );
-  }
-  else {
+  } else {
     return (
       <div>
-        <NotInGroup />
+        <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
+        <div style={{ "margin-top": "40%" }}>
+          <NotInGroup />
+        </div>
       </div>
-    )
+    );
   }
 };
 
