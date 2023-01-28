@@ -6,12 +6,14 @@ import ArticleCard from "../../components/Main/ArticleCard";
 import NotInGroup from "../../components/Main/NotInGroup";
 import AddButton from "../../components/Main/AddButton";
 import NoGroupAlertDialog from "../../components/Main/NoGroupAlert";
+import GroupInvitation from "../../components/Notification/GroupInvitation";
 
 const Home = () => {
   // console.log(state);
   const { articles } = useSelector((state) => state.board);
   // const groupId = 11;
   const groupId = null;
+  const { notifications } = useSelector((state) => state.noti);
 
   const [show, setShow] = useState(true);
 
@@ -27,6 +29,11 @@ const Home = () => {
   } else {
     return (
       <div>
+        {notifications.invitations != null
+          ? notifications.invitations.map((invitation, index) => {
+              return <GroupInvitation key={index} invitation={invitation} />;
+            })
+          : null}
         <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
         <div style={{ "margin-top": "40%" }}>
           <NotInGroup />
