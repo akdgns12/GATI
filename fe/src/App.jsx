@@ -17,7 +17,7 @@ class App extends React.Component {
       <div className="App">
         <AppBar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/*" element={<Home />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/photobook" element={<PhotoBook />} />
           <Route path="/gotg" element={<GoTogether />} />

@@ -1,10 +1,10 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { useNavigate } from 'react-router';
 
 export default function AddButton() {
-
+  const navigate = useNavigate();
   function writeArticle() {
-    console.log("move to write article page");
-    alert("move page")
+    navigate('/post');
   };
 
   return (
