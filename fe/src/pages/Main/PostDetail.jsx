@@ -37,7 +37,6 @@ const PostDetail = () => {
       <CommentInput />
       {
         article.comments.map((comm, index) => {
-          console.log(comm);
           return <CommentView key={index} comment={comm} />;
         })
       }
