@@ -8,6 +8,8 @@ import java.util.List;
 public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findByUserId(String userId);
     Group findMainByUserId(String userId);
+    Group findByGroupId(int groupId);
     Group createNewGroup(Group group);
+    Group modifyGroupByUserId(Group group);
     void deleteByGroupId(String groupId);
 }
