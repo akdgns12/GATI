@@ -197,7 +197,7 @@ export default function PrimaryAppBar() {
             <Badge badgeContent={17} color="error">
             </Badge>
           </IconButton>
-          <React.Fragment key={anchor}>
+          {/* <React.Fragment key={anchor}> */}
           <IconButton
           size="large"
           edge="start"
@@ -207,7 +207,7 @@ export default function PrimaryAppBar() {
           style={{
             margin:0
           }}
-          onClick={toggleDrawer("right", true)}>{anchor}
+          // onClick={toggleDrawer("right", true)}>{anchor}
           >
           <MenuIcon>
           </MenuIcon>
@@ -220,7 +220,7 @@ export default function PrimaryAppBar() {
           >
             {list("right")}
           </SwipeableDrawer>
-          </React.Fragment>
+          {/* </React.Fragment> */}
           </Box>
         </Toolbar>
       </AppBar>
