@@ -1,9 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
+import CustomizedInputBase from "../../components/PhotoBook/SearchBar";
+import BasicDatePicker from "../../components/PhotoBook/DatePicker";
 class PhotoBook extends React.Component {
   render() {
-    return <h1>photo</h1>;
+    return (
+      <div>
+        <CustomizedInputBase/>
+        <BasicDatePicker/>
+      </div>
+    )
   }
 }
 
