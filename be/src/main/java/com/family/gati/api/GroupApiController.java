@@ -2,7 +2,9 @@ package com.family.gati.api;
 
 import com.family.gati.dto.GroupDto;
 import com.family.gati.entity.Group;
+import com.family.gati.entity.User;
 import com.family.gati.service.GroupService;
+import com.family.gati.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -53,7 +55,6 @@ public class GroupApiController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
-
 
     // 그룹 목록 조회
     @ApiOperation(value = "그룹 목록 조회")
