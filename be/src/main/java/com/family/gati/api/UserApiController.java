@@ -4,6 +4,7 @@ import com.family.gati.dto.UserDto;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.service.UserService;
+import com.family.gati.service.token.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -13,8 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,7 +35,8 @@ public class UserApiController {
     private static final String FAIL = "fail";
 
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
     // 회원가입
@@ -54,8 +59,47 @@ public class UserApiController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
-    
-    
+
+    /**
+     * 로그인 JWT 발급
+     * @param {userId, password}
+     * @return
+     */
+    @ApiOperation(value = "일반 로그인")
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@ApiParam(value = "userId, password를 받음") @RequestBody Map<String, String> userInfo){
+        User user = userRepository.findByUserId(userInfo.get("userId"));
+        logger.debug("userId:{} ", user);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            if(user == null){
+                resultMap.put("msg", FAIL);
+                status = HttpStatus.NO_CONTENT;
+                new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+
+            if(!passwordEncoder.matches(userInfo.get("password"), user.getPassword())){
+                logger.debug("비밀번호 불일치: {}", user.getPassword());
+                resultMap.put("msg", FAIL);
+                status = HttpStatus.NOT_FOUND;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+
+            String token = jwtTokenProvider.createToken(user.getUserId(), user.getUser_seq());
+            resultMap.put("msg", SUCCESS);
+            resultMap.put("createToken", token);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("일반 로그인 실퍠: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
     // userSeq로 유저 정보 가져오기
     @ApiOperation(value = "유저 정보 리턴")
     @GetMapping("/{userSeq}")
@@ -94,7 +138,7 @@ public class UserApiController {
         HttpStatus status = null;
 
         try{
-            Optional<User> userInfo = userService.getUserByUserId(userId);
+           User userInfo = userService.getUserByUserId(userId);
             logger.debug("userInfo: {}", userInfo);
             if(userInfo == null){
                 status = HttpStatus.NO_CONTENT;
@@ -113,15 +157,14 @@ public class UserApiController {
 
     @ApiOperation(value = "메인 그룹 선택", notes = "userId, groupId 전달받음")
     @PutMapping("/main")
-    public ResponseEntity<?> modifyMainGroup(@RequestBody Map<String, Object> map){
-        String userId = (String)map.get("userId");
-        String groupId =(String) map.get("groupId");
+    public ResponseEntity<?> modifyMainGroup(@RequestPart(value = "userId") String userId,
+                                             @RequestPart(value = "groupId") int groupId){
         logger.debug("userId: {} groupId: {}", userId + " " + groupId);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            userService.modifyMainGroup(map); // test 후 수정 필요
+            userService.modifyMainGroup(userId, groupId);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e){
@@ -136,16 +179,16 @@ public class UserApiController {
     // 회원정보 변경
     @ApiOperation(value = "회원정보 변경")
     @PutMapping
-    public ResponseEntity<?> modify(@RequestBody User user){
+    public ResponseEntity<?> update(@RequestBody User user){
         logger.debug("user: {}", user);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
             // 본인 확인 추가해야함
-            userService.modify(user);
+            userService.updateUser(user);
             String userId = new UserDto().getUserId(); // 이게 맞아? 흠..
-            Optional<User> modifiedUser = userRepository.findByUserId(userId);
+            User modifiedUser = userRepository.findByUserId(userId);
             resultMap.put("msg", SUCCESS);
             resultMap.put("modifiedUser", modifiedUser);
             status = HttpStatus.OK;
@@ -158,16 +201,28 @@ public class UserApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    // 회원삭제
-    @ApiOperation(value = "회원탈퇴", notes = "넘어온 id와 일치하는 회원 삭제")
+    // 회원 탈퇴
+    @ApiOperation(value = "회원탈퇴")
     @DeleteMapping
-    public ResponseEntity<?> delete(@PathVariable Long userSeq){ // 추후 Token으로 교체해야함
-        logger.debug("userId: {}", userSeq);
+    public ResponseEntity<?> delete(@PathVariable String token){
+        logger.debug("userId: {}", token);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
+            if(!jwtTokenProvider.validateTokenExceptExpiration(token)){
+                resultMap.put("msg", "유효하지 않은 토큰");
+                status = HttpStatus.BAD_REQUEST;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+            int userSeq = jwtTokenProvider.getUserSeq(token);
             userService.deleteUser(userSeq);
+
+            // 스프링 시큐리티 - 인증 후 인증 결과(user 객체, 권한 정보)를 담고 SecurityContext에 저장됨
+            // 회원탈퇴시 clearContext로 기존 정보 초기화
+            SecurityContextHolder.clearContext(); 
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("회원 삭제 실패: {}", e);
             resultMap.put("msg", e.getMessage());

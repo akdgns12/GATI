@@ -2,6 +2,7 @@ package com.family.gati.service;
 
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
+import com.family.gati.service.token.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,15 @@ public class SignService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-//    @Transactional
-    public MemberRegisterResponseDto registerMember(MemberRegisterRequestDto requestDto) {
+    //    @Transactional
+    public UserRegisterResponseDto registerUser(UserRegisterRequestDto requestDto) {
         validateDuplicated(requestDto.getEmail());
         User user = userRepository.save(
                 User.builder()
                         .email(requestDto.getEmail())
                         .password(passwordEncoder.encode(requestDto.getPassword()))
                         .build());
-        return new MemberRegisterResponseDto(user.getId(), user.getEmail());
+        return new UserRegisterResponseDto(user.getId(), user.getEmail());
     }
 
     /**
@@ -30,14 +31,14 @@ public class SignService {
      */
     public void validateDuplicated(String email) {
         if (userRepository.findByEmail(email).isPresent())
-            throw new MemberEmailAlreadyExistsException();
+            throw new UserEmailAlreadyExistsException();
     }
 
-    public UserLoginResponseDto loginMember(MemberLoginRequestDto requestDto) {
+    public UserLoginResponseDto loginMember(UserLoginRequestDto requestDto) {
         User user = userRepository.findByEmail(requestDto.getEmail()).orElseThrow(LoginFailureException::new);
         if (!passwordEncoder.matches(requestDto.getPassword(), member.getPassword()))
             throw new LoginFailureException();
-        return new MemberLoginResponseDto(member.getId(), jwtTokenProvider.createToken(requestDto.getEmail()));
+        return new UserLoginResponseDto(member.getId(), jwtTokenProvider.createToken(requestDto.getEmail()));
 
     }
 }

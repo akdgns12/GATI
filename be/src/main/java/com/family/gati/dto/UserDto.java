@@ -4,19 +4,16 @@ import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class UserDto {
     /**
      * entity가 알 필요 없는것
      * accessToken, salt?(추후 security에서 암호화 함)
-     *
      */
-    private Long userSeq;
+    private int userSeq;
     private String userId;
     private String email;
     private String password;
@@ -25,29 +22,27 @@ public class UserDto {
     private String phoneNumber;
     private int mainGroup;
     private int plusMinus;
-    private Date createTime;
-    private Date updateTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
     private String accessToken;
     private String refreshToken;
-    private String salt;
     private Role role;
 
-    public User toEntity(){
-        User user = User.builder()
-                .user_seq(userSeq)
-                .userId(userId)
-                .email(email)
-                .password(password)
-                .nickName(nickName)
-                .birth(birth)
-                .phoneNumber(phoneNumber)
-                .mainGroup(mainGroup)
-                .plusMinus(plusMinus)
-                .refreshToken(refreshToken)
-                .role(role.USER)
-                .build();
-
-        return user;
+    public UserDto(User user){
+        this.userSeq = user.getUser_seq();
+        this.userId = user.getUserId();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.nickName = user.getNickName();
+        this.birth = user.getBirth();
+        this.phoneNumber = user.getPhoneNumber();
+        this.mainGroup = user.getMainGroup();
+        this.plusMinus = user.getPlusMinus();
+        this.createTime = user.getCreateTime();
+        this.updateTime = user.getUpdateTime();
+        this.accessToken = user.getAccessToken();
+        this.refreshToken = user.getRefreshToken();
+        this.role = user.getRole();
     }
 
 }
