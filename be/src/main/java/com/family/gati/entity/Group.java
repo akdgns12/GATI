@@ -1,12 +1,16 @@
 package com.family.gati.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "GROUP")
+@Getter
+@Setter
 @NoArgsConstructor
 public class Group {
 
