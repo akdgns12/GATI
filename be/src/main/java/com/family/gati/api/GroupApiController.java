@@ -1,5 +1,6 @@
 package com.family.gati.api;
 
+import com.family.gati.dto.GroupDto;
 import com.family.gati.entity.Group;
 import com.family.gati.service.GroupService;
 import io.swagger.annotations.Api;
@@ -98,6 +99,31 @@ public class GroupApiController {
             }
         }catch (Exception e){
             logger.debug("메인 그룹 조회 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    // 그룹 정보 수정
+    @ApiOperation(value = "그룹 정보 수정")
+    @PutMapping
+    public ResponseEntity<?> modfiy(@RequestBody @ApiParam(value = "수정할 그룹 객체 전달받음") Group group){
+        logger.debug("group: {}", group);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            // 1. 요청받은 groupId와 같은 groupId인 group
+            int groupId = group.getId();
+            Group modifiedGroup = groupService.getGroupByGroupId(groupId);
+            groupService.modifyGroup(modifiedGroup);
+            resultMap.put("modifedGroup: {}", modifiedGroup);
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("그룹 정보 수정 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
