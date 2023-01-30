@@ -5,24 +5,30 @@ import { css } from "@emotion/react";
 import { Routes, Route } from "react-router";
 
 import LoginFrom from "../../components/Login/LoginForm";
+import { Container } from "@mui/material";
 
+import imgPath from "../../static/home_with_door.png";
 const contStyle = css`
   width: 100%;
-  .background-img {
+  height: 100vh;
+  background-image: url(${imgPath});
+  background-size: auto 100vh;
+  background-position: center;
+  .bg-test {
     width: 100%;
-    height: 100%;
-    background-color: #c8c8c8;
   }
 `;
 
 const Login = () => {
-  function doSth() { };
+  function doSth() {}
   return (
     <div css={contStyle}>
-      <div className="background-img">Awesome Background</div>
-      <Routes>
-        <Route path="/" element={<LoginFrom />} />
-      </Routes>
+      <div className="bg-text">Awesome Background</div>
+      <Container className="router-cont">
+        <Routes>
+          <Route path="/" element={<LoginFrom />} />
+        </Routes>
+      </Container>
     </div>
   );
 };
