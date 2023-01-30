@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.StatementCreatorUtils;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -104,6 +106,28 @@ public class UserApiController {
             }
         }catch (Exception e){
             logger.error("msg", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @ApiOperation(value = "메인 그룹 선택", notes = "userId, groupId 전달받음")
+    @PutMapping("/main")
+    public ResponseEntity<?> modifyMainGroup(@RequestBody Map<String, Object> map){
+        String userId = (String)map.get("userId");
+        String groupId =(String) map.get("groupId");
+        logger.debug("userId: {} groupId: {}", userId + " " + groupId);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            userService.modifyMainGroup(map); // test 후 수정 필요
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("메인 그룹 선택 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 

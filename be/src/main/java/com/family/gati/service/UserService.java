@@ -5,6 +5,8 @@ import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor // final, @NotNull 붙은 필드의 생성자 자동 생성해주는 롬복 어노테이션
 public class UserService {
@@ -23,6 +25,9 @@ public class UserService {
         return userRepository.findByUserSeq(userSeq);
     }
 
+    public void modifyMainGroup(Map<String, Object> map){
+        userRepository.modfiyGroup(map);
+    }
     public User modify(User user){
         return userRepository.modify(user);
     }
