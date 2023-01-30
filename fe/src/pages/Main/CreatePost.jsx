@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import { useNavigate } from "react-router";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Box, Button, FormControl, OutlinedInput } from "@mui/material";
@@ -49,13 +50,18 @@ const contStyle = css`
 `;
 
 const CreatePost = () => {
+  const navigate = useNavigate();
   function doSth() {
     console.log("submit form");
     alert("article posted");
+    navigate('/');
   }
 
   function backToMain() {
-    console.log("go back to prev page");
+    if (window.confirm("cancel ?")) {
+      // should be fixed
+      navigate(-1);
+    }
   }
 
   return (
