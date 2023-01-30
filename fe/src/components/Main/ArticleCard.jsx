@@ -1,4 +1,4 @@
-import * as React from "react";
+import { React } from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -10,12 +10,18 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
+import { useNavigate } from "react-router";
+
 export default function ArticleCard(props) {
+  const navigate = useNavigate();
+
   const article = props.article;
+  const variant = (props.variant == null) ? "feed" : props.variant;
 
   const mvToDetail = () => {
     console.log("move to detail page");
-    alert("move to detail page");
+    const url = "/detail/" + article.postId;
+    navigate(url);
   };
 
   function showOptions() {
@@ -34,7 +40,7 @@ export default function ArticleCard(props) {
   }
 
   return (
-    <Card sx={{ maxWidth: "100%" }} style={{ marginBottom: "10px" }}>
+    <Card style={{ marginBottom: "10px", width: "100%" }}>
       <CardHeader
         action={
           <IconButton aria-label="settings" onClick={showOptions}>
@@ -70,12 +76,18 @@ export default function ArticleCard(props) {
         </Typography>
       </CardContent>
 
-      <CardActions onClick={mvToDetail} style={{ height: "30px" }}>
-        <Typography variant="body2" style={{ marginLeft: 10 }}>
-          Comment &nbsp;
-          {article.comment > 0 && article.comment}
-        </Typography>
-      </CardActions>
+      {
+        (variant == "feed")
+          ? (
+            <CardActions onClick={mvToDetail} style={{ height: "30px" }}>
+              <Typography variant="body2" style={{ marginLeft: 10 }}>
+                Comment &nbsp;
+                {article.comment > 0 && article.comment}
+              </Typography>
+            </CardActions>
+          )
+          : null
+      }
     </Card>
   );
 }
