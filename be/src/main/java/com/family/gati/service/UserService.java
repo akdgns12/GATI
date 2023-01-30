@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor // final, @NotNull 붙은 필드의 생성자 자동 생성해주는 롬복 어노테이션
@@ -17,7 +18,7 @@ public class UserService {
         return userRepository.join(user);
     }
 
-    public User getUserByUserId(String userId){
+    public Optional<User> getUserByUserId(String userId){
         return userRepository.findByUserId(userId);
     }
 

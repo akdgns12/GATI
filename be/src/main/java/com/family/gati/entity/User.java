@@ -1,5 +1,7 @@
 package com.family.gati.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -7,8 +9,10 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "USER")
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor // 기본 생성자 세팅
+@Table(name = "USER")
 public class User {
 
     @Id // DB 테이블의 PK와 객체의 필드 매핑
@@ -38,7 +42,7 @@ public class User {
 
     @Column(name = "PHONE_NUMBER", columnDefinition = "CHAR(11)", length = 11)
     @NotNull
-    private char phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "MAIN_GROUP")
     private int mainGroup;
@@ -66,4 +70,16 @@ public class User {
     @Column(name = "SALT", length = 64)
     @NotNull
     private String salt;
+
+    @Column(name = "ROLE", length = 20)
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private Role role;
+
+    @Builder
+    public User(String userId, String password, Role role) {
+        this.userId = userId;
+        this.password = password;
+        this.role = role;
+    }
 }

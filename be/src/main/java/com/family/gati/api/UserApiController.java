@@ -13,12 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.StatementCreatorUtils;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -95,7 +94,7 @@ public class UserApiController {
         HttpStatus status = null;
 
         try{
-            User userInfo = userService.getUserByUserId(userId);
+            Optional<User> userInfo = userService.getUserByUserId(userId);
             logger.debug("userInfo: {}", userInfo);
             if(userInfo == null){
                 status = HttpStatus.NO_CONTENT;
@@ -146,7 +145,7 @@ public class UserApiController {
             // 본인 확인 추가해야함
             userService.modify(user);
             String userId = new UserDto().getUserId(); // 이게 맞아? 흠..
-            User modifiedUser = userRepository.findByUserId(userId);
+            Optional<User> modifiedUser = userRepository.findByUserId(userId);
             resultMap.put("msg", SUCCESS);
             resultMap.put("modifiedUser", modifiedUser);
             status = HttpStatus.OK;
