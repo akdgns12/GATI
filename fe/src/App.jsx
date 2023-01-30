@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import AppBar from "./components/AppBar";
@@ -10,23 +10,30 @@ import Calendar from "./pages/Calendar/CalendarPage";
 import PhotoBook from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
 import PictureTogether from "./pages/PictureTogether/PictureTogetherPage";
+import Login from "./pages/LogIn/LoginPage";
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="App">
-        <AppBar />
-        <Routes>
-          <Route path="/*" element={<Home />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/photobook" element={<PhotoBook />} />
-          <Route path="/gotg" element={<GoTogether />} />
-          <Route path="/pictg" element={<PictureTogether />} />
-        </Routes>
-        <NavBar />
-      </div>
-    );
-  }
+const App = () => {
+  const location = useLocation();
+
+  function excludeHeader() {
+    if (location.pathname.startsWith("/login")) return true;
+    else return false;
+  };
+
+  return (
+    <div className="App" >
+      {!excludeHeader() && <AppBar />}
+      <Routes>
+        <Route path="/*" element={<Home />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/photobook" element={<PhotoBook />} />
+        <Route path="/gotg" element={<GoTogether />} />
+        <Route path="/pictg" element={<PictureTogether />} />
+        <Route path="/login/*" element={<Login />} />
+      </Routes>
+      {!excludeHeader() && <NavBar />}
+    </div>
+  );
 }
 
 export default App;
