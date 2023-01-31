@@ -11,7 +11,6 @@ const contStyle = css`
 `;
 
 const CommentView = (props) => {
-  console.log(props);
   return (
     <Box css={contStyle}>
       <SubdirectoryArrowRightIcon />
