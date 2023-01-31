@@ -15,6 +15,7 @@ import java.util.Date;
 @Getter
 @Builder
 @ToString
+@RequiredArgsConstructor
 public class Plan extends BaseTimeEntity {
     @Id
     @Column(name="ID")
