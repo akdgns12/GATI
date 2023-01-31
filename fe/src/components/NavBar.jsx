@@ -35,30 +35,36 @@ export default function SimpleBottomNavigation() {
           component={Link}
           to="/"
           label="Home" 
-          icon={<HomeOutlinedIcon />} />
+          icon={<HomeOutlinedIcon />}
+          style={{color: '#EF9A9A'}} 
+        />
         <BottomNavigationAction
           component={Link}
           to="/calendar"
           label="Calendar"
           icon={<CalendarMonthOutlinedIcon />}
+          style={{color: '#EF9A9A'}}
         />
         <BottomNavigationAction
           component={Link}
           to="/photobook"
           label="PhotoBook"
           icon={<PhotoOutlinedIcon />}
+          style={{color: '#EF9A9A'}}
         />
         <BottomNavigationAction
           component={Link}
           to="/gotg"
           label="가치가자"
           icon={<Diversity1OutlinedIcon />}
+          style={{color: '#EF9A9A'}}
         />
         <BottomNavigationAction
           component={Link}
           to="/pictg"
           label="가치한장"
           icon={<PortraitOutlinedIcon />}
+          style={{color: '#EF9A9A'}}
         />
       </BottomNavigation>
     </Box>
