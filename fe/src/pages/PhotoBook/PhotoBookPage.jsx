@@ -2,19 +2,20 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import CustomizedInputBase from "../../components/PhotoBook/SearchBar";
 import BasicDatePicker from "../../components/PhotoBook/DatePicker";
-import ImageList from '../../components/PhotoBook/ImageList'
+import ImageList2 from '../../components/PhotoBook/ImageList2'
 
 class PhotoBook extends React.Component {
   render() {
     return (
-      <div>
-        <div
-          style={{display:'flex', p:'20px'}}>
-          <CustomizedInputBase/>
-          <BasicDatePicker/>
-        </div>
-        <ImageList/>
-      </div>
+      <container
+        style={{
+          display:'flex',
+          flexDirection: 'column',
+          justifyContent:'center',
+          alignItems:'center',}}>
+        <CustomizedInputBase/>
+        <ImageList2/>
+      </container>
     )
   }
 }
