@@ -3,7 +3,6 @@ package com.family.gati.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.el.CompositeELResolver;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;

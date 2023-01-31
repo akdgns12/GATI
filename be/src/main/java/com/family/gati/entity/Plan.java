@@ -1,30 +1,23 @@
 package com.family.gati.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
 @Table(name="PLAN")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
-@Builder
-@ToString
-@RequiredArgsConstructor
 public class Plan extends BaseTimeEntity {
     @Id
     @Column(name="ID")
     @GeneratedValue
     private int id;
-
-    @Column(name = "USER_ID", length = 20, unique = true)
-    @NotNull
-    private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)//user와 다대일 매핑
     @JoinColumn(name = "USER_ID")
@@ -41,22 +34,22 @@ public class Plan extends BaseTimeEntity {
     @Column(name="START_DATE")
     @Temporal(TemporalType.DATE)
     @NotNull
-    private LocalDate startDate;
+    private Date startDate;
 
     @Column(name="END_DATE")
     @Temporal(TemporalType.DATE)
     @NotNull
-    private LocalDate endDate;
+    private Date endDate;
 
     @Column(name="START_TIME")
     @Temporal(TemporalType.TIME)
     @NotNull
-    private LocalTime startTime;
+    private Date startTime;
 
     @Column(name="END_TIME")
     @Temporal(TemporalType.TIME)
     @NotNull
-    private LocalTime endTime;
+    private Date endTime;
 
     @Column(name="PLACE", length=50, nullable = true)
     private String place;
@@ -72,6 +65,23 @@ public class Plan extends BaseTimeEntity {
     @Column(name="UPDATE_TIME", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
+
+    @Builder
+    public Plan(int id, String userId, User user, int groupId, String title, Date startDate, Date endDate, Date startTime, Date endTime, String place, String memo, Date createTime, Date updateTime) {
+        this.id = id;
+        this.user = user;
+        this.groupId = groupId;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.place = place;
+        this.memo = memo;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
 
     public void setUser(User user){//user와 연관관계 정의 메소드
         if(this.user!=null){

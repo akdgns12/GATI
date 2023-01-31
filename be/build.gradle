@@ -3,7 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.8'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	// querydsl 플러그인 추가
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+//	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 
 }
 
@@ -54,7 +54,8 @@ dependencies {
 	// log4j2 추가
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 	//querydsl 추가
-	implementation 'com.querydsl:querydsl-jpa'
+//	implementation 'com.querydsl:querydsl-jpa'
+
 }
 
 configurations {
@@ -65,19 +66,19 @@ configurations {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-//querydsl 부분
-def querydslDir = "$buildDir/generated/querydsl"
-querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
-}
-sourceSets {
-	main.java.srcDir querydslDir
-}
-//컴파일 클래스 패스에 넣음.
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
+////querydsl 부분
+//def querydslDir = "$buildDir/generated/querydsl"
+//querydsl {
+//	jpa = true
+//	querydslSourcesDir = querydslDir
+//}
+//compileQuerydsl {
+//	options.annotationProcessorPath = configurations.querydsl
+//}
+//sourceSets {
+//	main.java.srcDir querydslDir
+//}
+////컴파일 클래스 패스에 넣음.
+//configurations {
+//	querydsl.extendsFrom compileClasspath
+//}
