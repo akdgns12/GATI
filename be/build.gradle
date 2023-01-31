@@ -27,6 +27,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'junit:junit:4.13.1'
+	implementation 'junit:junit:4.13.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -38,6 +40,7 @@ dependencies {
 	// swagger3.0 추가
 	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
 	// spring jdbc 추가
 	// https://mvnrepository.com/artifact/org.springframework/spring-jdbc
@@ -50,6 +53,11 @@ dependencies {
 	
 	// log4j2 추가
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	// test 추가
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
 }
 
 configurations {

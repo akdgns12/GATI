@@ -18,7 +18,7 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(false)
                 .select()
                 // basPackage 수정해야함
-                .apis(RequestHandlerSelectors.basePackage("com.example.springswagger.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.family.gati.api"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
