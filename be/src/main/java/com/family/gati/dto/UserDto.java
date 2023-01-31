@@ -45,4 +45,12 @@ public class UserDto {
         this.role = user.getRole();
     }
 
+    public UserDto(String accessToken, String refreshToken){
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

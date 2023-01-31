@@ -231,4 +231,11 @@ public class UserApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+    // 토큰 재발행
+    @ApiOperation(value = "token 재발행")
+    @PostMapping("/reissue")
+    public ResponseEntity<UserDto> createRefreshToken(@RequestBody UserDto userRequestDto){
+        UserDto userDto = userService.reIssue(userRequestDto);
+        return ResponseEntity.ok(userDto);
+    }
 }

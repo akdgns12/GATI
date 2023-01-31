@@ -96,8 +96,8 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return nickName;
+    public String getUsername() { // UserDetails 인터페이스 커스텀
+        return userId;
     }
 
     @Override

@@ -27,8 +27,8 @@ public class JwtTokenProvider {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    // 토큰 유효시간 30분
-    private long tokenValidTime = 24 * 60 * 60 * 1000L;
+    private long accessTokenValidTime = 24 * 60 * 60 * 1000L; // 하루
+    private long refreshTokenValidTime = 24 * 60 * 60 * 7 * 1000L; // 7일
 
     private final CustomUserDetailService customUserDetailService;
 
@@ -47,19 +47,31 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims) // 정보저장
                 .setIssuedAt(now) // 토큰 발행시간 정보
-                .setExpiration(new Date(now.getTime() + tokenValidTime)) // 만료시간
+                .setExpiration(new Date(now.getTime() + accessTokenValidTime)) // 만료시간
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 사용할 알고리즘과 sigature에 들어갈 secretKey 값
+                .compact();
+    }
+
+    // refreshToken 발급
+    public String createRefreshToken(String userId, int userSeq){ 
+        // 오직 재발행 목적으로만, sub 불필요
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
     // 토큰으로 인증객체(Authentication)을 얻기 위한 메서드
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(getMemberEmail(token));
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(getUserEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
     
     // JWT 복호화해서 유저정보 얻기
-    public String getMemberEmail(String token) {
+    public String getUserEmail(String token) {
         try {
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
         } catch(ExpiredJwtException e) {
