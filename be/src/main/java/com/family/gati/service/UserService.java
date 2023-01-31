@@ -39,6 +39,7 @@ public class UserService {
         user.setUpdateTime(LocalDateTime.now());
         /*
             token?
+            아냐, 회원가입 후 로그인할 때 토큰 생성해주는게 맞지
          */
         user.setRole(Role.USER);
 
@@ -75,11 +76,7 @@ public class UserService {
         user.setUpdateTime(LocalDateTime.now());
         user.setNickName(user.getNickName());
 
-        try{
-            userRepository.save(user);
-        }catch (Exception e){
-
-        }
+        userRepository.save(user);
     }
 
     @Transactional
@@ -87,11 +84,16 @@ public class UserService {
         userRepository.deleteByUserSeq(userSeq);
     }
 
+    // 아이디 중복 체크
     private void validateDuplicateUser(User user){
         User findUser = userRepository.findByEmail(user.getUserId());
-        if(findUser != null){
-            throw new IllegalStateException("일치하는 아이디 이미 존재");
-        }
+        if(findUser != null) throw new IllegalStateException("일치하는 아이디 이미 존재");
+    }
+
+    // 이메일 중복 체크
+    private void validateDuplicateEmail(String email){
+        User findUser = userRepository.findByEmail(email);
+        if(findUser != null) throw new IllegalStateException(("이미 존재하는 이메일"));
     }
 
 }

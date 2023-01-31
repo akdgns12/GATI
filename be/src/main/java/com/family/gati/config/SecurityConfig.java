@@ -1,6 +1,5 @@
 package com.family.gati.config;
 
-import com.family.gati.config.auth.FormAuthenticationProvider;
 import com.family.gati.exception.FormAuthenticationFailureHandler;
 import com.family.gati.exception.FormAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
