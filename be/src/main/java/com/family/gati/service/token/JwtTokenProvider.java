@@ -75,7 +75,7 @@ public class JwtTokenProvider {
 
     // 토큰은 HTTP Header에 저장되어 계속 이용됨(토큰을 사용하기 위해 실제로 Header에서 꺼내오는 메서드)
     public String resolveToken(HttpServletRequest req) {
-        return req.getHeader("X-AUTH-TOKEN");
+        return req.getHeader("Authorization");
     }
 
     // 토큰 유효성 + 만료일자 체크
