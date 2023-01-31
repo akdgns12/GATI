@@ -1,6 +1,6 @@
 package com.family.gati.config.auth;
 
-import com.family.gati.service.token.JwtTokenProvider;
+import com.family.gati.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

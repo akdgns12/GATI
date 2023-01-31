@@ -29,7 +29,7 @@ public class UserDto {
     private Role role;
 
     public UserDto(User user){
-        this.userSeq = user.getUser_seq();
+        this.userSeq = user.getUserSeq();
         this.userId = user.getUserId();
         this.email = user.getEmail();
         this.password = user.getPassword();

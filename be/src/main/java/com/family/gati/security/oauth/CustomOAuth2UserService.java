@@ -1,18 +1,26 @@
-package com.family.gati.service.auth;
+package com.family.gati.security.oauth;
 
+import com.family.gati.entity.AuthProvider;
+import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
+import com.family.gati.exception.OAuthProcessingException;
 import com.family.gati.repository.UserRepository;
+import com.family.gati.security.oauth.user.OAuth2UserInfo;
+import com.family.gati.security.oauth.user.OAuth2UserInfoFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
 
-import java.security.AuthProvider;
 import java.util.Optional;
 
+@Slf4j
+@Service
 @RequiredArgsConstructor
-public class CustomOauth2UserService extends DefaultOAuth2UserService {
+public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
 
@@ -50,9 +58,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     private User createUser(OAuth2UserInfo userInfo, AuthProvider authProvider) {
         User user = User.builder()
                 .email(userInfo.getEmail())
-                .img(userInfo.getImageUrl())
-                .role(UserRole.USER)
-                .state(UserState.ACT)
+                .role(Role.USER)
+//                .state(UserState.ACT)
                 .authProvider(authProvider)
                 .build();
         return userRepository.save(user);

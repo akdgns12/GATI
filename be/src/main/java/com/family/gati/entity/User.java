@@ -12,13 +12,13 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
 @Builder
 @Getter @Setter
+@ToString
 @NoArgsConstructor // 기본 생성자 세팅
 @AllArgsConstructor
 @Table(name = "USER")
@@ -26,8 +26,8 @@ public class User implements UserDetails {
 
     @Id // DB 테이블의 PK와 객체의 필드 매핑
     @Column(name = "USER_SEQ")
-    @GeneratedValue // 기본 키 자동 생성
-    private int user_seq;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 생성 DB에 위임(id값 null이면 AUTO_INCREMENT)
+    private int userSeq;
 
     @Column(name = "USER_ID", length = 20, unique = true)
     @NotNull
@@ -68,10 +68,6 @@ public class User implements UserDetails {
     @Column(columnDefinition = "TIMESTAMP DEFAULT NULL ON CURRENT_TIMESTAMP")
     private LocalDateTime updateTime;
 
-    @Column(name = "ACCESS_TOKEN", length = 200)
-    @NotNull
-    private String accessToken;
-
     @Column(name = "REFRESH_TOKEN", length = 200)
     @NotNull
     private String refreshToken;
@@ -79,6 +75,9 @@ public class User implements UserDetails {
     @Column(name = "ROLE", length = 20)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
     /**
      * Spring Security 회원 가입
@@ -121,7 +120,7 @@ public class User implements UserDetails {
     }
 
     public User(
-            int user_seq,
+            int userSeq,
             String userId,
             String email,
             String password,
@@ -132,11 +131,10 @@ public class User implements UserDetails {
             int plusMinus,
             LocalDateTime createTime,
             LocalDateTime updateTime,
-            String accessToken,
             String refreshToken,
             Role role
     ){
-        this.user_seq = user_seq;
+        this.userSeq = userSeq;
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -147,7 +145,6 @@ public class User implements UserDetails {
         this.plusMinus = plusMinus;
         this.createTime = createTime;
         this.updateTime = updateTime;
-        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.role = role;
     }

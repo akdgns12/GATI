@@ -3,9 +3,8 @@ package com.family.gati.service;
 import com.family.gati.dto.UserDto;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
-import com.family.gati.exception.InvalidTokenException;
 import com.family.gati.repository.UserRepository;
-import com.family.gati.service.token.JwtTokenProvider;
+import com.family.gati.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -110,8 +109,8 @@ public class UserService {
         if (!user.getRefreshToken().equals(userDto.getRefreshToken()))
             throw new InvalidTokenException();
 
-        String accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getUser_seq());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getUserId(), user.getUser_seq());
+        String accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getUserSeq());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getUserId(), user.getUserSeq());
         userDto.updateRefreshToken(refreshToken);
         return new UserDto(accessToken, refreshToken);
     }

@@ -4,7 +4,7 @@ import com.family.gati.dto.UserDto;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.service.UserService;
-import com.family.gati.service.token.JwtTokenProvider;
+import com.family.gati.security.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,7 +85,7 @@ public class UserApiController {
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
-            String token = jwtTokenProvider.createToken(user.getUserId(), user.getUser_seq());
+            String token = jwtTokenProvider.createAccessToken(user.getUserId(), user.getUserSeq());
             resultMap.put("msg", SUCCESS);
             resultMap.put("createToken", token);
             status = HttpStatus.OK;
@@ -209,12 +208,13 @@ public class UserApiController {
         HttpStatus status = null;
 
         try{
-            if(!jwtTokenProvider.validateTokenExceptExpiration(token)){
+            if(!jwtTokenProvider.validateToken(token)){
                 resultMap.put("msg", "유효하지 않은 토큰");
                 status = HttpStatus.BAD_REQUEST;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
-            int userSeq = jwtTokenProvider.getUserSeq(token);
+            // JwtTokenProvider에 작성 필요
+            int userSeq = jwtTokenProvider.getUserSeq(token);  
             userService.deleteUser(userSeq);
 
             // 스프링 시큐리티 - 인증 후 인증 결과(user 객체, 권한 정보)를 담고 SecurityContext에 저장됨
@@ -231,11 +231,11 @@ public class UserApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    // 토큰 재발행
-    @ApiOperation(value = "token 재발행")
-    @PostMapping("/reissue")
-    public ResponseEntity<UserDto> createRefreshToken(@RequestBody UserDto userRequestDto){
-        UserDto userDto = userService.reIssue(userRequestDto);
-        return ResponseEntity.ok(userDto);
-    }
+//    // 토큰 재발행
+//    @ApiOperation(value = "token 재발행")
+//    @PostMapping("/reissue")
+//    public ResponseEntity<UserDto> createRefreshToken(@RequestBody UserDto userRequestDto){
+//        UserDto userDto = userService.reIssue(userRequestDto);
+//        return ResponseEntity.ok(userDto);
+//    }
 }
