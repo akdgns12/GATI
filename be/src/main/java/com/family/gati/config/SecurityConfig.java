@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 인증 과정이 끝나면 인증 code와 함께 리다이렉트할 URI
                 .redirectionEndpoint()
-                .baseUri("login/oauth/code/*")
+                .baseUri("login/oauth2/code/*")
                 .and()
                 // Provider로부터 획득한 유저정보를 다룰 service class 지정
                 .userInfoEndpoint()
