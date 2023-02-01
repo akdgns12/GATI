@@ -9,6 +9,7 @@ import { Container } from "@mui/material";
 import LoginFrom from "../../components/Login/LoginForm";
 import SignUpForm from "../../components/Login/SignUpForm";
 import FindID from "../../components/Login/FindID";
+import FindPW from "../../components/Login/FindPW";
 
 import FindResult from "../../components/Login/FindResult";
 
@@ -35,7 +36,7 @@ const Login = () => {
           <Route path="/" element={<LoginFrom />} />
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/findID" element={<FindID />} />
-          <Route path="/findPW" element={<FindID />} />
+          <Route path="/findPW" element={<FindPW />} />
           <Route path="/findRes" element={<FindResult />} />
         </Routes>
       </Container>
