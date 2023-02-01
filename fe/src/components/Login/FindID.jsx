@@ -10,7 +10,7 @@ const contStyle = css`
   width: 100%;
   margin-top: 33vh;
   border-radius: 10px;
-  background-color: rgba(255,255,255, 075);
+  background-color: rgba(255,255,255, 0.75);
   .form-box{
     width: 100%;
     .labeled-box {
