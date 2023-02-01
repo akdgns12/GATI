@@ -60,7 +60,8 @@ const FindID = () => {
 
   function submitForm(event) {
     event.preventDefault();
-    console.log(event.target.email.value);
+    const userEmail = event.target.email.value;
+    navigate("/login/findRes", { state: { mode: "ID", email: userEmail } });
   }
 
   return (
