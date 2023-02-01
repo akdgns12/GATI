@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import ReactDOM from "react-dom/client";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Container, Box, TextField, Button, Input, FormHelperText, InputLabel } from "@mui/material";
+import { Container, Box, TextField, Button, Input, FormHelperText, InputLabel, ToggleButtonGroup, ToggleButton } from "@mui/material";
 
 const contStyle = css`
   max-width: 300px;
@@ -26,6 +26,17 @@ const contStyle = css`
       .text-form {
         margin-top: 2px;
       }
+      .double-box{
+        display: flex;
+        justify-content: space-between;
+        .date-form{
+          width: 55%;
+        }
+        .cal-btn{
+          width: 40%;
+          max-height: inherit;
+        }
+      }
     }
     .submit-btn {
       margin-top : 10px;
@@ -39,6 +50,7 @@ const SignUpForm = () => {
   const [currentPW, setCurrentPW] = useState("");
   const [checkedPW, setCheckedPW] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
+  const [calType, setCalType] = useState("gregorian");
   const [isLast, setIsLast] = useState(false);
 
   const inputRef = useRef([]);
@@ -94,6 +106,10 @@ const SignUpForm = () => {
 
   function toPrev() {
     setIsLast(false);
+  }
+
+  function handleCalType(event, newType) {
+    setCalType(newType);
   }
 
   return (
@@ -173,22 +189,56 @@ const SignUpForm = () => {
           />
         </Box>
 
-        <TextField
-          fullWidth
-          className="text-form"
-          type="text"
-          name="nickname"
-          placeholder="Nickname"
-          style={{ display: isLast ? 'block' : 'none' }}
-        />
-        <TextField
-          fullWidth
-          className="text-form"
-          type="number"
-          name="tel"
-          placeholder="number"
-          style={{ display: isLast ? 'block' : 'none' }}
-        />
+        <Box className="labeled-box" style={{ display: isLast ? 'block' : 'none' }}>
+          <Box className="label-box">
+            <InputLabel className="form-label">이름</InputLabel>
+          </Box>
+          <TextField
+            required={(isLast) ? true : false}
+            fullWidth
+            className="text-form"
+            type="text"
+            name="nickname"
+            placeholder="Nickname"
+          />
+        </Box>
+        <Box className="labeled-box" style={{ display: isLast ? 'block' : 'none' }}>
+          <Box className="label-box">
+            <InputLabel className="form-label">전화번호</InputLabel>
+          </Box>
+          <TextField
+            required={(isLast) ? true : false}
+            fullWidth
+            className="text-form"
+            type="number"
+            name="tel"
+            placeholder="number"
+          />
+        </Box>
+        <Box className="labeled-box" style={{ display: isLast ? 'block' : 'none' }}>
+          <Box className="label-box">
+            <InputLabel className="form-label">생일</InputLabel>
+          </Box>
+          <Box className="double-box">
+            <TextField
+              required={(isLast) ? true : false}
+              fullWidth
+              className="date-form"
+              type="date"
+              name="BD"
+              placeholder="YYYY-MM-DD"
+            />
+            <ToggleButtonGroup
+              value={calType}
+              className="cal-btn"
+              onChange={handleCalType}
+              exclusive
+            >
+              <ToggleButton value="gregorian">양력</ToggleButton>
+              <ToggleButton value="lunar">음력</ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
+        </Box>
 
         <Button
           variant="outlined"
@@ -199,12 +249,9 @@ const SignUpForm = () => {
         >
           {
             isLast
-              ? "Submit"
-              : "Next"
+              ? "완료"
+              : "다음"
           }
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={toPrev} style={{ display: isLast ? 'block' : 'none' }}>
-          back
         </Button>
       </Box>
     </Container>
