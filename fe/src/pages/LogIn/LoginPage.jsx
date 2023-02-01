@@ -10,6 +10,8 @@ import LoginFrom from "../../components/Login/LoginForm";
 import SignUpForm from "../../components/Login/SignUpForm";
 import FindID from "../../components/Login/FindID";
 
+import FindResult from "../../components/Login/FindResult";
+
 import imgPath from "../../static/home_with_door.png";
 
 const contStyle = css`
@@ -33,6 +35,8 @@ const Login = () => {
           <Route path="/" element={<LoginFrom />} />
           <Route path="/signup" element={<SignUpForm />} />
           <Route path="/findID" element={<FindID />} />
+          <Route path="/findPW" element={<FindID />} />
+          <Route path="/findRes" element={<FindResult />} />
         </Routes>
       </Container>
     </div>
