@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
  import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class UserApiController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final Authentication authentication;
 
     // 회원가입
     @ApiOperation(value = "유저 회원가입")
@@ -65,7 +67,7 @@ public class UserApiController {
      */
     @ApiOperation(value = "일반 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@ApiParam(value = "userId, password를 받음") @RequestBody Map<String, String> userInfo){
+    public ResponseEntity<?> login(@ApiParam(value = "userId, password 받음") @RequestBody Map<String, String> userInfo){
         User user = userRepository.findByUserId(userInfo.get("userId"));
         logger.debug("userId:{} ", user);
         Map<String, Object> resultMap = new HashMap<>();
@@ -85,7 +87,12 @@ public class UserApiController {
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
-            String token = jwtTokenProvider.createAccessToken(user.getUserId(), user.getUserSeq());
+
+            String userId = user.getUserId();
+            int userSeq = user.getUserSeq();
+
+            // accessToken 발급
+            String token = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
             resultMap.put("msg", SUCCESS);
             resultMap.put("createToken", token);
             status = HttpStatus.OK;
@@ -231,11 +238,7 @@ public class UserApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-//    // 토큰 재발행
-//    @ApiOperation(value = "token 재발행")
-//    @PostMapping("/reissue")
-//    public ResponseEntity<UserDto> createRefreshToken(@RequestBody UserDto userRequestDto){
-//        UserDto userDto = userService.reIssue(userRequestDto);
-//        return ResponseEntity.ok(userDto);
-//    }
+    /*
+        소셜
+     */
 }
