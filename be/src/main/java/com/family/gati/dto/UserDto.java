@@ -24,7 +24,6 @@ public class UserDto {
     private int plusMinus;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-    private String accessToken;
     private String refreshToken;
     private Role role;
 
@@ -40,13 +39,11 @@ public class UserDto {
         this.plusMinus = user.getPlusMinus();
         this.createTime = user.getCreateTime();
         this.updateTime = user.getUpdateTime();
-        this.accessToken = user.getAccessToken();
         this.refreshToken = user.getRefreshToken();
         this.role = user.getRole();
     }
 
-    public UserDto(String accessToken, String refreshToken){
-        this.accessToken = accessToken;
+    public UserDto(String refreshToken){
         this.refreshToken = refreshToken;
     }
 

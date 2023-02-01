@@ -132,7 +132,8 @@ public class User implements UserDetails {
             LocalDateTime createTime,
             LocalDateTime updateTime,
             String refreshToken,
-            Role role
+            Role role,
+            AuthProvider authProvider
     ){
         this.userSeq = userSeq;
         this.userId = userId;
@@ -147,6 +148,7 @@ public class User implements UserDetails {
         this.updateTime = updateTime;
         this.refreshToken = refreshToken;
         this.role = role;
+        this.authProvider = authProvider;
     }
 
     @Transactional
