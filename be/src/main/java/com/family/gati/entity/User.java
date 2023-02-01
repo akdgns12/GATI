@@ -26,7 +26,7 @@ public class User implements UserDetails {
 
     @Id // DB 테이블의 PK와 객체의 필드 매핑
     @Column(name = "USER_SEQ")
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 생성 DB에 위임(id값 null이면 AUTO_INCREMENT)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // 기본키 생성 DB에 위임(id값 null이면 AUTO_INCREMENT)
     private int userSeq;
 
     @Column(name = "USER_ID", length = 20, unique = true)
@@ -59,13 +59,13 @@ public class User implements UserDetails {
     @Column(name = "PLUS_MINUS", columnDefinition = "TINYINT(1) DEFAULT 0", length = 1)
     private int plusMinus;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+//    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATE_TIME")
     @NotNull
     private LocalDateTime createTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT NULL ON CURRENT_TIMESTAMP")
+//    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "UPDATE_TIME")
     private LocalDateTime updateTime;
 
     @Column(name = "REFRESH_TOKEN", length = 200)
@@ -73,9 +73,11 @@ public class User implements UserDetails {
     private String refreshToken;
 
     @Column(name = "ROLE", length = 20)
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "AUTH_PROVIDER", length = 20)
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 

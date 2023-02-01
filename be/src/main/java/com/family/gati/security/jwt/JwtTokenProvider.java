@@ -1,5 +1,6 @@
 package com.family.gati.security.jwt;
 
+import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.security.oauth.CustomUserDetails;
 import io.jsonwebtoken.*;

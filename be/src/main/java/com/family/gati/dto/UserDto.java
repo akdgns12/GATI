@@ -4,6 +4,7 @@ import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import lombok.*;
 
+import java.security.AuthProvider;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,6 +27,7 @@ public class UserDto {
     private LocalDateTime updateTime;
     private String refreshToken;
     private Role role;
+    private AuthProvider authProvider;
 
     public UserDto(User user){
         this.userSeq = user.getUserSeq();
@@ -41,6 +43,7 @@ public class UserDto {
         this.updateTime = user.getUpdateTime();
         this.refreshToken = user.getRefreshToken();
         this.role = user.getRole();
+        this.authProvider = getAuthProvider();
     }
 
     public UserDto(String refreshToken){

@@ -88,10 +88,4 @@ public class UserService {
         User findUser = userRepository.findByEmail(user.getUserId());
         if(findUser != null) throw new IllegalStateException("일치하는 아이디 이미 존재");
     }
-
-    // 이메일 중복 체크
-    private void validateDuplicateEmail(String email){
-        User findUser = userRepository.findByEmail(email);
-        if(findUser != null) throw new IllegalStateException(("이미 존재하는 이메일"));
-    }
 }
