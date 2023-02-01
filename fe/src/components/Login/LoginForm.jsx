@@ -76,13 +76,13 @@ const LoginFrom = () => {
         </Button>
       </Box>
       <Box className="btn-group">
-        <Link to="/signup" className="router-link">
+        <Link to="/login/signup" className="router-link">
           <div>회원가입</div>
         </Link>
-        <Link to="/findID" className="router-link">
+        <Link to="/login/findID" className="router-link">
           <div>ID 찾기</div>
         </Link>
-        <Link to="/findPW" className="router-link">
+        <Link to="/login/findPW" className="router-link">
           <div>PW 찾기</div>
         </Link>
       </Box>
