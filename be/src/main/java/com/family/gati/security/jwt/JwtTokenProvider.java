@@ -4,6 +4,7 @@ import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.security.oauth.CustomUserDetails;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
@@ -39,6 +42,11 @@ public class JwtTokenProvider {
         this.COOKIE_REFRESH_TOKEN_KEY = cookieKey;
     }
 
+    public Key getSignKey(String SECRET_KEY){
+        byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
     public String createAccessToken(Authentication authentication) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH);
@@ -51,7 +59,8 @@ public class JwtTokenProvider {
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(getSignKey(SECRET_KEY), SignatureAlgorithm.HS256) // signWith depecreated
+//                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .setSubject(userSeq)
                 .claim(AUTHORITIES_KEY, role)
                 .setIssuer("debrains")
@@ -65,6 +74,7 @@ public class JwtTokenProvider {
         claims.put("user_seq", userSeq); // 정보는 key / value 쌍으로 저장된다.
         claims.put("userId", userId);  // sub에서 이미 저장했지만, 일단 추가
 //        claims.put("roles", roles);
+
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
@@ -79,7 +89,7 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_LENGTH);
 
         String refreshToken = Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .setIssuer("debrains")
                 .setIssuedAt(now)
                 .setExpiration(validity)
