@@ -1,5 +1,6 @@
 import { React } from "react";
 import Card from "@mui/material/Card";
+import { Box } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -39,8 +40,13 @@ export default function ArticleCard(props) {
     alert("add article to photo book");
   }
 
+  let bookmark = null;
+  if ( props.mode === 'feed') {
+    bookmark = <IconButton aria-label="bookmark" onClick={addToPhotoBook}><BookmarkBorderIcon /></IconButton>     
+  }
+
   return (
-    <Card style={{ marginBottom: "10px", width: "100%" }}>
+    <Box style={{ marginBottom: "10px", width: "100%" }}>
       <CardHeader
         action={
           <IconButton aria-label="settings" onClick={showOptions}>
@@ -49,7 +55,7 @@ export default function ArticleCard(props) {
         }
         title={article.userId}
         titleTypographyProps={{ variant: "body1" }}
-        style={{ textAlign: "left" }}
+        style={{ textAlign: "left", padding:'10px' }}
       />
       {article.img != null ? (
         <CardMedia component="img" width="100%" image={article.img} alt="No photo" />
@@ -63,10 +69,8 @@ export default function ArticleCard(props) {
         </IconButton>
         {article.like}
         <div style={{ marginLeft: "auto" }}>
-          <Typography variant="body4">{article.createTime}</Typography>
-          <IconButton aria-label="bookmark" onClick={addToPhotoBook}>
-            <BookmarkBorderIcon />
-          </IconButton>
+          <Typography variant="body4" style={{  fontWeight:'bold', marginRight:'10px'}} >{article.createTime}</Typography>
+          {bookmark}
         </div>
       </CardActions>
 
@@ -88,6 +92,6 @@ export default function ArticleCard(props) {
           )
           : null
       }
-    </Card>
+    </Box>
   );
 }

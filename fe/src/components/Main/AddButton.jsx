@@ -1,12 +1,17 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useNavigate } from 'react-router';
 
-export default function AddButton() {
+export default function AddButton(props) {
   const navigate = useNavigate();
+  
   function writeArticle() {
-    navigate('/post');
-  };
-
+    if (props.mode === 'feed') {
+      navigate('/post');
+  } else {
+    navigate('/photobook/post')
+  }
+  }
+  
   return (
     <AddCircleIcon
       onClick={writeArticle}
