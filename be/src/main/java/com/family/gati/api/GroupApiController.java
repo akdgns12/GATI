@@ -1,12 +1,9 @@
 package com.family.gati.api;
 
-import com.family.gati.dto.GroupDto;
 import com.family.gati.entity.Group;
 import com.family.gati.entity.GroupMember;
-import com.family.gati.entity.User;
 import com.family.gati.service.GroupMemberService;
 import com.family.gati.service.GroupService;
-import com.family.gati.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
