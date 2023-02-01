@@ -20,9 +20,9 @@ const MainFeed = () => {
   if (groupId) {
     return (
       <div>
-        <AddButton />
+        <AddButton mode="feed" />
         {articles.map((article, index) => {
-          return <ArticleCard key={index} article={article} style={{ "margin-top": "10px" }} />;
+          return <ArticleCard key={index} article={article} style={{ "margin-top": "10px" }} mode="feed" />;
         })}
       </div>
     );

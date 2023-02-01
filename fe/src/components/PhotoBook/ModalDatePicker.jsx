@@ -11,11 +11,13 @@ export default function ModalDatePicker() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StaticDatePicker
+        selected={value}
         displayStaticWrapperAs="desktop"
         openTo="day"
         value={value}
         onChange={(newValue) => {
-          setValue(newValue);
+          setValue(newValue)
+          ;
         }}
         renderInput={(params) => <TextField {...params} />}
       />
