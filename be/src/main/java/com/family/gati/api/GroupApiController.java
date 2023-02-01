@@ -2,7 +2,9 @@ package com.family.gati.api;
 
 import com.family.gati.dto.GroupDto;
 import com.family.gati.entity.Group;
+import com.family.gati.entity.GroupMember;
 import com.family.gati.entity.User;
+import com.family.gati.service.GroupMemberService;
 import com.family.gati.service.GroupService;
 import com.family.gati.service.UserService;
 import io.swagger.annotations.Api;
@@ -32,6 +34,7 @@ public class GroupApiController {
     private static final String FAIL = "fail";
 
     private final GroupService groupService;
+    private final GroupMemberService groupMemberService;
 
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성")
@@ -65,9 +68,12 @@ public class GroupApiController {
         HttpStatus status = null;
 
         try{
-            List<Group> groupList = groupService.getGroupListByUserId(userId);
+//            List<Group> groupList = groupService.getGroupListByUserId(userId);
+            List<GroupMember> groupList = groupMemberService.getGroupListByUserId(userId);
+
             if(groupList == null || groupList.size() < 1) status = HttpStatus.NO_CONTENT;
             else{
+                // 그룹명을 리턴 시켜줄거면?
                 resultMap.put("group List", groupList);
                 resultMap.put("msg", SUCCESS);
                 status = HttpStatus.OK;
@@ -91,7 +97,7 @@ public class GroupApiController {
         HttpStatus status = null;
 
         try{
-            Group mainGroup = groupService.getMainGroupByUserId(userId);
+            GroupMember mainGroup = groupMemberService.getMainGroupMemberByUserId(userId);
             if(mainGroup == null) status = HttpStatus.NO_CONTENT;
             else{
                 resultMap.put("Main group", mainGroup);
