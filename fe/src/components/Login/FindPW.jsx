@@ -67,7 +67,7 @@ const FindPW = () => {
   return (
     <Container css={contStyle}>
       <Box component="form" className="form-box" onSubmit={submitForm}>
-        <h1>FORGOT ID?</h1>
+        <h1>FORGOT PW?</h1>
         <Box
           className="labeled-box"
         >
