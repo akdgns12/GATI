@@ -44,18 +44,32 @@ public class JwtTokenProvider {
 
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
-        String userId = user.getName();
+        String userSeq = user.getName();
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-                .setSubject(userId)
+                .setSubject(userSeq)
                 .claim(AUTHORITIES_KEY, role)
                 .setIssuer("debrains")
                 .setIssuedAt(now)
                 .setExpiration(validity)
+                .compact();
+    }
+
+    public String createAccessTokenByUserInfo(String userId, int userSeq) {
+        Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위 (sub)
+        claims.put("user_seq", userSeq); // 정보는 key / value 쌍으로 저장된다.
+        claims.put("userId", userId);  // sub에서 이미 저장했지만, 일단 추가
+//        claims.put("roles", roles);
+        Date now = new Date();
+        return Jwts.builder()
+                .setClaims(claims) // 정보 저장
+                .setIssuedAt(now) // 토큰 발행 시간 정보
+                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH)) // set Expire Time
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)  // 사용할 암호화 알고리즘과 signature 에 들어갈 secret값 세팅
                 .compact();
     }
 
@@ -85,9 +99,9 @@ public class JwtTokenProvider {
 
     private void saveRefreshToken(Authentication authentication, String refreshToken) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        int id = Integer.valueOf(user.getName());
+        int userSeq = Integer.valueOf(user.getName());
 
-        userRepository.updateRefreshToken(id, refreshToken);
+        userRepository.updateRefreshToken(userSeq, refreshToken);
     }
 
     // Access Token을 검사하고 얻은 정보로 Authentication 객체 생성
@@ -102,6 +116,14 @@ public class JwtTokenProvider {
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
+
+    // 복호화해서 유저 정보 얻기
+    public int getUserSeq(String token) {
+        Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+        String user_seq = String.valueOf(claims.getBody().get("user_seq"));
+        return Integer.parseInt(user_seq);
+    }
+
 
     public Boolean validateToken(String token) {
         try {
