@@ -1,18 +1,14 @@
 package com.family.gati.service;
 
-import com.family.gati.dto.UserDto;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 @Service
@@ -97,32 +93,5 @@ public class UserService {
     private void validateDuplicateEmail(String email){
         User findUser = userRepository.findByEmail(email);
         if(findUser != null) throw new IllegalStateException(("이미 존재하는 이메일"));
-    }
-    
-    // refreshToken이 만료되었는지 확인
-    public UserDto reIssue(UserDto userDto) {
-        if (!jwtTokenProvider.validateTokenExceptExpiration(userDto.getRefreshToken()))
-            throw new InvalidTokenException();
-
-        User user = userRepository.findByToken(userDto.getRefreshToken());
-
-        if (!user.getRefreshToken().equals(userDto.getRefreshToken()))
-            throw new InvalidTokenException();
-
-        String accessToken = jwtTokenProvider.createToken(user.getUserId(), user.getUserSeq());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getUserId(), user.getUserSeq());
-        userDto.updateRefreshToken(refreshToken);
-        return new UserDto(accessToken, refreshToken);
-    }
-
-
-    // 입력받은 accessToken으로 회원 정보 가져오기
-    private User getUserByToken(HttpServletRequest request){ 
-        String token = request.getHeader("Authorization");
-        Authentication auth = jwtTokenProvider.getAuthentication(token);
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String userId = userDetails.getUsername();
-
-        return userRepository.findByUserId(userId);
     }
 }
