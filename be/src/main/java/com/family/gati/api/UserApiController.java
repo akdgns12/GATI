@@ -43,7 +43,7 @@ public class UserApiController {
     // 회원가입
     @ApiOperation(value = "유저 회원가입", notes = "id, email, password, nickname, birth, phoneNumber")
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody User user){
+    public ResponseEntity<?> join(@RequestBody User user){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
         logger.debug("user: {}", user.toString());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
@@ -55,13 +55,12 @@ public class UserApiController {
         newUser.setNickName(user.getNickName());
         newUser.setBirth(user.getBirth());
         newUser.setPhoneNumber(user.getPhoneNumber());
-        newUser.setRefreshToken(""); // Notnull 처리해도 넣어줘야 되네 왜지?
+        newUser.setRefreshToken(""); // Notnull 안해도 넣어줘야 되네 왜지?
         newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setAuthProvider(AuthProvider.LOCAL);
 
         try{
-            // 로그인 처리 & token 작업시 암호화 예정
             userService.join(newUser);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.CREATED;
@@ -81,7 +80,7 @@ public class UserApiController {
      */
     @ApiOperation(value = "일반 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@ApiParam(value = "userId, password 받음") @RequestBody Map<String, String> userInfo){
+    public ResponseEntity<?> login(@ApiParam(value = "userId, password 받음") @RequestBody Map<String, String> userInfo){ // 여기도 마찬가지로 payload.LoginRequest로
         User user = userRepository.findByUserId(userInfo.get("userId"));
         logger.debug("userId:{} ", user);
         Map<String, Object> resultMap = new HashMap<>();

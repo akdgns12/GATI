@@ -21,7 +21,7 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
+public class UserPrincipal implements OAuth2User, UserDetails, OidcUser { // CustomUserDetails와 차이가 뭔지 다시 알아봐야함
 
     private final String userId;
     private final String password;

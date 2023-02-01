@@ -130,6 +130,7 @@ public class JwtTokenProvider {
 
     // 복호화해서 유저 정보 얻기
     public int getUserSeq(String token) {
+        // depecreated 해결해야 함수 사용가능
         Jws<Claims> claims = Jwts.parser().setSigningKey(getSignKey(SECRET_KEY)).parseClaimsJws(token);
         String user_seq = String.valueOf(claims.getBody().get("user_seq"));
         return Integer.parseInt(user_seq);
