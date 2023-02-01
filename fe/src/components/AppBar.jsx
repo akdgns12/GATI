@@ -168,7 +168,7 @@ export default function PrimaryAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" style={{background: 'rgb(86, 113, 137)'}}>
         <Toolbar>
           <Avatar
             sx={{

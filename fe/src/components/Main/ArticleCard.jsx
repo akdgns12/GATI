@@ -79,8 +79,8 @@ export default function ArticleCard(props) {
       {
         (variant == "feed")
           ? (
-            <CardActions onClick={mvToDetail} style={{ height: "30px" }}>
-              <Typography variant="body2" style={{ marginLeft: 10 }}>
+            <CardActions style={{ height: "30px"}}>
+              <Typography variant="body2" onClick={mvToDetail} style={{ marginLeft: 10, cursor:'pointer'}}>
                 Comment &nbsp;
                 {article.comment > 0 && article.comment}
               </Typography>
