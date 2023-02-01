@@ -18,9 +18,9 @@ public class PlanServiceImpl implements PlanService{
     private final PlanRepository planRepository;
     private User user = new User();
     @Override
-    public List<PlanDto> findByGroupId(User user) {
-        Integer groupId = user.getGroupId();
-        List<Plan> plans = planRepository.findByGroupId(groupId);
+    public List<PlanDto> findByGroupId(String userId) {
+
+        List<Plan> plans = planRepository.findByGroupId(userId);
         int size = plans.size();
         List<PlanDto> result = new ArrayList<>();
         for (int i=0; i<size; i++){
@@ -29,9 +29,5 @@ public class PlanServiceImpl implements PlanService{
         }
         return result;
     }
-    @Override
-    public User findByUserId(String userId){
-        user = planRepository.findByUserId(userId);
-        return user;
-    }
+
 }

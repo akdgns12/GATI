@@ -54,8 +54,6 @@ public class PlanDto {
             this.endDate = plan.getEndDate();
             this.place = plan.getPlace();
             this.memo = plan.getMemo();
-            this.createTime = plan.getCreateTime();
-            this.updateTime = plan.getUpdateTime();
         }
         @Override
         public PlanDto build(){

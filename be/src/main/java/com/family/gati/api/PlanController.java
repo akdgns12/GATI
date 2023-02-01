@@ -23,8 +23,7 @@ public class PlanController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> findByUserAndGroupId(@ApiParam(value = "path로 userID 전달받음")@PathVariable("userId") String userId){
-        User user = planService.findByUserId(userId);
-        List<PlanDto> findDtos = planService.findByGroupId(user);
+        List<PlanDto> findDtos = planService.findByGroupId(userId);
         return ResponseEntity.ok(findDtos);
     }
 }

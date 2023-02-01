@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface PlanService {
 
-    List<PlanDto> findByGroupId(User user);
-    User findByUserId(String userId);
+    List<PlanDto> findByGroupId(String  userId);
 }

@@ -22,7 +22,7 @@ public class Plan extends BaseTimeEntity {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)//user와 다대일 매핑
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_GROUP_ID")
     private User user;
 
     @Column(name = "GROUP_ID")
@@ -59,15 +59,6 @@ public class Plan extends BaseTimeEntity {
     @Column(name="MEMO", length=200, nullable = true)
     private String memo;
 
-    @Column(name="CREATE_TIME")
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
-    private Date createTime;
-
-    @Column(name="UPDATE_TIME", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateTime;
-
     private Plan(PlanBuilder builder){
         this.id = builder.id;
         this.user = builder.user;
@@ -79,8 +70,6 @@ public class Plan extends BaseTimeEntity {
         this.endTime = builder.endTime;
         this.place = builder.place;
         this.memo = builder.memo;
-        this.createTime = builder.createTime;
-        this.updateTime = builder.updateTime;
     }
 
     public static class PlanBuilder implements CommonBuilder<Plan>{
@@ -94,8 +83,6 @@ public class Plan extends BaseTimeEntity {
         private Date endTime;
         private String place;
         private String memo;
-        private Date createTime;
-        private Date updateTime;
 
         public PlanBuilder(PlanDto planDto){
             this.id = planDto.getId();
@@ -108,8 +95,6 @@ public class Plan extends BaseTimeEntity {
             this.endTime = planDto.getEndTime();
             this.place = planDto.getPlace();
             this.memo = planDto.getMemo();
-            this.createTime = planDto.getCreateTime();
-            this.updateTime = planDto.getUpdateTime();
         }
         @Override
         public Plan build(){
