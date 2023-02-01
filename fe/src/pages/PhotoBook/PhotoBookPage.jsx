@@ -1,23 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import CustomizedInputBase from "../../components/PhotoBook/SearchBar";
-import BasicDatePicker from "../../components/PhotoBook/DatePicker";
-import ImageList2 from '../../components/PhotoBook/ImageList2'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import PhotoBook from "./PhotoBook";
+import CreatePhoto from "./CreatePhoto";
+import PhotoDetail from "./PhotoDetail";
 
-class PhotoBook extends React.Component {
-  render() {
-    return (
-      <container
-        style={{
-          display:'flex',
-          flexDirection: 'column',
-          justifyContent:'center',
-          alignItems:'center',}}>
-        <CustomizedInputBase/>
-        <ImageList2/>
-      </container>
-    )
-  }
-}
+const PhotoBookPage = (props) => {
+  return (
+    <Routes>
+      <Route path='/' element={<PhotoBook />} />
+      <Route path='/post' element={<CreatePhoto />} />
+      <Route path='/:photoId' element={<PhotoDetail />} />
+    </Routes>
+  );
+};
 
-export default PhotoBook;
+export default PhotoBookPage;

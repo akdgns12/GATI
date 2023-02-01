@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 
 const contStyle = css`
+  display: flex;
   margin-left: 5%;
   margin-top: 5px;
 `;
