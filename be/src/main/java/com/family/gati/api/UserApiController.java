@@ -45,7 +45,6 @@ public class UserApiController {
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody User user){
         logger.debug("user: {}", user.toString());
-        System.out.println(user.toString());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
@@ -60,7 +59,6 @@ public class UserApiController {
         newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setAuthProvider(AuthProvider.LOCAL);
-        System.out.println("newUser : " + newUser.toString());
 
         try{
             // 로그인 처리 & token 작업시 암호화 예정
