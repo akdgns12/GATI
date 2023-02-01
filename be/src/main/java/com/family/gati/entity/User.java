@@ -13,7 +13,7 @@ public class User {
     @Id // DB 테이블의 PK와 객체의 필드 매핑
     @Column(name = "USER_SEQ")
     @GeneratedValue // 기본 키 자동 생성
-    private Long user_seq;
+    private int userSeq;
 
     @Column(name = "USER_ID", length = 20, nullable = false, unique = true)
     private String userId;

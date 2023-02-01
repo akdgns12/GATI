@@ -120,7 +120,7 @@ public class GroupApiController {
 
         try{
             // 1. 요청받은 groupId와 같은 groupId인 group
-            int groupId = group.getId();
+            int groupId = group.getGroupId();
             Group modifiedGroup = groupService.getGroupByGroupId(groupId);
             groupService.modifyGroup(modifiedGroup);
             resultMap.put("modifedGroup: {}", modifiedGroup);
