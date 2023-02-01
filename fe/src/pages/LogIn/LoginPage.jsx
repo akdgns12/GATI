@@ -8,6 +8,7 @@ import { Container } from "@mui/material";
 
 import LoginFrom from "../../components/Login/LoginForm";
 import SignUpForm from "../../components/Login/SignUpForm";
+import FindID from "../../components/Login/FindID";
 
 import imgPath from "../../static/home_with_door.png";
 
@@ -31,6 +32,7 @@ const Login = () => {
         <Routes>
           <Route path="/" element={<LoginFrom />} />
           <Route path="/signup" element={<SignUpForm />} />
+          <Route path="/findID" element={<FindID />} />
         </Routes>
       </Container>
     </div>
