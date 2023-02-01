@@ -41,6 +41,7 @@ dependencies {
 	// swagger3.0 추가
 	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+//	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
 	// spring jdbc 추가
 	// https://mvnrepository.com/artifact/org.springframework/spring-jdbc

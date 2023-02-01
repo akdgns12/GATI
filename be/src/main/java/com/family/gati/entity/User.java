@@ -19,6 +19,8 @@ public class User {
     private String email;
     private String password;
     private String nickname;
+    private String userId;
+    private Integer groupId;
 
     @OneToMany(mappedBy = "user")//plan과 일대다 연관관계 정의
     private List<Plan> plans = new ArrayList<Plan>();

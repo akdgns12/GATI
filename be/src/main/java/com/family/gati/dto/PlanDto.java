@@ -14,11 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 public class PlanDto {
     private Integer id;
-    private String userId;
+    private User user;
     private Integer groupId;
     private String title;
     private Date startDate;
     private Date endDate;
+    private Date startTime;
+    private Date endTime;
     private String place;
     private String memo;
     private Date createTime;
@@ -36,6 +38,8 @@ public class PlanDto {
         private String title;
         private Date startDate;
         private Date endDate;
+        private Date startTime;
+        private Date endTime;
         private String place;
         private String memo;
         private Date createTime;

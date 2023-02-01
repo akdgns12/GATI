@@ -1,5 +1,7 @@
 package com.family.gati.entity;
 
+import com.family.gati.dto.PlanDto;
+import com.family.gati.util.CommonBuilder;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,23 +68,54 @@ public class Plan extends BaseTimeEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
 
-    @Builder
-    public Plan(int id, String userId, User user, int groupId, String title, Date startDate, Date endDate, Date startTime, Date endTime, String place, String memo, Date createTime, Date updateTime) {
-        this.id = id;
-        this.user = user;
-        this.groupId = groupId;
-        this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.place = place;
-        this.memo = memo;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
+    private Plan(PlanBuilder builder){
+        this.id = builder.id;
+        this.user = builder.user;
+        this.groupId = builder.groupId;
+        this.title = builder.title;
+        this.startDate = builder.startDate;
+        this.endDate = builder.endDate;
+        this.startTime = builder.startTime;
+        this.endTime = builder.endTime;
+        this.place = builder.place;
+        this.memo = builder.memo;
+        this.createTime = builder.createTime;
+        this.updateTime = builder.updateTime;
     }
 
+    public static class PlanBuilder implements CommonBuilder<Plan>{
+        private Integer id;
+        private User user;
+        private Integer groupId;
+        private String title;
+        private Date startDate;
+        private Date endDate;
+        private Date startTime;
+        private Date endTime;
+        private String place;
+        private String memo;
+        private Date createTime;
+        private Date updateTime;
 
+        public PlanBuilder(PlanDto planDto){
+            this.id = planDto.getId();
+            this.user = planDto.getUser();
+            this.groupId = planDto.getGroupId();
+            this.title = planDto.getTitle();
+            this.startDate = planDto.getStartDate();
+            this.endDate = planDto.getEndDate();
+            this.startTime = planDto.getStartTime();
+            this.endTime = planDto.getEndTime();
+            this.place = planDto.getPlace();
+            this.memo = planDto.getMemo();
+            this.createTime = planDto.getCreateTime();
+            this.updateTime = planDto.getUpdateTime();
+        }
+        @Override
+        public Plan build(){
+            return new Plan(this);
+        }
+    }
     public void setUser(User user){//user와 연관관계 정의 메소드
         if(this.user!=null){
             this.user.getPlans().remove(this);
