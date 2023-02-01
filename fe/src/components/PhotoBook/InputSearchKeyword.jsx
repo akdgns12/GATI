@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 
-const SearchKeyword = () => {
+const InputSearchKeyword = () => {
   const [keyword, setKeyword] = React.useState("")
 
   // const onChange = (e) => {
@@ -40,12 +40,11 @@ const SearchKeyword = () => {
         onKeyDown={onKeyDownHandler}
         sx={{
           width:'100%',
-          ml:'10px',
         }}
-        placeholder="검색어를 입력하세요."
+        placeholder="키워드로 사진을 검색하세요."
         inputProps={{ 'aria-label': 'search keywords'}}
         />
     </div>
   )
 }
-export default SearchKeyword
+export default InputSearchKeyword

@@ -1,0 +1,47 @@
+export default [
+  {
+    id:1,
+    userId: "gina",
+    content: "어쩌구저쩌구",
+    tag: "# 전주",
+    img: "https://mblogthumb-phinf.pstatic.net/MjAyMDAzMTNfMjA2/MDAxNTg0MDI3MzA1MTM1.ziQdHXjoSVpswgl7MkBXPOamMHIiKQKPpqjtQNkw6IMg.rkebY82ViYlYz83X1y5B7Fm6qyQkC2ZZlmHgRyJw1vAg.JPEG.d_hye97/1.jpg?type=w800",
+    like: 3,
+    createTime: "23.01.27",
+    comment: 2,
+    comments: [
+      { userId: "akdgns12", comment: "ㅋ" },
+      { userId: "gkagu12", comment: "ㅋㅋ" },
+      { userId: "podif", comment: "호엥" },
+    ],
+  },
+  {
+    id:2,
+    userId: "tina",
+    content: "블라블라",
+    tag: "# 서울",
+    img: "https://media.bunjang.co.kr/product/188410848_1_1653044293_w360.jpg",
+    like: 3,
+    createTime: "23.01.27",
+    comment: 2,
+    comments: [
+      { userId: "akdgns12", comment: "ㅋ" },
+      { userId: "gkagu12", comment: "ㅋㅋ" },
+      { userId: "podif", comment: "호엥" },
+    ],
+  },
+  {
+    id:3,
+    userId: "tina",
+    content: "블라블라",
+    tag: "# 서울",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFqRXeZ9Fqf0LJOyjSISoJkVXG26pxpRTji6ANAQ98iYYsJavoIgRu8xjMqSKfFBf1U9Y&usqp=CAU",
+    like: 3,
+    createTime: "23.01.27",
+    comment: 2,
+    comments: [
+      { userId: "akdgns12", comment: "ㅋ" },
+      { userId: "gkagu12", comment: "ㅋㅋ" },
+      { userId: "podif", comment: "호엥" },
+    ],
+  },
+]
