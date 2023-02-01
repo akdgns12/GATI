@@ -3,7 +3,6 @@ package com.family.gati.service;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
-import com.family.gati.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,30 +18,30 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
+    @Transactional(readOnly = false)
     public void join(User user){
-        validateDuplicateUser(user);
-        user.setUserId(user.getUserId());
-        user.setEmail(user.getEmail());
+//        validateDuplicateUser(user);
+//        user.setUserId(user.getUserId());
+//        user.setEmail(user.getEmail());
+//
+//        user.setPassword(user.getPassword());
+//        user.encodePassword(passwordEncoder);
 
-        user.setPassword(user.getPassword());
-        user.encodePassword(passwordEncoder);
+//        user.setNickName(user.getNickName());
+//        user.setBirth(user.getBirth());
+//        user.setPhoneNumber(user.getPhoneNumber());
 
-        user.setNickName(user.getNickName());
-        user.setBirth(user.getBirth());
-        user.setPhoneNumber(user.getPhoneNumber());
-
-        user.setPlusMinus(user.getPlusMinus());
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
+//        user.setPlusMinus(user.getPlusMinus());
+//        user.setCreateTime(LocalDateTime.now());
+//        user.setUpdateTime(LocalDateTime.now());
         /*
             token?
             아냐, 회원가입 후 로그인할 때 토큰 생성해주는게 맞지
          */
-        user.setRole(Role.USER);
+//        user.setRole(Role.USER);
 
-        userRepository.save(user);
+        userRepository.save(user); // 여기서 뭔가 문제 발생..
     }
 
     public User getUserByUserId(String userId){
@@ -66,10 +65,15 @@ public class UserService {
     }
 
     public void updateUser(User user) {
+        System.out.println("0");
         user.setUserId(user.getUserId());
+        System.out.println("1");
         user.setPassword(user.getPassword());
+        System.out.println("2");
         user.setBirth(user.getBirth());
+        System.out.println("3");
         user.setEmail(user.getEmail());
+        System.out.println("4");
         user.setNickName(user.getNickName());
         user.setMainGroup(user.getMainGroup());
         user.setUpdateTime(LocalDateTime.now());

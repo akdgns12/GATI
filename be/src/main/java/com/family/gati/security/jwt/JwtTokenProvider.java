@@ -80,7 +80,7 @@ public class JwtTokenProvider {
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발행 시간 정보
                 .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH)) // set Expire Time
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)  // 사용할 암호화 알고리즘과 signature 에 들어갈 secret값 세팅
+                .signWith(getSignKey(SECRET_KEY), SignatureAlgorithm.HS256)  // 사용할 암호화 알고리즘과 signature 에 들어갈 secret값 세팅
                 .compact();
     }
 
@@ -89,7 +89,7 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_LENGTH);
 
         String refreshToken = Jwts.builder()
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(getSignKey(SECRET_KEY), SignatureAlgorithm.HS256)
                 .setIssuer("debrains")
                 .setIssuedAt(now)
                 .setExpiration(validity)
@@ -130,7 +130,7 @@ public class JwtTokenProvider {
 
     // 복호화해서 유저 정보 얻기
     public int getUserSeq(String token) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+        Jws<Claims> claims = Jwts.parser().setSigningKey(getSignKey(SECRET_KEY)).parseClaimsJws(token);
         String user_seq = String.valueOf(claims.getBody().get("user_seq"));
         return Integer.parseInt(user_seq);
     }
@@ -138,7 +138,7 @@ public class JwtTokenProvider {
 
     public Boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(getSignKey(SECRET_KEY)).parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
@@ -153,7 +153,7 @@ public class JwtTokenProvider {
     // Access Token 만료시 갱신때 사용할 정보를 얻기 위해 Claim 리턴
     private Claims parseClaims(String accessToken) {
         try {
-            return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(accessToken).getBody();
+            return Jwts.parser().setSigningKey(getSignKey(SECRET_KEY)).parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }

@@ -1,13 +1,13 @@
 package com.family.gati.entity;
 
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Table(name = "USER")
 public class User implements UserDetails {
 
+    @JsonIgnore
     @Id // DB 테이블의 PK와 객체의 필드 매핑
     @Column(name = "USER_SEQ")
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // 기본키 생성 DB에 위임(id값 null이면 AUTO_INCREMENT)
@@ -54,7 +55,7 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     @Column(name = "MAIN_GROUP")
-    private int mainGroup;
+    private Integer mainGroup;
 
     @Column(name = "PLUS_MINUS", columnDefinition = "TINYINT(1) DEFAULT 0", length = 1)
     private int plusMinus;
@@ -69,7 +70,7 @@ public class User implements UserDetails {
     private LocalDateTime updateTime;
 
     @Column(name = "REFRESH_TOKEN", length = 200)
-    @NotNull
+//    @NotNull
     private String refreshToken;
 
     @Column(name = "ROLE", length = 20)
@@ -84,7 +85,7 @@ public class User implements UserDetails {
     /**
      * Spring Security 회원 가입
      */
-    @ElementCollection // 값 타입을 컬렉션을 매핑할때 사용
+    @ElementCollection(fetch = FetchType.EAGER) // 값 타입을 컬렉션을 매핑할때 사용
     @Builder.Default // 특정 필드를 특정 값으로 초기화할때
     private List<String> roles = new ArrayList<>();
 
@@ -98,7 +99,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() { // UserDetails 인터페이스 커스텀
-        return userId;
+        return nickName;
     }
 
     @Override
@@ -122,7 +123,6 @@ public class User implements UserDetails {
     }
 
     public User(
-            int userSeq,
             String userId,
             String email,
             String password,
@@ -137,7 +137,6 @@ public class User implements UserDetails {
             Role role,
             AuthProvider authProvider
     ){
-        this.userSeq = userSeq;
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -149,11 +148,11 @@ public class User implements UserDetails {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.refreshToken = refreshToken;
-        this.role = role;
-        this.authProvider = authProvider;
+        this.role = role != null ? role : Role.USER;
+        this.authProvider = authProvider != null ? authProvider : authProvider.LOCAL;
     }
 
-    @Transactional
+//    @Transactional
     public void encodePassword(PasswordEncoder passwordEncoder){
         password = passwordEncoder.encode(password);
     }

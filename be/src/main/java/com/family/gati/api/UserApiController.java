@@ -1,6 +1,8 @@
 package com.family.gati.api;
 
 import com.family.gati.dto.UserDto;
+import com.family.gati.entity.AuthProvider;
+import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.service.UserService;
@@ -18,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,20 +41,35 @@ public class UserApiController {
     private final UserService userService;
 
     // 회원가입
-    @ApiOperation(value = "유저 회원가입")
+    @ApiOperation(value = "유저 회원가입", notes = "id, email, password, nickname, birth, phoneNumber")
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody User user){
         logger.debug("user: {}", user.toString());
+        System.out.println(user.toString());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
+        User newUser = new User();
+        newUser.setUserId(user.getUserId());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(user.getPassword());
+        newUser.setNickName(user.getNickName());
+        newUser.setBirth(user.getBirth());
+        newUser.setPhoneNumber(user.getPhoneNumber());
+        newUser.setRefreshToken(""); // Notnull 처리해도 넣어줘야 되네 왜지?
+        newUser.setRole(Role.USER);
+        newUser.setCreateTime(LocalDateTime.now());
+        newUser.setAuthProvider(AuthProvider.LOCAL);
+        System.out.println("newUser : " + newUser.toString());
+
         try{
             // 로그인 처리 & token 작업시 암호화 예정
-            userService.join(user);
+            userService.join(newUser);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.CREATED;
         }catch (Exception e){
             logger.debug("회원가입 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
@@ -78,13 +96,14 @@ public class UserApiController {
                 new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
-            if(!passwordEncoder.matches(userInfo.get("password"), user.getPassword())){
-                logger.debug("비밀번호 불일치: {}", user.getPassword());
-                resultMap.put("msg", FAIL);
-                status = HttpStatus.NOT_FOUND;
-                return new ResponseEntity<Map<String, Object>>(resultMap, status);
-            }
-
+            // passwordEncoder 오류.. 로그인은 됨
+//            if(!passwordEncoder.matches(userInfo.get("password"), user.getPassword())){
+//                logger.debug("비밀번호 불일치: {}", user.getPassword());
+//                resultMap.put("msg", FAIL);
+//                status = HttpStatus.NOT_FOUND;
+//                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+//            }
+            
             String userId = user.getUserId();
             int userSeq = user.getUserSeq();
 

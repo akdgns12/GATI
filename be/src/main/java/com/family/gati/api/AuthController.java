@@ -11,6 +11,7 @@ import com.family.gati.repository.UserRepository;
 import com.family.gati.security.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 // 소셜 로그인
+@Slf4j
 @RestController
 @Api(tags = "Social API")
 @RequiredArgsConstructor
@@ -40,7 +42,9 @@ public class AuthController {
 
         @PostMapping("/login")
         public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
+            log.debug("loginRequest: {}", loginRequest);
+            System.out.println(loginRequest.getEmail());
+            System.out.println(loginRequest.getPassword());
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
