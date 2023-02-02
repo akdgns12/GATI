@@ -31,8 +31,13 @@
     "react-redux": "^8.0.5",
     "react-router": "^6.7.0",
     "react-router-dom": "^6.7.0",
+    "react-slick": "^0.29.0",
     "redux": "^4.2.0",
+<<<<<<< HEAD
     "redux-thunk": "^2.4.2",
+=======
+    "slick-carousel": "^1.8.1",
+>>>>>>> gotogether-carousel
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
