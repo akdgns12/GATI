@@ -3,6 +3,7 @@ import { React } from "react";
 import { css } from "@emotion/react";
 import { Box, Button, Container, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 
 const contStyle = css`
   width: 300px;
@@ -42,9 +43,21 @@ const contStyle = css`
 `;
 
 const LoginFrom = () => {
-  function doSth() {
-    console.log("do sth");
-    alert("Incorrenct ID or PW");
+
+  const { loginUser, logIn } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  function doSth(event) {
+    event.preventDefault();
+    const user = {
+      userId: event.target.id.value,
+    };
+    console.log(logIn);
+    dispatch({ type: "user/LOGIN", data: { user, } });
+    console.log(loginUser);
+    console.log(logIn);
+    if (logIn) alert("Hello");
+    else alert("Incorrenct ID or PW");
   }
 
   return (
@@ -56,6 +69,7 @@ const LoginFrom = () => {
           fullWidth
           label="ID"
           size="small"
+          name="id"
           autoFocus
         />
         <TextField
@@ -65,6 +79,7 @@ const LoginFrom = () => {
           label="PASSWORD"
           type="password"
           size="small"
+          name="pw"
         />
         <Button
           type="submit"
