@@ -45,6 +45,7 @@ public class AuthController {
             log.debug("loginRequest: {}", loginRequest);
             System.out.println(loginRequest.getEmail());
             System.out.println(loginRequest.getPassword());
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
@@ -52,15 +53,18 @@ public class AuthController {
                     )
             );
 
+            System.out.println(authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String token = jwtTokenProvider.createAccessToken(authentication);
+            System.out.println(token);
             return ResponseEntity.ok(new AuthResponse(token));
         }
 
         @PostMapping("/signup")
         public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
             if(userRepository.findOneByEmail(signUpRequest.getEmail()) == null) {
+                System.out.println("인텔리제이 로그 어디서 보는거야 ㄸㅂ");
                 throw new BadRequestException("Email address already in use.");
             }
 
@@ -69,6 +73,7 @@ public class AuthController {
             user.setUserId(signUpRequest.getUserId());
             user.setEmail(signUpRequest.getEmail());
             user.setPassword(signUpRequest.getPassword());
+            System.out.println(user);
             // 추후 소셜 로그인이 늘어나면 provider 분류해서 지정해주는 logic 작성 필요
             user.setAuthProvider(AuthProvider.GOOGLE);
 

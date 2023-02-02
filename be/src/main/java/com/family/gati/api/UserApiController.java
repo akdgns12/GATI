@@ -43,7 +43,8 @@ public class UserApiController {
     // 회원가입
     @ApiOperation(value = "유저 회원가입", notes = "id, email, password, nickname, birth, phoneNumber")
     @PostMapping("/join")
-    public ResponseEntity<?> join(@RequestBody User user){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
+    public ResponseEntity<?> join(@ApiParam(value = "id, email, password, nickname, birth, phoneNumber")
+                                      @RequestBody User user){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
         logger.debug("user: {}", user.toString());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;

@@ -1,5 +1,6 @@
 package com.family.gati.config;
 
+//import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.security.oauth.*;
@@ -28,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    private final CustomUserDetails customUserDetails;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
