@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface BoardService {
     List<BoardDto> findByGroupId(Integer groupId);
-    void insertBoard(BoardDto boardDto);
+    BoardDto insertBoard(BoardDto boardDto);
+    BoardDto findById(Integer id);
 }
