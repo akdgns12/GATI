@@ -5,7 +5,6 @@ import CreatePost from './CreatePost';
 import PostDetail from './PostDetail';
 
 const Home = (props) => {
-  console.log('Home')
   return (
     <Routes>
       <Route path='/' element={<MainFeed />} />
