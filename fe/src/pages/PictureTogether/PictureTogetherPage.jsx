@@ -40,7 +40,7 @@ export default function PictureTogether() {
       }}>
       <div>
         <ToggleButtonGroup
-          color="primary"
+          color='primary'
           value={mode}
           exclusive
           onChange={changeMode}
@@ -51,8 +51,8 @@ export default function PictureTogether() {
             width:'80vw'
           }}
           >
-          <ToggleButton value="inprogress" style={{ flex:1, height:'40px'}}>진행 중</ToggleButton>
-          <ToggleButton value="completed" style={{ flex:1, height:'40px'}}>완료</ToggleButton>
+          <ToggleButton value="inprogress" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중</ToggleButton><> </>
+          <ToggleButton value="completed" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>완료</ToggleButton>
         </ToggleButtonGroup>
       </div>
       <div
