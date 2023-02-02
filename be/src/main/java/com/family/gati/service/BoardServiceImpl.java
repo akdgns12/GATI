@@ -27,13 +27,23 @@ public class BoardServiceImpl implements BoardService{
         return result;
     }
 
-    public BoardDto insertBoard(BoardDto boardDto) {
-        return new BoardDto.BoardDtoBuilder(boardRepository.save(new Board.BoardBuilder(boardDto).build())).build();
-    }
-
     @Override
     public BoardDto findById(Integer id) {
         BoardDto result = new BoardDto.BoardDtoBuilder(boardRepository.findById(id).get()).build();
         return result;
     }
+
+    public BoardDto insertBoard(BoardDto boardDto) {
+        return new BoardDto.BoardDtoBuilder(boardRepository.save(new Board.BoardBuilder(boardDto).build())).build();
+    }
+
+    public BoardDto updateBoard(BoardDto boardDto) {
+        return new BoardDto.BoardDtoBuilder(boardRepository.save(new Board.BoardBuilder(boardDto).build())).build();
+    }
+
+    @Override
+    public void deleteBoardById(Integer id) {
+        boardRepository.deleteById(id);
+    }
+
 }

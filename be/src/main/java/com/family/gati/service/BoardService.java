@@ -8,4 +8,6 @@ public interface BoardService {
     List<BoardDto> findByGroupId(Integer groupId);
     BoardDto insertBoard(BoardDto boardDto);
     BoardDto findById(Integer id);
+    BoardDto updateBoard(BoardDto boardDto);
+    void deleteBoardById(Integer id);
 }

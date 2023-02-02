@@ -1,4 +1,4 @@
-package com.family.gati.controller;
+package com.family.gati.api;
 
 import com.family.gati.dto.BoardCommentDto;
 import com.family.gati.dto.BoardDto;
@@ -44,9 +44,33 @@ public class BoardController {
         return ResponseEntity.ok(resultDto);
     }
 
-//    @PutMapping("/board")
-//    public ResponseEntity<?> updateBoard(@RequestBody BoardDto boardDto){
-//        BoardDto resultDto = boardService.updateBoard(boardDto);
-//        return ResponseEntity.ok(resultDto);
-//    }
+    @PutMapping("/board")
+    public ResponseEntity<?> updateBoard(@RequestBody BoardDto boardDto){
+        BoardDto resultDto = boardService.updateBoard(boardDto);
+        return ResponseEntity.ok(resultDto);
+    }
+
+    @PostMapping("/comment")
+    public ResponseEntity<?> addBoardComment(@RequestBody BoardCommentDto boardCommentDto) {
+        BoardCommentDto resultDto = boardCommentService.insertBoardComment(boardCommentDto);
+        return ResponseEntity.ok(resultDto);
+    }
+
+    @PutMapping("/comment")
+    public ResponseEntity<?> updateBoardComment(@RequestBody BoardCommentDto boardCommentDto){
+        BoardCommentDto resultDto = boardCommentService.updateBoardComment(boardCommentDto);
+        return ResponseEntity.ok(resultDto);
+    }
+
+    @DeleteMapping("/board/{id}")
+    public ResponseEntity<?> deleteBoard(@ApiParam(value = "삭제 할 boardId")@PathVariable("id") Integer id) {
+        boardService.deleteBoardById(id);
+        return ResponseEntity.ok(null);
+    }
+
+    @DeleteMapping("/comment/{id}")
+    public ResponseEntity<?> deleteComment(@ApiParam(value = "삭제 할 boardId")@PathVariable("id") Integer id) {
+        boardCommentService.deleteCommentById(id);
+        return ResponseEntity.ok(null);
+    }
 }

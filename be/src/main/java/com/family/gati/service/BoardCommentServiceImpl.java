@@ -1,7 +1,6 @@
 package com.family.gati.service;
 
 import com.family.gati.dto.BoardCommentDto;
-import com.family.gati.dto.BoardDto;
 import com.family.gati.entity.BoardComment;
 import com.family.gati.repository.BoardCommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +22,24 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         int size = boardComments.size();
         List<BoardCommentDto> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            BoardCommentDto boardCommentDto = new BoardCommentDto(boardComments.get(i));
+            BoardCommentDto boardCommentDto = new BoardCommentDto.BoardCommentDtoBuilder(boardComments.get(i)).build();
             result.add(boardCommentDto);
         }
         return result;
     }
+
+    @Override
+    public BoardCommentDto insertBoardComment(BoardCommentDto boardCommentDto) {
+        return new BoardCommentDto.BoardCommentDtoBuilder(boardCommentRepository.save(new BoardComment.BoardCommentBuilder(boardCommentDto).build())).build();
+    }
+
+    public BoardCommentDto updateBoardComment(BoardCommentDto boardCommentDto) {
+        return new BoardCommentDto.BoardCommentDtoBuilder(boardCommentRepository.save(new BoardComment.BoardCommentBuilder(boardCommentDto).build())).build();
+    }
+
+    @Override
+    public void deleteCommentById(Integer id) {
+        boardCommentRepository.deleteById(id);
+    }
+
 }
