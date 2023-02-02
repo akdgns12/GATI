@@ -16,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/boards")
 @Api(tags = "Board API")
-
 public class BoardController {
     private final BoardService boardService;
     private final BoardCommentService boardCommentService;
