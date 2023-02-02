@@ -29,7 +29,7 @@ export default function InProgress(props) {
           flexWrap:'wrap',
           width:'80vw',
           flexDirection:'column',
-          alignContent:'center',
+          alignItems:'center',
         }}>
           <div
           style={{ flex:'auto'}}>
