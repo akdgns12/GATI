@@ -2,8 +2,9 @@ import { React } from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Box, Button, Container, TextField } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
+import { doLoginUser } from "../../store/User/user";
 
 const contStyle = css`
   width: 300px;
@@ -43,26 +44,37 @@ const contStyle = css`
 `;
 
 const LoginFrom = () => {
-
+  const navigate = useNavigate();
   const { loginUser, logIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  function doSth(event) {
+  function handleLogin(event) {
     event.preventDefault();
     const user = {
       userId: event.target.id.value,
+      password: event.target.pw.value,
     };
-    console.log(logIn);
-    dispatch({ type: "user/LOGIN", data: { user, } });
-    console.log(loginUser);
-    console.log(logIn);
-    if (logIn) alert("Hello");
-    else alert("Incorrenct ID or PW");
+
+    dispatch(doLoginUser(user))
+      .then((data) => {
+        console.log(data);
+        // console.log(data.payload);
+        if (data.payload.msg === "success") {
+          console.log("ttltltltlltlqkf");
+          alert("Hello");
+          navigate("/");
+        }
+        else {
+          console.log("failed to login");
+        }
+      })
+      .catch((error) => console.log(error));
+
   }
 
   return (
     <Container css={contStyle}>
-      <Box component="form" onSubmit={doSth}>
+      <Box component="form" onSubmit={handleLogin}>
         <TextField
           margin="normal"
           required
