@@ -1,5 +1,6 @@
 package com.family.gati.entity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor // 기본 생성자 세팅
 @AllArgsConstructor
 @Table(name = "USER")
-public class User implements UserDetails {
+public class User {
 
     @JsonIgnore
     @Id // DB 테이블의 PK와 객체의 필드 매핑
@@ -38,7 +39,7 @@ public class User implements UserDetails {
     @NotNull
     private String email;
 
-    @Column(name = "PASSWORD", columnDefinition = "CHAR(64)", length = 64, nullable = false)
+    @Column(name = "PASSWORD", columnDefinition = "CHAR(200)", length = 200, nullable = false)
     @NotNull
     private String password;
 
@@ -82,45 +83,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    /**
-     * Spring Security 회원 가입
-     */
-    @ElementCollection(fetch = FetchType.EAGER) // 값 타입을 컬렉션을 매핑할때 사용
-    @Builder.Default // 특정 필드를 특정 값으로 초기화할때
-    private List<String> roles = new ArrayList<>();
-
-    // UserDetails 구현 함수
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public String getUsername() { // UserDetails 인터페이스 커스텀
-        return nickName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    private String providerId;
 
     public User(
             String userId,
@@ -135,7 +98,8 @@ public class User implements UserDetails {
             LocalDateTime updateTime,
             String refreshToken,
             Role role,
-            AuthProvider authProvider
+            AuthProvider authProvider,
+            String providerId
     ){
         this.userId = userId;
         this.email = email;
@@ -150,10 +114,11 @@ public class User implements UserDetails {
         this.refreshToken = refreshToken;
         this.role = role != null ? role : Role.USER;
         this.authProvider = authProvider != null ? authProvider : authProvider.LOCAL;
+        this.providerId = providerId;
     }
 
-//    @Transactional
-    public void encodePassword(PasswordEncoder passwordEncoder){
-        password = passwordEncoder.encode(password);
-    }
+////    @Transactional
+//    public void encodePassword(PasswordEncoder passwordEncoder){
+//        password = passwordEncoder.encode(password);
+//    }
 }

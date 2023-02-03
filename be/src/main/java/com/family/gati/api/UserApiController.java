@@ -4,6 +4,7 @@ import com.family.gati.dto.UserDto;
 import com.family.gati.entity.AuthProvider;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
+import com.family.gati.payload.SignUpRequest;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.service.UserService;
 import com.family.gati.security.jwt.JwtTokenProvider;
@@ -16,10 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
  import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,22 +47,25 @@ public class UserApiController {
     @ApiOperation(value = "유저 회원가입", notes = "id, email, password, nickname, birth, phoneNumber")
     @PostMapping("/join")
     public ResponseEntity<?> join(@ApiParam(value = "id, email, password, nickname, birth, phoneNumber")
-                                      @RequestBody User user){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
-        logger.debug("user: {}", user.toString());
+                                      @RequestBody SignUpRequest request){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
+        logger.debug("user: {}", request.toString());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         User newUser = new User();
-        newUser.setUserId(user.getUserId());
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(user.getPassword());
-        newUser.setNickName(user.getNickName());
-        newUser.setBirth(user.getBirth());
-        newUser.setPhoneNumber(user.getPhoneNumber());
-        newUser.setRefreshToken(""); // Notnull 안해도 넣어줘야 되네 왜지?
+        newUser.setUserId(request.getUserId());
+        newUser.setEmail(request.getEmail());
+        newUser.setPassword(request.getPassword());
+
+//        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        newUser.setNickName(request.getNickName());
+        newUser.setBirth(request.getBirth());
+        newUser.setPhoneNumber(request.getPhoneNumber());
         newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
+        newUser.setUpdateTime(LocalDateTime.now());
         newUser.setAuthProvider(AuthProvider.LOCAL);
+        System.out.println(newUser);
 
         try{
             userService.join(newUser);
@@ -94,21 +100,26 @@ public class UserApiController {
                 new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
-            // passwordEncoder 오류.. 로그인은 됨
-//            if(!passwordEncoder.matches(userInfo.get("password"), user.getPassword())){
-//                logger.debug("비밀번호 불일치: {}", user.getPassword());
-//                resultMap.put("msg", FAIL);
-//                status = HttpStatus.NOT_FOUND;
-//                return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//            }
+            if(!passwordEncoder.matches(userInfo.get("password"), user.getPassword())){
+                logger.debug("비밀번호 불일치: {}", user.getPassword());
+                resultMap.put("msg", FAIL);
+                status = HttpStatus.NOT_FOUND;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
             
             String userId = user.getUserId();
             int userSeq = user.getUserSeq();
 
             // accessToken 발급
-            String token = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
+            String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
+//            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+//            // refreshToken 저장과 함께 DB에 저장됨
+//            HttpServletResponse response = null;
+//            jwtTokenProvider.createRefreshToken(authentication, response);
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            System.out.println(authentication.toString());
             resultMap.put("msg", SUCCESS);
-            resultMap.put("createToken", token);
+            resultMap.put("accessToken", accessToken);
             status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("일반 로그인 실퍠: {}", e.getMessage());
@@ -121,7 +132,7 @@ public class UserApiController {
 
     // userSeq로 유저 정보 가져오기
     @ApiOperation(value = "유저 정보 리턴")
-    @GetMapping("/{userSeq}")
+    @GetMapping("/seq/{userSeq}")
     public ResponseEntity<?> getUserByUserSeq(@ApiParam(value = "path로 userSeq 전달받음") @PathVariable("userSeq") int userSeq){
         logger.debug("userSeq: {}", userSeq);
 
@@ -149,7 +160,7 @@ public class UserApiController {
 
     // userId로 유저 정보 가져오기
     @ApiOperation("유저 정보 리턴")
-    @GetMapping("/{userId}")
+    @GetMapping("/id/{userId}")
     public ResponseEntity<?> getUserByUserId(@ApiParam(value = "path로 userId 전달받음")@PathVariable("userId") String userId){
         logger.debug("userId: {}", userId);
 
@@ -198,14 +209,27 @@ public class UserApiController {
     // 회원정보 변경
     @ApiOperation(value = "회원정보 변경")
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody User user){
-        logger.debug("user: {}", user);
+    public ResponseEntity<?> update(@RequestBody SignUpRequest request){
+        logger.debug("user: {}", request);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
+        User newUser = new User();
+        newUser.setUserId(request.getUserId());
+        newUser.setEmail(request.getEmail());
+        newUser.setPassword(request.getPassword());
+        newUser.setNickName(request.getNickName());
+        newUser.setBirth(request.getBirth());
+        newUser.setPhoneNumber(request.getPhoneNumber());
+        newUser.setRole(Role.USER);
+        newUser.setUpdateTime(LocalDateTime.now());
+        newUser.setAuthProvider(AuthProvider.LOCAL);
+        System.out.println(newUser);
+
         try{
             // 본인 확인 추가해야함
-            userService.updateUser(user);
+
+            userService.updateUser(newUser);
             String userId = new UserDto().getUserId(); // 이게 맞아? 흠..
             User modifiedUser = userRepository.findByUserId(userId);
             resultMap.put("msg", SUCCESS);

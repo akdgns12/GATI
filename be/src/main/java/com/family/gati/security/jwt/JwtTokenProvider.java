@@ -60,7 +60,6 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .signWith(getSignKey(SECRET_KEY), SignatureAlgorithm.HS256) // signWith depecreated
-//                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .setSubject(userSeq)
                 .claim(AUTHORITIES_KEY, role)
                 .setIssuer("debrains")
@@ -77,6 +76,7 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         return Jwts.builder()
+                .claim(AUTHORITIES_KEY, role)
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발행 시간 정보
                 .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH)) // set Expire Time
@@ -118,11 +118,13 @@ public class JwtTokenProvider {
     // Access Token을 검사하고 얻은 정보로 Authentication 객체 생성
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
-
+        System.out.println(claims);
+        System.out.println(claims.get(AUTHORITIES_KEY));
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
+        System.out.println(authorities.toString());
         CustomUserDetails principal = new CustomUserDetails(Integer.valueOf(claims.getSubject()), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
@@ -131,15 +133,14 @@ public class JwtTokenProvider {
     // 복호화해서 유저 정보 얻기
     public int getUserSeq(String token) {
         // depecreated 해결해야 함수 사용가능
-        Jws<Claims> claims = Jwts.parser().setSigningKey(getSignKey(SECRET_KEY)).parseClaimsJws(token);
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
         String user_seq = String.valueOf(claims.getBody().get("user_seq"));
         return Integer.parseInt(user_seq);
     }
 
-
     public Boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(getSignKey(SECRET_KEY)).parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
@@ -154,7 +155,7 @@ public class JwtTokenProvider {
     // Access Token 만료시 갱신때 사용할 정보를 얻기 위해 Claim 리턴
     private Claims parseClaims(String accessToken) {
         try {
-            return Jwts.parser().setSigningKey(getSignKey(SECRET_KEY)).parseClaimsJws(accessToken).getBody();
+            return Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
