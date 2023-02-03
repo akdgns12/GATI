@@ -28,13 +28,12 @@ echo "image rm start"
 if [ "${IMAGE_ID}" != "${EMPTY_STR}" ];then
         if [ "${IMAGE_ID}" != "${NEW_IMAGE_ID}" ];then
                 echo "image rm in start ${IMAGE_ID}"
-                docker image rm ${IMAGE_ID}
+                docker image rm -f ${IMAGE_ID}
                 echo "image rm in end"
         fi
 fi
 echo "image rm end"
 
 echo "docker run start"
-docker rm -f gati-front-dev
 docker run -dp 3000:3000 --mount type=bind,src=$(pwd)/src,target=/fe/src --name gati-front-dev ${IMAGE_NAME}
 echo "docker run end"
