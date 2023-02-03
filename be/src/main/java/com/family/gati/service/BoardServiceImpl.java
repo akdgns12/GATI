@@ -2,6 +2,8 @@ package com.family.gati.service;
 
 import com.family.gati.dto.BoardDto;
 import com.family.gati.entity.Board;
+import com.family.gati.entity.BoardLikes;
+import com.family.gati.repository.BoardLikesRepository;
 import com.family.gati.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
+    private final BoardLikesRepository boardLikesRepository;
     @Override
     public List<BoardDto> findByGroupId(Integer groupId) {
         List<Board> boards = boardRepository.findByGroupId(groupId);
@@ -44,6 +47,23 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public void deleteBoardById(Integer id) {
         boardRepository.deleteById(id);
+    }
+
+    public boolean findLikes(Integer boardId, String userId) {
+//        BoardLikes boardLikes = boardLikesRepository.findByBoardIdAndUserId(boardId, userId);
+        BoardLikes boardlike = new BoardLikes();
+        boardlike.setBoardId(boardId);
+        boardlike.setUserId(userId);
+        boardLikesRepository.save(boardlike);
+//        if (boardLikes == null) {
+//            BoardLikes boardlike = new BoardLikes();
+//            boardlike.setBoardId(boardId);
+//            boardlike.setUserId(userId);
+//            boardLikesRepository.save(boardlike);
+//            return true;
+//        }
+//        boardLikesRepository.deleteById(boardLikes.getId());
+        return false;
     }
 
 }

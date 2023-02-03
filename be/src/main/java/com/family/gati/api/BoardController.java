@@ -73,4 +73,20 @@ public class BoardController {
         boardCommentService.deleteCommentById(id);
         return ResponseEntity.ok(null);
     }
+
+    @PostMapping("/likes")
+    public ResponseEntity<?> addBoardLikes(@RequestBody Integer boardId) {
+        //userId 후에 token으로 얻을 것.
+        boardService.findLikes(boardId, "userId");
+//        if (boardService.findLikes(boardId, userId)) {
+////            BoardDto boardDto = boardService.findById(boardId);
+////            boardDto.setLikes(boardDto.getLikes() + 1);
+////            boardService.updateBoard(boardDto);
+//            return ResponseEntity.ok(null);
+//        }
+////        BoardDto boardDto = boardService.findById(boardId);
+////        boardDto.setLikes(boardDto.getLikes() - 1);
+////        boardService.updateBoard(boardDto);
+        return ResponseEntity.ok(null);
+    }
 }
