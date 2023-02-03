@@ -46,7 +46,7 @@ export default function ArticleCard(props) {
   }
 
   return (
-    <Box style={{ marginBottom: "10px", width: "100%" }}>
+    <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
       <CardHeader
         action={
           <IconButton aria-label="settings" onClick={showOptions}>
@@ -92,6 +92,6 @@ export default function ArticleCard(props) {
           )
           : null
       }
-    </Box>
+    </Card>
   );
 }
