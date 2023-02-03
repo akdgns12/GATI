@@ -1,4 +1,4 @@
-import "./App.css";
+
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import PhotoBookPage from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
 import PictureTogether from "./pages/PictureTogether/PictureTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
+import Box from '@mui/material/Box';
 
 const App = () => {
   const location = useLocation();
