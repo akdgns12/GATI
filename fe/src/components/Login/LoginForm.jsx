@@ -57,10 +57,9 @@ const LoginFrom = () => {
 
     dispatch(doLoginUser(user))
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         // console.log(data.payload);
         if (data.payload.msg === "success") {
-          console.log("ttltltltlltlqkf");
           alert("Hello");
           navigate("/");
         }
