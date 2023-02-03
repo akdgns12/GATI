@@ -27,21 +27,22 @@ const App = () => {
   if (logIn === false) {
     return <Login />
   }
-
-  return (
-    <div className="App" >
-      {!excludeHeader() && <AppBar />}
-      <Routes>
-        <Route path="/*" element={<Home />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/photobook/*" element={<PhotoBookPage />} />
-        <Route path="/gotg" element={<GoTogether />} />
-        <Route path="/pictg" element={<PictureTogether />} />
-        <Route path="/login/*" element={<Login />} />
-      </Routes>
-      {!excludeHeader() && <NavBar />}
-    </div>
-  );
+  else {
+    return (
+      <div className="App" >
+        {!excludeHeader() && <AppBar />}
+        <Routes>
+          <Route path="/*" element={<Home />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/photobook/*" element={<PhotoBookPage />} />
+          <Route path="/gotg" element={<GoTogether />} />
+          <Route path="/pictg" element={<PictureTogether />} />
+          <Route path="/login/*" element={<Login />} />
+        </Routes>
+        {!excludeHeader() && <NavBar />}
+      </div>
+    );
+  }
 }
 
 export default App;
