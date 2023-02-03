@@ -14,59 +14,63 @@ export default function SimpleBottomNavigation() {
   const [value, setValue] = React.useState(0);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-      }}
-    >
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
+    <Box sx={{
+      height:55,
+    }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
         }}
-      >
-        <BottomNavigationAction 
-          component={Link}
-          to="/"
-          label="Home" 
-          icon={<HomeOutlinedIcon />}
-          style={{color: '#EF9A9A'}} 
-        />
-        <BottomNavigationAction
-          component={Link}
-          to="/calendar"
-          label="Calendar"
-          icon={<CalendarMonthOutlinedIcon />}
-          style={{color: '#EF9A9A'}}
-        />
-        <BottomNavigationAction
-          component={Link}
-          to="/photobook"
-          label="PhotoBook"
-          icon={<PhotoOutlinedIcon />}
-          style={{color: '#EF9A9A'}}
-        />
-        <BottomNavigationAction
-          component={Link}
-          to="/gotg"
-          label="가치가자"
-          icon={<Diversity1OutlinedIcon />}
-          style={{color: '#EF9A9A'}}
-        />
-        <BottomNavigationAction
-          component={Link}
-          to="/pictg"
-          label="가치한장"
-          icon={<PortraitOutlinedIcon />}
-          style={{color: '#EF9A9A'}}
-        />
-      </BottomNavigation>
+        >
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+          >
+          <BottomNavigationAction 
+            component={Link}
+            to="/"
+            label="Home" 
+            icon={<HomeOutlinedIcon />}
+            style={{color: '#EF9A9A'}} 
+            />
+          <BottomNavigationAction
+            component={Link}
+            to="/calendar"
+            label="Calendar"
+            icon={<CalendarMonthOutlinedIcon />}
+            style={{color: '#EF9A9A'}}
+            />
+          <BottomNavigationAction
+            component={Link}
+            to="/photobook"
+            label="PhotoBook"
+            icon={<PhotoOutlinedIcon />}
+            style={{color: '#EF9A9A'}}
+            />
+          <BottomNavigationAction
+            component={Link}
+            to="/gotg"
+            label="가치가자"
+            icon={<Diversity1OutlinedIcon />}
+            style={{color: '#EF9A9A'}}
+            />
+          <BottomNavigationAction
+            component={Link}
+            to="/pictg"
+            label="가치한장"
+            icon={<PortraitOutlinedIcon />}
+            style={{color: '#EF9A9A'}}
+            />
+        </BottomNavigation>
+      </Box>
     </Box>
   );
 }
