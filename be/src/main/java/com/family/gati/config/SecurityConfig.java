@@ -6,6 +6,7 @@ import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.security.oauth.*;
 import com.family.gati.security.jwt.JwtAccessDeniedHandler;
 import com.family.gati.security.jwt.JwtAuthenticationEntryPoint;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
