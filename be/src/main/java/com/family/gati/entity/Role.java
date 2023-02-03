@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
-@AllArgsConstructor
 public enum Role {
     USER("USER", "일반 사용자 권한"),
     ADMIN("ADMIN", "관리자 권한");
