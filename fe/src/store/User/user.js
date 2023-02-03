@@ -1,29 +1,54 @@
-// action types
-const LOGIN = "user/LOGIN";
+import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit";
+import httpClient from "../../utils/axios";
 
-// action creators
-export const login = (user) => ({ type: LOGIN, user });
+// actions
+export const doLoginUser = createAsyncThunk(
+  "user/loginUser",
+  async (userData) => {
+    // const response = await httpClient.post(TXdata);
+    try {
+      const response = await httpClient.post("/user/login", {
+        userId: userData.userId,
+        password: userData.password,
+      });
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return { msg: error };
+    }
+  }
+);
 
 // initial state
 const initialState = {
+  loading: "",
   logIn: false,
   loginUser: {
     userId: "",
+    accessToken: "",
   },
   groups: [],
   // token & other stuffs
 };
 
-// reducer
-export default function user(state = initialState, action) {
-  switch (action.type) {
-    case LOGIN:
-      return {
-        ...state,
-        loginUser: action.data.user,
-        logIn: true,
-      };
-    default:
-      return state;
-  }
-}
+// slice
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(doLoginUser.pending, (state) => {
+      state.loading = "pending";
+    });
+    builder.addCase(doLoginUser.fulfilled, (state, action) => {
+      state.loading = "success";
+      state.logIn = true;
+      state.loginUser.accessToken = action.payload.createToken;
+    });
+    builder.addCase(doLoginUser.rejected, (state) => {
+      state.loading = "rejected";
+    });
+  },
+});
+
+export default userSlice.reducer;
