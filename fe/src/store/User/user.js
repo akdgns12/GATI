@@ -4,17 +4,17 @@ import httpClient from "../../utils/axios";
 // actions
 export const doLoginUser = createAsyncThunk(
   "user/loginUser",
-  async (userData) => {
+  async (userData, { rejectWithValue }) => {
     // const response = await httpClient.post(TXdata);
     try {
       const response = await httpClient.post("/user/login", {
         userId: userData.userId,
         password: userData.password,
       });
-      console.log(response);
       return response.data;
     } catch (error) {
-      return { msg: error };
+      console.log(error);
+      return rejectWithValue(error);
     }
   }
 );
