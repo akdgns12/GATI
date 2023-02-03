@@ -76,7 +76,7 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         return Jwts.builder()
-                .claim(AUTHORITIES_KEY, role)
+//                .claim(AUTHORITIES_KEY, role)
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발행 시간 정보
                 .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH)) // set Expire Time
