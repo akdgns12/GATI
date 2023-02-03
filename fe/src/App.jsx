@@ -13,13 +13,20 @@ import PictureTogether from "./pages/PictureTogether/PictureTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
 import Box from '@mui/material/Box';
 
+import { useSelector } from 'react-redux';
+
 const App = () => {
   const location = useLocation();
+  const { loginUser, logIn } = useSelector((state) => state.user);
 
   function excludeHeader() {
     if (location.pathname.startsWith("/login")) return true;
     else return false;
   };
+
+  if (logIn === false) {
+    return <Login />
+  }
 
   return (
     <div className="App" >
