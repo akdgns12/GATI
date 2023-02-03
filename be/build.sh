@@ -28,7 +28,7 @@ echo "image rm start"
 if [ "${IMAGE_ID}" != "${EMPTY_STR}" ];then
         if [ "${IMAGE_ID}" != "${NEW_IMAGE_ID}" ];then
                 echo "image rm in start ${IMAGE_ID}"
-		docker image stop ${IMAGE_ID}
+		docker stop ${IMAGE_ID}
                 docker image rm ${IMAGE_ID}
                 echo "image rm in end"
         fi
