@@ -1,5 +1,7 @@
 package com.family.gati.entity;
 
+import com.family.gati.dto.AdminMissionDto;
+import com.family.gati.util.CommonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,4 +36,35 @@ public class AdminMission {
 
     @Column(name = "END_DATE", nullable = false)
     private Date endDate;
+
+    private AdminMission(AdminMissionBuilder builder) {
+        this.id = builder.id;
+        this.title = builder.title;
+        this.createTime = builder.createTime;
+        this.updateTime = builder.updateTime;
+        this.startDate = builder.startDate;
+        this.endDate = builder.endDate;
+    }
+
+    public static class AdminMissionBuilder implements CommonBuilder<AdminMission> {
+        private Integer id;
+        private String title;
+        private Timestamp createTime;
+        private Timestamp updateTime;
+        private Date startDate;
+        private Date endDate;
+
+        public AdminMissionBuilder(AdminMissionDto adminMissionDto) {
+            this.id = adminMissionDto.getId();
+            this.title = adminMissionDto.getTitle();
+            this.createTime = adminMissionDto.getCreateTime();
+            this.updateTime = adminMissionDto.getUpdateTime();
+            this.startDate = adminMissionDto.getStartDate();
+            this.endDate = adminMissionDto.getEndDate();
+        }
+
+        public AdminMission build() {
+            return new AdminMission(this);
+        }
+    }
 }

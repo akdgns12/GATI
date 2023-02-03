@@ -21,7 +21,7 @@ public class BoardDto {
     private Integer comments;
     private String nickname;
 
-    private BoardDto(BoardDto.BoardDtoBuilder builder) {
+    private BoardDto(BoardDtoBuilder builder) {
         this.id = builder.id;
         this.groupId = builder.groupId;
         this.userId = builder.userId;
