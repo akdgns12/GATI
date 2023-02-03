@@ -90,7 +90,7 @@ const PrimaryAppBar = () => {
           anchor="right"
           open={open}
         >
-          <Container sx={{height: '15%'}}>
+          <Container>
             <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
               <IconButton onClick={handleDrawerClose} sx={{fontSize: 'large'}}>
                 {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -102,7 +102,7 @@ const PrimaryAppBar = () => {
             </Typography>
           </Container>
           <Divider />
-          <Container >
+          <Container>
             <Box direction='row' spacing={2} justifyContent='space-between' sx={{p: 1}}>
               <Button variant='outlined'>내 정보</Button>
               <Button variant='outlined'>가족 그룹</Button>
