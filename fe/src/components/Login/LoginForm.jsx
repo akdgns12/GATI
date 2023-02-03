@@ -65,6 +65,7 @@ const LoginFrom = () => {
         }
         else {
           console.log("failed to login");
+          alert("Incorrect ID or PW");
         }
       })
       .catch((error) => console.log(error));
