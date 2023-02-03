@@ -50,19 +50,17 @@ public class BoardServiceImpl implements BoardService{
     }
 
     public boolean findLikes(Integer boardId, String userId) {
-//        BoardLikes boardLikes = boardLikesRepository.findByBoardIdAndUserId(boardId, userId);
-        BoardLikes boardlike = new BoardLikes();
-        boardlike.setBoardId(boardId);
-        boardlike.setUserId(userId);
-        boardLikesRepository.save(boardlike);
-//        if (boardLikes == null) {
-//            BoardLikes boardlike = new BoardLikes();
-//            boardlike.setBoardId(boardId);
-//            boardlike.setUserId(userId);
-//            boardLikesRepository.save(boardlike);
-//            return true;
-//        }
-//        boardLikesRepository.deleteById(boardLikes.getId());
+        BoardLikes findBoardLikes = boardLikesRepository.findByBoardIdAndUserId(boardId, userId);
+        System.out.println(findBoardLikes);
+
+        if (findBoardLikes == null) {
+            BoardLikes boardlikes = new BoardLikes();
+            boardlikes.setBoardId(boardId);
+            boardlikes.setUserId(userId);
+            boardLikesRepository.save(boardlikes);
+            return true;
+        }
+        boardLikesRepository.deleteById(findBoardLikes.getId());
         return false;
     }
 
