@@ -1,0 +1,28 @@
+body {
+  background: #ccc;
+}
+
+.slick-slide > div {
+  margin: 0 10px
+}
+
+.slick-list {
+  margin: 0 -10px
+}
+
+.card{
+  border: 1px solid #fff;
+  background: #FFFBEB;
+  border-radius: 10px;
+  height: 100%;
+}
+
+.card-top img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-bottom {
+  margin: 15px 10px;
+}

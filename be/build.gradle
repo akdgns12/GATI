@@ -73,3 +73,8 @@ configurations {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//jar 사용 안함
+jar{
+	enabled = false
+}
