@@ -89,7 +89,7 @@ public class UserApiController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@ApiParam(value = "userId, password 받음") @RequestBody Map<String, String> userInfo){ // 여기도 마찬가지로 payload.LoginRequest로
         User user = userRepository.findByUserId(userInfo.get("userId"));
-        logger.debug("userId:{} ", user);
+        logger.info("userId:{} ", user);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
@@ -136,7 +136,6 @@ public class UserApiController {
     @GetMapping("/seq/{userSeq}")
     public ResponseEntity<?> getUserByUserSeq(@ApiParam(value = "path로 userSeq 전달받음") @PathVariable("userSeq") int userSeq){
         logger.debug("userSeq: {}", userSeq);
-
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
