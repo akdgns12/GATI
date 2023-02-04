@@ -118,6 +118,7 @@ public class UserApiController {
 //            jwtTokenProvider.createRefreshToken(authentication, response);
             Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
             System.out.println(authentication.toString());
+
             resultMap.put("msg", SUCCESS);
             resultMap.put("accessToken", accessToken);
             status = HttpStatus.OK;

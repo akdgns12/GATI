@@ -71,27 +71,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .accessDeniedHandler(jwtAccessDeniedHandler);
 //            .and()
 //                .authorizeRequests()
 //                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 //                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
 //                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
 //                .anyRequest().authenticated()
-                .and()
-                .oauth2Login()
-                .authorizationEndpoint()
-                .baseUri("/oauth2/authorization")
-                .authorizationRequestRepository(cookieAuthorizationRequestRepository)
-                .and()
-                .redirectionEndpoint()
-                .baseUri("/*/oauth2/callback/*")
-                .and()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler);
+                // Oauth 관련 설정
+//                .and()
+//                .oauth2Login()
+//                .authorizationEndpoint()
+//                .baseUri("/oauth2/authorization")
+//                .authorizationRequestRepository(cookieAuthorizationRequestRepository)
+//                .and()
+//                .redirectionEndpoint()
+//                .baseUri("/*/oauth2/callback/*")
+//                .and()
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
+//                .and()
+//                .successHandler(oAuth2AuthenticationSuccessHandler)
+//                .failureHandler(oAuth2AuthenticationFailureHandler);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
