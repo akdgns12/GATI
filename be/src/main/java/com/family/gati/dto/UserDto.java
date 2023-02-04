@@ -10,10 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @RequiredArgsConstructor
 public class UserDto {
-    /**
-     * entity가 알 필요 없는것
-     * accessToken, salt?(추후 security에서 암호화 함)
-     */
+
     private int userSeq;
     private String userId;
     private String email;
@@ -27,7 +24,6 @@ public class UserDto {
     private LocalDateTime updateTime;
     private String refreshToken;
     private Role role;
-    private AuthProvider authProvider;
 
     public UserDto(User user){
         this.userSeq = user.getUserSeq();
@@ -43,7 +39,6 @@ public class UserDto {
         this.updateTime = user.getUpdateTime();
         this.refreshToken = user.getRefreshToken();
         this.role = user.getRole();
-        this.authProvider = getAuthProvider();
     }
 
     public UserDto(String refreshToken){
