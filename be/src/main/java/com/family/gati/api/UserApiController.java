@@ -17,12 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
  import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -246,20 +244,16 @@ public class UserApiController {
 
     // 회원 탈퇴
     @ApiOperation(value = "회원탈퇴")
-    @DeleteMapping
-    public ResponseEntity<?> delete(@PathVariable String token){
-        logger.debug("userId: {}", token);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> delete(@PathVariable String userId){
+        logger.debug("userId: {}", userId);
+        User user = userRepository.findByUserId(userId);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            if(!jwtTokenProvider.validateToken(token)){
-                resultMap.put("msg", "유효하지 않은 토큰");
-                status = HttpStatus.BAD_REQUEST;
-                return new ResponseEntity<Map<String, Object>>(resultMap, status);
-            }
             // JwtTokenProvider에 작성 필요
-            int userSeq = jwtTokenProvider.getUserSeq(token);  
+            int userSeq = user.getUserSeq();
             userService.deleteUser(userSeq);
 
             // 스프링 시큐리티 - 인증 후 인증 결과(user 객체, 권한 정보)를 담고 SecurityContext에 저장됨
@@ -275,8 +269,4 @@ public class UserApiController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
-
-    /*
-        소셜
-     */
 }

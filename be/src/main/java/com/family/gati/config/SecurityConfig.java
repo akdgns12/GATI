@@ -1,9 +1,8 @@
 package com.family.gati.config;
 
-//import com.family.gati.security.jwt.JwtAuthenticationFilter;
+import com.family.gati.security.CookieAuthorizationRequestRepository;
 import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.security.jwt.JwtTokenProvider;
-import com.family.gati.security.oauth.*;
 import com.family.gati.security.jwt.JwtAccessDeniedHandler;
 import com.family.gati.security.jwt.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +27,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-//    private final CustomUserDetails customUserDetails;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -78,22 +73,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
 //                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
 //                .anyRequest().authenticated()
-                // Oauth 관련 설정
-//                .and()
-//                .oauth2Login()
-//                .authorizationEndpoint()
-//                .baseUri("/oauth2/authorization")
-//                .authorizationRequestRepository(cookieAuthorizationRequestRepository)
-//                .and()
-//                .redirectionEndpoint()
-//                .baseUri("/*/oauth2/callback/*")
-//                .and()
-//                .userInfoEndpoint()
-//                .userService(customOAuth2UserService)
-//                .and()
-//                .successHandler(oAuth2AuthenticationSuccessHandler)
-//                .failureHandler(oAuth2AuthenticationFailureHandler);
-
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
     // CORS 허용 적용

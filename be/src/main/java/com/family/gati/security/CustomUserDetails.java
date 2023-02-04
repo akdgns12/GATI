@@ -1,4 +1,4 @@
-package com.family.gati.security.oauth;
+package com.family.gati.security;
 
 import com.family.gati.entity.User;
 import org.springframework.security.core.GrantedAuthority;
