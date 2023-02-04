@@ -79,13 +79,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "AUTH_PROVIDER", length = 20)
-    @Enumerated(EnumType.STRING)
-    private AuthProvider authProvider;
-
-
-    private String providerId;
-
     public User(
             String userId,
             String email,
@@ -98,9 +91,7 @@ public class User {
             LocalDateTime createTime,
             LocalDateTime updateTime,
             String refreshToken,
-            Role role,
-            AuthProvider authProvider,
-            String providerId
+            Role role
     ){
         this.userId = userId;
         this.email = email;
@@ -114,12 +105,5 @@ public class User {
         this.updateTime = updateTime;
         this.refreshToken = refreshToken;
         this.role = role != null ? role : Role.USER;
-        this.authProvider = authProvider != null ? authProvider : authProvider.LOCAL;
-        this.providerId = providerId;
     }
-
-////    @Transactional
-//    public void encodePassword(PasswordEncoder passwordEncoder){
-//        password = passwordEncoder.encode(password);
-//    }
 }
