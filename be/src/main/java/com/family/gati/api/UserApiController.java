@@ -116,8 +116,8 @@ public class UserApiController {
 //            // refreshToken 저장과 함께 DB에 저장됨
 //            HttpServletResponse response = null;
 //            jwtTokenProvider.createRefreshToken(authentication, response);
-            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-            System.out.println(authentication.toString());
+//            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+//            System.out.println(authentication.toString());
 
             resultMap.put("msg", SUCCESS);
             resultMap.put("accessToken", accessToken);
