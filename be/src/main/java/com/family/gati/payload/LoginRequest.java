@@ -8,6 +8,6 @@ import lombok.Setter;
 @Data
 @Getter @Setter
 public class LoginRequest { // oauth 회원관리 용도
-    String email;
+    String id;
     String password;
 }
