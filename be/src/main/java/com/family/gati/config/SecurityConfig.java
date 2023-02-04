@@ -63,9 +63,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                 .frameOptions().sameOrigin()
                 .and()
-                // 세션 안쓰고 JWT 쓸것이므로 비활성화
-//            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//            .and()
                 .authorizeRequests()
 //                .antMatchers("/chat/**").hasRole("USER")  // chat으로 시작하는 리소스에 대한 접근 권한 설정 ; TEST!!!
                 .antMatchers("/**").permitAll()
