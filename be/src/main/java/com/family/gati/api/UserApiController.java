@@ -1,10 +1,10 @@
 package com.family.gati.api;
 
-import com.family.gati.dto.UserDto;
-import com.family.gati.entity.AuthProvider;
+import com.family.gati.dto.UserLoginDto;
+import com.family.gati.dto.UserUpdateDto;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
-import com.family.gati.payload.SignUpRequest;
+import com.family.gati.dto.UserSignUpRequest;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.service.UserService;
 import com.family.gati.security.jwt.JwtTokenProvider;
@@ -45,7 +45,7 @@ public class UserApiController {
     @ApiOperation(value = "유저 회원가입", notes = "id, email, password, nickname, birth, phoneNumber")
     @PostMapping("/join")
     public ResponseEntity<?> join(@ApiParam(value = "id, email, password, nickname, birth, phoneNumber")
-                                      @RequestBody SignUpRequest request){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
+                                      @RequestBody UserSignUpRequest request){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
         logger.debug("user: {}", request.toString());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
@@ -85,8 +85,8 @@ public class UserApiController {
      */
     @ApiOperation(value = "일반 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@ApiParam(value = "userId, password 받음") @RequestBody Map<String, String> userInfo){ // 여기도 마찬가지로 payload.LoginRequest로
-        User user = userRepository.findByUserId(userInfo.get("userId"));
+    public ResponseEntity<?> login(@ApiParam(value = "userId, password 받음") @RequestBody UserLoginDto userLoginDto){
+        User user = userRepository.findByUserId(userLoginDto.getUserId());
         logger.info("userId:{} ", user);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
@@ -98,18 +98,21 @@ public class UserApiController {
                 new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
-            if(!passwordEncoder.matches(userInfo.get("password"), user.getPassword())){
+            if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())){
                 logger.debug("비밀번호 불일치: {}", user.getPassword());
                 resultMap.put("msg", FAIL);
                 status = HttpStatus.NOT_FOUND;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
-            
+
             String userId = user.getUserId();
             int userSeq = user.getUserSeq();
 
             // accessToken 발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
+            // refreshToken 발급하고 DB에 저장
+
+//            String refreshToken = jwtTokenProvider.
 //            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 //            // refreshToken 저장과 함께 DB에 저장됨
 //            HttpServletResponse response = null;
@@ -206,36 +209,22 @@ public class UserApiController {
 
     // 회원정보 변경
     @ApiOperation(value = "회원정보 변경")
-    @PutMapping
-    public ResponseEntity<?> update(@RequestBody SignUpRequest request){
-        logger.debug("user: {}", request);
+    @PutMapping("/change/{userId}")
+    public ResponseEntity<?> update(@PathVariable("userId") String userId,
+                                    @RequestBody UserUpdateDto userUpdateDto){
+        logger.debug("user: {}", userId);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
-        User newUser = new User();
-        newUser.setUserId(request.getUserId());
-        newUser.setEmail(request.getEmail());
-        newUser.setPassword(request.getPassword());
-        newUser.setNickName(request.getNickName());
-        newUser.setBirth(request.getBirth());
-        newUser.setPhoneNumber(request.getPhoneNumber());
-        newUser.setRole(Role.USER);
-        newUser.setUpdateTime(LocalDateTime.now());
-        newUser.setAuthProvider(AuthProvider.LOCAL);
-        System.out.println(newUser);
-
         try{
-            // 본인 확인 추가해야함
-
-            userService.updateUser(newUser);
-            String userId = new UserDto().getUserId(); // 이게 맞아? 흠..
+            userService.updateUser(userId, userUpdateDto);
             User modifiedUser = userRepository.findByUserId(userId);
             resultMap.put("msg", SUCCESS);
             resultMap.put("modifiedUser", modifiedUser);
             status = HttpStatus.OK;
         }catch (Exception e){
             logger.error("회원정보 변경 실패: {}", e);
-            resultMap.put("msg", e.getMessage());
+            resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
