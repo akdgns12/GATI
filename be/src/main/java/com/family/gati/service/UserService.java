@@ -19,22 +19,22 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void join(User user){
-//        validateDuplicateUser(user);
-//        user.setUserId(user.getUserId());
-//        user.setEmail(user.getEmail());
-//
-//        user.setPassword(user.getPassword());
-//        user.encodePassword(passwordEncoder);
+        validateDuplicateUser(user);
+        user.setUserId(user.getUserId());
+        user.setEmail(user.getEmail());
 
-//        user.setNickName(user.getNickName());
-//        user.setBirth(user.getBirth());
-//        user.setPhoneNumber(user.getPhoneNumber());
+        user.setPassword(user.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-//        user.setPlusMinus(user.getPlusMinus());
-//        user.setCreateTime(LocalDateTime.now());
-//        user.setUpdateTime(LocalDateTime.now());
+        user.setNickName(user.getNickName());
+        user.setBirth(user.getBirth());
+        user.setPhoneNumber(user.getPhoneNumber());
+
+        user.setPlusMinus(user.getPlusMinus());
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
         /*
             token?
             아냐, 회원가입 후 로그인할 때 토큰 생성해주는게 맞지
@@ -64,20 +64,21 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void updateUser(User user) {
-        System.out.println("0");
-        user.setUserId(user.getUserId());
-        System.out.println("1");
-        user.setPassword(user.getPassword());
-        System.out.println("2");
-        user.setBirth(user.getBirth());
-        System.out.println("3");
-        user.setEmail(user.getEmail());
-        System.out.println("4");
-        user.setNickName(user.getNickName());
-        user.setMainGroup(user.getMainGroup());
-        user.setUpdateTime(LocalDateTime.now());
-        user.setNickName(user.getNickName());
+        User modifiedUser = userRepository.findByEmail(user.getEmail());
+        System.out.println(modifiedUser);
+        modifiedUser.setUserId(user.getUserId());
+        modifiedUser.setEmail(user.getEmail());
+        // 비밀번호도 변경가능하게?
+        modifiedUser.setPassword(user.getPassword());
+        modifiedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        modifiedUser.setNickName(user.getNickName());
+        modifiedUser.setBirth(user.getBirth());
+        modifiedUser.setPhoneNumber(user.getPhoneNumber());
+
+        modifiedUser.setPlusMinus(user.getPlusMinus());
+        modifiedUser.setUpdateTime(LocalDateTime.now());
 
         userRepository.save(user);
     }
