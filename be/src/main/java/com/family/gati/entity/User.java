@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor // 기본 생성자 세팅
 @AllArgsConstructor
 @Table(name = "USER")
-public class User {
+public class User implements UserDetails{
 
     @JsonIgnore
     @Id // DB 테이블의 PK와 객체의 필드 매핑
@@ -79,12 +79,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "AUTH_PROVIDER", length = 20)
-    @Enumerated(EnumType.STRING)
-    private AuthProvider authProvider;
-
-
-    private String providerId;
+    @Builder
+    public User(String userId, String password){
+        this.userId = userId;
+        this.password = password;
+    }
 
     public User(
             String userId,
@@ -98,9 +97,7 @@ public class User {
             LocalDateTime createTime,
             LocalDateTime updateTime,
             String refreshToken,
-            Role role,
-            AuthProvider authProvider,
-            String providerId
+            Role role
     ){
         this.userId = userId;
         this.email = email;
@@ -114,12 +111,41 @@ public class User {
         this.updateTime = updateTime;
         this.refreshToken = refreshToken;
         this.role = role != null ? role : Role.USER;
-        this.authProvider = authProvider != null ? authProvider : authProvider.LOCAL;
-        this.providerId = providerId;
     }
 
-////    @Transactional
-//    public void encodePassword(PasswordEncoder passwordEncoder){
-//        password = passwordEncoder.encode(password);
-//    }
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return userId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }
