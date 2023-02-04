@@ -50,7 +50,7 @@ public class JwtTokenProvider {
 
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
-        String userSeq = user.getName();
+        String userSeq = user.getUsername();
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -69,11 +69,10 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위 (sub)
         claims.put("user_seq", userSeq); // 정보는 key / value 쌍으로 저장된다.
         claims.put("userId", userId);  // sub에서 이미 저장했지만, 일단 추가
-//        claims.put("roles", roles);
+        claims.put("roles", AUTHORITIES_KEY);
 
         Date now = new Date();
         return Jwts.builder()
-//                .claim(AUTHORITIES_KEY, role)
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발행 시간 정보
                 .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH)) // set Expire Time
@@ -81,25 +80,38 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    private void saveRefreshToken(Authentication authentication, String refreshToken) {
+    public String createRefreshTokenByUserInfo(String userId, int userSeq) {
+        Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위 (sub)
+        claims.put("user_seq", userSeq); // 정보는 key / value 쌍으로 저장된다.
+        claims.put("userId", userId);  // sub에서 이미 저장했지만, 일단 추가
+        claims.put("roles", AUTHORITIES_KEY);
+
+        Date now = new Date();
+        return Jwts.builder()
+                .setClaims(claims) // 정보 저장
+                .setIssuedAt(now) // 토큰 발행 시간 정보
+                .setExpiration(new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_LENGTH)) // set Expire Time
+                .signWith(getSignKey(SECRET_KEY), SignatureAlgorithm.HS256)  // 사용할 암호화 알고리즘과 signature 에 들어갈 secret값 세팅
+                .compact();
+    }
+
+    public void saveRefreshToken(Authentication authentication, String refreshToken) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        int userSeq = Integer.valueOf(user.getName());
+        int userSeq = Integer.valueOf(user.getUsername());
 
         userRepository.updateRefreshToken(userSeq, refreshToken);
     }
 
     // Access Token을 검사하고 얻은 정보로 Authentication 객체 생성
-    public Authentication getAuthentication(String accessToken) {
-        Claims claims = parseClaims(accessToken);
-        System.out.println(claims);
-        System.out.println(claims.get(AUTHORITIES_KEY));
+    public Authentication getAuthentication(String token) {
+        Claims claims = parseClaims(token);
+
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-        System.out.println(authorities.toString());
-        CustomUserDetails principal = new CustomUserDetails(Integer.valueOf(claims.getSubject()), "", authorities);
 
+        CustomUserDetails principal = new CustomUserDetails(Integer.valueOf(claims.getSubject()), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

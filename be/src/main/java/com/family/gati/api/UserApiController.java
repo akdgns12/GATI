@@ -17,10 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
  import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.attachment.AttachmentUnmarshaller;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +66,6 @@ public class UserApiController {
         newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setUpdateTime(LocalDateTime.now());
-        newUser.setAuthProvider(AuthProvider.LOCAL);
         System.out.println(newUser);
 
         try{
@@ -86,6 +89,7 @@ public class UserApiController {
     @ApiOperation(value = "일반 로그인")
     @PostMapping("/login")
     public ResponseEntity<?> login(@ApiParam(value = "userId, password 받음") @RequestBody UserLoginDto userLoginDto){
+//        UserDetails userDetails =
         User user = userRepository.findByUserId(userLoginDto.getUserId());
         logger.info("userId:{} ", user);
         Map<String, Object> resultMap = new HashMap<>();
@@ -111,14 +115,8 @@ public class UserApiController {
             // accessToken 발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
             // refreshToken 발급하고 DB에 저장
-
-//            String refreshToken = jwtTokenProvider.
-//            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-//            // refreshToken 저장과 함께 DB에 저장됨
-//            HttpServletResponse response = null;
-//            jwtTokenProvider.createRefreshToken(authentication, response);
-//            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-//            System.out.println(authentication.toString());
+            String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
+            userRepository.updateRefreshToken(userSeq, refreshToken);
 
             resultMap.put("msg", SUCCESS);
             resultMap.put("accessToken", accessToken);

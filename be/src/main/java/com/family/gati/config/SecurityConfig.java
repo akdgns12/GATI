@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     // 패스워드 인코더
@@ -59,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
-//                .antMatchers("/chat/**").hasRole("USER")  // chat으로 시작하는 리소스에 대한 접근 권한 설정 ; TEST!!!
                 .antMatchers("/**").permitAll()
                 .and()
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter보다 앞으로 설정

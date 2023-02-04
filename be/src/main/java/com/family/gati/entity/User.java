@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor // 기본 생성자 세팅
 @AllArgsConstructor
 @Table(name = "USER")
-public class User {
+public class User implements UserDetails{
 
     @JsonIgnore
     @Id // DB 테이블의 PK와 객체의 필드 매핑
@@ -79,6 +79,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Builder
+    public User(String userId, String password){
+        this.userId = userId;
+        this.password = password;
+    }
+
     public User(
             String userId,
             String email,
@@ -105,5 +111,41 @@ public class User {
         this.updateTime = updateTime;
         this.refreshToken = refreshToken;
         this.role = role != null ? role : Role.USER;
+    }
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return userId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }
