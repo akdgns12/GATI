@@ -55,10 +55,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void modifyMainGroup(String userId, int groupId){
+    public void modifyMainFamily(String userId, int groupId){
         User user = userRepository.findByUserId(userId);
         user.setUserId(userId);
-        user.setMainGroup(groupId);
+        user.setMainFamily(groupId);
 
         userRepository.save(user);
     }

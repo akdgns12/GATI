@@ -4,7 +4,6 @@ import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import lombok.*;
 
-import java.security.AuthProvider;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,7 +17,7 @@ public class UserDto {
     private String nickName;
     private String birth;
     private String phoneNumber;
-    private int mainGroup;
+    private int mainFamily;
     private int plusMinus;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
@@ -33,7 +32,7 @@ public class UserDto {
         this.nickName = user.getNickName();
         this.birth = user.getBirth();
         this.phoneNumber = user.getPhoneNumber();
-        this.mainGroup = user.getMainGroup();
+        this.mainFamily = user.getMainFamily();
         this.plusMinus = user.getPlusMinus();
         this.createTime = user.getCreateTime();
         this.updateTime = user.getUpdateTime();

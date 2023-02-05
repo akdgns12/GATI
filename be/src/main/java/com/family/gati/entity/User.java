@@ -55,8 +55,8 @@ public class User implements UserDetails{
     @NotNull
     private String phoneNumber;
 
-    @Column(name = "MAIN_GROUP")
-    private Integer mainGroup;
+    @Column(name = "MAIN_FAMILY")
+    private Integer mainFamily;
 
     @Column(name = "PLUS_MINUS", columnDefinition = "TINYINT(1) DEFAULT 0", length = 1)
     private int plusMinus;
@@ -92,7 +92,7 @@ public class User implements UserDetails{
             String nickName,
             String birth,
             String phoneNumber,
-            int mainGroup,
+            int mainFamily,
             int plusMinus,
             LocalDateTime createTime,
             LocalDateTime updateTime,
@@ -105,7 +105,7 @@ public class User implements UserDetails{
         this.nickName = nickName;
         this.birth = birth;
         this.phoneNumber = phoneNumber;
-        this.mainGroup = mainGroup;
+        this.mainFamily = mainFamily;
         this.plusMinus = plusMinus;
         this.createTime = createTime;
         this.updateTime = updateTime;
