@@ -13,12 +13,14 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router";
+import httpClient from "../../utils/axios";
 
 const contStyle = css`
   max-width: 300px;
   width: 100%;
   margin-top: 33vh;
   background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 10px;
   .form-box {
     width: 100%;
     .header {
@@ -115,8 +117,28 @@ const SignUpForm = () => {
     if (!isLast) {
       toNext();
     } else {
-      alert("Registered");
+      const userData = {
+        userId: event.target.id.value,
+        password: event.target.PW.value,
+        email: event.target.email.value,
+        nickName: event.target.nickname.value,
+        phoneNumber: event.target.tel.value,
+        birth: "20230205",
+      };
+      console.log(userData);
+      handleSignUp(userData)
+        .then(() => {
+          alert("회원가입에 성공하였습니다.");
+          navigate("/login");
+        })
+        .catch((err) => {
+          alert("회원가입에 실패하였습니다.");
+        });
     }
+  }
+
+  async function handleSignUp(userData) {
+    return (await httpClient.post("/user/join", userData)).data;
   }
 
   function toNext() {
@@ -125,7 +147,7 @@ const SignUpForm = () => {
 
   function toPrev() {
     if (isLast) setIsLast(false);
-    else navigate('/login');
+    else navigate("/login");
   }
 
   function handleCalType(event, newType) {
@@ -138,16 +160,10 @@ const SignUpForm = () => {
         <Box className="header">
           <div className="title-box">회원가입</div>
         </Box>
-        <Box
-          className="labeled-box"
-          style={{ display: isLast ? "none" : "block" }}
-        >
+        <Box className="labeled-box" style={{ display: isLast ? "none" : "block" }}>
           <Box className="label-box">
             <InputLabel className="form-label">ID</InputLabel>
-            <span
-              className="check-msg"
-              style={{ color: validID ? "green" : "red" }}
-            >
+            <span className="check-msg" style={{ color: validID ? "green" : "red" }}>
               {validID ? "사용 가능한 ID 입니다." : "사용 불가능한 ID 입니다."}
             </span>
           </Box>
@@ -155,24 +171,17 @@ const SignUpForm = () => {
             fullWidth
             className="text-form"
             ref={(el) => (inputRef.current[0] = el)}
+            name="id"
             placeholder="ID"
             // error={!validID}
             onChange={checkID}
           />
         </Box>
-        <Box
-          className="labeled-box"
-          style={{ display: isLast ? "none" : "block" }}
-        >
+        <Box className="labeled-box" style={{ display: isLast ? "none" : "block" }}>
           <Box className="label-box">
             <InputLabel className="form-label">비밀번호</InputLabel>
-            <span
-              className="check-msg"
-              style={{ color: validPW ? "green" : "red" }}
-            >
-              {checkPW
-                ? "사용 가능한 비밀번호 입니다."
-                : "사용 불가능한 ID 입니다."}
+            <span className="check-msg" style={{ color: validPW ? "green" : "red" }}>
+              {checkPW ? "사용 가능한 비밀번호 입니다." : "사용 불가능한 ID 입니다."}
             </span>
           </Box>
           <TextField
@@ -186,19 +195,11 @@ const SignUpForm = () => {
             onChange={checkPW}
           />
         </Box>
-        <Box
-          className="labeled-box"
-          style={{ display: isLast ? "none" : "block" }}
-        >
+        <Box className="labeled-box" style={{ display: isLast ? "none" : "block" }}>
           <Box className="label-box">
             <InputLabel className="form-label">비밀번호 확인</InputLabel>
-            <span
-              className="check-msg"
-              style={{ color: checkedPW ? "green" : "red" }}
-            >
-              {checkedPW
-                ? "비밀번호가 일치합니다"
-                : "비밀번호가 일치하지 않습니다."}
+            <span className="check-msg" style={{ color: checkedPW ? "green" : "red" }}>
+              {checkedPW ? "비밀번호가 일치합니다" : "비밀번호가 일치하지 않습니다."}
             </span>
           </Box>
           <TextField
@@ -211,19 +212,11 @@ const SignUpForm = () => {
             onChange={comparePW}
           />
         </Box>
-        <Box
-          className="labeled-box"
-          style={{ display: isLast ? "none" : "block" }}
-        >
+        <Box className="labeled-box" style={{ display: isLast ? "none" : "block" }}>
           <Box className="label-box">
             <InputLabel className="form-label">E-mail</InputLabel>
-            <span
-              className="check-msg"
-              style={{ color: validEmail ? "green" : "red" }}
-            >
-              {validEmail
-                ? "유효한 Email 입니다."
-                : "유효하지 않은 형식입니다."}
+            <span className="check-msg" style={{ color: validEmail ? "green" : "red" }}>
+              {validEmail ? "유효한 Email 입니다." : "유효하지 않은 형식입니다."}
             </span>
           </Box>
           <TextField
@@ -237,10 +230,7 @@ const SignUpForm = () => {
           />
         </Box>
 
-        <Box
-          className="labeled-box"
-          style={{ display: isLast ? "block" : "none" }}
-        >
+        <Box className="labeled-box" style={{ display: isLast ? "block" : "none" }}>
           <Box className="label-box">
             <InputLabel className="form-label">이름</InputLabel>
           </Box>
@@ -253,10 +243,7 @@ const SignUpForm = () => {
             placeholder="Nickname"
           />
         </Box>
-        <Box
-          className="labeled-box"
-          style={{ display: isLast ? "block" : "none" }}
-        >
+        <Box className="labeled-box" style={{ display: isLast ? "block" : "none" }}>
           <Box className="label-box">
             <InputLabel className="form-label">전화번호</InputLabel>
           </Box>
@@ -269,10 +256,7 @@ const SignUpForm = () => {
             placeholder="number"
           />
         </Box>
-        <Box
-          className="labeled-box"
-          style={{ display: isLast ? "block" : "none" }}
-        >
+        <Box className="labeled-box" style={{ display: isLast ? "block" : "none" }}>
           <Box className="label-box">
             <InputLabel className="form-label">생일</InputLabel>
           </Box>
@@ -298,12 +282,7 @@ const SignUpForm = () => {
         </Box>
 
         <Box className="btn-group">
-          <Button
-            variant="outlined"
-            color="primary"
-            className="prev-btn"
-            onClick={toPrev}
-          >
+          <Button variant="outlined" color="primary" className="prev-btn" onClick={toPrev}>
             이전
           </Button>
           <Button
