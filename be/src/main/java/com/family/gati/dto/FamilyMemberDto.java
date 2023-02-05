@@ -5,11 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class GroupDto {
-
+public class FamilyMemberDto {
     private int id;
-    private String name;
-    private int groupMember;
-    private String img;
-    private String masterId;
+    private String userId;
+    private String groupId;
 }
