@@ -9,7 +9,7 @@ public class FamilyDto {
 
     private int id;
     private String name;
-    private int familyMember;
+    private int familyTotal;
     private String img;
     private String masterId;
 }

@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface FamilyMemberRepository extends JpaRepository<FamilyMember, Long> {
     List<FamilyMember> findAllByUserId(String userId); // findAll
+    FamilyMember findFamilyById(int id);
     FamilyMember findMainByUserId(String userId);
+    void deleteByFamilyId(int id);
 }
