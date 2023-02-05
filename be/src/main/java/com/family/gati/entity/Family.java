@@ -8,23 +8,23 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "GROUP")
+@Table(name = "FAMILY")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Group {
+public class Family {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue
-    private int groupId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int familyId;
 
     @Column(name = "NAME", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "GROUP_MEMBER")
-    @NotNull
-    private int groupNumber;
+    @Column(name = "FAMILY_MEMBER", columnDefinition = "DEFAULT 0")
+//    @NotNull
+    private int familyMember;
 
     @Column(name = "IMG", length = 40)
     @NotNull

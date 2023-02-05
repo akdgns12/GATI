@@ -55,9 +55,9 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void modifyMainGroup(String userId, int groupId){
+    // 메인 그룹 선택
+    public void selectMainFamily(String userId, int groupId){
         User user = userRepository.findByUserId(userId);
-        user.setUserId(userId);
         user.setMainGroup(groupId);
 
         userRepository.save(user);
