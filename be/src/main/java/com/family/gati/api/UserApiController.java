@@ -184,12 +184,12 @@ public class UserApiController {
     @ApiOperation(value = "메인 그룹 선택", notes = "userId, familyId 전달받음")
     @PutMapping("/main")
     public ResponseEntity<?> selectMainFamily(@RequestBody UserSelectMainDto selectMainDto){
-        logger.debug("userId: {} familyId: {}", selectMainDto.getUserId() + " " + selectMainDto.getMainGroup());
+        logger.debug("userId: {} familyId: {}", selectMainDto.getUserId() + " " + selectMainDto.getMainFamily());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            userService.selectMainFamily(selectMainDto.getUserId(), selectMainDto.getMainGroup());
+            userService.selectMainFamily(selectMainDto.getUserId(), selectMainDto.getMainFamily());
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e){

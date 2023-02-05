@@ -30,7 +30,7 @@ public class FamilyService {
     public Family getMainFamilyByUserId(String userId){
         User user = userRepository.findByUserId(userId);
 
-        Family mainGroup = familyRepository.findByFamilyId(user.getMainGroup());
+        Family mainGroup = familyRepository.findByFamilyId(user.getMainFamily());
 
         if(mainGroup == null){
             log.debug("메인 그룹 없음:{}");

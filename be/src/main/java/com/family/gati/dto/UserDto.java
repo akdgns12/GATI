@@ -32,7 +32,7 @@ public class UserDto {
         this.nickName = user.getNickName();
         this.birth = user.getBirth();
         this.phoneNumber = user.getPhoneNumber();
-        this.mainFamily = user.getMainGroup();
+        this.mainFamily = user.getMainFamily();
         this.plusMinus = user.getPlusMinus();
         this.createTime = user.getCreateTime();
         this.updateTime = user.getUpdateTime();
