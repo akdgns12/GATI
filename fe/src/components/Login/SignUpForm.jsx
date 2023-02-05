@@ -72,6 +72,7 @@ const SignUpForm = () => {
   const [validID, setValidID] = useState(false);
   const [validPW, setValidPW] = useState(false);
   const [currentPW, setCurrentPW] = useState("");
+  const [confirmPW, setConfirmPW] = useState("");
   const [checkedPW, setCheckedPW] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [calType, setCalType] = useState("gregorian");
@@ -94,10 +95,14 @@ const SignUpForm = () => {
     setCurrentPW(inputPW);
     if (inputPW.length < 5) setValidPW(false);
     else setValidPW(true);
+    if (inputPW === confirmPW) {
+      setCheckedPW(true);
+    } else setCheckedPW(false);
   }
 
   function comparePW(event) {
     const PWConfirm = event.target.value;
+    setConfirmPW(PWConfirm);
     // console.log(inputRef.current[1]);
     if (currentPW === PWConfirm) {
       setCheckedPW(true);
@@ -125,7 +130,6 @@ const SignUpForm = () => {
         phoneNumber: event.target.tel.value,
         birth: "20230205",
       };
-      console.log(userData);
       handleSignUp(userData)
         .then(() => {
           alert("회원가입에 성공하였습니다.");
