@@ -45,7 +45,7 @@ public class User implements UserDetails{
     @NotNull
     private String nickName;
 
-    @Column(name = "BIRTH", columnDefinition = "CHAR(8)", length = 8)
+    @Column(name = "BIRTH", columnDefinition = "CHAR(20)", length = 20)
     @NotNull
     private String birth;
 
