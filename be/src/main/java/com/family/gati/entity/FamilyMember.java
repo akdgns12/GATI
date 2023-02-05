@@ -25,5 +25,7 @@ public class FamilyMember {
 
     @Column(name = "FAMILY_ID", length = 20)
     @NotNull
+//    @ManyToOne
+//    @JoinColumn(name = "FAMILY_ID")
     private int familyId;
 }

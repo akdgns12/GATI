@@ -3,10 +3,13 @@ package com.family.gati.api;
 import com.family.gati.dto.UserLoginDto;
 import com.family.gati.dto.UserSelectMainDto;
 import com.family.gati.dto.UserUpdateDto;
+import com.family.gati.entity.Family;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import com.family.gati.dto.UserSignUpRequest;
+import com.family.gati.repository.FamilyRepository;
 import com.family.gati.repository.UserRepository;
+import com.family.gati.service.FamilyService;
 import com.family.gati.service.UserService;
 import com.family.gati.security.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
@@ -41,6 +44,7 @@ public class UserApiController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final FamilyService familyService;
 
     // 회원가입
     @ApiOperation(value = "유저 회원가입", notes = "id, email, password, nickname, birth, phoneNumber")
@@ -189,11 +193,38 @@ public class UserApiController {
         HttpStatus status = null;
 
         try{
-            userService.selectMainFamily(selectMainDto.getUserId(), selectMainDto.getMainFamily());
+            userService.selectMainFamily(selectMainDto);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("메인 그룹 선택 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    // Main 그룹 조회
+    @ApiOperation(value = "Main 그룹 조회")
+    @GetMapping("/main/{userId}")
+    public ResponseEntity<?> getMainFamilyByUserId(@ApiParam(value = "path로 userId 전달받음")
+                                                 @PathVariable String userId){
+        logger.debug("userId: {}", userId);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            Family mainFamily = familyService.getMainFamilyByUserId(userId);
+
+            if(mainFamily == null) status = HttpStatus.NO_CONTENT;
+            else{
+                resultMap.put("Main family", mainFamily);
+                resultMap.put("msg", SUCCESS);
+                status = HttpStatus.OK;
+            }
+        }catch (Exception e){
+            logger.debug("메인 그룹 조회 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }

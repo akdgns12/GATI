@@ -1,5 +1,6 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.UserSelectMainDto;
 import com.family.gati.dto.UserUpdateDto;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
@@ -54,11 +55,10 @@ public class UserService {
     }
 
     // 메인 그룹 선택
-    public void selectMainFamily(String userId, int groupId){
-        User user = userRepository.findByUserId(userId);
-        user.setMainFamily(groupId);
-
-        userRepository.save(user);
+    @Transactional
+    public void selectMainFamily(UserSelectMainDto selectMainDto){
+        User user = userRepository.findByUserId(selectMainDto.getUserId());
+        user.setMainFamily(selectMainDto.getMainFamily());
     }
 
     @Transactional
