@@ -27,7 +27,17 @@ public class MissionServiceImpl implements MissionService{
         return result;
     }
 
-    public void insertMission(MissionDto missionDto) {
-        missionRepository.save(new Mission.MissionBuilder(missionDto).build());
+    public MissionDto insertMission(MissionDto missionDto) {
+        return new MissionDto.MissionDtoBuilder(missionRepository.save(new Mission.MissionBuilder(missionDto).build())).build();
+    }
+
+    @Override
+    public MissionDto updateMission(MissionDto missionDto) {
+        return new MissionDto.MissionDtoBuilder(missionRepository.save(new Mission.MissionBuilder(missionDto).build())).build();
+    }
+
+    @Override
+    public void deleteMissionById(Integer id) {
+        missionRepository.deleteById(id);
     }
 }

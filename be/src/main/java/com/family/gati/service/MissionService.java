@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface MissionService {
     List<MissionDto> findByGroupId(Integer groupId);
-    void insertMission(MissionDto missionDto);
+    MissionDto insertMission(MissionDto missionDto);
+    MissionDto updateMission(MissionDto missionDto);
+    void deleteMissionById(Integer id);
 }
