@@ -8,11 +8,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "GROUP_MEMBER")
+@Table(name = "FAMILY_MEMBER")
 @Getter
 @Setter
 @NoArgsConstructor
-public class GroupMember {
+public class FamilyMember {
 
     @Id
     @Column(name = "ID")
@@ -23,7 +23,7 @@ public class GroupMember {
     @NotNull
     private String userId;
 
-    @Column(name = "GROUP_ID", length = 20)
+    @Column(name = "FAMILY_ID", length = 20)
     @NotNull
-    private int groupId;
+    private int familyId;
 }

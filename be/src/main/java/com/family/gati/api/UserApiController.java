@@ -1,6 +1,7 @@
 package com.family.gati.api;
 
 import com.family.gati.dto.UserLoginDto;
+import com.family.gati.dto.UserSelectMainDto;
 import com.family.gati.dto.UserUpdateDto;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
@@ -17,14 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
  import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.bind.attachment.AttachmentUnmarshaller;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -184,16 +181,15 @@ public class UserApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    @ApiOperation(value = "메인 그룹 선택", notes = "userId, groupId 전달받음")
+    @ApiOperation(value = "메인 그룹 선택", notes = "userId, familyId 전달받음")
     @PutMapping("/main")
-    public ResponseEntity<?> modifyMainGroup(@RequestPart(value = "userId") String userId,
-                                             @RequestPart(value = "groupId") int groupId){
-        logger.debug("userId: {} groupId: {}", userId + " " + groupId);
+    public ResponseEntity<?> selectMainFamily(@RequestBody UserSelectMainDto selectMainDto){
+        logger.debug("userId: {} familyId: {}", selectMainDto.getUserId() + " " + selectMainDto.getMainGroup());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            userService.modifyMainGroup(userId, groupId);
+            userService.selectMainFamily(selectMainDto.getUserId(), selectMainDto.getMainGroup());
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e){
