@@ -8,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 public class FamilyMemberDto {
     private int id;
     private String userId;
-    private String groupId;
+    private String familyId;
 }

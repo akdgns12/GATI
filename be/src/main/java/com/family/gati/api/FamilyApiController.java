@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class FamilyApiController {
     private final FamilyMemberService familyMemberService;
 
     // 새로운 그룹 생성
-    @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 0")
+    @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
     @PostMapping
     public ResponseEntity<?> Family(@RequestBody FamilySignUpDto familySignUpDto){
         logger.debug("familySignUpDto: {}", familySignUpDto);
@@ -45,6 +46,7 @@ public class FamilyApiController {
 
         try{
             familyService.createFamily(familySignUpDto);
+            familyMemberService.createFamilyMember(familySignUpDto);
             resultMap.put("created Family", familySignUpDto);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.CREATED;
@@ -67,11 +69,17 @@ public class FamilyApiController {
 
         try{
             List<FamilyMember> familyList = familyMemberService.getFamilyListByUserId(userId);
+            // familyMember의 family id로 family INFO List 작성
+            List<Family> familysInfo = new ArrayList<>();
+            for(FamilyMember data : familyList){
+                int id = data.getFamilyId();
 
-            if(familyList == null || familyList.size() < 1) status = HttpStatus.NO_CONTENT;
+                familysInfo.add(familyService.getFamilyById(id));
+            }
+
+            if(familyList == null || familyList.size() < 1 || familysInfo == null || familysInfo.size() < 1) status = HttpStatus.NO_CONTENT;
             else{
-                // 그룹명을 리턴 시켜줄거면?
-                resultMap.put("familyList", familyList);
+                resultMap.put("familyList", familysInfo);
                 resultMap.put("msg", SUCCESS);
                 status = HttpStatus.OK;
             }
@@ -84,31 +92,7 @@ public class FamilyApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    // Main 그룹 조회
-    @ApiOperation(value = "Main 그룹 조회")
-    @GetMapping("/main/{userId}")
-    public ResponseEntity<?> getMainFamilyByUser(@ApiParam(value = "path로 userId 전달받음")
-                                                @PathVariable String userId){
-        logger.debug("userId: {}", userId);
-        Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = null;
 
-        try{
-            Family mainFamily = familyService.getMainFamilyByUserId(userId);
-            if(mainFamily == null) status = HttpStatus.NO_CONTENT;
-            else{
-                resultMap.put("Main family", mainFamily);
-                resultMap.put("msg", SUCCESS);
-                status = HttpStatus.OK;
-            }
-        }catch (Exception e){
-            logger.debug("메인 그룹 조회 실패: {}", e.getMessage());
-            resultMap.put("msg", FAIL);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-    }
 
     // 그룹 정보 수정
     @ApiOperation(value = "그룹 정보 수정", notes = "그룹 id, 바꿀 그룹 정보(img, name)")
@@ -134,14 +118,15 @@ public class FamilyApiController {
 
     // 그룹 삭제
     @ApiOperation(value = "그룹 삭제")
-    @DeleteMapping("/familyId")
-    public ResponseEntity<?> deleteFamily(@PathVariable String familyId){
-        logger.debug("familyId: {}", familyId);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteFamily(@PathVariable int id){
+        logger.debug("id: {}", id);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            familyService.deleteFamily(familyId);
+            familyService.deleteFamily(id);
+            familyMemberService.deleteFamilyMember(id);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e){

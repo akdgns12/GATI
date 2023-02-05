@@ -1,7 +1,7 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.UserSelectMainDto;
 import com.family.gati.dto.UserUpdateDto;
-import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true) // 기본적으로 트랜잭션 안에서만 데이터 변경하게 설정(그만큼 최적화 되어 읽는게 빨라짐)
@@ -56,11 +55,10 @@ public class UserService {
     }
 
     // 메인 그룹 선택
-    public void selectMainFamily(String userId, int groupId){
-        User user = userRepository.findByUserId(userId);
-        user.setMainGroup(groupId);
-
-        userRepository.save(user);
+    @Transactional
+    public void selectMainFamily(UserSelectMainDto selectMainDto){
+        User user = userRepository.findByUserId(selectMainDto.getUserId());
+        user.setMainFamily(selectMainDto.getMainFamily());
     }
 
     @Transactional

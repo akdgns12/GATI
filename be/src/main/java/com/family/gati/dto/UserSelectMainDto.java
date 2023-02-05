@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserSelectMainDto {
     private String userId;
-    private int mainGroup;
+    private int mainFamily;
 }
