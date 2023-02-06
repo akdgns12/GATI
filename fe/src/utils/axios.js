@@ -1,7 +1,9 @@
 import axios from "axios";
 
-const DOMAIN = "http://localhost";
-const PORT = ":8080";
+const DOMAIN = process.env.REACT_APP_API_URL;
+const PORT = process.env.REACT_APP_API_PORT;
+
+console.log();
 const baseURL = DOMAIN + PORT;
 const httpClient = axios.create({
   baseURL,
