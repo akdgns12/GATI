@@ -20,7 +20,7 @@ public class AlbumServiceImpl implements AlbumService{
     private final AlbumLikesRepository albumLikesRepository;
     @Override
     public List<AlbumDto> findByGroupId(Integer groupId) {
-        List<Album> albums = albumRepository.findByGroupId(groupId);
+        List<Album> albums = albumRepository.findByGroupIdOOrderByCreateTime(groupId);
         int size = albums.size();
         List<AlbumDto> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
