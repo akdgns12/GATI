@@ -1,9 +1,11 @@
 package com.family.gati.service;
 
-import com.family.gati.entity.Role;
+import com.family.gati.dto.UserSelectMainDto;
+import com.family.gati.dto.UserUpdateDto;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @Service
 @Transactional(readOnly = true) // 기본적으로 트랜잭션 안에서만 데이터 변경하게 설정(그만큼 최적화 되어 읽는게 빨라짐)
 @RequiredArgsConstructor // final, @NotNull 붙은 필드의 생성자 자동 생성해주는 롬복 어노테이션
+@Slf4j
 public class UserService {
 
     private final PasswordEncoder passwordEncoder;
@@ -35,11 +38,6 @@ public class UserService {
         user.setPlusMinus(user.getPlusMinus());
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
-        /*
-            token?
-            아냐, 회원가입 후 로그인할 때 토큰 생성해주는게 맞지
-         */
-//        user.setRole(Role.USER);
 
         userRepository.save(user); // 여기서 뭔가 문제 발생..
     }
@@ -56,31 +54,31 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void modifyMainGroup(String userId, int groupId){
-        User user = userRepository.findByUserId(userId);
-        user.setUserId(userId);
-        user.setMainGroup(groupId);
-
-        userRepository.save(user);
+    // 메인 그룹 선택
+    @Transactional
+    public void selectMainFamily(UserSelectMainDto selectMainDto){
+        User user = userRepository.findByUserId(selectMainDto.getUserId());
+        user.setMainFamily(selectMainDto.getMainFamily());
     }
 
     @Transactional
-    public void updateUser(User user) {
-        User modifiedUser = userRepository.findByEmail(user.getEmail());
-        System.out.println(modifiedUser);
-        modifiedUser.setUserId(user.getUserId());
-        modifiedUser.setEmail(user.getEmail());
-        // 비밀번호도 변경가능하게?
-        modifiedUser.setPassword(user.getPassword());
-        modifiedUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        modifiedUser.setNickName(user.getNickName());
-        modifiedUser.setBirth(user.getBirth());
-        modifiedUser.setPhoneNumber(user.getPhoneNumber());
+    public void updateUser(String userId, final UserUpdateDto request) {
+        User originUser = userRepository.findByUserId(userId);
 
-        modifiedUser.setPlusMinus(user.getPlusMinus());
-        modifiedUser.setUpdateTime(LocalDateTime.now());
+        if(originUser == null){
+            log.debug("회원 못찾음: {}", originUser);
+            return;
+        }
 
-        userRepository.save(user);
+        originUser.setEmail(request.getEmail());
+        originUser.setPassword(request.getPassword());
+        originUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        originUser.setNickName(request.getNickName());
+        originUser.setBirth(request.getBirth());
+        originUser.setPhoneNumber(request.getPhoneNumber());
+        originUser.setUpdateTime(LocalDateTime.now());
+
+        userRepository.save(originUser);
     }
 
     @Transactional

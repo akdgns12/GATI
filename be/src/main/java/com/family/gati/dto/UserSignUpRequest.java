@@ -1,4 +1,4 @@
-package com.family.gati.payload;
+package com.family.gati.dto;
 
 import lombok.Data;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Getter @Setter
-public class SignUpRequest {
+public class UserSignUpRequest {
     String email;
     String userId;
     String password;
