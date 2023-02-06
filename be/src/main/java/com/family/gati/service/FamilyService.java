@@ -50,8 +50,8 @@ public class FamilyService {
         group.setImg(familySignUpDto.getImg());
         // 생성할때 그룹 인원 1
         group.setFamilyTotal(1);
-        // 로그인 한 유저 Id 가져오기로 수정해야함
-        group.setMasterId("akdgns12");
+        // 로그인 한 유저 ID로 가져옴
+        group.setMasterId(familySignUpDto.getUserId());
 
         familyRepository.save(group);
     }
