@@ -20,7 +20,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .select()
-                // basPackage 수정해야함
+                // BasPackage 수정해야함
                 .apis(RequestHandlerSelectors.basePackage("com.family.gati.api"))
                 .paths(PathSelectors.any())
                 .build()
