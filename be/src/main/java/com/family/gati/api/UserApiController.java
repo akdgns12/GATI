@@ -1,12 +1,9 @@
 package com.family.gati.api;
 
-import com.family.gati.dto.UserLoginDto;
-import com.family.gati.dto.UserSelectMainDto;
-import com.family.gati.dto.UserUpdateDto;
+import com.family.gati.dto.*;
 import com.family.gati.entity.Family;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
-import com.family.gati.dto.UserSignUpRequest;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.service.FamilyService;
 import com.family.gati.service.UserService;
@@ -18,7 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
- import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,6 +42,8 @@ public class UserApiController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final FamilyService familyService;
+    @Value("${spring.mail.username}")
+    private String from; // 발신자 메일(관리자)
 
     // 회원가입
     @ApiOperation(value = "유저 회원가입", notes = "id, email, password, nickname, birth, phoneNumber")
@@ -278,6 +278,49 @@ public class UserApiController {
         }catch (Exception e){
             logger.debug("회원 삭제 실패: {}", e);
             resultMap.put("msg", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    // 비밀번호 찾기
+    @ApiOperation(value = "비밀번호 찾기", notes = "입력받은 이메일로 임시 비밀번호 전달")
+    @PostMapping("/{email}")
+    public ResponseEntity<?> findPassword(@PathVariable("email") String email){
+        logger.debug("email: {}", email);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            MailDto mail = userService.createMailAndChangePassword(email);
+            userService.mailSend(mail, from);
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("비밀번호 찾기 이메일 발송 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @ApiOperation(value = "아이디 찾기", notes = "입력받은 이메일로 아이디 전달")
+    @PostMapping("/id/{email}")
+    public ResponseEntity<?> findId(@PathVariable("email") String email){
+        logger.debug("email: {}", email);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            MailDto mail = userService.createMailForId(email);
+            userService.mailSend(mail, from);
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("아이디 찾기 이메일 발송 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
