@@ -9,6 +9,7 @@ import Datepicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
+import { logDOM } from '@testing-library/react';
 const locales = {
   'ko-KR': require('date-fns/locale/ko')
 }
@@ -49,12 +50,15 @@ export default function Scheduler() {
   
   function handleAddEvent() {
     setAllEvents([...allEvents, newEvent])
-    // console.log('hi')
+    // console.log(allEvents);
+  }
+  function handlePlan(event) {
+    console.log(event);
   }
 
   return (
     <Box>
-      <Box sx={{justifyContent: 'center'}}>
+      <Box>
         <input type="text" placeholder='Add title' style={{width: '20%', marginRight: '10px'}}
           value={newEvent.title} onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
         />
@@ -63,7 +67,7 @@ export default function Scheduler() {
         <Datepicker placeholderText='종료일'
           selected={newEvent.end} onChange={(end) => setNewEvent({...newEvent, end})}
         />
-        <button style={{marginTop: '10px'}} onClick={handleAddEvent}>일정 등록</button>
+        <button style={{marginTop: '10px'}} onClick={() => {handleAddEvent(); handlePlan()}}>일정 등록</button>
       </Box>
       <Calendar localizer={localizer} events={allEvents}
       startAccessor='start' endAccessor='end'
