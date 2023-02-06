@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { useNavigate } from "react-router";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Box, Button, FormControl, OutlinedInput } from "@mui/material";
+import { Box, Button, FormControl, Input, OutlinedInput } from "@mui/material";
 
 const contStyle = css`
   text-align: left;
@@ -51,10 +51,12 @@ const contStyle = css`
 
 const CreatePost = () => {
   const navigate = useNavigate();
+  const [imgURL, setImgURL] = useState(null);
+
   function doSth() {
     console.log("submit form");
     alert("article posted");
-    navigate('/');
+    navigate("/");
   }
 
   function backToMain() {
@@ -64,15 +66,34 @@ const CreatePost = () => {
     }
   }
 
+  function handleIMGChange(event) {
+    console.log(event.target.files[0]);
+    setImgURL(URL.createObjectURL(event.target.files[0]));
+  }
+
   return (
     <Box component="form" css={contStyle} onSubmit={doSth}>
       <Box className="photo">
-        <div className="photo-label">사진 선택</div>
-        <Box className="photo-prev">Here comes a photo</Box>
-        <Button className="edit-btn">edit</Button>
+        <Box className="photo-label">사진 선택</Box>
+        <Box className="photo-prev">
+          <img src={imgURL} alt="Here comes a photo" width={"200px"}></img>
+        </Box>
+        <Input
+          inputProps={{ accept: "image/*" }}
+          type="file"
+          // ref={fileInput}
+          id="select-img"
+          style={{ display: "none" }}
+          onChange={handleIMGChange}
+        />
+        <label htmlFor="select-img">
+          <Button className="edit-btn" component="span">
+            edit
+          </Button>
+        </label>
       </Box>
       <FormControl variant="standard" style={{ width: "100%" }}>
-        <div className="input-label">문구 입력</div>
+        <Box className="input-label">문구 입력</Box>
         <OutlinedInput
           className="text-input"
           placeholder="사진과 함께 기억하고 싶은 추억들을 이 곳에 기록하세요."
@@ -81,21 +102,21 @@ const CreatePost = () => {
         />
       </FormControl>
       <FormControl variant="standard" style={{ width: "100%" }}>
-        <div className="input-label">태그</div>
+        <Box className="input-label">태그</Box>
         <OutlinedInput
           className="text-input"
           placeholder="사진의 태그를 입력하세요."
           multiline={true}
         />
       </FormControl>
-      <div className="button-group">
+      <Box className="button-group">
         <Button type="submit" variant="contained">
           확인
         </Button>
         <Button variant="outlined" onClick={backToMain}>
           취소
         </Button>
-      </div>
+      </Box>
     </Box>
   );
 };
