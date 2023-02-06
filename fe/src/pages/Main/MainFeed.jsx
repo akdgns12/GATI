@@ -10,21 +10,19 @@ import NoGroupAlertDialog from "../../components/Main/NoGroupAlert";
 import GroupInvitation from "../../components/Notification/GroupInvitation";
 
 const MainFeed = () => {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("main feed mounted");
     dispatch(loadMainFeed(1))
       .then((data) => {
-        console.log("data loaded")
+        console.log("data loaded");
         console.log(data.payload);
       })
       .catch((error) => console.log(error));
     return () => {
       console.log("main feed umnounted");
-    }
-
+    };
   }, []);
 
   // console.log(state);
@@ -39,9 +37,17 @@ const MainFeed = () => {
     return (
       <div>
         <AddButton mode="feed" />
-        {articles.map((article, index) => {
-          return <ArticleCard key={index} article={article} style={{ "margin-top": "10px" }} mode="feed" />;
-        })}
+        {articles != null &&
+          articles.map((article, index) => {
+            return (
+              <ArticleCard
+                key={index}
+                article={article}
+                style={{ "margin-top": "10px" }}
+                mode="feed"
+              />
+            );
+          })}
       </div>
     );
   } else {
@@ -49,8 +55,8 @@ const MainFeed = () => {
       <div>
         {notifications.invitations != null
           ? notifications.invitations.map((invitation, index) => {
-            return <GroupInvitation key={index} invitation={invitation} />;
-          })
+              return <GroupInvitation key={index} invitation={invitation} />;
+            })
           : null}
         <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
         <div style={{ "margin-top": "40%" }}>
@@ -60,6 +66,5 @@ const MainFeed = () => {
     );
   }
 };
-
 
 export default MainFeed;
