@@ -63,7 +63,13 @@ export default function Scheduler() {
       start: newEvent.start,
       end: newEvent.end,
     }
-    dispatch(postCalendar(info))
+    // console.log('a')
+    if (info.title && info.start && info.end) {
+      dispatch(postCalendar(info))
+    } else {
+      alert('빈칸을 채워주세여')
+    }
+    // console.log('b')
   }
 
   return (

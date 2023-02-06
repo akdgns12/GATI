@@ -9,13 +9,20 @@ import httpRequest from "../../utils/test";
 // actions
 export const postCalendar = createAsyncThunk(
   "plan/createPlan",
+  
   async (planData, {rejectWithValue}) => {
-    try {
-      const response = await httpRequest.post('https://first-pjt-469d2-default-rtdb.firebaseio.com/plans.json', {
+    // console.log('aa')
+    const Data = {
         title: planData.title,
         start: planData.start,
         end: planData.end,
+    }
+    try {
+      const response = await httpRequest.post('plan.json?', {
+        Data
       })
+      console.log(response.data)
+      
       return response.data
     } catch (error) {
       console.log(error)
@@ -28,13 +35,11 @@ const initialState = {
   planData: [
     {
       title: "가족 외식",
-      content: "월요일 저녁7시 oo삼겹살 집 앞",
       start: "2023-01-15 16:00",
       end: "2023-01-18 18:30",
     },
     {
       title: "가족 여행",
-      content: "화요일 김포공항 아침 8시",
       start: "2022-02-12 13:00",
       end: "2022-02-18 11:30",
     },
@@ -49,6 +54,8 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(postCalendar.fulfilled, (state, action) => {
       state.planData.push(action.payload)
+      console.log(state.planData)
+      
     })
   },
 })
