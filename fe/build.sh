@@ -35,11 +35,6 @@ fi
 echo "image rm end"
 
 echo "docker run start"
-if [ "${IMAGE_NAME}" == "/gati-front-dev" ];then
-        echo "same image name ${IMAGE_NAME}"
-        docker rm -f ${IMAGE_NAME}
-        echo "same image rm in end"
-fi
-
+docker rm -f "gati-front-dev"
 docker run -dp 3000:3000 --mount type=bind,src=$(pwd)/src,target=/fe/src --name gati-front-dev ${IMAGE_NAME}
 echo "docker run end"
