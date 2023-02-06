@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -38,14 +39,15 @@ public class FamilyApiController {
 
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
-    @PostMapping
-    public ResponseEntity<?> Family(@RequestBody FamilySignUpDto familySignUpDto){
+    @PostMapping("/{userId}")
+    public ResponseEntity<?> Family(@PathVariable("userId") String userId
+            ,@RequestBody FamilySignUpDto familySignUpDto){
         logger.debug("familySignUpDto: {}", familySignUpDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            familyService.createFamily(familySignUpDto);
+            familyService.createFamily(userId, familySignUpDto);
             familyMemberService.createFamilyMember(familySignUpDto);
             resultMap.put("created Family", familySignUpDto);
             resultMap.put("msg", SUCCESS);
