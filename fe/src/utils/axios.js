@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const DOMAIN = "http://localhost";
+const DOMAIN = "http://3.34.141.63";
 const PORT = ":8080";
 const baseURL = DOMAIN + PORT;
 const httpClient = axios.create({
