@@ -20,7 +20,7 @@ public class BoardServiceImpl implements BoardService{
     private final BoardLikesRepository boardLikesRepository;
     @Override
     public List<BoardDto> findByGroupId(Integer groupId) {
-        List<Board> boards = boardRepository.findByGroupId(groupId);
+        List<Board> boards = boardRepository.findByGroupIdOrderByCreateTimeDesc(groupId);
         int size = boards.size();
         List<BoardDto> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
