@@ -25,9 +25,9 @@ public class AlbumDto {
     private String img;
     @ApiModelProperty(example = "10")
     private Integer likes;
-    @ApiModelProperty(example = "2023-02-06 14:31:19")
+    @ApiModelProperty(example = "2023-02-06T23:47:44.082+00:00")
     private Timestamp createTime;
-    @ApiModelProperty(example = "2023-02-06 14:31:19")
+    @ApiModelProperty(example = "2023-02-06T23:47:44.082+00:00")
     private Timestamp updateTime;
     @ApiModelProperty(example = "9")
     private Integer comments;
