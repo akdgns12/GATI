@@ -1,5 +1,6 @@
 package com.family.gati.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Getter
 @ConfigurationProperties(prefix = "app")
+@AllArgsConstructor
 public class AppProperties {
     private final Auth auth = new Auth();
     private final OAuth2 oauth2 = new OAuth2();

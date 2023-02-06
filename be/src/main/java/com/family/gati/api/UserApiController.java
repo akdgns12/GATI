@@ -7,7 +7,6 @@ import com.family.gati.entity.Family;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import com.family.gati.dto.UserSignUpRequest;
-import com.family.gati.repository.FamilyRepository;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.service.FamilyService;
 import com.family.gati.service.UserService;
@@ -36,7 +35,7 @@ import java.util.Map;
 @Api(tags = "User API")
 public class UserApiController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserApiController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PlanApiController.class);
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 

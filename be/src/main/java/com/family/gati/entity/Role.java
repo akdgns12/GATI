@@ -1,5 +1,6 @@
 package com.family.gati.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
