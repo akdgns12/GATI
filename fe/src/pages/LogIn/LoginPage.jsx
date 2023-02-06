@@ -21,13 +21,14 @@ const contStyle = css`
   background-image: url(${imgPath});
   background-size: auto 100vh;
   background-position: center;
+  text-align: center;
   .bg-test {
     width: 100%;
   }
 `;
 
 const Login = () => {
-  function doSth() { }
+  function doSth() {}
   return (
     <div css={contStyle}>
       <div className="bg-text">Awesome Background</div>
