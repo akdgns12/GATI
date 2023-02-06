@@ -2,6 +2,7 @@ package com.family.gati.dto;
 
 import com.family.gati.entity.Board;
 import com.family.gati.util.CommonBuilder;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
@@ -9,16 +10,27 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 public class BoardDto {
+    @ApiModelProperty(example = "1")
     private Integer id;
+    @ApiModelProperty(example = "1")
     private Integer groupId;
+    @ApiModelProperty(example = "userid")
     private String userId;
+    @ApiModelProperty(example = "게시글의 내용 입니다.")
     private String content;
+    @ApiModelProperty(example = "@부산")
     private String tag;
+    @ApiModelProperty(example = "img.img")
     private String img;
+    @ApiModelProperty(example = "10")
     private Integer likes;
+    @ApiModelProperty(example = "2023-02-06 14:31:19")
     private Timestamp createTime;
+    @ApiModelProperty(example = "2023-02-06 14:31:19")
     private Timestamp updateTime;
+    @ApiModelProperty(example = "9")
     private Integer comments;
+    @ApiModelProperty(example = "akdgns12")
     private String nickname;
 
     private BoardDto(BoardDtoBuilder builder) {
