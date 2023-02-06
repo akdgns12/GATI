@@ -1,6 +1,28 @@
-const LOAD = "schedule/LOAD";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import httpRequest from "../../utils/test";
 
-export const load = () => ({ type: LOAD });
+
+// const LOAD = "schedule/LOAD";
+
+// export const load = () => ({ type: LOAD });
+
+// actions
+export const postCalendar = createAsyncThunk(
+  "plan/createPlan",
+  async (planData, {rejectWithValue}) => {
+    try {
+      const response = await httpRequest.post('https://first-pjt-469d2-default-rtdb.firebaseio.com/plans.json', {
+        title: planData.title,
+        start: planData.start,
+        end: planData.end,
+      })
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return rejectWithValue(error)
+    }
+  }
+)
 
 const initialState = {
   planData: [
@@ -19,14 +41,28 @@ const initialState = {
   ],
 };
 
+// slice
+const userSlice = createSlice({
+  name: 'plan',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(postCalendar.fulfilled, (state, action) => {
+      state.planData.push(action.payload)
+    })
+  },
+})
+
+export default userSlice.reducer;
+
 // reducer
-export default function schedule(state = initialState, action) {
-  switch (action.type) {
-    case LOAD:
-      return {
-        ...state,
-      };
-    default:
-      return state;
-  }
-}
+// export default function schedule(state = initialState, action) {
+//   switch (action.type) {
+//     case LOAD:
+//       return {
+//         ...state,
+//       };
+//     default:
+//       return state;
+//   }
+// }

@@ -10,6 +10,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import { logDOM } from '@testing-library/react';
+import { useDispatch } from 'react-redux';
+import { postCalendar } from '../../store/Schedule/schedule';
+
 const locales = {
   'ko-KR': require('date-fns/locale/ko')
 }
@@ -47,13 +50,20 @@ export default function Scheduler() {
     title: '', start: '', end: ''
   });
   const [allEvents, setAllEvents] = useState(events)
+  const dispatch = useDispatch()
+  
   
   function handleAddEvent() {
     setAllEvents([...allEvents, newEvent])
     // console.log(allEvents);
   }
-  function handlePlan(event) {
-    console.log(event);
+  function handlePlan() {
+    const info = {
+      title: newEvent.title,
+      start: newEvent.start,
+      end: newEvent.end,
+    }
+    dispatch(postCalendar(info))
   }
 
   return (
