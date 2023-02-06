@@ -28,7 +28,7 @@ public class Plan {
 
     @Column(name = "GROUP_ID")
     @NotNull
-    private String groupId;
+    private int groupId;
 
     @Column(name = "TITLE")
     @NotNull
@@ -55,7 +55,7 @@ public class Plan {
 
     @Builder
     public Plan(int id, String userId,
-                String groupId,
+                int groupId,
                 String title,
                 LocalDateTime startDate,
                 LocalDateTime endDate,

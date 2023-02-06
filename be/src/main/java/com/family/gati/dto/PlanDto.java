@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class PlanDto {
     private int id;
     private String userId;
-    private String groupId;
+    private int groupId;
     private String title;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
