@@ -42,67 +42,10 @@ const boardSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loadMainFeed.pending, (state) => {
-      console.log("pending...");
+      // console.log("pending...");
     });
     builder.addCase(loadMainFeed.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.articles = [
-        {
-          userId: "test",
-          content: "description",
-          tag: "#ex",
-          img: "https://picsum.photos/400/300",
-          like: 3,
-          createTime: "23.01.27",
-          comment: 2,
-        },
-        {
-          postId: 1,
-          userId: "seotai78",
-          content: "호에엥",
-          tag: "#ex",
-          img: "https://picsum.photos/400/300",
-          like: 1,
-          createTime: "23.01.01",
-          comment: 3,
-        },
-        {
-          userId: "akdgns12",
-          content: "description",
-          tag: "#ex",
-          img: "..",
-          like: 3,
-          createTime: "22.12.31",
-          comment: 0,
-        },
-        {
-          userId: "akdgns13",
-          content: "desc",
-          tag: "#ex",
-          img: "https://picsum.photos/400/300",
-          like: 1,
-          createTime: "22.12.31",
-          comment: 1,
-        },
-        {
-          userId: "gkagu12",
-          content: "desc",
-          tag: "#ex",
-          img: null,
-          like: 3,
-          createTime: "23.12.25",
-          comment: 4,
-        },
-        {
-          userId: "podif",
-          content: "description",
-          tag: "#ex",
-          img: "https://picsum.photos/400/300",
-          like: 3,
-          createTime: "23.12.01",
-          comment: 4,
-        },
-      ];
+      state.articles = action.payload;
     });
     builder.addCase(loadMainFeed.rejected, (state) => {
       console.log(state);
@@ -111,3 +54,59 @@ const boardSlice = createSlice({
 });
 
 export default boardSlice.reducer;
+
+// {
+//     userId: "test",
+//     content: "description",
+//     tag: "#ex",
+//     img: "https://picsum.photos/400/300",
+//     like: 3,
+//     createTime: "23.01.27",
+//     comment: 2,
+//   },
+//   {
+//     postId: 1,
+//     userId: "seotai78",
+//     content: "호에엥",
+//     tag: "#ex",
+//     img: "https://picsum.photos/400/300",
+//     like: 1,
+//     createTime: "23.01.01",
+//     comment: 3,
+//   },
+//   {
+//     userId: "akdgns12",
+//     content: "description",
+//     tag: "#ex",
+//     img: "..",
+//     like: 3,
+//     createTime: "22.12.31",
+//     comment: 0,
+//   },
+//   {
+//     userId: "akdgns13",
+//     content: "desc",
+//     tag: "#ex",
+//     img: "https://picsum.photos/400/300",
+//     like: 1,
+//     createTime: "22.12.31",
+//     comment: 1,
+//   },
+//   {
+//     userId: "gkagu12",
+//     content: "desc",
+//     tag: "#ex",
+//     img: null,
+//     like: 3,
+//     createTime: "23.12.25",
+//     comment: 4,
+//   },
+//   {
+//     userId: "podif",
+//     content: "description",
+//     tag: "#ex",
+//     img: "https://picsum.photos/400/300",
+//     like: 3,
+//     createTime: "23.12.01",
+//     comment: 4,
+//   },
