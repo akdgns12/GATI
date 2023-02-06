@@ -1,19 +1,18 @@
-
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import AppBar from "./components/AppBar";
 
-import Home from "./pages/Main/MainPage"
+import Home from "./pages/Main/MainPage";
 import Calendar from "./pages/Calendar/CalendarPage";
 import PhotoBookPage from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
 import PictureTogether from "./pages/PictureTogether/PictureTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 const App = () => {
   const location = useLocation();
@@ -22,27 +21,29 @@ const App = () => {
   function excludeHeader() {
     if (location.pathname.startsWith("/login")) return true;
     else return false;
-  };
+  }
 
-  if (logIn === false) {
-    return <Login />
+  function doRedirect() {
+    const isLoginPage = location.pathname.startsWith("/login") ? true : false;
+    if (!logIn && !isLoginPage) return true;
+    else return false;
   }
-  else {
-    return (
-      <div className="App" >
-        {!excludeHeader() && <AppBar />}
-        <Routes>
-          <Route path="/*" element={<Home />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/photobook/*" element={<PhotoBookPage />} />
-          <Route path="/gotg" element={<GoTogether />} />
-          <Route path="/pictg" element={<PictureTogether />} />
-          <Route path="/login/*" element={<Login />} />
-        </Routes>
-        {!excludeHeader() && <NavBar />}
-      </div>
-    );
-  }
-}
+
+  return (
+    <div className="App">
+      {doRedirect() && <Navigate to="/login" replace={true} />}
+      {!excludeHeader() && <AppBar />}
+      <Routes>
+        <Route path="/*" element={<Home />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/photobook/*" element={<PhotoBookPage />} />
+        <Route path="/gotg" element={<GoTogether />} />
+        <Route path="/pictg" element={<PictureTogether />} />
+        <Route path="/login/*" element={<Login />} />
+      </Routes>
+      {!excludeHeader() && <NavBar />}
+    </div>
+  );
+};
 
 export default App;
