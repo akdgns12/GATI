@@ -36,10 +36,10 @@ public class Plan {
 
     @Column(name = "START_DATE")
     @NotNull
-    private LocalDateTime startDate;
+    private String startDate;
 
     @Column(name = "END_DATE")
-    private LocalDateTime endDate;
+    private String endDate;
 
     @Column(name = "PLACE")
     private String place;
@@ -57,8 +57,8 @@ public class Plan {
     public Plan(int id, String userId,
                 int groupId,
                 String title,
-                LocalDateTime startDate,
-                LocalDateTime endDate,
+                String startDate,
+                String endDate,
                 String memo,
                 LocalDateTime createTime,
                 LocalDateTime updateTitme) {
