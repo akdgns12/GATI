@@ -89,7 +89,6 @@ public class UserApiController {
     @ApiOperation(value = "일반 로그인")
     @PostMapping("/login")
     public ResponseEntity<?> login(@ApiParam(value = "userId, password 받음") @RequestBody UserLoginDto userLoginDto){
-//        UserDetails userDetails =
         User user = userRepository.findByUserId(userLoginDto.getUserId());
         logger.info("userId:{} ", user);
         Map<String, Object> resultMap = new HashMap<>();
@@ -120,6 +119,8 @@ public class UserApiController {
 
             resultMap.put("msg", SUCCESS);
             resultMap.put("accessToken", accessToken);
+            resultMap.put("userId", user.getUserId());
+            resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("일반 로그인 실퍠: {}", e.getMessage());

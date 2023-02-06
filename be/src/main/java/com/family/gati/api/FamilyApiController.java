@@ -4,6 +4,8 @@ import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
 import com.family.gati.entity.FamilyMember;
+import com.family.gati.entity.User;
+import com.family.gati.repository.UserRepository;
 import com.family.gati.service.FamilyMemberService;
 import com.family.gati.service.FamilyService;
 import io.swagger.annotations.Api;
@@ -15,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class FamilyApiController {
 
     private final FamilyService familyService;
     private final FamilyMemberService familyMemberService;
+    private final UserRepository userRepository;
 
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
@@ -49,6 +51,15 @@ public class FamilyApiController {
         try{
             familyService.createFamily(userId, familySignUpDto);
             familyMemberService.createFamilyMember(familySignUpDto);
+
+            // 첫 그룹 생성 시, 생성 그룹이 mainFamily가 될 수 있게
+            User user = userRepository.findByUserId(userId);
+            if(user.getMainFamily() == null){
+                log.debug("회원");
+                Family newFamily = familyService.getByMasterId(userId);
+                user.setMainFamily(newFamily.getId());
+                userRepository.save(user);
+            }
             resultMap.put("created Family", familySignUpDto);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.CREATED;
