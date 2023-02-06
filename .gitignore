@@ -40,3 +40,6 @@ out/
 ### resourece ###
 application-db.yml
 application-oauth.yml
+
+### react env
+fe/.env
