@@ -8,7 +8,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import Datepicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { Box } from '@mui/material';
-
+import Paper from '@mui/material/Paper';
 const locales = {
   'ko-KR': require('date-fns/locale/ko')
 }
@@ -53,10 +53,8 @@ export default function Scheduler() {
   }
 
   return (
-    <Box sx={{
-      border: 1, borderColor: 'primary.main'
-    }}>
-      <div>
+    <Box>
+      <Box sx={{justifyContent: 'center'}}>
         <input type="text" placeholder='Add title' style={{width: '20%', marginRight: '10px'}}
           value={newEvent.title} onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
         />
@@ -66,7 +64,7 @@ export default function Scheduler() {
           selected={newEvent.end} onChange={(end) => setNewEvent({...newEvent, end})}
         />
         <button style={{marginTop: '10px'}} onClick={handleAddEvent}>일정 등록</button>
-      </div>
+      </Box>
       <Calendar localizer={localizer} events={allEvents}
       startAccessor='start' endAccessor='end'
       style={{

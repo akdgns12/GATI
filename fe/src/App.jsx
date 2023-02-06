@@ -30,7 +30,7 @@ const App = () => {
   }
 
   return (
-    <div className="App">
+    <Box className="App">
       {doRedirect() && <Navigate to="/login" replace={true} />}
       {!excludeHeader() && <AppBar />}
       <Routes>
@@ -42,7 +42,7 @@ const App = () => {
         <Route path="/login/*" element={<Login />} />
       </Routes>
       {!excludeHeader() && <NavBar />}
-    </div>
+    </Box>
   );
 };
 
