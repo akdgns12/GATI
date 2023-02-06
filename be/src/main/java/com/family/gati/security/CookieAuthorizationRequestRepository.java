@@ -1,4 +1,4 @@
-package com.family.gati.security.oauth;
+package com.family.gati.security;
 
 import com.family.gati.util.CookieUtil;
 import com.nimbusds.oauth2.sdk.util.StringUtils;

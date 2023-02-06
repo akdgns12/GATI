@@ -5,7 +5,6 @@ import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor // 기본 생성자 세팅
 @AllArgsConstructor
 @Table(name = "USER")
-public class User implements UserDetails {
+public class User implements UserDetails{
 
     @JsonIgnore
     @Id // DB 테이블의 PK와 객체의 필드 매핑
@@ -38,7 +37,7 @@ public class User implements UserDetails {
     @NotNull
     private String email;
 
-    @Column(name = "PASSWORD", columnDefinition = "CHAR(64)", length = 64, nullable = false)
+    @Column(name = "PASSWORD", columnDefinition = "CHAR(200)", length = 200, nullable = false)
     @NotNull
     private String password;
 
@@ -46,16 +45,16 @@ public class User implements UserDetails {
     @NotNull
     private String nickName;
 
-    @Column(name = "BIRTH", columnDefinition = "CHAR(8)", length = 8)
+    @Column(name = "BIRTH", columnDefinition = "CHAR(20)", length = 20)
     @NotNull
     private String birth;
 
-    @Column(name = "PHONE_NUMBER", columnDefinition = "CHAR(11)", length = 11)
+    @Column(name = "PHONE_NUMBER", columnDefinition = "CHAR(20)", length = 20)
     @NotNull
     private String phoneNumber;
 
-    @Column(name = "MAIN_GROUP")
-    private Integer mainGroup;
+    @Column(name = "MAIN_FAMILY")
+    private Integer mainFamily;
 
     @Column(name = "PLUS_MINUS", columnDefinition = "TINYINT(1) DEFAULT 0", length = 1)
     private int plusMinus;
@@ -78,48 +77,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "AUTH_PROVIDER", length = 20)
-    @Enumerated(EnumType.STRING)
-    private AuthProvider authProvider;
-
-    /**
-     * Spring Security 회원 가입
-     */
-    @ElementCollection(fetch = FetchType.EAGER) // 값 타입을 컬렉션을 매핑할때 사용
-    @Builder.Default // 특정 필드를 특정 값으로 초기화할때
-    private List<String> roles = new ArrayList<>();
-
-    // UserDetails 구현 함수
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public String getUsername() { // UserDetails 인터페이스 커스텀
-        return nickName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+    @Builder
+    public User(String userId, String password){
+        this.userId = userId;
+        this.password = password;
     }
 
     public User(
@@ -129,13 +90,12 @@ public class User implements UserDetails {
             String nickName,
             String birth,
             String phoneNumber,
-            int mainGroup,
+            int mainFamily,
             int plusMinus,
             LocalDateTime createTime,
             LocalDateTime updateTime,
             String refreshToken,
-            Role role,
-            AuthProvider authProvider
+            Role role
     ){
         this.userId = userId;
         this.email = email;
@@ -143,17 +103,47 @@ public class User implements UserDetails {
         this.nickName = nickName;
         this.birth = birth;
         this.phoneNumber = phoneNumber;
-        this.mainGroup = mainGroup;
+        this.mainFamily = mainFamily;
         this.plusMinus = plusMinus;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.refreshToken = refreshToken;
         this.role = role != null ? role : Role.USER;
-        this.authProvider = authProvider != null ? authProvider : authProvider.LOCAL;
     }
 
-//    @Transactional
-    public void encodePassword(PasswordEncoder passwordEncoder){
-        password = passwordEncoder.encode(password);
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return userId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }
