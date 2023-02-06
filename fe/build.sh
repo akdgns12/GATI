@@ -37,7 +37,7 @@ echo "image rm end"
 echo "docker run start"
 if [ "${IMAGE_NAME}" == "gati-front-dev" ];then
         echo "same image name ${IMAGE_NAME}"
-        docker image rm -f ${IMAGE_NAME}
+        docker rm -f ${IMAGE_NAME}
         echo "same image rm in end"
 fi
 
