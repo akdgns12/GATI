@@ -2,12 +2,16 @@ package com.family.gati.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Date;
 
 @Data
 @NoArgsConstructor
+@Getter
+@Setter
 public class AdminMissionUpdateDto {
     @ApiModelProperty(example = "1")
     private Integer id;
