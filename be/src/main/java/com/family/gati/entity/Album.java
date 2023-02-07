@@ -33,7 +33,7 @@ public class Album {
     @Column(name = "TAG", nullable = false, length = 500)
     private String tag;
 
-    @Column(name = "IMG", nullable = false, length = 200)
+    @Column(name = "IMG", nullable = false, length = 500)
     private String img;
 
     @Column(name = "LIKES", nullable = false)

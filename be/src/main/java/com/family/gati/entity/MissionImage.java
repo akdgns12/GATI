@@ -26,7 +26,7 @@ public class MissionImage {
     @Column(name = "USER_ID", nullable = false, length = 20)
     private String userId;
 
-    @Column(name = "IMG", nullable = false, length = 200)
+    @Column(name = "IMG", nullable = false, length = 500)
     private String img;
 
     private MissionImage(MissionImage.MissionImageBuilder builder) {
