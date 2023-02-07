@@ -24,7 +24,7 @@ export default function PictureBox(props) {
   // }
 
   return (
-    <Box style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100px', height:'100px', padding:'10px', border:'1px solid black'}}>
+    <Box style={{display:'flex', justifyContent:'center', alignItems:'center', width:'145px', height:'145px',  border:'1px dashed #8888', margin:3}}>
       {imgFile ? <img style={{width:'100px', height:'100px'}} src={imgFile} objectfit="cover" alt="업로드된 이미지" loading="로딩중..." /> :
         <IconButton sx={{margin:'auto'}} component="label">
           <input hidden accept="image/*" type="file" onChange={printFile} ref={imgRef} />
