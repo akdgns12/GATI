@@ -20,7 +20,7 @@ export default function ArticleCard(props) {
   const variant = props.variant == null ? "feed" : props.variant;
 
   const mvToDetail = () => {
-    console.log("move to detail page");
+    // console.log("move to detail page");
     const url = "/detail/" + article.id;
     navigate(url);
   };

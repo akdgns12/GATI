@@ -1,4 +1,4 @@
-import { React, useEffect, useLayoutEffect, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
@@ -29,8 +29,8 @@ const PostDetail = () => {
   const navigate = useNavigate();
   const articleId = useParams().articleId;
 
-  useLayoutEffect(() => {
-    console.log("detail page mounted");
+  useEffect(() => {
+    // console.log("detail page mounted");
     httpClient.get("/boards/board/" + articleId)
       .then((res) => {
         setArticle(res.data);

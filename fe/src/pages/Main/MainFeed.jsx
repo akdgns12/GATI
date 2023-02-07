@@ -13,15 +13,14 @@ const MainFeed = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("main feed mounted");
+    // console.log("main feed mounted");
     dispatch(loadMainFeed(1))
       .then((data) => {
-        console.log("data loaded");
-        console.log(data.payload);
+        // console.log(data.payload);
       })
       .catch((error) => console.log(error));
     return () => {
-      console.log("main feed umnounted");
+      // console.log("main feed umnounted");
     };
   }, []);
 
@@ -36,7 +35,7 @@ const MainFeed = () => {
   if (groupId) {
     return (
       <div>
-        {console.log("hi")}
+        {/* {console.log("hi")} */}
         <AddButton mode="feed" />
         {articles != null &&
           articles.map((article, index) => {
