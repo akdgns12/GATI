@@ -23,7 +23,7 @@ const localizer = dateFnsLocalizer({
   startOfWeek,
   getDay,
   locales
-})
+ })
 
 const events = [
   {
@@ -60,12 +60,18 @@ export default function Scheduler() {
   function handlePlan() {
     const info = {
       title: newEvent.title,
-      start: newEvent.start,
-      end: newEvent.end,
+      startDate: newEvent.start,
+      endDate: newEvent.end,
+      groupId: 1,
+      userId: 'podif',
+      memo: 'test axios',
+      place: 'multicampus'
+
     }
     // console.log('a')
-    if (info.title && info.start && info.end) {
+    if (info.title && info.startDate && info.endDate) {
       dispatch(postCalendar(info))
+      // console.log('hello')
     } else {
       alert('빈칸을 채워주세여')
     }

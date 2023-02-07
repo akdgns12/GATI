@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // 기본 REST API만 쓰겠다는 소리
                 .httpBasic().disable()
-                .cors().and()
+                .cors().and().cors().configurationSource(corsConfigurationSource()).and()
                 .csrf().disable()
                 // SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을 해제한다.
                 .headers()
@@ -79,11 +79,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        // configuration.setAllowedOriginPatterns();
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://3.34.141.63:3000");
+        configuration.addAllowedOrigin("http://3.34.141.63:443");
+        configuration.addAllowedOrigin("https://ggati.site");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
+        //configuration.setExposedHeaders(""); //
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
