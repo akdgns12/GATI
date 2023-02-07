@@ -28,13 +28,6 @@ const App = () => {
     else return false;
   }
 
-  // height:100vh 설정 값에 스크롤이 안 생기도록 조정
-  function setScreenSize() {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`); //"--vh"라는 속성으로 정의해준다.
-  }
-  window.addEventListener('resize', () => setScreenSize());
-
   return (
     <Box className="App">
       {/* {doRedirect() && <Navigate to="/login" replace={true} />} */}
