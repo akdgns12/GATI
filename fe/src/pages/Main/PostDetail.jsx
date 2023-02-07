@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Box, IconButton } from '@mui/material';
@@ -10,7 +10,7 @@ import ArticleCard from '../../components/Main/ArticleCard';
 import CommentInput from '../../components/Main/CommentInput';
 import CommentView from '../../components/Main/CommentView';
 
-import httpClient from '../../utils/axios';
+import { loadPostDetail } from '../../store/Board/board';
 
 const contStyle = css`
   width: 100%;
@@ -24,21 +24,25 @@ const contStyle = css`
 
 const PostDetail = () => {
   const [loaded, setLoaded] = useState(false);
-  const [article, setArticle] = useState({});
+  const { article } = useSelector((state) => state.board);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const articleId = useParams().articleId;
 
   useEffect(() => {
     // console.log("detail page mounted");
-    httpClient.get("/boards/board/" + articleId)
-      .then((res) => {
-        setArticle(res.data);
+    const reqData = {
+      articleId: articleId,
+    };
+    dispatch(loadPostDetail(reqData))
+      .then((data) => {
+        console.log(data);
         setLoaded(true);
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
   }, [])
 
   function mvBack() {
