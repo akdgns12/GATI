@@ -10,7 +10,6 @@ export const postCalendar = createAsyncThunk(
   "plan/createPlan",
 
   async (planData, { rejectWithValue }) => {
-    console.log("aa");
     const Data = {
       title: planData.title,
       startDate: planData.startDate,
@@ -20,11 +19,11 @@ export const postCalendar = createAsyncThunk(
       memo: planData.memo,
       place: planData.place,
     };
+
     try {
       const response = await httpClient.post("/plan", Data);
-      console.log("hello");
-
-      return response.data;
+      console.log(response.config.data);
+      return response.config.data;
     } catch (error) {
       console.log(error);
       return rejectWithValue(error);
@@ -55,6 +54,7 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(postCalendar.fulfilled, (state, action) => {
       state.planData.push(action.payload);
+      console.log(state);
     });
   },
 });
