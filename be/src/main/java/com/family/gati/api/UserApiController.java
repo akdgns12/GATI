@@ -11,11 +11,13 @@ import com.family.gati.security.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -320,6 +322,46 @@ public class UserApiController {
             status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("아이디 찾기 이메일 발송 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @Data
+    public static class changePasswordRequest{
+        private String password;
+        private String changePassword;
+    }
+
+    // 유저 비밀번호 변경
+    @ApiOperation(value = "비밀번호 변경")
+    @PutMapping("/account/password")
+    public ResponseEntity<?> changePassword(@RequestHeader(value = "Authroize") String token,
+                                             changePasswordRequest request){
+        // front에서 비밀번호 변경할때도 입력 form에 대해 규칙성 검사해주면 bindingresult 검사는 굳이?
+        logger.debug("token: {}", token);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        // 유효성 검사
+        if(!jwtTokenProvider.validateToken(token)){
+            log.debug("올바르지 않은 token: {}", token);
+            resultMap.put("msg", FAIL);
+            resultMap.put("result", "Invalid token");
+            status = HttpStatus.NOT_FOUND;
+
+            return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        }
+
+        try{
+            User user = jwtTokenProvider.getUser(token);
+            userService.changePassword(user, request.getChangePassword());
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.ACCEPTED;
+        }catch (Exception e){
+            log.debug("비밀번호 변경 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }

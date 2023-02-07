@@ -1,11 +1,9 @@
 package com.family.gati.config;
 
-import com.family.gati.security.CookieAuthorizationRequestRepository;
 import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.security.jwt.JwtAccessDeniedHandler;
 import com.family.gati.security.jwt.JwtAuthenticationEntryPoint;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

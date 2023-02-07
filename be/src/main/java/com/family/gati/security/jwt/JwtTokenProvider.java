@@ -1,5 +1,6 @@
 package com.family.gati.security.jwt;
 
+import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
 import com.family.gati.security.CustomUserDetails;
 import io.jsonwebtoken.*;
@@ -114,19 +115,35 @@ public class JwtTokenProvider {
         CustomUserDetails principal = new CustomUserDetails(Integer.valueOf(claims.getSubject()), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
+    
+    // 유저 객체 얻기
+    public User getUser(String token){
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
+        String user_seq = String.valueOf(claims.getBody().get("user_seq"));
+        return userRepository.findByUserSeq(Integer.parseInt(user_seq));
+    }
 
-    // 복호화해서 유저 정보 얻기
+    // userSeq 얻기
     public int getUserSeq(String token) {
-        // depecreated 해결해야 함수 사용가능
         Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
         String user_seq = String.valueOf(claims.getBody().get("user_seq"));
         return Integer.parseInt(user_seq);
     }
 
+    // userId 얻기
+    public String getUserId(String token){
+        User user = getUser(token);
+        String userId = user.getUserId();
+        return userId;
+    }
+
+    //
     public Boolean validateToken(String token) {
         try {
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
             Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
-            return true;
+            // token의 시간이 현재 시간 전이면 만료된 token
+            return !claims.getBody().getExpiration().before(new Date());
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
@@ -145,5 +162,4 @@ public class JwtTokenProvider {
             return e.getClaims();
         }
     }
-
 }
