@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {ToggleButtonGroup, ToggleButton } from '@mui/material';
-import InProgressDefault from '../../components/PicsTogether/InProgressDefault';
-import OnMission from '../../components/PicsTogether/OnMission';
-import Completed from '../../components/PicsTogether/Completed';
+import {ToggleButtonGroup, ToggleButton, Box } from '@mui/material';
+import InProgressDefault from './InProgressDefault';
+import OnMission from './OnMission';
+import Completed from './Completed';
 
 export default function PictureTogether() {
   // 진행 중, 완료 모드 전환
@@ -34,38 +34,31 @@ export default function PictureTogether() {
   }
 
   return (
-    <div
+    <Box
       style={{
         display:'flex',
         flexDirection:'column',
         alignItems:'center'
       }}>
-      <div>
-        <ToggleButtonGroup
-          color='primary'
-          value={mode}
-          exclusive
-          onChange={changeMode}
-          aria-label="Platform"
-          style={{
-            flex:'auto',
-            margin:'30px',
-            width:'80vw'
-          }}
-          >
-          <ToggleButton value="inprogress" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중</ToggleButton>
-          <ToggleButton value="completed" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>완료</ToggleButton>
-        </ToggleButtonGroup>
-      </div>
-      <div
+      <ToggleButtonGroup
+        color='primary'
+        value={mode}
+        exclusive
+        onChange={changeMode}
+        aria-label="Platform"
         style={{
-          display:'flex',
-          flexDirection:'column',
-          alignItems:'center',
-          height:'70vh'
-        }}>
+          flex:'auto',
+          margin:'30px',
+          width:'80vw'
+        }}
+        >
+        <ToggleButton value="inprogress" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중</ToggleButton>
+        <ToggleButton value="completed" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>완료</ToggleButton>
+      </ToggleButtonGroup>
+      <Box
+        style={{width:'80vw'}}>
         {content}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

@@ -8,10 +8,9 @@ import Home from "./pages/Main/MainPage";
 import Calendar from "./pages/Calendar/CalendarPage";
 import PhotoBookPage from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
-import PictureTogether from "./pages/PicsTogether/PictureTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
 import Box from "@mui/material/Box";
-
+import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage"
 import { useSelector } from "react-redux";
 
 const App = () => {
@@ -38,7 +37,7 @@ const App = () => {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/photobook/*" element={<PhotoBookPage />} />
         <Route path="/gotg" element={<GoTogether />} />
-        <Route path="/pictg" element={<PictureTogether />} />
+        <Route path="/pictg/*" element={<PictureTogetherPage />} />
         <Route path="/login/*" element={<Login />} />
       </Routes>
       {!excludeHeader() && <NavBar />}
