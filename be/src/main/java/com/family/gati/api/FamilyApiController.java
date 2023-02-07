@@ -4,6 +4,8 @@ import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
 import com.family.gati.entity.FamilyMember;
+import com.family.gati.entity.User;
+import com.family.gati.repository.UserRepository;
 import com.family.gati.service.FamilyMemberService;
 import com.family.gati.service.FamilyService;
 import io.swagger.annotations.Api;
@@ -35,18 +37,29 @@ public class FamilyApiController {
 
     private final FamilyService familyService;
     private final FamilyMemberService familyMemberService;
+    private final UserRepository userRepository;
 
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
-    @PostMapping
-    public ResponseEntity<?> Family(@RequestBody FamilySignUpDto familySignUpDto){
+    @PostMapping("/{userId}")
+    public ResponseEntity<?> Family(@PathVariable("userId") String userId
+            ,@RequestBody FamilySignUpDto familySignUpDto){
         logger.debug("familySignUpDto: {}", familySignUpDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            familyService.createFamily(familySignUpDto);
+            familyService.createFamily(userId, familySignUpDto);
             familyMemberService.createFamilyMember(familySignUpDto);
+
+            // 첫 그룹 생성 시, 생성 그룹이 mainFamily가 될 수 있게
+            User user = userRepository.findByUserId(userId);
+            if(user.getMainFamily() == null){
+                log.debug("회원");
+                Family newFamily = familyService.getByMasterId(userId);
+                user.setMainFamily(newFamily.getId());
+                userRepository.save(user);
+            }
             resultMap.put("created Family", familySignUpDto);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.CREATED;

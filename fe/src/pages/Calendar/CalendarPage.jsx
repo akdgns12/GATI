@@ -43,7 +43,7 @@ export default function Calendar() {
         <ToggleButton value="calendar" onClick={() => setShow(true)}>달력</ToggleButton>
       </ToggleButtonGroup>
       {show? <Scheduler/>:<Plans/>}
-      <AddButton/>
+      {/* <AddButton/> */}
     </Box>
   )
 }

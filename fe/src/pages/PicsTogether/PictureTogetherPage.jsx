@@ -1,15 +1,12 @@
 import * as React from 'react';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import InProgress from '../../components/PicsTg/InProgress';
-import UploadPics from '../../components/PicsTg/UploadPics';
-import Completed from '../../components/PicsTg/Completed';
+import {ToggleButtonGroup, ToggleButton } from '@mui/material';
+import InProgressDefault from '../../components/PicsTogether/InProgressDefault';
+import OnMission from '../../components/PicsTogether/OnMission';
+import Completed from '../../components/PicsTogether/Completed';
 
 export default function PictureTogether() {
+  // 진행 중, 완료 모드 전환
   const [mode, setMode] = React.useState('inprogress');
-  const [mission, setMission] = React.useState(false)
-  const [pics, setPics] = React.useState('')
-
   const changeMode = () => {
     if (mode === 'inprogress') {
       setMode('completed');
@@ -17,18 +14,23 @@ export default function PictureTogether() {
       setMode('inprogress')
     }}
 
-  const changeMissionMode = () => {
+  // 이번주 미션 시작 여부
+  const [mission, setMission] = React.useState(false)
+  const changeToMissionMode = () => {
     setMission(true)
   }
 
-  
+  // 선택한 인원 수(사진 수)
+  const [picNum, setPicNum] = React.useState('')
+
+  // mode에 따라 달라질 content
   let content = null
   if (mode === 'inprogress' && mission === false) {
-    content = <InProgress deliverPics={(_pic)=>setPics(_pic)} changeMissionMode={changeMissionMode} />
-  } else if (mode === 'completed') {
-    content = <Completed />
+    content = <InProgressDefault deliverPicNum={(_pic)=>setPicNum(_pic)} changeToMissionMode={changeToMissionMode} />
   } else if (mode === 'inprogress' && mission === true) {
-    content = <UploadPics pics={pics} />
+    content = <OnMission picNum={picNum} />
+  } else {
+    content = <Completed />
   }
 
   return (
@@ -51,7 +53,7 @@ export default function PictureTogether() {
             width:'80vw'
           }}
           >
-          <ToggleButton value="inprogress" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중</ToggleButton><> </>
+          <ToggleButton value="inprogress" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중</ToggleButton>
           <ToggleButton value="completed" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>완료</ToggleButton>
         </ToggleButtonGroup>
       </div>
