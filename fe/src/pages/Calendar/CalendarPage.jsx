@@ -33,7 +33,6 @@ export default function Calendar() {
         exclusive
         onChange={handleChange}
         aria-label="Platform"
-        
         size='large'
         sx={{
           margin: 2,
@@ -44,7 +43,7 @@ export default function Calendar() {
         <ToggleButton value="calendar" onClick={() => setShow(true)}>달력</ToggleButton>
       </ToggleButtonGroup>
       {show? <Scheduler/>:<Plans/>}
-      <AddButton/>
+      {/* <AddButton/> */}
     </Box>
   )
 }

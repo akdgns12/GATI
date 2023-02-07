@@ -4,20 +4,44 @@ import reportWebVitals from "./reportWebVitals";
 // react-router
 import { BrowserRouter } from "react-router-dom";
 // react-redux
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import App from "./App";
 import rootReducer from "./store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const store = configureStore({ reducer: rootReducer });
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: ['user'],
+};
+
+const _persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const customizedMiddleware = getDefaultMiddleware({
+  serializableCheck: false,
+});
+
+const store = configureStore({
+  reducer: _persistedReducer,
+  devTools: process.env.NODE_ENV !== 'production',
+  middleware: customizedMiddleware,
+});
+
+const persistor = persistStore(store);
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>

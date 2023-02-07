@@ -8,6 +8,10 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import Datepicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { Box } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import { logDOM } from '@testing-library/react';
+import { useDispatch } from 'react-redux';
+import { postCalendar } from '../../store/Schedule/schedule';
 
 const locales = {
   'ko-KR': require('date-fns/locale/ko')
@@ -46,17 +50,31 @@ export default function Scheduler() {
     title: '', start: '', end: ''
   });
   const [allEvents, setAllEvents] = useState(events)
+  const dispatch = useDispatch()
+  
   
   function handleAddEvent() {
     setAllEvents([...allEvents, newEvent])
-    // console.log('hi')
+    // console.log(allEvents);
+  }
+  function handlePlan() {
+    const info = {
+      title: newEvent.title,
+      start: newEvent.start,
+      end: newEvent.end,
+    }
+    // console.log('a')
+    if (info.title && info.start && info.end) {
+      dispatch(postCalendar(info))
+    } else {
+      alert('빈칸을 채워주세여')
+    }
+    // console.log('b')
   }
 
   return (
-    <Box sx={{
-      border: 1, borderColor: 'primary.main'
-    }}>
-      <div>
+    <Box>
+      <Box>
         <input type="text" placeholder='Add title' style={{width: '20%', marginRight: '10px'}}
           value={newEvent.title} onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
         />
@@ -65,8 +83,8 @@ export default function Scheduler() {
         <Datepicker placeholderText='종료일'
           selected={newEvent.end} onChange={(end) => setNewEvent({...newEvent, end})}
         />
-        <button style={{marginTop: '10px'}} onClick={handleAddEvent}>일정 등록</button>
-      </div>
+        <button style={{marginTop: '10px'}} onClick={() => {handleAddEvent(); handlePlan()}}>일정 등록</button>
+      </Box>
       <Calendar localizer={localizer} events={allEvents}
       startAccessor='start' endAccessor='end'
       style={{
