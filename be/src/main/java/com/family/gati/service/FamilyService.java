@@ -43,17 +43,22 @@ public class FamilyService {
         return mainGroup;
     }
 
-    public void createFamily(FamilySignUpDto familySignUpDto){
-        Family group = new Family();
-        group.setName(familySignUpDto.getName());
-        // 우리가 제공해줄 기본 이미지 or 사용자가 업로드한 이미지로
-        group.setImg(familySignUpDto.getImg());
-        // 생성할때 그룹 인원 1
-        group.setFamilyTotal(1);
-        // 로그인 한 유저 Id 가져오기로 수정해야함
-        group.setMasterId("akdgns12");
+    public void createFamily(String userId, FamilySignUpDto familySignUpDto){
+        Family family = new Family();
 
-        familyRepository.save(group);
+        family.setName(familySignUpDto.getName());
+        // 우리가 제공해줄 기본 이미지 or 사용자가 업로드한 이미지로
+        family.setImg(familySignUpDto.getImg());
+        // 생성할때 그룹 인원 1
+        family.setFamilyTotal(1);
+        // 로그인 한 유저 ID로 가져옴
+        family.setMasterId(userId);
+
+        familyRepository.save(family);
+    }
+
+    public Family getByMasterId(String masterId){
+        return familyRepository.findByMasterId(masterId);
     }
 
     @Transactional
