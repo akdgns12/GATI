@@ -29,7 +29,7 @@ public class Family {
     @NotNull
     private int familyTotal;
 
-    @Column(name = "IMG", length = 40)
+    @Column(name = "IMG", length = 500)
     @NotNull
     private String img;
 

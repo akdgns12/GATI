@@ -20,7 +20,7 @@ public class Mission {
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "IMG", nullable = false, length = 200)
+    @Column(name = "IMG", nullable = false, length = 500)
     private String img;
 
     @Column(name = "MEM_NUMBER", nullable = false)

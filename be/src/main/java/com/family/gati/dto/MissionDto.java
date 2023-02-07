@@ -2,17 +2,24 @@ package com.family.gati.dto;
 
 import com.family.gati.entity.Mission;
 import com.family.gati.util.CommonBuilder;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 public class MissionDto {
+    @ApiModelProperty(example = "1")
     private Integer id;
+    @ApiModelProperty(example = "img.img")
     private String img;
+    @ApiModelProperty(example = "4")
     private Integer memNumber;
+    @ApiModelProperty(example = "1")
     private Integer adminMissionId;
+    @ApiModelProperty(example = "1")
     private Integer groupId;
+    @ApiModelProperty(example = "1 : 완료, 0 : 미완료")
     private Integer completed;
 
     private MissionDto(MissionDto.MissionDtoBuilder builder) {
