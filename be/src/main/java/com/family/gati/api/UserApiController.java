@@ -100,13 +100,13 @@ public class UserApiController {
             if(user == null){
                 resultMap.put("msg", FAIL);
                 status = HttpStatus.NO_CONTENT;
-                new ResponseEntity<Map<String, Object>>(resultMap, status);
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
             if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())){
                 logger.debug("비밀번호 불일치: {}", user.getPassword());
                 resultMap.put("msg", FAIL);
-                status = HttpStatus.NOT_FOUND;
+                status = HttpStatus.NO_CONTENT;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
