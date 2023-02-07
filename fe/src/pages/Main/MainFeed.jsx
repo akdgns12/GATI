@@ -1,6 +1,7 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { useDispatch, useSelector } from "react-redux";
+import { loadMainFeed } from "../../store/Board/board";
 
 import ArticleCard from "../../components/Main/ArticleCard";
 import NotInGroup from "../../components/Main/NotInGroup";
@@ -9,6 +10,20 @@ import NoGroupAlertDialog from "../../components/Main/NoGroupAlert";
 import GroupInvitation from "../../components/Notification/GroupInvitation";
 
 const MainFeed = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // console.log("main feed mounted");
+    dispatch(loadMainFeed(1))
+      .then((data) => {
+        // console.log(data.payload);
+      })
+      .catch((error) => console.log(error));
+    return () => {
+      // console.log("main feed umnounted");
+    };
+  }, []);
+
   // console.log(state);
   const { articles } = useSelector((state) => state.board);
   const groupId = 11;
@@ -20,10 +35,19 @@ const MainFeed = () => {
   if (groupId) {
     return (
       <div>
+        {/* {console.log("hi")} */}
         <AddButton mode="feed" />
-        {articles.map((article, index) => {
-          return <ArticleCard key={index} article={article} style={{ "margin-top": "10px" }} mode="feed" />;
-        })}
+        {articles != null &&
+          articles.map((article, index) => {
+            return (
+              <ArticleCard
+                key={index}
+                article={article}
+                style={{ "margin-top": "10px" }}
+                mode="feed"
+              />
+            );
+          })}
       </div>
     );
   } else {
@@ -42,6 +66,5 @@ const MainFeed = () => {
     );
   }
 };
-
 
 export default MainFeed;
