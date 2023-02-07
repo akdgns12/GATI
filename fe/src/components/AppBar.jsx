@@ -4,13 +4,6 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-<<<<<<< HEAD
-import Badge from '@mui/material/Badge';
-import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Img from "../static/user img.png";
-import { Avatar, withStyles } from '@mui/material';
-=======
 import { Avatar, withStyles } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled, useTheme } from '@mui/material/styles';
@@ -33,7 +26,6 @@ import MyInfo from './SideBar/MyInfo';
 import Family from './SideBar/Family';
 import Logout from './SideBar/Logout';
 import FamilyCreate from './SideBar/FamilyCreate';
->>>>>>> 5fa15d9e9f77c52496440f81edc660485d37a3da
 
 const PrimaryAppBar = () => {
 
@@ -80,18 +72,6 @@ const PrimaryAppBar = () => {
     setFamilyinfo(false)
   }
 
-<<<<<<< HEAD
-  const list = (anchor) => (
-    <Box
-      sx={{ width: anchor === 'anchor' || anchor === 'bottom' ? 'auto' : 250 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-    </Box>
-  );
-=======
->>>>>>> 5fa15d9e9f77c52496440f81edc660485d37a3da
 
   return (
     <Box sx={{flexGrow: 1, height:55}}>
