@@ -1,13 +1,6 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
+import {Box, Typography, Modal, Button, InputLabel, MenuItem, FormControl, Select} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 
 const style = {
   display:'flex',
@@ -24,17 +17,18 @@ const style = {
 };
 
 export default function SetMemberModal(props) {
-  const [pics, setPics] = React.useState('');
-
+  // 미션 참여 인원 수 설정
+  const [picNum, setPicNum] = React.useState('');
   const handleChange = (event) => {
-    setPics(event.target.value);
+    setPicNum(event.target.value);
   };
 
+  // 확인 버튼 -> 상위 컴포넌트에 selected=true(-> onMission 컴포넌트 전환), PicNum 전달
   const onConfirm = () => {
     props.onSelected()
-    props.deliverPics(pics)
-
+    props.deliverPicNum(picNum)
   }
+
   return (
     <Modal
       open={props.open}
@@ -55,8 +49,8 @@ export default function SetMemberModal(props) {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={pics}
-              label="Pics"
+              value={picNum}
+              label="PicNum"
               onChange={handleChange}
             >
               <MenuItem value={1}>1</MenuItem>
@@ -76,7 +70,7 @@ export default function SetMemberModal(props) {
             justifyContent:'center',
             margin:'20px 20px'
           }}>
-          <Button onClick={onConfirm} size="medium" variant="contained"disableElevation>확인</Button>
+          <Button onClick={onConfirm} size="medium" variant="contained" disableElevation>확인</Button>
         </div>
       </Box>
     </Modal>
