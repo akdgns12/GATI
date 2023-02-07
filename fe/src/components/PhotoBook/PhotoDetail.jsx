@@ -5,10 +5,10 @@ import { css } from "@emotion/react";
 import { Box, IconButton } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router';
-import ArticleCard from '../../components/Main/ArticleCard';
-import CommentInput from '../../components/Main/CommentInput';
-import CommentView from '../../components/Main/CommentView';
-import PhotoData from './PhotoData';
+import ArticleCard from '../Main/ArticleCard';
+import CommentInput from '../Main/CommentInput';
+import CommentView from '../Main/CommentView';
+import PhotoData from '../PicsTogether/PhotoData';
 
 const PhotoDetail = () => {
   const {photoId} = useParams()

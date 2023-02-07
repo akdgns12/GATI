@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Container, Paper, Box, Typography, Stack, IconButton, Button } from "@mui/material";
+import { Container, Paper, Box, Typography, Stack, IconButton, Button, TextField } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PictureBox from "./PictureBox";
@@ -52,20 +52,38 @@ export default function OnMission(props) {
           {onDesc === true ? <Typography margin='20px' fontSize='13px'> {mission.description}</Typography> : null}
           <Typography color='#888888'> {mission.startdate} ~ {mission.enddate} </Typography>
         </Paper>
-        <Box sx={{ marginTop:'50px', borderRadius:8}}>
+        <Box sx={{ marginTop:'20px', borderRadius:8}}>
           <Box sx={{
             display:'flex',
             justifyContent:'center',
             flexWrap:'wrap',
-            margin:'20px 0 20px 0'
-          }}>
+            margin:'10px 0 10px 0'
+            }}>
             {content}
+          </Box>
+          <Box
+            component="form"
+            sx={{
+              display:'flex',
+              flexWrap:'wrap',
+              '& .MuiTextField-root': { m:1, width:'100%' },
+              marginBottom:'20px'
+            }}
+            noValidate
+            autoComplete="off">
+            <TextField
+              fullwidth
+              id="outlined-textarea"
+              label="문구 입력"
+              placeholder="이번주 사진의 테마에 대해 짧은 문구를 남겨주세요. 문구는 사진과 함께 [가치 한 장 사진첩]에 저장됩니다."
+              multiline
+            />
           </Box>
           <Box sx={{
             display:'flex',
             justifyContent:'center',
             }}>
-            <Button margin='20px' size="medium" variant="contained" disableElevation>
+            <Button margin='30px' size="medium" variant="contained" disableElevation>
               <Link to="/pictg/missionCompleted" style={{ textDecoration: 'none', color:'white' }}>미션 완료</Link>
             </Button>
           </Box>
