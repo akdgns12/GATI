@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // 기본 REST API만 쓰겠다는 소리
                 .httpBasic().disable()
-                .cors().and()
+                .cors().and().cors().configurationSource(corsConfigurationSource()).and()
                 .csrf().disable()
                 // SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을 해제한다.
                 .headers()
