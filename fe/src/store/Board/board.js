@@ -16,24 +16,7 @@ export const loadMainFeed = createAsyncThunk(
 );
 
 // initial state
-const initialState = {
-  articles: [],
-  article: {
-    postId: 1,
-    userId: "seotai78",
-    content: "호에엥",
-    tag: "#호엥",
-    img: "https://picsum.photos/400/300",
-    like: 3,
-    createTime: "22.12.31",
-    comment: 4,
-    comments: [
-      { userId: "akdgns12", comment: "ㅋ" },
-      { userId: "gkagu12", comment: "ㅋㅋ" },
-      { userId: "podif", comment: "호엥" },
-    ],
-  },
-};
+const initialState = {};
 
 // slice
 const boardSlice = createSlice({
