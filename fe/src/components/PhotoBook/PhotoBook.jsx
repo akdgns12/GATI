@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import SearchBar from "../../components/PhotoBook/SearchBar";
-import Img from '../../components/PhotoBook/Img'
-import NoImg from "../../components/PhotoBook/NoImg";
-import PhotoData from "./PhotoData";
+import SearchBar from "./SearchBar";
+import Img from './Img'
+import NoImg from "./NoImg";
+import PhotoData from "../PicsTogether/PhotoData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AddButton from "../../components/Main/AddButton";
+import AddButton from "../Main/AddButton";
 
 class PhotoBook extends React.Component {
   render() {
