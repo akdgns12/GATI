@@ -8,11 +8,14 @@ import Home from "./pages/Main/MainPage";
 import Calendar from "./pages/Calendar/CalendarPage";
 import PhotoBookPage from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
-import PictureTogether from "./pages/PictureTogether/PictureTogetherPage";
+import PictureTogether from "./pages/PicsTogether/PictureTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
+<<<<<<< HEAD
+=======
 import Box from "@mui/material/Box";
 
 import { useSelector } from "react-redux";
+>>>>>>> 5fa15d9e9f77c52496440f81edc660485d37a3da
 
 const App = () => {
   const location = useLocation();
@@ -33,6 +36,18 @@ const App = () => {
     <Box className="App">
       {/* {doRedirect() && <Navigate to="/login" replace={true} />} */}
       {!excludeHeader() && <AppBar />}
+<<<<<<< HEAD
+        <Routes>
+          <Route path="/*" element={<Home />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/photobook/*" element={<PhotoBookPage />} />
+          <Route path="/gotg" element={<GoTogether />} />
+          <Route path="/pictg" element={<PictureTogether />} />
+          <Route path="/login/*" element={<Login />} />
+        </Routes>
+        {!excludeHeader() && <NavBar />}
+    </div>
+=======
       <Routes>
         <Route path="/*" element={<Home />} />
         <Route path="/calendar" element={<Calendar />} />
@@ -43,6 +58,7 @@ const App = () => {
       </Routes>
       {!excludeHeader() && <NavBar />}
     </Box>
+>>>>>>> 5fa15d9e9f77c52496440f81edc660485d37a3da
   );
 };
 
