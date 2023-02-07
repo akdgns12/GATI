@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit";
 import httpClient from "../../utils/axios";
 
-
 // actions
-
 
 export const doLoginUser = createAsyncThunk(
   "user/loginUser",
