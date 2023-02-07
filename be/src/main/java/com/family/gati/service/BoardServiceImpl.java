@@ -1,8 +1,10 @@
 package com.family.gati.service;
 
 import com.family.gati.dto.BoardDto;
+import com.family.gati.dto.TagDto;
 import com.family.gati.entity.Board;
 import com.family.gati.entity.BoardLikes;
+import com.family.gati.entity.BoardTag;
 import com.family.gati.repository.BoardLikesRepository;
 import com.family.gati.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,13 @@ public class BoardServiceImpl implements BoardService{
     }
 
     public BoardDto insertBoard(BoardDto boardDto) {
-        return new BoardDto.BoardDtoBuilder(boardRepository.save(new Board.BoardBuilder(boardDto).build())).build();
+        Board board = new Board.BoardBuilder(boardDto).build();
+        for (TagDto tagDto: boardDto.getTag()) {
+            BoardTag boardTag = new BoardTag(tagDto.getTagContent());
+            boardTag.setBoard(board);
+            board.putTag(boardTag);
+        }
+        return new BoardDto.BoardDtoBuilder(boardRepository.save(board)).build();
     }
 
     public BoardDto updateBoard(BoardDto boardDto) {

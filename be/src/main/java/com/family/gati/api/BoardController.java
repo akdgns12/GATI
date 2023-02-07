@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,8 +45,41 @@ public class BoardController {
 //    )
     })
     @GetMapping("/{groupId}")
-    public ResponseEntity<?> getBoardsByGroupId(@ApiParam(value = "path로 groupId 전달받음")@PathVariable("groupId") Integer groupId) {
+    public ResponseEntity<?> getBoardsByGroupIdAndPage(@ApiParam(value = "path로 groupId 전달받음")@PathVariable("groupId") Integer groupId) {
         List<BoardDto> findDtos = boardService.findByGroupId(groupId);
+        return ResponseEntity.ok(findDtos);
+    }
+
+    @ApiOperation(
+            value = "현재 그룹의 Board page 조회"
+            , notes = "GroupId와 page 번호(0부터 시작)를 통해 현재 그룹의 Board page를 최신순으로 12개 조회한다.")
+    @ApiResponses({
+            @ApiResponse(
+                    code = 200
+                    , message = "조회 성공"
+                    , response = BoardDto.class
+                    , responseContainer = "List"
+            )
+//            , @ApiResponse(
+//            code = 201
+//            , message = "생성된 자원 정보"
+//            , response = ResponseDTO.class
+//            , responseContainer = "List"
+//    )
+//            , @ApiResponse(
+//            code = 409
+//            , message = "로직 수행 불가 모순 발생"
+//            , response = ErrorDTO.class
+//            , responseContainer = "List"
+//    )
+    })
+    @GetMapping("/page")
+    public ResponseEntity<?> getBoardsByGroupId(@RequestParam Integer groupId, @RequestParam Integer page) {
+        List<BoardDto> boardDtos = boardService.findByGroupId(groupId);
+        List<BoardDto> findDtos = new ArrayList<>();
+        for (int i = page*12; i < Math.min((page+1)*12, boardDtos.size()); i++) {
+            findDtos.add(boardDtos.get(i));
+        }
         return ResponseEntity.ok(findDtos);
     }
 
@@ -75,7 +109,7 @@ public class BoardController {
         BoardDto boardDto = new BoardDto();
         boardDto.setGroupId(boardRegistDto.getGroupId());
         boardDto.setContent(boardRegistDto.getContent());
-        boardDto.setTag(boardRegistDto.getTag());
+        boardDto.setTag(boardRegistDto.getTagDtos());
         boardDto.setImg(boardRegistDto.getImg());
         boardDto.setLikes(0);
         boardDto.setComments(0);
@@ -106,7 +140,7 @@ public class BoardController {
         boardDto.setId(boardUpdateDto.getId());
         boardDto.setGroupId(boardUpdateDto.getGroupId());
         boardDto.setContent(boardUpdateDto.getContent());
-        boardDto.setTag(boardUpdateDto.getTag());
+//        boardDto.setTag(boardUpdateDto.getTag());
         boardDto.setImg(boardUpdateDto.getImg());
         boardDto.setLikes(0);
         boardDto.setComments(0);
