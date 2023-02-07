@@ -1,14 +1,16 @@
-import { React, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { React, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Box, IconButton } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import ArticleCard from '../../components/Main/ArticleCard';
 import CommentInput from '../../components/Main/CommentInput';
 import CommentView from '../../components/Main/CommentView';
+
+import { loadPostDetail } from '../../store/Board/board';
 
 const contStyle = css`
   width: 100%;
@@ -21,8 +23,27 @@ const contStyle = css`
 `;
 
 const PostDetail = () => {
-  const navigate = useNavigate();
+  const [loaded, setLoaded] = useState(false);
   const { article } = useSelector((state) => state.board);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const articleId = useParams().articleId;
+
+  useEffect(() => {
+    // console.log("detail page mounted");
+    const reqData = {
+      articleId: articleId,
+    };
+    dispatch(loadPostDetail(reqData))
+      .then((data) => {
+        console.log(data);
+        setLoaded(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }, [])
 
   function mvBack() {
     navigate(-1);
@@ -33,10 +54,16 @@ const PostDetail = () => {
       <IconButton className='mv-back' onClick={mvBack}>
         <ArrowBackIosIcon />
       </IconButton>
-      <ArticleCard article={article} style={{ width: '100%' }} variant="detail" />
-      <CommentInput />
       {
-        article.comments.map((comm, index) => {
+        loaded == true &&
+        <>
+          <ArticleCard article={article} style={{ width: '100%' }} variant="detail" />
+          <CommentInput articleId={article.id} />
+        </>
+      }
+      {
+        article != null && article.comment != null &&
+        article.comment.map((comm, index) => {
           return <CommentView key={index} comment={comm} />;
         })
       }
