@@ -64,6 +64,9 @@ dependencies {
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	// s3 서버 추가
 //	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// 이메일 인증 관련 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 configurations {
