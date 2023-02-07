@@ -12,6 +12,7 @@ export default function Plans() {
   return (
     <Box sx={{display: 'flex', justifyContent: 'center'}}>
       {planData.map((plan, index) => {
+        console.log(planData)
         return <PlanCard key={index} plan={plan}/>
       })}
     </Box>
