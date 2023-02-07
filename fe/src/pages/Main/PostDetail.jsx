@@ -54,7 +54,7 @@ const PostDetail = () => {
         loaded == true &&
         <>
           <ArticleCard article={article} style={{ width: '100%' }} variant="detail" />
-          <CommentInput />
+          <CommentInput articleId={article.id} />
         </>
       }
       {

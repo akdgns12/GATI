@@ -17,7 +17,6 @@ export default function ArticleCard(props) {
   const navigate = useNavigate();
 
   const article = props.article;
-
   const variant = props.variant == null ? "feed" : props.variant;
 
   const mvToDetail = () => {
@@ -106,7 +105,7 @@ export default function ArticleCard(props) {
             style={{ marginLeft: 10, cursor: "pointer" }}
           >
             Comment &nbsp;
-            {article.comment > 0 && article.comment}
+            {article.comments > 0 && article.comments}
           </Typography>
         </CardActions>
       ) : null}
