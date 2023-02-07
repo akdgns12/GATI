@@ -10,8 +10,10 @@ import PhotoBookPage from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
 import Box from "@mui/material/Box";
-import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage"
+import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage";
 import { useSelector } from "react-redux";
+
+import httpClient from "./utils/axios";
 
 const App = () => {
   const location = useLocation();
@@ -24,13 +26,18 @@ const App = () => {
 
   function doRedirect() {
     const isLoginPage = location.pathname.startsWith("/login") ? true : false;
-    if (!logIn && !isLoginPage) return true;
-    else return false;
+    if (isLoginPage) return false;
+    if (logIn) {
+      // console.log("add to header : " + loginUser.accessToken);
+      httpClient.defaults.headers.common["Authorization"] = loginUser.accessToken;
+      return false;
+    }
+    return true;
   }
 
   return (
     <Box className="App">
-      {/* {doRedirect() && <Navigate to="/login" replace={true} />} */}
+      {doRedirect() && <Navigate to="/login" replace={true} />}
       {!excludeHeader() && <AppBar />}
       <Routes>
         <Route path="/*" element={<Home />} />
