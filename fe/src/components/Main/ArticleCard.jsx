@@ -17,11 +17,12 @@ export default function ArticleCard(props) {
   const navigate = useNavigate();
 
   const article = props.article;
-  const variant = (props.variant == null) ? "feed" : props.variant;
+
+  const variant = props.variant == null ? "feed" : props.variant;
 
   const mvToDetail = () => {
     console.log("move to detail page");
-    const url = "/detail/" + article.postId;
+    const url = "/detail/" + article.id;
     navigate(url);
   };
 
@@ -41,12 +42,19 @@ export default function ArticleCard(props) {
   }
 
   let bookmark = null;
-  if ( props.mode === 'feed') {
-    bookmark = <IconButton aria-label="bookmark" onClick={addToPhotoBook}><BookmarkBorderIcon /></IconButton>     
+  if (props.mode === "feed") {
+    bookmark = (
+      <IconButton aria-label="bookmark" onClick={addToPhotoBook}>
+        <BookmarkBorderIcon />
+      </IconButton>
+    );
   }
 
   return (
-    <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
+    <Card
+      sx={{ borderRadius: 1 }}
+      style={{ marginBottom: "10px", width: "100%" }}
+    >
       <CardHeader
         action={
           <IconButton aria-label="settings" onClick={showOptions}>
@@ -55,10 +63,15 @@ export default function ArticleCard(props) {
         }
         title={article.userId}
         titleTypographyProps={{ variant: "body1" }}
-        style={{ textAlign: "left", padding:'10px' }}
+        style={{ textAlign: "left", padding: "10px" }}
       />
       {article.img != null ? (
-        <CardMedia component="img" width="100%" image={article.img} alt="No photo" />
+        <CardMedia
+          component="img"
+          width="100%"
+          image={article.img}
+          alt="No photo"
+        />
       ) : (
         "no img"
       )}
@@ -67,11 +80,16 @@ export default function ArticleCard(props) {
         <IconButton aria-label="add to favorites" onClick={toggleFav}>
           <FavoriteIcon />
         </IconButton>
-        {article.like}
-        <div style={{ marginLeft: "auto" }}>
-          <Typography variant="body4" style={{  fontWeight:'bold', marginRight:'10px'}} >{article.createTime}</Typography>
+        {article.likes}
+        <Box style={{ marginLeft: "auto" }}>
+          <Typography
+            variant="body4"
+            style={{ fontWeight: "bold", marginRight: "10px" }}
+          >
+            {article.createTime.split("T")[0]}
+          </Typography>
           {bookmark}
-        </div>
+        </Box>
       </CardActions>
 
       <CardContent>
@@ -80,18 +98,18 @@ export default function ArticleCard(props) {
         </Typography>
       </CardContent>
 
-      {
-        (variant == "feed")
-          ? (
-            <CardActions style={{ height: "30px"}}>
-              <Typography variant="body2" onClick={mvToDetail} style={{ marginLeft: 10, cursor:'pointer'}}>
-                Comment &nbsp;
-                {article.comment > 0 && article.comment}
-              </Typography>
-            </CardActions>
-          )
-          : null
-      }
+      {variant == "feed" ? (
+        <CardActions style={{ height: "30px" }}>
+          <Typography
+            variant="body2"
+            onClick={mvToDetail}
+            style={{ marginLeft: 10, cursor: "pointer" }}
+          >
+            Comment &nbsp;
+            {article.comment > 0 && article.comment}
+          </Typography>
+        </CardActions>
+      ) : null}
     </Card>
   );
 }
