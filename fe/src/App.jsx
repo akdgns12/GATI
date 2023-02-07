@@ -8,7 +8,7 @@ import Home from "./pages/Main/MainPage";
 import Calendar from "./pages/Calendar/CalendarPage";
 import PhotoBookPage from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
-import PictureTogether from "./pages/PictureTogether/PictureTogetherPage";
+import PictureTogether from "./pages/PicsTogether/PictureTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
 import Box from "@mui/material/Box";
 
