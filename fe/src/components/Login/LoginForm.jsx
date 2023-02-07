@@ -54,7 +54,6 @@ const LoginFrom = () => {
       userId: event.target.id.value,
       password: event.target.pw.value,
     };
-
     dispatch(doLoginUser(user))
       .then((data) => {
         // console.log(data);
