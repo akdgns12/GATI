@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "BOARD")
 public class Board {
     @Id
     @Column(name = "ID", nullable = false)
@@ -49,6 +50,10 @@ public class Board {
 
     @Column(name = "NICKNAME", nullable = false, length = 20)
     private String nickname;
+
+    public void plusLikes(Integer num) {
+        this.likes += num;
+    }
 
     public void putTag(BoardTag boardTag) {
         tag.add(boardTag);

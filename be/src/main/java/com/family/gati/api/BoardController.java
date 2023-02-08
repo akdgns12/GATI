@@ -45,8 +45,8 @@ public class BoardController {
 //    )
     })
     @GetMapping("/{groupId}")
-    public ResponseEntity<?> getBoardsByGroupIdAndPage(@ApiParam(value = "path로 groupId 전달받음")@PathVariable("groupId") Integer groupId) {
-        List<BoardDto> findDtos = boardService.findByGroupId(groupId);
+    public ResponseEntity<?> getBoardsByGroupIdAndPage(@RequestParam Integer groupId, @RequestParam String userId) {
+        List<BoardDto> findDtos = boardService.findByGroupId(groupId, userId);
         return ResponseEntity.ok(findDtos);
     }
 
@@ -74,8 +74,8 @@ public class BoardController {
 //    )
     })
     @GetMapping("/page")
-    public ResponseEntity<?> getBoardsByGroupId(@RequestParam Integer groupId, @RequestParam Integer page) {
-        List<BoardDto> boardDtos = boardService.findByGroupId(groupId);
+    public ResponseEntity<?> getBoardsByGroupId(@RequestParam Integer groupId, @RequestParam Integer page, @RequestParam String userId) {
+        List<BoardDto> boardDtos = boardService.findByGroupId(groupId, userId);
         List<BoardDto> findDtos = new ArrayList<>();
         for (int i = page*12; i < Math.min((page+1)*12, boardDtos.size()); i++) {
             findDtos.add(boardDtos.get(i));
@@ -87,8 +87,9 @@ public class BoardController {
             value = "Board 조회"
             , notes = "Board의 Id를 통해 해당 Board를 조회한다.")
     @GetMapping("/board/{id}")
-    public ResponseEntity<?> getBoardById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id) {
-        BoardDto findDto = boardService.findById(id);
+    public ResponseEntity<?> getBoardById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id,
+                                          @RequestParam String userId) {
+        BoardDto findDto = boardService.findById(id, userId);
         return ResponseEntity.ok(findDto);
     }
 
@@ -140,7 +141,7 @@ public class BoardController {
         boardDto.setId(boardUpdateDto.getId());
         boardDto.setGroupId(boardUpdateDto.getGroupId());
         boardDto.setContent(boardUpdateDto.getContent());
-//        boardDto.setTag(boardUpdateDto.getTag());
+        boardDto.setTag(boardUpdateDto.getTagDtos());
         boardDto.setImg(boardUpdateDto.getImg());
         boardDto.setLikes(0);
         boardDto.setComments(0);

@@ -35,6 +35,8 @@ public class BoardDto {
     private Integer comments;
     @ApiModelProperty(example = "akdgns12")
     private String nickname;
+    @ApiModelProperty(example = "1 : 좋아요 o, 0 : 좋아요 x")
+    private Integer userLike;
 
     private BoardDto(BoardDtoBuilder builder) {
         this.id = builder.id;
@@ -48,6 +50,7 @@ public class BoardDto {
         this.updateTime = builder.updateTime;
         this.comments = builder.comments;
         this.nickname = builder.nickname;
+        this.userLike = 1;
     }
 
     public static class BoardDtoBuilder implements CommonBuilder<BoardDto> {

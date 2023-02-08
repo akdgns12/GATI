@@ -20,8 +20,8 @@ public class BoardUpdateDto {
     private Integer groupId;
     @ApiModelProperty(example = "게시글의 내용 입니다.")
     private String content;
-    @ApiModelProperty(example = "['부산', '울산']")
-    private List<BoardTag> tag;
+    @ApiModelProperty(example = "[{'tagContent':'부산'}, {'tagContent':'울산'}]")
+    private List<TagDto> tagDtos;
     @ApiModelProperty(example = "img.img")
     private String img;
 }

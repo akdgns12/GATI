@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
+@Table(name = "BOARD_TAG")
 public class BoardTag {
     @Id
     @Column(name = "TAG_ID", nullable = false)
