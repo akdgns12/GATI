@@ -4,15 +4,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -28,15 +34,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
 
+//    // 인증에서 제외할 url
+//    private static final List<String> EXCLUDE_URL = Collections.unmodifiableList(
+//            Arrays.asList(
+//                    "/**/join",
+//                    "/**/login",
+//                    "/api/v2/api-docs",
+//                    "/api/swagger.json",
+//                    "api/swagger-ui.html#",
+//                    "/api/swagger-resources",
+//                    "/api/webjars"
+//                    ,"/api/swagger.json"
+//                    ,"/api/swagger-ui.html"
+//                    ,"/api/swagger-resources"
+//            )
+//    );
+//
+//    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+//        return EXCLUDE_URL.stream().anyMatch(exclude -> exclude.equalsIgnoreCase(request.getContextPath()));
+//    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = parseBearerToken(request); // 추출한 token
-        // Validation Access Token
-//        if(token == null) {
-//            log.debug("token null");
-//            throw new ServletException();
-//        }
-
+        
         if (StringUtils.hasText(token) && tokenProvider.validateAccessToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
             log.debug("token의 userId", tokenProvider.getUserId(token));
@@ -49,14 +71,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 시큐리티에 authentication 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug(authentication.getName() + "의 인증정보 저장");
-        } else {
-            log.debug("유효한 JWT 토큰이 없습니다.");
-            // fhwl
+        }else{
+            log.debug("유효하지 않은 토큰입니다.");
         }
 
         filterChain.doFilter(request, response);
     }
-    
+
+
+
     // request에서 "Authorization" token 추출
     private String parseBearerToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
