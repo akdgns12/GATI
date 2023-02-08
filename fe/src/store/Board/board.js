@@ -42,7 +42,11 @@ const initialState = {};
 const boardSlice = createSlice({
   name: "board",
   initialState,
-  reducers: {},
+  reducers: {
+    updateLike: (state, action) => {
+      console.log(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loadMainFeed.pending, (state) => {
       // console.log("pending...");
@@ -62,3 +66,4 @@ const boardSlice = createSlice({
 });
 
 export default boardSlice.reducer;
+export const { updateLike } = boardSlice.actions;

@@ -64,8 +64,8 @@ const PostDetail = () => {
         </>
       }
       {
-        article != null && article.comment != null &&
-        article.comment.map((comm, index) => {
+        article != null && article.boardCommentDtos != null &&
+        article.boardCommentDtos.map((comm, index) => {
           return <CommentView key={index} comment={comm} />;
         })
       }

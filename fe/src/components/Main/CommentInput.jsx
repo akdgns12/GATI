@@ -7,6 +7,7 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 import httpClient from '../../utils/axios';
 import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 const contStyle = css`
   width: 100%;
@@ -24,15 +25,18 @@ const contStyle = css`
 `;
 
 const CommentInput = (props) => {
+  const { loginUser } = useSelector((state) => state.user);
 
   function writeComment(event) {
     event.preventDefault();
     console.log("write comment");
     console.log(props.articleId);
     console.log(event.target.comment.value);
+    console.log(loginUser.userId);
     httpClient.post("/boards/comment/", {
       boardId: props.articleId,
       content: event.target.comment.value,
+      userId: loginUser.userId,
     })
       .then((data) => {
         console.log(data);

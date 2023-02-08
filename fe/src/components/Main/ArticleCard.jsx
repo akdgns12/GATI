@@ -12,14 +12,17 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import { useNavigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CardOptionModal from "./CardOptionModal";
 import httpClient from "../../utils/axios";
+import { updateLike } from "../../store/Board/board";
 
 export default function ArticleCard(props) {
   const navigate = useNavigate();
   const { loginUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [toggleLike, setToggleLike] = useState(false);
 
   const article = props.article;
   const variant = props.variant == null ? "feed" : props.variant;
@@ -37,11 +40,12 @@ export default function ArticleCard(props) {
 
   function toggleFav() {
     console.log("add/remove this article to/from favorite");
-    alert("toggle icon effects");
-    httpClient.post(`/boards/likes?boardId=${article.id}&userId=${loginUser.userId}`)
+    httpClient
+      .post(`/boards/likes?boardId=${article.id}&userId=${loginUser.userId}`)
       .then((data) => console.log(data))
       .catch((data) => console.log(data));
-
+    setToggleLike(toggleLike ? false : true);
+    dispatch(updateLike("sdfdsf"));
   }
 
   function addToPhotoBook() {
@@ -60,13 +64,19 @@ export default function ArticleCard(props) {
 
   return (
     <>
-      <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
+      <Card
+        sx={{ borderRadius: 1 }}
+        style={{ marginBottom: "10px", width: "100%" }}
+      >
         <CardHeader
           action={
             <IconButton
               aria-label="settings"
               onClick={showOptions}
-              style={{ display: article.userId == loginUser.userId ? "inline-block" : "none" }}
+              style={{
+                display:
+                  article.userId == loginUser.userId ? "inline-block" : "none",
+              }}
             >
               <MoreHorizIcon />
             </IconButton>
@@ -76,18 +86,30 @@ export default function ArticleCard(props) {
           style={{ textAlign: "left", padding: "10px" }}
         />
         {article.img != null ? (
-          <CardMedia component="img" width="100%" image={article.img} alt="No photo" />
+          <CardMedia
+            component="img"
+            width="100%"
+            image={article.img}
+            alt="No photo"
+          />
         ) : (
           "no img"
         )}
 
         <CardActions disableSpacing={true}>
           <IconButton aria-label="add to favorites" onClick={toggleFav}>
-            <FavoriteIcon />
+            <FavoriteIcon
+              style={{
+                color: (article.userLike === 1) ^ toggleLike ? "red" : "grey",
+              }}
+            />
           </IconButton>
           {article.likes}
           <Box style={{ marginLeft: "auto" }}>
-            <Typography variant="body4" style={{ fontWeight: "bold", marginRight: "10px" }}>
+            <Typography
+              variant="body4"
+              style={{ fontWeight: "bold", marginRight: "10px" }}
+            >
               {article.createTime.split("T")[0]}
             </Typography>
             {bookmark}
