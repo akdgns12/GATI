@@ -12,20 +12,26 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import { useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import CardOptionModal from "./CardOptionModal";
 import httpClient from "../../utils/axios";
-import { updateLike } from "../../store/Board/board";
+import { useEffect } from "react";
 
 export default function ArticleCard(props) {
   const navigate = useNavigate();
   const { loginUser } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [likeVar, setLikeVar] = useState(0);
   const [toggleLike, setToggleLike] = useState(false);
 
   const article = props.article;
   const variant = props.variant == null ? "feed" : props.variant;
+
+  useEffect(() => {
+    if (toggleLike) {
+      setLikeVar(article.userLike === 1 ? -1 : +1);
+    } else setLikeVar(0);
+  }, [toggleLike]);
 
   const mvToDetail = () => {
     // console.log("move to detail page");
@@ -45,7 +51,6 @@ export default function ArticleCard(props) {
       .then((data) => console.log(data))
       .catch((data) => console.log(data));
     setToggleLike(toggleLike ? false : true);
-    dispatch(updateLike("sdfdsf"));
   }
 
   function addToPhotoBook() {
@@ -64,18 +69,14 @@ export default function ArticleCard(props) {
 
   return (
     <>
-      <Card
-        sx={{ borderRadius: 1 }}
-        style={{ marginBottom: "10px", width: "100%" }}
-      >
+      <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
         <CardHeader
           action={
             <IconButton
               aria-label="settings"
               onClick={showOptions}
               style={{
-                display:
-                  article.userId == loginUser.userId ? "inline-block" : "none",
+                display: article.userId == loginUser.userId ? "inline-block" : "none",
               }}
             >
               <MoreHorizIcon />
@@ -86,12 +87,7 @@ export default function ArticleCard(props) {
           style={{ textAlign: "left", padding: "10px" }}
         />
         {article.img != null ? (
-          <CardMedia
-            component="img"
-            width="100%"
-            image={article.img}
-            alt="No photo"
-          />
+          <CardMedia component="img" width="100%" image={article.img} alt="No photo" />
         ) : (
           "no img"
         )}
@@ -104,12 +100,9 @@ export default function ArticleCard(props) {
               }}
             />
           </IconButton>
-          {article.likes}
+          {article.likes + likeVar}
           <Box style={{ marginLeft: "auto" }}>
-            <Typography
-              variant="body4"
-              style={{ fontWeight: "bold", marginRight: "10px" }}
-            >
+            <Typography variant="body4" style={{ fontWeight: "bold", marginRight: "10px" }}>
               {article.createTime.split("T")[0]}
             </Typography>
             {bookmark}
