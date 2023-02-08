@@ -1,8 +1,11 @@
 package com.family.gati.service;
 
 import com.family.gati.dto.BoardCommentDto;
+import com.family.gati.entity.Board;
 import com.family.gati.entity.BoardComment;
 import com.family.gati.repository.BoardCommentRepository;
+import com.family.gati.repository.BoardRepository;
+import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardCommentServiceImpl implements BoardCommentService{
     private final BoardCommentRepository boardCommentRepository;
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<BoardCommentDto> findByBoardId(Integer boardId) {
@@ -30,15 +35,28 @@ public class BoardCommentServiceImpl implements BoardCommentService{
 
     @Override
     public BoardCommentDto insertBoardComment(BoardCommentDto boardCommentDto) {
-        return new BoardCommentDto.BoardCommentDtoBuilder(boardCommentRepository.save(new BoardComment.BoardCommentBuilder(boardCommentDto).build())).build();
+        BoardComment boardComment = new BoardComment.BoardCommentBuilder(boardCommentDto).build();
+        boardComment.setNickname(userRepository.findByUserId(boardComment.getUserId()).getNickName());
+        Board board = boardRepository.findById(boardComment.getBoardId()).get();
+        board.plusComments(1);
+        boardRepository.save(board);
+        return new BoardCommentDto.BoardCommentDtoBuilder(boardCommentRepository.save(boardComment)).build();
     }
 
     public BoardCommentDto updateBoardComment(BoardCommentDto boardCommentDto) {
-        return new BoardCommentDto.BoardCommentDtoBuilder(boardCommentRepository.save(new BoardComment.BoardCommentBuilder(boardCommentDto).build())).build();
+        BoardComment boardComment = boardCommentRepository.findById(boardCommentDto.getId()).get();
+        boardComment.setContent(boardCommentDto.getContent());
+        boardComment.setUpdateTime(boardCommentDto.getUpdateTime());
+
+        return new BoardCommentDto.BoardCommentDtoBuilder(boardCommentRepository.save(boardComment)).build();
     }
 
     @Override
     public void deleteCommentById(Integer id) {
+        BoardComment boardComment = boardCommentRepository.findById(id).get();
+        Board board = boardRepository.findById(boardComment.getBoardId()).get();
+        board.plusComments(-1);
+        boardRepository.save(board);
         boardCommentRepository.deleteById(id);
     }
 
