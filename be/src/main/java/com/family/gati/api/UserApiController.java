@@ -11,6 +11,7 @@ import com.family.gati.security.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -66,7 +67,6 @@ public class UserApiController {
         newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setUpdateTime(LocalDateTime.now());
-        System.out.println(newUser);
 
         try{
             userService.join(newUser);
@@ -98,13 +98,13 @@ public class UserApiController {
             if(user == null){
                 resultMap.put("msg", FAIL);
                 status = HttpStatus.NO_CONTENT;
-                new ResponseEntity<Map<String, Object>>(resultMap, status);
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
             if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())){
                 logger.debug("비밀번호 불일치: {}", user.getPassword());
                 resultMap.put("msg", FAIL);
-                status = HttpStatus.NOT_FOUND;
+                status = HttpStatus.NO_CONTENT;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
@@ -113,9 +113,13 @@ public class UserApiController {
 
             // accessToken 발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
-            // refreshToken 발급하고 DB에 저장
-            String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
-            userRepository.updateRefreshToken(userSeq, refreshToken);
+            // 발급받은적 없거나 만료된 RefreshToken이 아니라면 발급
+            if(user.getRefreshToken() == null){ // || jwtTokenProvider.validateRefreshToken(user.getRefreshToken()) 추가할 필요있나? 어차피
+                // refreshToken 발급하고 DB에 저장
+                String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
+                userRepository.updateRefreshToken(userSeq, refreshToken);
+            }
+           
 
             resultMap.put("msg", SUCCESS);
             resultMap.put("accessToken", accessToken);
@@ -320,6 +324,46 @@ public class UserApiController {
             status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("아이디 찾기 이메일 발송 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @Data
+    public static class changePasswordRequest{
+        private String password;
+        private String changePassword;
+    }
+
+    // 유저 비밀번호 변경
+    @ApiOperation(value = "비밀번호 변경")
+    @PutMapping("/account/password")
+    public ResponseEntity<?> changePassword(@RequestHeader(value = "Authroize") String token,
+                                             changePasswordRequest request){
+        // front에서 비밀번호 변경할때도 입력 form에 대해 규칙성 검사해주면 bindingresult 검사는 굳이?
+        logger.debug("token: {}", token);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        // 유효성 검사
+        if(!jwtTokenProvider.validateAccessToken(token)){
+            log.debug("올바르지 않은 token: {}", token);
+            resultMap.put("msg", FAIL);
+            resultMap.put("result", "Invalid token");
+            status = HttpStatus.NOT_FOUND;
+
+            return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        }
+
+        try{
+            User user = jwtTokenProvider.getUser(token);
+            userService.changePassword(user, request.getChangePassword());
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.ACCEPTED;
+        }catch (Exception e){
+            log.debug("비밀번호 변경 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
