@@ -6,19 +6,19 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "BOARD")
 public class Board {
     @Id
     @Column(name = "ID", nullable = false)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "GROUP_ID", nullable = false)
@@ -30,8 +30,8 @@ public class Board {
     @Column(name = "CONTENT", nullable = false, length = 1000)
     private String content;
 
-    @Column(name = "TAG", nullable = false, length = 500)
-    private String tag;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<BoardTag> tag = new ArrayList<>();
 
     @Column(name = "IMG", nullable = false, length = 500)
     private String img;
@@ -51,12 +51,19 @@ public class Board {
     @Column(name = "NICKNAME", nullable = false, length = 20)
     private String nickname;
 
+    public void plusLikes(Integer num) {
+        this.likes += num;
+    }
+
+    public void putTag(BoardTag boardTag) {
+        tag.add(boardTag);
+    }
+
     private Board(BoardBuilder builder) {
         this.id = builder.id;
         this.groupId = builder.groupId;
         this.userId = builder.userId;
         this.content = builder.content;
-        this.tag = builder.tag;
         this.img = builder.img;
         this.likes = builder.likes;
         this.createTime = builder.createTime;
@@ -70,7 +77,6 @@ public class Board {
         private Integer groupId;
         private String userId;
         private String content;
-        private String tag;
         private String img;
         private Integer likes;
         private Timestamp createTime;
@@ -84,7 +90,6 @@ public class Board {
             this.groupId = boardDto.getGroupId();
             this.userId = boardDto.getUserId();
             this.content = boardDto.getContent();
-            this.tag = boardDto.getTag();
             this.img = boardDto.getImg();
             this.likes = boardDto.getLikes();
             this.createTime = boardDto.getCreateTime();

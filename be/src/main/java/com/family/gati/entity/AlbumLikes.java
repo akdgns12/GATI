@@ -5,15 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @Setter
+@Table(name = "ALBUM_LIKES")
 public class AlbumLikes {
     @Id
     @Column(name = "ID", nullable = false)
