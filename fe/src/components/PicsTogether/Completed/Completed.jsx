@@ -2,11 +2,8 @@ import * as React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
-import PicsTgExampleDinner from '../../static/PicsTgExampleDinner.png'
-import PicsTgExampleSky from '../../static/PicsTgExampleSky.png'
+import PicsTgExampleDinner from '../../../static/PicsTgExampleDinner.png'
+import PicsTgExampleSky from '../../../static/PicsTgExampleSky.png'
 import { Box } from '@mui/material';
 
 // AXIOS 연결 전 테스트용

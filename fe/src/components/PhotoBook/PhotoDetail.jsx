@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 import ArticleCard from '../Main/ArticleCard';
 import CommentInput from '../Main/CommentInput';
 import CommentView from '../Main/CommentView';
-import PhotoData from '../PicsTogether/PhotoData';
+import PhotoData from '../PicsTogether/Completed/PhotoData';
 
 const PhotoDetail = () => {
   const {photoId} = useParams()

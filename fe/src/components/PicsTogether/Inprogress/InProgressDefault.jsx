@@ -2,28 +2,17 @@ import React from "react";
 import { useSelector } from 'react-redux';
 import {Typography, Paper, Button, Box} from '@mui/material';
 import SetMemberModal from './SetMemberModal';
-import DinnerImg from "../../static/PicsTgExampleDinner.png";
 
 export default function InProgressDefault(props) {
-  // store.picsTg에서 이번주 Mission 데이터 가져오기
-  const {mission} = useSelector((state)=>state.picsTg)
+  // 이번주 Mission 데이터 가져오기
+  const thisWeekMission = useSelector(state => {
+    return state.picsTg.thisWeekMission
+  })
 
   // 참여 버튼 클릭 -> SetMemberModal (인원 선택) 모달 띄우기
   const [modal, setModal] = React.useState(false)
   const openModal = () => {
       setModal(true)
-  }
-
-  // SetMemberModal에서 인원 수 선택 유무
-  const [selected, setSelected] = React.useState(false)
-  if (selected === true) {
-    props.changeToMissionMode()
-  }
-
-  // SetMemberModal에서 선택한 인원 수(사진 수)
-  const [picNum, setPicNum] = React.useState('')
-  if (picNum !== '') {
-    props.deliverPicNum(picNum)
   }
 
   // 이번주 해당하는 미션 가져오는 함수
@@ -43,9 +32,9 @@ export default function InProgressDefault(props) {
     <Paper sx={{
       padding:3,
     }}>
-      <Typography style={{ fontWeight:'bold', marginBottom:'20px'}}>{mission.title}</Typography>
+      <Typography style={{ fontWeight:'bold', marginBottom:'20px'}}>{thisWeekMission.title}</Typography>
       <Typography style={{ marginBottom:'30px'}}>
-        {mission.description}
+        {thisWeekMission.description}
       </Typography>
       <Box
         style={{
@@ -54,7 +43,7 @@ export default function InProgressDefault(props) {
           marginBottom:'30px'
         }}>
         <img
-          src={DinnerImg}
+          src={thisWeekMission.exampleImg}
           alt='exampleImg'
           width='200px'/>
       </Box>
@@ -66,8 +55,6 @@ export default function InProgressDefault(props) {
       </Box>
       { modal === true ?
         <SetMemberModal
-          deliverPicNum={(_pic)=>{ setPicNum(_pic)}}
-          onSelected={()=>{ setSelected(true)}}
           open={modal}
           onClose={()=>{ setModal(false)}}
         />

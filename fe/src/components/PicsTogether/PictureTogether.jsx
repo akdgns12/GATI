@@ -1,34 +1,30 @@
 import * as React from 'react';
 import {ToggleButtonGroup, ToggleButton, Box } from '@mui/material';
-import InProgressDefault from './InProgressDefault';
-import OnMission from './OnMission';
-import Completed from './Completed';
+import InProgressDefault from './Inprogress/InProgressDefault';
+import OnMission from './OnMission/OnMission';
+import Completed from './Completed/Completed';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeMode } from '../../store/PicsTogether/picsTg';
 
 export default function PictureTogether() {
+  const dispatch = useDispatch()
   // 진행 중, 완료 모드 전환
-  const [mode, setMode] = React.useState('inprogress');
-  const changeMode = () => {
-    if (mode === 'inprogress') {
-      setMode('completed');
-    } else {
-      setMode('inprogress')
-    }}
+  const mode = useSelector(state => {
+    console.log('state',state)
+    return state.picsTg.mode
+  })
 
-  // 이번주 미션 시작 여부
-  const [mission, setMission] = React.useState(false)
-  const changeToMissionMode = () => {
-    setMission(true)
-  }
-
-  // 선택한 인원 수(사진 수)
-  const [picNum, setPicNum] = React.useState('')
+  // 미션 전(InprogressDefault), 미션 중(OnMission) 모드 전환
+  const missionMode = useSelector(state => {
+    return state.picsTg.missionMode
+  })
 
   // mode에 따라 달라질 content
   let content = null
-  if (mode === 'inprogress' && mission === false) {
-    content = <InProgressDefault deliverPicNum={(_pic)=>setPicNum(_pic)} changeToMissionMode={changeToMissionMode} />
-  } else if (mode === 'inprogress' && mission === true) {
-    content = <OnMission picNum={picNum} />
+  if (mode === 'inprogress' && missionMode === false) {
+    content = <InProgressDefault />
+  } else if (mode === 'inprogress' && missionMode === true) {
+    content = <OnMission />
   } else {
     content = <Completed />
   }
@@ -44,7 +40,6 @@ export default function PictureTogether() {
         color='primary'
         value={mode}
         exclusive
-        onChange={changeMode}
         aria-label="Platform"
         style={{
           flex:'auto',
@@ -52,8 +47,16 @@ export default function PictureTogether() {
           width:'80vw'
         }}
         >
-        <ToggleButton value="inprogress" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중</ToggleButton>
-        <ToggleButton value="completed" style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>완료</ToggleButton>
+        <ToggleButton
+          onClick={()=>{dispatch(changeMode('inprogress'))}}
+          value="inprogress"
+          style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중
+        </ToggleButton>
+        <ToggleButton
+          onClick={()=>{dispatch(changeMode('completed'))}}
+          value="completed"
+          style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>완료
+        </ToggleButton>
       </ToggleButtonGroup>
       <Box
         style={{width:'80vw'}}>

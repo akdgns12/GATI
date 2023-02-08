@@ -12,7 +12,6 @@ export default function PictureBox(props) {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
           setImgFile(reader.result);
-          props.uploadedNum()
       };
   };
 

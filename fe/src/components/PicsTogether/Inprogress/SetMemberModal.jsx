@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {Box, Typography, Modal, Button, InputLabel, MenuItem, FormControl, Select} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeMissionMode, changeSetPictureNumber } from '../../../store/PicsTogether/picsTg';
 
 const style = {
   display:'flex',
@@ -17,16 +19,22 @@ const style = {
 };
 
 export default function SetMemberModal(props) {
-  // 미션 참여 인원 수 설정
-  const [picNum, setPicNum] = React.useState('');
+  // 미션 업로드 사진 수 설정
+  const dispatch = useDispatch()
+
+  // select 선택 값 변수에 저장
+  let selectedValue = null
+
   const handleChange = (event) => {
-    setPicNum(event.target.value);
+    selectedValue = event.target.value
   };
 
-  // 확인 버튼 -> 상위 컴포넌트에 selected=true(-> onMission 컴포넌트 전환), PicNum 전달
+  // 확인 버튼 누르면 OnMission 컴포넌트로 전환
   const onConfirm = () => {
-    props.onSelected()
-    props.deliverPicNum(picNum)
+    if (selectedValue) {
+      dispatch(changeSetPictureNumber(selectedValue))
+      dispatch(changeMissionMode())
+    }
   }
 
   return (
@@ -49,7 +57,7 @@ export default function SetMemberModal(props) {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={picNum}
+              value={''}
               label="PicNum"
               onChange={handleChange}
             >

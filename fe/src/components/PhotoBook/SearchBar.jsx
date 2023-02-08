@@ -41,9 +41,8 @@ export default function SearchBar() {
         height: '40px'}}>
       <InputSearchKeyword />
       <Divider sx={{ height: 28, m: 0.5, backgroundColor: '#E8E8E8'}} orientation="vertical" />
-      <IconButton color="primary" sx={{ p: '10px'}} aria-label="directions">
-        <CalendarMonthIcon
-          onClick={OpenCalendar}/>
+      <IconButton onClick={OpenCalendar} color="primary" sx={{ p: '10px'}} aria-label="directions">
+        <CalendarMonthIcon/>
       </IconButton>
       <Modal
         open={open}

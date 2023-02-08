@@ -1,10 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Container, Paper, Box, Typography, Stack, IconButton, Button, TextField } from "@mui/material";
+import { Paper, Box, Typography, Stack, IconButton, Button, TextField } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import PictureBox from "./PictureBox";
 import { Link } from "react-router-dom";
+import PictureBox from "./PictureBox";
 
 export default function OnMission(props) {
   // store.picsTg에서 mission 데이터 가져오기
@@ -72,7 +72,7 @@ export default function OnMission(props) {
             noValidate
             autoComplete="off">
             <TextField
-              fullwidth
+              fullwidth='true'
               id="outlined-textarea"
               label="문구 입력"
               placeholder="이번주 사진의 테마에 대해 짧은 문구를 남겨주세요. 문구는 사진과 함께 [가치 한 장 사진첩]에 저장됩니다."
