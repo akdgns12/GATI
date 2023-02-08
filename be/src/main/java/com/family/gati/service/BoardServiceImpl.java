@@ -5,8 +5,10 @@ import com.family.gati.dto.TagDto;
 import com.family.gati.entity.Board;
 import com.family.gati.entity.BoardLikes;
 import com.family.gati.entity.BoardTag;
+import com.family.gati.repository.BoardCommentRepository;
 import com.family.gati.repository.BoardLikesRepository;
 import com.family.gati.repository.BoardRepository;
+import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
     private final BoardLikesRepository boardLikesRepository;
+    private final UserRepository userRepository;
     @Override
     public List<BoardDto> findByGroupId(Integer groupId, String userId) {
         List<Board> boards = boardRepository.findByGroupIdOrderByCreateTimeDesc(groupId);
@@ -49,6 +52,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     public BoardDto insertBoard(BoardDto boardDto) {
+        boardDto.setNickname(userRepository.findByUserId(boardDto.getUserId()).getNickName());
         Board board = new Board.BoardBuilder(boardDto).build();
         for (TagDto tagDto: boardDto.getTag()) {
             BoardTag boardTag = new BoardTag(tagDto.getTagContent());
@@ -59,7 +63,10 @@ public class BoardServiceImpl implements BoardService{
     }
 
     public BoardDto updateBoard(BoardDto boardDto) {
-        Board board = new Board.BoardBuilder(boardDto).build();
+        Board board = boardRepository.findById(boardDto.getId()).get();
+        board.setContent(boardDto.getContent());
+        board.setImg(boardDto.getImg());
+        board.setTag(new ArrayList<>());
         for (TagDto tagDto: boardDto.getTag()) {
             BoardTag boardTag = new BoardTag(tagDto.getTagContent());
             boardTag.setBoard(board);
@@ -70,25 +77,26 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void deleteBoardById(Integer id) {
+        // comment 삭제 나중에 꼭 해야한다면 하겠습니다.
         boardRepository.deleteById(id);
     }
 
     public boolean findLikes(Integer boardId, String userId) {
         BoardLikes findBoardLikes = boardLikesRepository.findByBoardIdAndUserId(boardId, userId);
-        Optional<Board> board = boardRepository.findById(boardId);
+        Board board = boardRepository.findById(boardId).get();
 
         if (findBoardLikes == null) {
             BoardLikes boardlikes = new BoardLikes();
             boardlikes.setBoardId(boardId);
             boardlikes.setUserId(userId);
             boardLikesRepository.save(boardlikes);
-            board.get().plusLikes(1);
-            boardRepository.save(board.get());
+            board.plusLikes(1);
+            boardRepository.save(board);
             return true;
         }
         boardLikesRepository.deleteById(findBoardLikes.getId());
-        board.get().plusLikes(-1);
-        boardRepository.save(board.get());
+        board.plusLikes(-1);
+        boardRepository.save(board);
         return false;
     }
 

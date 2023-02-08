@@ -13,8 +13,6 @@ import lombok.Setter;
 public class BoardCommentUpdateDto {
     @ApiModelProperty(example = "1")
     private Integer id;
-    @ApiModelProperty(example = "1")
-    private Integer boardId;
     @ApiModelProperty(example = "댓글의 내용 입니다.")
     private String content;
 }
