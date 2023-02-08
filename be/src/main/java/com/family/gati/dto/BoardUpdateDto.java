@@ -16,8 +16,6 @@ import java.util.List;
 public class BoardUpdateDto {
     @ApiModelProperty(example = "1")
     private Integer id;
-    @ApiModelProperty(example = "1")
-    private Integer groupId;
     @ApiModelProperty(example = "게시글의 내용 입니다.")
     private String content;
     @ApiModelProperty(example = "[{'tagContent':'부산'}, {'tagContent':'울산'}]")
