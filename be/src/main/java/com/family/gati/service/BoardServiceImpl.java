@@ -1,8 +1,10 @@
 package com.family.gati.service;
 
 import com.family.gati.dto.BoardDto;
+import com.family.gati.dto.TagDto;
 import com.family.gati.entity.Board;
 import com.family.gati.entity.BoardLikes;
+import com.family.gati.entity.BoardTag;
 import com.family.gati.repository.BoardLikesRepository;
 import com.family.gati.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -19,29 +22,50 @@ public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
     private final BoardLikesRepository boardLikesRepository;
     @Override
-    public List<BoardDto> findByGroupId(Integer groupId) {
+    public List<BoardDto> findByGroupId(Integer groupId, String userId) {
         List<Board> boards = boardRepository.findByGroupIdOrderByCreateTimeDesc(groupId);
         int size = boards.size();
         List<BoardDto> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            BoardDto board = new BoardDto.BoardDtoBuilder(boards.get(i)).build();
-            result.add(board);
+            Board board = boards.get(i);
+            BoardDto boardDto = new BoardDto.BoardDtoBuilder(board).build();
+            BoardLikes findBoardLikes = boardLikesRepository.findByBoardIdAndUserId(board.getId(), userId);
+            if (findBoardLikes == null) {
+                boardDto.setUserLike(0);
+            }
+            result.add(boardDto);
         }
         return result;
     }
 
     @Override
-    public BoardDto findById(Integer id) {
+    public BoardDto findById(Integer id, String userId) {
         BoardDto result = new BoardDto.BoardDtoBuilder(boardRepository.findById(id).get()).build();
+        BoardLikes findBoardLikes = boardLikesRepository.findByBoardIdAndUserId(id, userId);
+        if (findBoardLikes == null) {
+            result.setUserLike(0);
+        }
         return result;
     }
 
     public BoardDto insertBoard(BoardDto boardDto) {
-        return new BoardDto.BoardDtoBuilder(boardRepository.save(new Board.BoardBuilder(boardDto).build())).build();
+        Board board = new Board.BoardBuilder(boardDto).build();
+        for (TagDto tagDto: boardDto.getTag()) {
+            BoardTag boardTag = new BoardTag(tagDto.getTagContent());
+            boardTag.setBoard(board);
+            board.putTag(boardTag);
+        }
+        return new BoardDto.BoardDtoBuilder(boardRepository.save(board)).build();
     }
 
     public BoardDto updateBoard(BoardDto boardDto) {
-        return new BoardDto.BoardDtoBuilder(boardRepository.save(new Board.BoardBuilder(boardDto).build())).build();
+        Board board = new Board.BoardBuilder(boardDto).build();
+        for (TagDto tagDto: boardDto.getTag()) {
+            BoardTag boardTag = new BoardTag(tagDto.getTagContent());
+            boardTag.setBoard(board);
+            board.putTag(boardTag);
+        }
+        return new BoardDto.BoardDtoBuilder(boardRepository.save(board)).build();
     }
 
     @Override
@@ -51,16 +75,20 @@ public class BoardServiceImpl implements BoardService{
 
     public boolean findLikes(Integer boardId, String userId) {
         BoardLikes findBoardLikes = boardLikesRepository.findByBoardIdAndUserId(boardId, userId);
-        System.out.println(findBoardLikes);
+        Optional<Board> board = boardRepository.findById(boardId);
 
         if (findBoardLikes == null) {
             BoardLikes boardlikes = new BoardLikes();
             boardlikes.setBoardId(boardId);
             boardlikes.setUserId(userId);
             boardLikesRepository.save(boardlikes);
+            board.get().plusLikes(1);
+            boardRepository.save(board.get());
             return true;
         }
         boardLikesRepository.deleteById(findBoardLikes.getId());
+        board.get().plusLikes(-1);
+        boardRepository.save(board.get());
         return false;
     }
 
