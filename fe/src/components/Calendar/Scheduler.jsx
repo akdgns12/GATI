@@ -12,6 +12,8 @@ import Paper from '@mui/material/Paper';
 import { logDOM } from '@testing-library/react';
 import { useDispatch } from 'react-redux';
 import { postCalendar } from '../../store/Schedule/schedule';
+import { useNavigate } from 'react-router';
+
 
 const locales = {
   'ko-KR': require('date-fns/locale/ko')
@@ -46,6 +48,8 @@ const events = [
 
 
 export default function Scheduler() {
+  const navigate = useNavigate()
+
   const [newEvent, setNewEvent] = useState({
     title: '', start: '', end: ''
   });
@@ -66,8 +70,8 @@ export default function Scheduler() {
       userId: 'podif',
       memo: 'test axios',
       place: 'multicampus'
-
     }
+
     // console.log('a')
     if (info.title && info.startDate && info.endDate) {
       dispatch(postCalendar(info))
@@ -89,7 +93,7 @@ export default function Scheduler() {
         <Datepicker placeholderText='종료일'
           selected={newEvent.end} onChange={(end) => setNewEvent({...newEvent, end})}
         />
-        <button style={{marginTop: '10px'}} onClick={() => {handleAddEvent(); handlePlan()}}>일정 등록</button>
+        <button style={{marginTop: '10px'}} onClick={() => {handleAddEvent(); handlePlan(); navigate(0)}}>일정 등록</button>
       </Box>
       <Calendar localizer={localizer} events={allEvents}
       startAccessor='start' endAccessor='end'
