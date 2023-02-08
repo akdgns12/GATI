@@ -5,6 +5,7 @@ import com.family.gati.util.CommonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Getter @Setter
 @Table(name = "BOARD")
 public class Board {
     @Id
@@ -51,6 +52,9 @@ public class Board {
     @Column(name = "NICKNAME", nullable = false, length = 20)
     private String nickname;
 
+    public void plusComments(Integer num) {
+        this.comments += num;
+    }
     public void plusLikes(Integer num) {
         this.likes += num;
     }

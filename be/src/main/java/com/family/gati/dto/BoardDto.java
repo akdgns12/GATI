@@ -37,6 +37,8 @@ public class BoardDto {
     private String nickname;
     @ApiModelProperty(example = "1 : 좋아요 o, 0 : 좋아요 x")
     private Integer userLike;
+    @ApiModelProperty(example = "[boardComment]")
+    private List<BoardCommentDto> boardCommentDtos;
 
     private BoardDto(BoardDtoBuilder builder) {
         this.id = builder.id;
