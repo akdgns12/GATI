@@ -6,6 +6,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 
+import httpClient from "../../utils/axios";
+
 const modalStyle = {
   position: "absolute",
   top: "50%",
@@ -30,8 +32,22 @@ const CardOptionModal = (props) => {
   const open = props.open;
   const handleClose = () => props.setOpen(false);
 
-  function clicked() {
+  function moveToModify() {
     alert("some BTN clicked");
+  }
+
+  function deleteArticle(event) {
+    if (window.confirm("Delete ?")) {
+      console.log("Delete this article : " + props.articleId);
+      httpClient.delete(`boards/board/${props.articleId}`)
+        .then((res) => {
+          alert(props.articleId + " has been deleted");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      props.setOpen(false);
+    }
   }
 
   return (
@@ -45,11 +61,15 @@ const CardOptionModal = (props) => {
       >
         <Fade in={open}>
           <Box sx={modalStyle}>
-            <Box css={btnStyle} onClick={clicked}>
+            <Box css={btnStyle} onClick={moveToModify}>
               수정
             </Box>
-            <Box css={btnStyle}>삭제</Box>
-            <Box css={btnStyle}>취소</Box>
+            <Box css={btnStyle} onClick={deleteArticle} sx={{ color: "red" }}>
+              삭제
+            </Box>
+            <Box css={btnStyle} onClick={handleClose}>
+              취소
+            </Box>
           </Box>
         </Fade>
       </Modal>

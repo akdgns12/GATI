@@ -108,7 +108,7 @@ export default function ArticleCard(props) {
           </CardActions>
         ) : null}
       </Card>
-      <CardOptionModal open={open} setOpen={setOpen} />
+      <CardOptionModal open={open} setOpen={setOpen} articleId={article.id} />
     </>
   );
 }
