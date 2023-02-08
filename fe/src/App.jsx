@@ -29,7 +29,7 @@ const App = () => {
     if (isLoginPage) return false;
     if (logIn) {
       // console.log("add to header : " + loginUser.accessToken);
-      httpClient.defaults.headers.common["Authorization"] = loginUser.accessToken;
+      httpClient.defaults.headers.common["Authorization"] = `Bearer ${loginUser.accessToken}`;
       return false;
     }
     return true;
