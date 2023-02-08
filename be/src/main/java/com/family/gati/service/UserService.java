@@ -159,4 +159,11 @@ public class UserService {
 
         javaMailSender.send(message);
     }
+    
+    // 비밀번호 변경
+    @Transactional
+    public void changePassword(User user, String newPassword){
+        user.setUserId(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }

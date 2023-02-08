@@ -16,6 +16,8 @@ import java.util.List;
 public class BoardRegistDto {
     @ApiModelProperty(example = "1")
     private Integer groupId;
+    @ApiModelProperty(example = "userid")
+    private String userId;
     @ApiModelProperty(example = "게시글의 내용 입니다.")
     private String content;
     @ApiModelProperty(example = "[{'tagContent':'부산'}, {'tagContent':'울산'}]")
