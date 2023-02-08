@@ -1,10 +1,13 @@
 import { React, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Box, Button, FormControl, Input, OutlinedInput } from "@mui/material";
 
 import httpClient from "../../utils/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { loadPostDetail } from "../../store/Board/board";
 
 const contStyle = css`
   text-align: left;
@@ -61,7 +64,34 @@ const contStyle = css`
 const CreatePost = (props) => {
   const variant = (props.variant == null) ? "create" : props.variant;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [imgURL, setImgURL] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+
+  const articleId = useParams().articleId;
+  const { article } = useSelector((state) => state.board);
+  const { loginUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    console.log("mounted");
+    if (variant === "modify") {
+      const reqData = {
+        articleId: articleId,
+        userId: loginUser.userId,
+      };
+      dispatch(loadPostDetail(reqData))
+        .then((data) => {
+          // console.log(data);
+          console.log(data.payload.img);
+          // setImgURL(URL.createObjectURL(event.target.files[0]));
+          setImgURL("https://picsum.photos/400/300");
+          setLoaded(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
+  }, [])
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -129,6 +159,7 @@ const CreatePost = (props) => {
           multiline={true}
           name="content"
           style={{ height: "150px" }}
+          value={(variant === "modify" && loaded) ? article.content : ""}
         />
       </FormControl>
       <FormControl variant="standard" style={{ width: "100%" }}>
@@ -138,6 +169,7 @@ const CreatePost = (props) => {
           placeholder="사진의 태그를 입력하세요."
           multiline={true}
           name="tag"
+          value={(variant === "modify" && loaded) ? "some tag" : ""}
         />
       </FormControl>
       <Box className="button-group">

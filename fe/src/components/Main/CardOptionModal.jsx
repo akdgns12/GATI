@@ -7,6 +7,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 
 import httpClient from "../../utils/axios";
+import { useNavigate } from "react-router";
 
 const modalStyle = {
   position: "absolute",
@@ -32,8 +33,11 @@ const CardOptionModal = (props) => {
   const open = props.open;
   const handleClose = () => props.setOpen(false);
 
+  const navigate = useNavigate();
+
   function moveToModify() {
-    alert("some BTN clicked");
+    console.log("modify btn clicked");
+    navigate(`/modify/${props.articleId}`);
   }
 
   function deleteArticle(event) {
