@@ -70,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
 //                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
 //                .anyRequest().authenticated()
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
     // CORS 허용 적용
     @Bean

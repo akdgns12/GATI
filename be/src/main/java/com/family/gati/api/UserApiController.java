@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -68,7 +67,6 @@ public class UserApiController {
         newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setUpdateTime(LocalDateTime.now());
-        System.out.println(newUser);
 
         try{
             userService.join(newUser);
@@ -115,9 +113,13 @@ public class UserApiController {
 
             // accessToken 발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
-            // refreshToken 발급하고 DB에 저장
-            String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
-            userRepository.updateRefreshToken(userSeq, refreshToken);
+            // 발급받은적 없거나 만료된 RefreshToken이 아니라면 발급
+            if(user.getRefreshToken() == null){ // || jwtTokenProvider.validateRefreshToken(user.getRefreshToken()) 추가할 필요있나? 어차피
+                // refreshToken 발급하고 DB에 저장
+                String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
+                userRepository.updateRefreshToken(userSeq, refreshToken);
+            }
+           
 
             resultMap.put("msg", SUCCESS);
             resultMap.put("accessToken", accessToken);
@@ -346,7 +348,7 @@ public class UserApiController {
         HttpStatus status = null;
 
         // 유효성 검사
-        if(!jwtTokenProvider.validateToken(token)){
+        if(!jwtTokenProvider.validateAccessToken(token)){
             log.debug("올바르지 않은 token: {}", token);
             resultMap.put("msg", FAIL);
             resultMap.put("result", "Invalid token");
