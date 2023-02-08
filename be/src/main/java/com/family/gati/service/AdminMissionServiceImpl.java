@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Log4j2
@@ -36,7 +37,10 @@ public class AdminMissionServiceImpl implements AdminMissionService{
 
     @Override
     public AdminMissionDto insertAdminMission(AdminMissionDto adminMissionDto) {
-        return new AdminMissionDto.AdminMissionDtoBuilder(adminMissionRepository.save(new AdminMission.AdminMissionBuilder(adminMissionDto).build())).build();
+        if (adminMissionRepository.findByStartDate(adminMissionDto.getStartDate()) == null) {
+            return new AdminMissionDto.AdminMissionDtoBuilder(adminMissionRepository.save(new AdminMission.AdminMissionBuilder(adminMissionDto).build())).build();
+        }
+        return null;
     }
 
     @Override
@@ -47,5 +51,11 @@ public class AdminMissionServiceImpl implements AdminMissionService{
     @Override
     public void deleteAdminMissionById(Integer id) {
         adminMissionRepository.deleteById(id);
+    }
+
+    @Override
+    public AdminMissionDto findAdminMissionThisWeek(Date date) {
+        AdminMission adminMission = adminMissionRepository.findByStartDateIsLessThanEqualAndEndDateGreaterThanEqual(date, date);
+        return new AdminMissionDto.AdminMissionDtoBuilder(adminMission).build();
     }
 }
