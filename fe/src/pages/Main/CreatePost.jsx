@@ -71,7 +71,7 @@ const CreatePost = (props) => {
     console.log(event.target.tag.value);
     const postData = {
       content: event.target.content.value,
-      tag: event.target.tag.value,
+      tagDtos: [{ tagContent: event.target.tag.value },],
       img: event.target.img.files[0].name,
       groupId: 1,
     }

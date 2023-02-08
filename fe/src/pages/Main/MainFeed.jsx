@@ -16,7 +16,7 @@ const MainFeed = () => {
   useEffect(() => {
     console.log("main feed mounted");
     console.log(loginUser.userId);
-    dispatch(loadMainFeed(1))
+    dispatch(loadMainFeed({ groupId: 1, userId: loginUser.userId }))
       .then((data) => {
         // console.log(data.payload);
       })
@@ -57,8 +57,8 @@ const MainFeed = () => {
       <div>
         {notifications.invitations != null
           ? notifications.invitations.map((invitation, index) => {
-              return <GroupInvitation key={index} invitation={invitation} />;
-            })
+            return <GroupInvitation key={index} invitation={invitation} />;
+          })
           : null}
         <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
         <div style={{ "margin-top": "40%" }}>

@@ -25,6 +25,7 @@ const contStyle = css`
 const PostDetail = () => {
   const [loaded, setLoaded] = useState(false);
   const { article } = useSelector((state) => state.board);
+  const { loginUser } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const PostDetail = () => {
     // console.log("detail page mounted");
     const reqData = {
       articleId: articleId,
+      userId: loginUser.userId,
     };
     dispatch(loadPostDetail(reqData))
       .then((data) => {
