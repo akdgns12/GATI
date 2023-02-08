@@ -2,10 +2,9 @@ import axios from "axios";
 
 const DOMAIN = process.env.REACT_APP_API_URL;
 const PATH = process.env.REACT_APP_API_PATH;
-const PORT = process.env.REACT_APP_API_PORT;
 
 console.log();
-const baseURL = DOMAIN + PORT + PATH;
+const baseURL = DOMAIN + PATH;
 const httpClient = axios.create({
   baseURL,
   withCredentials: true,
