@@ -1,11 +1,9 @@
 package com.family.gati.config;
 
-import com.family.gati.security.CookieAuthorizationRequestRepository;
 import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.security.jwt.JwtAccessDeniedHandler;
 import com.family.gati.security.jwt.JwtAuthenticationEntryPoint;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -72,14 +70,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
 //                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
 //                .anyRequest().authenticated()
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
     // CORS 허용 적용
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+<<<<<<< HEAD
         // configuration.setAllowedOriginPatterns();
+=======
+>>>>>>> a1395c1d0231ccd360fab52d34768d6d3c21131e
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://3.34.141.63:3000");
         configuration.addAllowedOrigin("http://3.34.141.63:443");

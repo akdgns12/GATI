@@ -6,15 +6,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "ALBUM")
 public class Album {
     @Id
     @Column(name = "ID", nullable = false)
@@ -33,7 +31,7 @@ public class Album {
     @Column(name = "TAG", nullable = false, length = 500)
     private String tag;
 
-    @Column(name = "IMG", nullable = false, length = 200)
+    @Column(name = "IMG", nullable = false, length = 500)
     private String img;
 
     @Column(name = "LIKES", nullable = false)

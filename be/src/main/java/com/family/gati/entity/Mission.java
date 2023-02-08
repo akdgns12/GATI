@@ -6,21 +6,19 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "MISSION")
 public class Mission {
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "IMG", nullable = false, length = 200)
+    @Column(name = "IMG", nullable = false, length = 500)
     private String img;
 
     @Column(name = "MEM_NUMBER", nullable = false)

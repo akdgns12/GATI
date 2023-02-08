@@ -31,7 +31,7 @@ const App = () => {
 
   return (
     <Box className="App">
-      {doRedirect() && <Navigate to="/login" replace={true} />}
+      {/* {doRedirect() && <Navigate to="/login" replace={true} />} */}
       {!excludeHeader() && <AppBar />}
       <Routes>
         <Route path="/*" element={<Home />} />
