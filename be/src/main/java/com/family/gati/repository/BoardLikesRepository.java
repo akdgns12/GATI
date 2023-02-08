@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoardLikesRepository extends JpaRepository<BoardLikes, Integer> {
     BoardLikes findByBoardIdAndUserId(Integer boardId, String userId);
+    Integer countBoardLikesByBoardIdAndUserId(Integer boardId, String userId);
 
 }
