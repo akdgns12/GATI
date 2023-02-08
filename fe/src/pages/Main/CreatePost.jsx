@@ -58,7 +58,8 @@ const contStyle = css`
   }
 `;
 
-const CreatePost = () => {
+const CreatePost = (props) => {
+  const variant = (props.variant == null) ? "create" : props.variant;
   const navigate = useNavigate();
   const [imgURL, setImgURL] = useState(null);
 
