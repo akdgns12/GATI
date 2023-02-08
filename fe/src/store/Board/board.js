@@ -7,7 +7,7 @@ export const loadMainFeed = createAsyncThunk(
   async (reqData, { rejectWithValue }) => {
     // console.log(reqData);
     try {
-      const response = await httpClient.get("/boards/{userId}", {
+      const response = await httpClient.get("/boards/page", {
         params: reqData,
       });
       return response.data;

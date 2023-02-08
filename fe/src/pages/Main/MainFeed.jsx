@@ -16,7 +16,7 @@ const MainFeed = () => {
   useEffect(() => {
     console.log("main feed mounted");
     console.log(loginUser.userId);
-    dispatch(loadMainFeed({ groupId: 1, userId: loginUser.userId }))
+    dispatch(loadMainFeed({ groupId: 1, userId: loginUser.userId, page: 0 }))
       .then((data) => {
         // console.log(data.payload);
       })

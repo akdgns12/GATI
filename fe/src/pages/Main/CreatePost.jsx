@@ -96,25 +96,52 @@ const CreatePost = (props) => {
   function handleSubmit(event) {
     event.preventDefault();
     console.log("submit form");
-    console.log(event.target.img.files[0].name);
+    // console.log(event.target.img.files[0].name);
     console.log(event.target.content.value);
     console.log(event.target.tag.value);
-    const postData = {
+    const formData = {
       content: event.target.content.value,
       tagDtos: [{ tagContent: event.target.tag.value },],
-      img: event.target.img.files[0].name,
-      groupId: 1,
+      // img: event.target.img.files[0].name,
+      img: "image",
+    };
+    console.log(formData);
+
+    if (variant === "create") {
+      const postData = {
+        ...formData,
+        userId: loginUser.userId,
+        groupId: 1,
+      };
+      console.log(postData);
+      httpClient.post("/boards/board/", postData)
+        .then((data) => {
+          console.log(data)
+          alert("article posted");
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error)
+          alert("failed to post article");
+        });
     }
-    httpClient.post("/boards/board/", postData)
-      .then((data) => {
-        console.log(data)
-        alert("article posted");
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error)
-        alert("failed to post article");
-      });
+    else if (variant === "modify") {
+      const putData = {
+        ...formData,
+        id: articleId,
+      };
+      console.log(putData);
+      httpClient.put("/boards/board/", putData)
+        .then((data) => {
+          console.log(data);
+          alert("modified");
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("failed to modify data");
+        })
+    }
   }
 
   function backToMain() {
@@ -159,7 +186,7 @@ const CreatePost = (props) => {
           multiline={true}
           name="content"
           style={{ height: "150px" }}
-          value={(variant === "modify" && loaded) ? article.content : ""}
+          defaultValue={(variant === "modify" && loaded) ? article.content : ""}
         />
       </FormControl>
       <FormControl variant="standard" style={{ width: "100%" }}>
@@ -169,7 +196,7 @@ const CreatePost = (props) => {
           placeholder="사진의 태그를 입력하세요."
           multiline={true}
           name="tag"
-          value={(variant === "modify" && loaded) ? "some tag" : ""}
+          defaultValue={(variant === "modify" && loaded) ? "some tag" : ""}
         />
       </FormControl>
       <Box className="button-group">
