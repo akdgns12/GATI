@@ -32,13 +32,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = parseBearerToken(request); // 추출한 token
         // Validation Access Token
+//        if(token == null) {
+//            log.debug("token null");
+//            throw new ServletException();
+//        }
+
         if (StringUtils.hasText(token) && tokenProvider.validateAccessToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
+            log.debug("token의 userId", tokenProvider.getUserId(token));
+            System.out.println(tokenProvider.getUserId(token));
+            if(!authentication.getName().matches(tokenProvider.getUserId(token))){ // 다른 유저의 토큰일 경우 예외처리
+                log.debug("다른 유저의 토큰입니다.");
+                throw new ServletException();
+            }
+
             // 시큐리티에 authentication 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug(authentication.getName() + "의 인증정보 저장");
         } else {
             log.debug("유효한 JWT 토큰이 없습니다.");
+            // fhwl
         }
 
         filterChain.doFilter(request, response);

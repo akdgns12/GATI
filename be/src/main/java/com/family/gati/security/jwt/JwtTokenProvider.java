@@ -136,6 +136,7 @@ public class JwtTokenProvider {
     // 토큰 유효성, 만료시간 검사
     public Boolean validateAccessToken(String accessToken) {
         try {
+            log.debug("여기니?");
             Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(accessToken);
             return true;
         } catch (ExpiredJwtException e) {
@@ -143,6 +144,8 @@ public class JwtTokenProvider {
             /*
                 1. accessToken이 만료 -> DB에 저장된 refreshToken 가져와 유효성 검사하고, 적합하다면 다시 프론트로 보내주기
                     1-1) front는 받은 refreshToken 로컬스토리지에 저장하고, 저장한 token을 이용해 request
+
+
                 2. refreshToken이 만료 -> DB에 저장된 refreshToken 지우고 login 화면으로 사용자 보내기
              */
             int userSeq = getUserSeq(accessToken);
