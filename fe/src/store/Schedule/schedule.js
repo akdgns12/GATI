@@ -36,7 +36,7 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(postCalendar.fulfilled, (state, action) => {
-      state.push(action.payload);
+      state = action.payload;
     });
   },
 });
