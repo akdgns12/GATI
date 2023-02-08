@@ -14,6 +14,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import CardOptionModal from "./CardOptionModal";
+import httpClient from "../../utils/axios";
 
 export default function ArticleCard(props) {
   const navigate = useNavigate();
@@ -37,6 +38,10 @@ export default function ArticleCard(props) {
   function toggleFav() {
     console.log("add/remove this article to/from favorite");
     alert("toggle icon effects");
+    httpClient.post(`/boards/likes?boardId=${article.id}&userId=${loginUser.userId}`)
+      .then((data) => console.log(data))
+      .catch((data) => console.log(data));
+
   }
 
   function addToPhotoBook() {
