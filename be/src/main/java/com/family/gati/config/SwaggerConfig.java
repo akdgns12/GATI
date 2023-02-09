@@ -18,7 +18,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .host("https://i8a805.p.ssafy.io")
+                .host("i8a805.p.ssafy.io")
                 .useDefaultResponseMessages(false)
                 .select()
                 // BasPackage 수정해야함
