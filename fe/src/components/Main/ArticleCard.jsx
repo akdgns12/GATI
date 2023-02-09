@@ -109,6 +109,17 @@ export default function ArticleCard(props) {
           </Box>
         </CardActions>
 
+        {
+          (variant == "detail") &&
+          (article.tag != null) &&
+          article.tag.map((tag, index) => {
+            return (
+              <>
+                #{tag.tagContent}&nbsp;
+              </>
+            )
+          })
+        }
         <CardContent>
           <Typography variant="body2" style={{ textAlign: "left" }}>
             {article.content}

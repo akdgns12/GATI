@@ -67,6 +67,7 @@ const CreatePost = (props) => {
   const dispatch = useDispatch();
   const [imgURL, setImgURL] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [serializedTag, setSerializedTag] = useState("");
 
   const articleId = useParams().articleId;
   const { article } = useSelector((state) => state.board);
@@ -85,13 +86,27 @@ const CreatePost = (props) => {
           console.log(data.payload.img);
           // setImgURL(URL.createObjectURL(event.target.files[0]));
           setImgURL("https://picsum.photos/400/300");
+          setSerializedTag(serializeTag(data.payload.tag));
           setLoaded(true);
         })
         .catch((error) => {
           console.log(error);
         })
     }
-  }, [])
+  }, []);
+
+  function serializeTag(tagObjs) {
+    console.log(tagObjs);
+    var str = "";
+    if (tagObjs != null) {
+      tagObjs.map((tagObj) => {
+        str += tagObj.tagContent;
+        str += " ";
+      })
+    }
+    console.log(str);
+    return str;
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -99,9 +114,10 @@ const CreatePost = (props) => {
     // console.log(event.target.img.files[0].name);
     console.log(event.target.content.value);
     console.log(event.target.tag.value);
+    const tagObjs = parseTags(event.target.tag.value);
     const formData = {
       content: event.target.content.value,
-      tagDtos: [{ tagContent: event.target.tag.value },],
+      tagDtos: tagObjs,
       // img: event.target.img.files[0].name,
       img: "image",
     };
@@ -142,6 +158,18 @@ const CreatePost = (props) => {
           alert("failed to modify data");
         })
     }
+  }
+
+  function parseTags(str) {
+    console.log(str);
+    console.log(str.split(" "));
+    const tags = str.split(" ");
+    let ret = [];
+    tags.map((tag, index) => {
+      console.log(tag);
+      ret.push({ tagContent: tag });
+    })
+    return ret;
   }
 
   function backToMain() {
@@ -196,7 +224,7 @@ const CreatePost = (props) => {
           placeholder="사진의 태그를 입력하세요."
           multiline={true}
           name="tag"
-          defaultValue={(variant === "modify" && loaded) ? "some tag" : ""}
+          defaultValue={(variant === "modify" && loaded) ? serializedTag : ""}
         />
       </FormControl>
       <Box className="button-group">
