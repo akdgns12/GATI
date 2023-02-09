@@ -53,7 +53,7 @@ public class AdminMissionDto {
         public AdminMissionDtoBuilder(AdminMission adminMission) {
             this.id = adminMission.getId();
             this.title = adminMission.getTitle();
-            this.content = adminMission.getImg();
+            this.content = adminMission.getContent();
             this.img = adminMission.getImg();
             this.createTime = adminMission.getCreateTime();
             this.updateTime = adminMission.getUpdateTime();
