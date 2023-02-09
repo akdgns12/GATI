@@ -5,16 +5,17 @@ import com.family.gati.util.CommonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Getter @Setter
+@Table(name = "ALBUM")
 public class Album {
     @Id
     @Column(name = "ID", nullable = false)
@@ -30,8 +31,8 @@ public class Album {
     @Column(name = "CONTENT", nullable = false, length = 1000)
     private String content;
 
-    @Column(name = "TAG", nullable = false, length = 500)
-    private String tag;
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<AlbumTag> tag = new ArrayList<>();
 
     @Column(name = "IMG", nullable = false, length = 500)
     private String img;
@@ -51,12 +52,21 @@ public class Album {
     @Column(name = "NICKNAME", nullable = false, length = 20)
     private String nickname;
 
+    public void plusComments(Integer num) {
+        this.comments += num;
+    }
+    public void plusLikes(Integer num) {
+        this.likes += num;
+    }
+    public void putTag(AlbumTag albumTag) {
+        tag.add(albumTag);
+    }
+
     private Album(Album.AlbumBuilder builder) {
         this.id = builder.id;
         this.groupId = builder.groupId;
         this.userId = builder.userId;
         this.content = builder.content;
-        this.tag = builder.tag;
         this.img = builder.img;
         this.likes = builder.likes;
         this.createTime = builder.createTime;
@@ -70,7 +80,6 @@ public class Album {
         private Integer groupId;
         private String userId;
         private String content;
-        private String tag;
         private String img;
         private Integer likes;
         private Timestamp createTime;
@@ -84,7 +93,6 @@ public class Album {
             this.groupId = albumDto.getGroupId();
             this.userId = albumDto.getUserId();
             this.content = albumDto.getContent();
-            this.tag = albumDto.getTag();
             this.img = albumDto.getImg();
             this.likes = albumDto.getLikes();
             this.createTime = albumDto.getCreateTime();
@@ -97,4 +105,5 @@ public class Album {
             return new Album(this);
         }
     }
+
 }

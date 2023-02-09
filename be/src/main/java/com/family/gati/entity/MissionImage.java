@@ -5,23 +5,22 @@ import com.family.gati.util.CommonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Getter @Setter
+@Table(name = "MISSION_IMAGE")
 public class MissionImage {
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "GROUP_ID", nullable = false)
-    private Integer groupId;
+    @Column(name = "MISSION_ID", nullable = false)
+    private Integer missionId;
 
     @Column(name = "USER_ID", nullable = false, length = 20)
     private String userId;
@@ -31,20 +30,20 @@ public class MissionImage {
 
     private MissionImage(MissionImage.MissionImageBuilder builder) {
         this.id = builder.id;
-        this.groupId = builder.groupId;
+        this.missionId = builder.missionId;
         this.userId = builder.userId;
         this.img = builder.img;
     }
 
     public static class MissionImageBuilder implements CommonBuilder<MissionImage> {
         private Integer id;
-        private Integer groupId;
+        private Integer missionId;
         private String userId;
         private String img;
 
         public MissionImageBuilder(MissionImageDto missionImageDto) {
             this.id = missionImageDto.getId();
-            this.groupId = missionImageDto.getGroupId();
+            this.missionId = missionImageDto.getMissionId();
             this.userId = missionImageDto.getUserId();
             this.img = missionImageDto.getImg();
         }

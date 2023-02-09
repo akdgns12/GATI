@@ -74,7 +74,7 @@ const PrimaryAppBar = () => {
 
 
   return (
-    <Box sx={{flexGrow: 1, height:55}}>
+    <Box  sx={{flexGrow: 1, height:55}}>
       <AppBar open={open} position="fixed" style={{background: 'rgb(86, 113, 137)'}}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Avatar

@@ -5,15 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @Setter
+@Table(name = "BOARD_LIKES")
 public class BoardLikes {
     @Id
     @Column(name = "ID", nullable = false)
@@ -23,6 +21,6 @@ public class BoardLikes {
     @Column(name = "USER_ID", nullable = false, length = 20)
     private String userId;
 
-    @Column(name = "BOARD_ID", nullable = false, length = 20)
+    @Column(name = "BOARD_ID", nullable = false)
     private Integer boardId;
 }
