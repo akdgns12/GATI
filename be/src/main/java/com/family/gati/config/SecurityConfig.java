@@ -63,10 +63,9 @@ public class SecurityConfig {
         http
                 .httpBasic().disable()
                 .formLogin().disable() // security 기본 로그인 사용 X
-                .cors().and() // cors 허용
+                // cors허용
+                .cors().and().cors().configurationSource(corsConfigurationSource()).and()
                 .csrf().disable() // csrf 보안 설정 비활성화
-                // Jwt filter
-//                .and()
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter보다 앞으로 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
@@ -103,11 +102,15 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        // configuration.setAllowedOriginPatterns();
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://3.34.141.63:3000");
+        configuration.addAllowedOrigin("http://3.34.141.63:443");
+        configuration.addAllowedOrigin("https://ggati.site");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
+        //configuration.setExposedHeaders(""); //
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
