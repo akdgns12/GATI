@@ -13,10 +13,12 @@ import AdminPage from "./pages/Admins/AdminPage";
 import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage"
 import AdminRouter from "./pages/Admins/AdminRouter";
 
-import Box from "@mui/material/Box";
+import { Container } from "@mui/material";
+
 import { useSelector } from "react-redux";
 
-import { Container } from "@mui/material";
+import httpClient from "./utils/axios";
+
 const App = () => {
   const location = useLocation();
   const { loginUser, logIn } = useSelector((state) => state.user);
@@ -28,8 +30,13 @@ const App = () => {
 
   function doRedirect() {
     const isLoginPage = location.pathname.startsWith("/login") ? true : false;
-    if (!logIn && !isLoginPage) return true;
-    else return false;
+    if (isLoginPage) return false;
+    if (logIn) {
+      // console.log("add to header : " + loginUser.accessToken);
+      httpClient.defaults.headers.common["Authorization"] = `Bearer ${loginUser.accessToken}`;
+      return false;
+    }
+    return true;
   }
 
   return (
@@ -43,7 +50,7 @@ const App = () => {
         <Route path="/gotg" element={<GoTogether />} />
         <Route path="/pictg/*" element={<PictureTogetherPage />} />
         <Route path="/login/*" element={<Login />} />
-        <Route path="/admin/*" element={<AdminRouter/>}/>
+        <Route path="/admin/*" element={<AdminRouter />} />
       </Routes>
       {!excludeHeader() && <NavBar />}
     </Container>
