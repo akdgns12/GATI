@@ -145,7 +145,7 @@ public class JwtTokenProvider {
             // 클라이언트는 accessToken가지고만 로그인 요청, accessToken 만료시 refreshToken 쏴달라고 go
 //            sendResponse();
             // 클라이언트는 자기가 가지고 있던 refreshToken 보내면 우리는 그 refreshToken이랑 DB에 있는 user의 refreshToken 비교
-
+            sendRequestForRefreshToken();
 
             if (validateRefreshToken(token)) { // refreshToken 유효성 검사 통과하면, accessToken 재발급
                 String userId = getUserId(token);
@@ -160,13 +160,24 @@ public class JwtTokenProvider {
         return false;
     }
 
+    public ResponseEntity<?> sendRequestForRefreshToken(){
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        resultMap.put("msg", "refreshToken 보내세요");
+        status = HttpStatus.BAD_REQUEST;
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
     public ResponseEntity<?> sendAccessToken(String accessToken){
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         log.debug("accessToken 재발급");
         resultMap.put("재발급 accessToken", accessToken);
-        status = HttpStatus.CREATED;
+        resultMap.put("HTTP error Code", "401");
+        status = HttpStatus.UNAUTHORIZED;
         
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
