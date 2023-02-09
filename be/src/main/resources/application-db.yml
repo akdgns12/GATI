@@ -1,0 +1,84 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+    encoding:
+      charset: utf-8
+      enabled: true
+
+spring:
+  datasource:
+    #        driver-class-name: org.mariadb.jdbc.Driver
+    #    url: jdbc:mariadb://3.34.141.63:8100/gati_dev?useUnicode=true&characterEncoding=utf-8
+    #    username: rladuddnd
+    #    password: a80515
+    #  output.ansi.enabled: always
+    url : jdbc:mysql://3.34.141.63:8100/gati?useUnicode=true&characterEncoding=utf-8
+    username : rladuddnd
+    password : a80515
+    driver-class-name : com.mysql.cj.jdbc.Driver
+  #   output.ansi.enabled: always
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    format-sql: true
+    properties:
+      hibernate:
+        dialect:
+        default_schema:
+    defer-datasource-initialization: true
+  jwt:
+    algorithm: "HS256"
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zome: Asia/Seoul
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  h2:
+    console:
+      enabled: true
+#security:
+#  oauth2:
+#    client:
+#      registration:
+#        google:
+#          client-id: 152956967648-0uksl64kpstokcucj62slbbv0gp1gv5m.apps.googleusercontent.com
+#          client-secret:  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
+#          redirectUri: "http://3.34.141.63:8080/oauth2/callback/google"
+#          scope: profile, email
+
+
+app:
+  jwtSecret: jwtsigntutorialasdfasdfasdfasdfasdf
+  jwtExpirationInMs: 604800000
+  jwtRefreshExpirationInMs: 86400000
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+  auth:
+    token:
+      secret-key: "6B64DCA4E72F58EDIKU9AAB215FE7"
+      refresh-cookie-key: "refresh"
+  oauth2:
+    authorizedRedirectUri: "http://3.34.141.63:3000/oauth2/redirect"
+  cors:
+    allowedOrigins: http://3.34.141.63:3000,http://3.34.141.63:8080
+
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
+
+#ubuntu only
+upload.dir: home/ubuntu/image
