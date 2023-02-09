@@ -5,6 +5,7 @@ import com.family.gati.util.CommonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Getter @Setter
 @Table(name = "ALBUM")
 public class Album {
     @Id
@@ -61,7 +62,6 @@ public class Album {
         tag.add(albumTag);
     }
 
-
     private Album(Album.AlbumBuilder builder) {
         this.id = builder.id;
         this.groupId = builder.groupId;
@@ -105,4 +105,5 @@ public class Album {
             return new Album(this);
         }
     }
+
 }
