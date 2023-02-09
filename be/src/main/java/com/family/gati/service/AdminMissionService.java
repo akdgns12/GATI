@@ -11,5 +11,5 @@ public interface AdminMissionService {
     AdminMissionDto insertAdminMission(AdminMissionDto adminMissionDto);
     AdminMissionDto updateAdminMission(AdminMissionDto adminMissionDto);
     void deleteAdminMissionById(Integer id);
-    AdminMissionDto findAdminMissionThisWeek(Date date);
+    AdminMissionDto findAdminMissionThisWeek();
 }

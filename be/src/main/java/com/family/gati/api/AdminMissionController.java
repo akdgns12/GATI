@@ -50,22 +50,21 @@ public class AdminMissionController {
         return ResponseEntity.ok(findDtos);
     }
 
-    @ApiOperation(
-            value = "AdminMission 조회"
-            , notes = "AdminMission의 Id를 통해 해당 AdminMission를 조회한다.")
-    @GetMapping("/adminMission/{id}")
-    public ResponseEntity<?> getAdminMissionById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id) {
-        AdminMissionDto findDto = adminMissionService.findById(id);
-        return ResponseEntity.ok(findDto);
-    }
+//    @ApiOperation(
+//            value = "AdminMission 조회"
+//            , notes = "AdminMission의 Id를 통해 해당 AdminMission를 조회한다.")
+//    @GetMapping("/adminMission/{id}")
+//    public ResponseEntity<?> getAdminMissionById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id) {
+//        AdminMissionDto findDto = adminMissionService.findById(id);
+//        return ResponseEntity.ok(findDto);
+//    }
 
     @ApiOperation(
             value = "이번주 AdminMission 조회"
             , notes = "이번주 AdminMission을 조회한다.")
     @GetMapping("/adminMission/thisweek")
     public ResponseEntity<?> getAdminMissionThisWeek() {
-        System.out.println(new Date());
-        AdminMissionDto findDto = adminMissionService.findAdminMissionThisWeek(new Date());
+        AdminMissionDto findDto = adminMissionService.findAdminMissionThisWeek();
         return ResponseEntity.ok(findDto);
     }
     @ApiOperation(
@@ -73,7 +72,9 @@ public class AdminMissionController {
             , notes = "AdminMission을 작성한다.")
     @PostMapping("/adminMission")
     public ResponseEntity<?> addAdminMission(@RequestBody AdminMissionResgistDto adminMissionResgistDto) {
-        System.out.println(adminMissionResgistDto.getStartDate());
+        if (new Timestamp(adminMissionResgistDto.getStartDate().getTime()).getDay() != 1) {
+            return ResponseEntity.ok("오류 : 입력한 startDate가 월요일이 아닙니다!");
+        }
         AdminMissionDto adminMissionDto = new AdminMissionDto();
         adminMissionDto.setTitle(adminMissionResgistDto.getTitle());
         adminMissionDto.setContent(adminMissionResgistDto.getContent());
@@ -96,6 +97,9 @@ public class AdminMissionController {
             , notes = "AdminMission을 수정한다.")
     @PutMapping("/adminMission")
     public ResponseEntity<?> updateAdminMission(@RequestBody AdminMissionUpdateDto adminMissionUpdateDto) {
+        if (new Timestamp(adminMissionUpdateDto.getStartDate().getTime()).getDay() != 1) {
+            return ResponseEntity.ok("오류 : 입력한 startDate가 월요일이 아닙니다!");
+        }
         AdminMissionDto adminMissionDto = new AdminMissionDto();
         adminMissionDto.setId(adminMissionUpdateDto.getId());
         adminMissionDto.setTitle(adminMissionUpdateDto.getTitle());

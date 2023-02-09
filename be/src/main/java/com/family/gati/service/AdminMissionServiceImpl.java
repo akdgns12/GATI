@@ -54,7 +54,8 @@ public class AdminMissionServiceImpl implements AdminMissionService{
     }
 
     @Override
-    public AdminMissionDto findAdminMissionThisWeek(Date date) {
+    public AdminMissionDto findAdminMissionThisWeek() {
+        Date date = new Date();
         AdminMission adminMission = adminMissionRepository.findByStartDateIsLessThanEqualAndEndDateGreaterThanEqual(date, date);
         return new AdminMissionDto.AdminMissionDtoBuilder(adminMission).build();
     }
