@@ -58,7 +58,6 @@ public class Board {
     public void plusLikes(Integer num) {
         this.likes += num;
     }
-
     public void putTag(BoardTag boardTag) {
         tag.add(boardTag);
     }
