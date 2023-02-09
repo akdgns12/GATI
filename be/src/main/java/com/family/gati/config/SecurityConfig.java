@@ -41,19 +41,19 @@ public class SecurityConfig {
     }
 
     // swagger는 security 무시 -> 적용 안되는듯
-    @Bean
-    public WebSecurityCustomizer configure() {
-        return web -> { web.ignoring()
-                .antMatchers("/**/join", "/**/login")
-                .antMatchers(
-                        "/v2/api-docs/**"
-                        , "/swagger.json"
-                        , "/swagger-ui.html/**"
-                        , "/swagger-resources/**"
-                        , "/webjars/**"
-                );
-            };
-    }
+//    @Bean
+//    public WebSecurityCustomizer configure() {
+//        return web -> { web.ignoring()
+//                .antMatchers("/**/join", "/**/login")
+//                .antMatchers(
+//                        "/v2/api-docs/**"
+//                        , "/swagger.json"
+//                        , "/swagger-ui.html/**"
+//                        , "/swagger-resources/**"
+//                        , "/webjars/**"
+//                );
+//            };
+//    }
 
     // HttpSecurity 설정
     @Bean
@@ -63,27 +63,25 @@ public class SecurityConfig {
                 .formLogin().disable() // security 기본 로그인 사용 X
                 .cors().and() // cors 허용
                 .csrf().disable() // csrf 보안 설정 비활성화
-                
-                .antMatcher("/**").authorizeRequests() // 보호된 리소스 URI에 접근할 수 있는 권한 설정
-//                .antMatchers("/**/login", "/**/join").permitAll() // 전체 접근 허용
-//                .antMatchers(  "/v2/api-docs/**"
-//                        , "/swagger.json"
-//                        , "/swagger-ui.html/**"
-//                        , "/swagger-resources/**"
-//                        , "/webjars/**").permitAll()
-
-                .anyRequest().authenticated() // 다른 경로는 인증필요
-
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 X
-
                 // Jwt filter
-                .and()
+//                .and()
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter보다 앞으로 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler);
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 X
+
+                .and()
+                .authorizeRequests() // 보호된 리소스 URI에 접근할 수 있는 권한 설정
+                // 로그인, 회원가입 접근 허용
+                .antMatchers("/**/login", "/**/join").permitAll() 
+//                .antMatchers("/**/user/**/**").permitAll()
+                // swagger 페이지 접근 허용
+                .antMatchers(  "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
+                .anyRequest().authenticated(); // 다른 경로는 인증필요
 
         return http.build();
     }

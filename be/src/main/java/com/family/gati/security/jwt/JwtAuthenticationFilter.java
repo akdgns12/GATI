@@ -4,21 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -34,11 +28,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
 
-//    // 인증에서 제외할 url
+    // 인증에서 제외할 url -> 적용 안되는듯 일단;
 //    private static final List<String> EXCLUDE_URL = Collections.unmodifiableList(
 //            Arrays.asList(
 //                    "/**/join",
 //                    "/**/login",
+//                    "/**/user/id",
 //                    "/api/v2/api-docs",
 //                    "/api/swagger.json",
 //                    "api/swagger-ui.html#",
@@ -59,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = parseBearerToken(request); // 추출한 token
         
-        if (StringUtils.hasText(token) && tokenProvider.validateAccessToken(token)) {
+        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
             log.debug("token의 userId", tokenProvider.getUserId(token));
             System.out.println(tokenProvider.getUserId(token));
