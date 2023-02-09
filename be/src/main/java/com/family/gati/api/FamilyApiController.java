@@ -1,5 +1,6 @@
 package com.family.gati.api;
 
+import com.family.gati.dto.FamilyInviteDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
@@ -144,6 +145,27 @@ public class FamilyApiController {
             status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("그룹 삭제 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+    
+    // 그룹 초대 수락
+    @ApiOperation(value = "그룹 초대 수락", notes = "Family id, userId 받음")
+    @PostMapping("/invite/{userId}")
+    public ResponseEntity<?> acceptInviteFamily(@RequestBody FamilyInviteDto familyInviteDto){
+        logger.debug("userId: {}", familyInviteDto);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            familyService.acceptInvite(familyInviteDto);
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e) {
+            logger.debug("그룹 초대 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }

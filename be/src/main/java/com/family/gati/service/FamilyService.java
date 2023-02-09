@@ -1,5 +1,6 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.FamilyInviteDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -80,5 +80,24 @@ public class FamilyService {
     @Transactional
     public void deleteFamily(int id){
         familyRepository.deleteById(id);
+    }
+
+    //
+    @Transactional
+    public void acceptInvite(FamilyInviteDto familyInviteDto){
+        int familyId = familyInviteDto.getId();
+        String userId = familyInviteDto.getUserId();
+        Family family = familyRepository.findById(familyId);
+
+        // 기존 멤버 수 +1
+        family.setFamilyTotal(family.getFamilyTotal() + 1);
+        familyRepository.save(family);
+
+        // familyMember 테이블에 user 추가
+        FamilyMember familyMember = new FamilyMember();
+        familyMember.setUserId(userId);
+        familyMember.setFamilyId(familyId);
+
+        familyMemberRepository.save(familyMember);
     }
 }

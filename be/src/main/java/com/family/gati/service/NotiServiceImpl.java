@@ -1,5 +1,6 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.FamilyInviteDto;
 import com.family.gati.dto.NotiDto;
 import com.family.gati.entity.Noti;
 import com.family.gati.repository.NotiRepository;
@@ -26,5 +27,14 @@ public class NotiServiceImpl implements NotiService {
             result.add(noti);
         }
         return result;
+    }
+
+    // 가족 초대 요청
+    @Override
+    public void saveFamilyInvite(FamilyInviteDto familyInviteDto) {
+
+
+
+        notiRepository.save(noti);
     }
 }
