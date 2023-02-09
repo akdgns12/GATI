@@ -13,6 +13,8 @@ import lombok.Setter;
 public class AlbumCommentRegistDto {
     @ApiModelProperty(example = "1")
     private Integer boardId;
+    @ApiModelProperty(example = "userid")
+    private String userId;
     @ApiModelProperty(example = "댓글의 내용 입니다.")
     private String content;
 }
