@@ -22,7 +22,7 @@ export const loadPostDetail = createAsyncThunk(
   "board/loadPostDetail",
   async (reqData, { rejectWithValue }) => {
     try {
-      console.log(reqData);
+      // console.log(reqData);
       const response = await httpClient.get(
         "/boards/board/" + reqData.articleId,
         { params: { userId: reqData.userId } }

@@ -40,15 +40,17 @@ export default function ArticleCard(props) {
   };
 
   function showOptions() {
-    console.log("show options");
+    // console.log("show options");
     setOpen(true);
   }
 
   function toggleFav() {
-    console.log("add/remove this article to/from favorite");
+    // console.log("add/remove this article to/from favorite");
     httpClient
       .post(`/boards/likes?boardId=${article.id}&userId=${loginUser.userId}`)
-      .then((data) => console.log(data))
+      .then((data) => {
+        // console.log(data)
+      })
       .catch((data) => console.log(data));
     setToggleLike(toggleLike ? false : true);
   }
