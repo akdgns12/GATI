@@ -36,5 +36,5 @@ echo "image rm end"
 
 echo "docker run start"
 docker rm -f "gati-backend-dev"
-docker run -dp 8080:8080 --name gati-backend-dev --network gati-net ${IMAGE_NAME}
+docker run -dp 8081:8080 --name gati-backend-dev --network gati-net ${IMAGE_NAME}
 echo "docker run end"
