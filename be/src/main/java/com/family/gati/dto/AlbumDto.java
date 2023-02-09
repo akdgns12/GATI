@@ -1,12 +1,14 @@
 package com.family.gati.dto;
 
 import com.family.gati.entity.Album;
+import com.family.gati.entity.AlbumTag;
 import com.family.gati.util.CommonBuilder;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,8 +21,8 @@ public class AlbumDto {
     private String userId;
     @ApiModelProperty(example = "앨범의 내용 입니다.")
     private String content;
-    @ApiModelProperty(example = "@서울")
-    private String tag;
+    @ApiModelProperty(example = "['부산', '울산']")
+    private List<TagDto> tag;
     @ApiModelProperty(example = "img.img")
     private String img;
     @ApiModelProperty(example = "10")
@@ -33,6 +35,10 @@ public class AlbumDto {
     private Integer comments;
     @ApiModelProperty(example = "akdgns12")
     private String nickname;
+    @ApiModelProperty(example = "1 : 좋아요 o, 0 : 좋아요 x")
+    private Integer userLike;
+    @ApiModelProperty(example = "[albumComment]")
+    private List<AlbumCommentDto> albumCommentDtos;
 
     private AlbumDto(AlbumDto.AlbumDtoBuilder builder) {
         this.id = builder.id;
@@ -46,6 +52,7 @@ public class AlbumDto {
         this.updateTime = builder.updateTime;
         this.comments = builder.comments;
         this.nickname = builder.nickname;
+        this.userLike = 1;
     }
 
     public static class AlbumDtoBuilder implements CommonBuilder<AlbumDto> {
@@ -53,7 +60,7 @@ public class AlbumDto {
         private Integer groupId;
         private String userId;
         private String content;
-        private String tag;
+        private List<TagDto> tag;
         private String img;
         private Integer likes;
         private Timestamp createTime;
@@ -67,7 +74,12 @@ public class AlbumDto {
             this.groupId = album.getGroupId();
             this.userId = album.getUserId();
             this.content = album.getContent();
-            this.tag = album.getTag();
+            this.tag = new ArrayList<>();
+            for (AlbumTag albumTag: album.getTag()) {
+                TagDto tagDto = new TagDto();
+                tagDto.setTagContent(albumTag.getTag());
+                this.tag.add(tagDto);
+            }
             this.img = album.getImg();
             this.likes = album.getLikes();
             this.createTime = album.getCreateTime();
