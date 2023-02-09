@@ -11,7 +11,6 @@ import PortraitOutlinedIcon from "@mui/icons-material/PortraitOutlined";
 import { Link } from "react-router-dom";
 
 export default function SimpleBottomNavigation() {
-  const [value, setValue] = React.useState(0);
 
   return (
     <Box sx={{
@@ -29,44 +28,40 @@ export default function SimpleBottomNavigation() {
         >
         <BottomNavigation
           showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
           >
           <BottomNavigationAction 
             component={Link}
             to="/"
             label="Home" 
-            icon={<HomeOutlinedIcon />}
+            icon={<HomeOutlinedIcon fontSize="large" />}
             style={{color: '#EF9A9A'}} 
             />
           <BottomNavigationAction
             component={Link}
             to="/calendar"
             label="Calendar"
-            icon={<CalendarMonthOutlinedIcon />}
+            icon={<CalendarMonthOutlinedIcon fontSize="large" />}
             style={{color: '#EF9A9A'}}
             />
           <BottomNavigationAction
             component={Link}
             to="/photobook"
             label="PhotoBook"
-            icon={<PhotoOutlinedIcon />}
+            icon={<PhotoOutlinedIcon fontSize="large" />}
             style={{color: '#EF9A9A'}}
             />
           <BottomNavigationAction
             component={Link}
             to="/gotg"
             label="가치가자"
-            icon={<Diversity1OutlinedIcon />}
+            icon={<Diversity1OutlinedIcon fontSize="large" />}
             style={{color: '#EF9A9A'}}
             />
           <BottomNavigationAction
             component={Link}
             to="/pictg"
             label="가치한장"
-            icon={<PortraitOutlinedIcon />}
+            icon={<PortraitOutlinedIcon fontSize="large" />}
             style={{color: '#EF9A9A'}}
             />
         </BottomNavigation>
