@@ -29,10 +29,10 @@ const CommentInput = (props) => {
 
   function writeComment(event) {
     event.preventDefault();
-    console.log("write comment");
-    console.log(props.articleId);
-    console.log(event.target.comment.value);
-    console.log(loginUser.userId);
+    // console.log("write comment");
+    // console.log(props.articleId);
+    // console.log(event.target.comment.value);
+    // console.log(loginUser.userId);
     httpClient
       .post("/boards/comment/", {
         boardId: props.articleId,
@@ -40,7 +40,7 @@ const CommentInput = (props) => {
         userId: loginUser.userId,
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
       })
       .catch((error) => {
         console.log(error);
