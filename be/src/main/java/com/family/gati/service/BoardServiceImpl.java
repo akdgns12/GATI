@@ -5,7 +5,6 @@ import com.family.gati.dto.TagDto;
 import com.family.gati.entity.Board;
 import com.family.gati.entity.BoardLikes;
 import com.family.gati.entity.BoardTag;
-import com.family.gati.repository.BoardCommentRepository;
 import com.family.gati.repository.BoardLikesRepository;
 import com.family.gati.repository.BoardRepository;
 import com.family.gati.repository.UserRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Log4j2
 @Service

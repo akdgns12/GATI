@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MissionImageRepository extends JpaRepository<MissionImage, Integer> {
-    List<MissionImage> findByGroupId(Integer groupId);
+    List<MissionImage> findByMissionId(Integer missionId);
 }

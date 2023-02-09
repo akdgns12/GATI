@@ -21,6 +21,6 @@ public class AlbumLikes {
     @Column(name = "USER_ID", nullable = false, length = 20)
     private String userId;
 
-    @Column(name = "ALBUM_ID", nullable = false, length = 20)
+    @Column(name = "ALBUM_ID", nullable = false)
     private Integer albumId;
 }
