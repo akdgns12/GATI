@@ -22,6 +22,10 @@ public class AdminMission {
 
     @Column(name = "TITLE", nullable = false, length = 50)
     private String title;
+    @Column(name = "CONTENT", nullable = false, length = 1000)
+    private String content;
+    @Column(name = "IMG", nullable = false, length = 500)
+    private String img;
 
     @Column(name = "CREATE_TIME", nullable = false)
     private Timestamp createTime;
@@ -38,6 +42,8 @@ public class AdminMission {
     private AdminMission(AdminMissionBuilder builder) {
         this.id = builder.id;
         this.title = builder.title;
+        this.content = builder.content;
+        this.img = builder.img;
         this.createTime = builder.createTime;
         this.updateTime = builder.updateTime;
         this.startDate = builder.startDate;
@@ -47,6 +53,8 @@ public class AdminMission {
     public static class AdminMissionBuilder implements CommonBuilder<AdminMission> {
         private Integer id;
         private String title;
+        private String content;
+        private String img;
         private Timestamp createTime;
         private Timestamp updateTime;
         private Date startDate;
@@ -55,6 +63,8 @@ public class AdminMission {
         public AdminMissionBuilder(AdminMissionDto adminMissionDto) {
             this.id = adminMissionDto.getId();
             this.title = adminMissionDto.getTitle();
+            this.content = adminMissionDto.getImg();
+            this.img = adminMissionDto.getImg();
             this.createTime = adminMissionDto.getCreateTime();
             this.updateTime = adminMissionDto.getUpdateTime();
             this.startDate = adminMissionDto.getStartDate();

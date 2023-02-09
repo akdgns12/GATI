@@ -1,13 +1,18 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.MissionCompleteDto;
 import com.family.gati.dto.MissionDto;
+import com.family.gati.dto.MissionRegistDto;
+import com.family.gati.entity.AdminMission;
 import com.family.gati.entity.Mission;
+import com.family.gati.repository.AdminMissionRepository;
 import com.family.gati.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Log4j2
@@ -15,9 +20,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MissionServiceImpl implements MissionService{
     private final MissionRepository missionRepository;
+    private final AdminMissionRepository adminMissionRepository;
+    private final MissionImageService missionImageService;
     @Override
     public List<MissionDto> findByGroupId(Integer groupId) {
-        List<Mission> missions = missionRepository.findByGroupId(groupId);
+        List<Mission> missions = missionRepository.findByGroupIdOrderByAdminMissionIdDesc(groupId);
         int size = missions.size();
         List<MissionDto> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -39,5 +46,47 @@ public class MissionServiceImpl implements MissionService{
     @Override
     public void deleteMissionById(Integer id) {
         missionRepository.deleteById(id);
+    }
+
+    @Override
+    public MissionDto findById(Integer id) {
+        return new MissionDto.MissionDtoBuilder(missionRepository.findById(id).get()).build();
+    }
+
+    @Override
+    public MissionDto findMissionThisWeek(Integer groupId) {
+        Date date = new Date();
+        AdminMission adminMission = adminMissionRepository.findByStartDateIsLessThanEqualAndEndDateGreaterThanEqual(date, date);
+        Mission mission = missionRepository.findByGroupIdAndAdminMissionId(groupId, adminMission.getId());
+        if (mission == null) {
+            return new MissionDto.MissionDtoBuilder(missionRepository.save(new Mission(adminMission, groupId))).build();
+        }
+        MissionDto missionDto = new MissionDto.MissionDtoBuilder(mission).build();
+        if (mission.getCompleted() == 1) {
+            missionDto.setMissionImageDtos(missionImageService.findByMissionId(mission.getId()));
+        }
+        return missionDto;
+    }
+
+    @Override
+    public MissionDto setMissionMemNumber(MissionRegistDto missionRegistDto) {
+        Mission mission = missionRepository.findById(missionRegistDto.getId()).get();
+        if (mission.getCompleted() != 0) {
+            return new MissionDto.MissionDtoBuilder(mission).build();
+        }
+        mission.setMemNumber(missionRegistDto.getMemNumber());
+        mission.setCompleted(1);
+        return new MissionDto.MissionDtoBuilder(missionRepository.save(mission)).build();
+    }
+
+    @Override
+    public MissionDto completeMission(MissionCompleteDto missionCompleteDto) {
+        Mission mission = missionRepository.findById(missionCompleteDto.getId()).get();
+        if (mission.getCompleted() != 1) {
+            return new MissionDto.MissionDtoBuilder(mission).build();
+        }
+        mission.setImg(missionCompleteDto.getImg());
+        mission.setCompleted(2);
+        return new MissionDto.MissionDtoBuilder(missionRepository.save(mission)).build();
     }
 }
