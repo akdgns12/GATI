@@ -1,5 +1,6 @@
 package com.family.gati.config;
 
+import com.family.gati.exception.CustomAuthenticationEntryPoint;
 import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.security.jwt.JwtAccessDeniedHandler;
@@ -32,6 +33,7 @@ public class SecurityConfig {
 //    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final JwtTokenProvider jwtTokenProvider;
 
     // 패스워드 인코더
@@ -68,7 +70,7 @@ public class SecurityConfig {
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter보다 앞으로 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .authenticationEntryPoint(customAuthenticationEntryPoint) // 토큰없는 사용자 요청시 unathorized error
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
                 .and()

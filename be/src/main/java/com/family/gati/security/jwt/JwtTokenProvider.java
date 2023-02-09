@@ -29,7 +29,7 @@ import java.util.Map;
 public class JwtTokenProvider {
 
     private final String SECRET_KEY;
-    private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 1;		// 1시간
+    private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60;		// 1시간
     private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 7;	// 1주
 //    private final String AUTHORITIES_KEY = "role";
 
@@ -143,6 +143,7 @@ public class JwtTokenProvider {
             log.info("만료된 accessToken 입니다.");
             log.info("refreshToken을 보내주세요.");
             // 클라이언트는 accessToken가지고만 로그인 요청, accessToken 만료시 refreshToken 쏴달라고 go
+//            sendResponse();
             // 클라이언트는 자기가 가지고 있던 refreshToken 보내면 우리는 그 refreshToken이랑 DB에 있는 user의 refreshToken 비교
 
 

@@ -113,20 +113,20 @@ public class UserApiController {
 
             // accessToken 발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
-
-            // 발급받은적 없거나 만료된 RefreshToken이 아니라면 발급
             String refreshToken = null;
+            // 발급받은적 없거나 만료된 RefreshToken이 아니라면 발급
             if(user.getRefreshToken() == null){ // || jwtTokenProvider.validateRefreshToken(user.getRefreshToken()) 추가할 필요있나? 어차피
                 // refreshToken 발급하고 DB에 저장
                 refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
                 userRepository.updateRefreshToken(userSeq, refreshToken);
+            } else{ // 발급받은 적 없다면
+                refreshToken = userRepository.getRefreshTokenByUserSeq(userSeq);
             }
-           
 
             resultMap.put("msg", SUCCESS);
             // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
-            resultMap.put("accessToken", accessToken);
-            resultMap.put("refreshToken", refreshToken);
+            resultMap.put("accessToken: ", accessToken);
+            resultMap.put("resfreshToken: ", refreshToken);
             resultMap.put("userId", user.getUserId());
             resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;
