@@ -11,10 +11,12 @@ import GroupInvitation from "../../components/Notification/GroupInvitation";
 
 const MainFeed = () => {
   const dispatch = useDispatch();
+  const { loginUser } = useSelector((state) => state.user);
 
   useEffect(() => {
-    // console.log("main feed mounted");
-    dispatch(loadMainFeed(1))
+    console.log("main feed mounted");
+    console.log(loginUser.userId);
+    dispatch(loadMainFeed({ groupId: 1, userId: loginUser.userId, page: 0 }))
       .then((data) => {
         // console.log(data.payload);
       })

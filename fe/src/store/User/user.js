@@ -46,7 +46,9 @@ const userSlice = createSlice({
     builder.addCase(doLoginUser.fulfilled, (state, action) => {
       state.loading = "success";
       state.logIn = true;
-      state.loginUser.accessToken = action.payload.createToken;
+      state.loginUser.accessToken = action.payload.accessToken;
+      state.loginUser.userId = action.payload.userId;
+      // console.log(action.payload.accessToken);
     });
     builder.addCase(doLoginUser.rejected, (state) => {
       state.loading = "rejected";
