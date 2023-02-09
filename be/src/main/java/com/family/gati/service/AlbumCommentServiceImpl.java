@@ -1,8 +1,11 @@
 package com.family.gati.service;
 
 import com.family.gati.dto.AlbumCommentDto;
+import com.family.gati.entity.Album;
 import com.family.gati.entity.AlbumComment;
 import com.family.gati.repository.AlbumCommentRepository;
+import com.family.gati.repository.AlbumRepository;
+import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlbumCommentServiceImpl implements AlbumCommentService{
     private final AlbumCommentRepository albumCommentRepository;
+    private final AlbumRepository albumRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<AlbumCommentDto> findByAlbumId(Integer albumId) {
@@ -30,16 +35,28 @@ public class AlbumCommentServiceImpl implements AlbumCommentService{
 
     @Override
     public AlbumCommentDto insertAlbumComment(AlbumCommentDto albumCommentDto) {
-        return new AlbumCommentDto.AlbumCommentDtoBuilder(albumCommentRepository.save(new AlbumComment.AlbumCommentBuilder(albumCommentDto).build())).build();
+        AlbumComment albumComment = new AlbumComment.AlbumCommentBuilder(albumCommentDto).build();
+        albumComment.setNickname(userRepository.findByUserId(albumComment.getUserId()).getNickName());
+        Album album = albumRepository.findById(albumComment.getAlbumId()).get();
+        album.plusComments(1);
+        albumRepository.save(album);
+        return new AlbumCommentDto.AlbumCommentDtoBuilder(albumCommentRepository.save(albumComment)).build();
     }
 
     public AlbumCommentDto updateAlbumComment(AlbumCommentDto albumCommentDto) {
-        return new AlbumCommentDto.AlbumCommentDtoBuilder(albumCommentRepository.save(new AlbumComment.AlbumCommentBuilder(albumCommentDto).build())).build();
+        AlbumComment albumComment = albumCommentRepository.findById(albumCommentDto.getId()).get();
+        albumComment.setContent(albumCommentDto.getContent());
+        albumComment.setUpdateTime(albumCommentDto.getUpdateTime());
 
+        return new AlbumCommentDto.AlbumCommentDtoBuilder(albumCommentRepository.save(albumComment)).build();
     }
 
     @Override
     public void deleteCommentById(Integer id) {
+        AlbumComment albumComment = albumCommentRepository.findById(id).get();
+        Album album = albumRepository.findById(albumComment.getAlbumId()).get();
+        album.plusComments(-1);
+        albumRepository.save(album);
         albumCommentRepository.deleteById(id);
     }
 
