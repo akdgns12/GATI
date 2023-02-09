@@ -294,7 +294,7 @@ public class UserApiController {
 
     // 비밀번호 찾기
     @ApiOperation(value = "비밀번호 찾기", notes = "입력받은 이메일로 임시 비밀번호 전달")
-    @PostMapping("/{email}")
+    @PostMapping("/findPassword/{email}")
     public ResponseEntity<?> findPassword(@PathVariable("email") String email){
         logger.debug("email: {}", email);
         Map<String, Object> resultMap = new HashMap<>();

@@ -78,7 +78,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() // 보호된 리소스 URI에 접근할 수 있는 권한 설정
                 // 로그인, 회원가입 접근 허용
-                .antMatchers("/**/login", "/**/join").permitAll()
+                .antMatchers("/**/login", "/**/join", "/**/user/id/**", "/**/user/findPassword/**"
+                ,"/**/refresh").permitAll()
                 .antMatchers(
                         "/v2/api-docs/**"
                         , "/swagger.json"
@@ -88,11 +89,10 @@ public class SecurityConfig {
                 ).permitAll()
 //                .antMatchers("/**/user/**/**").permitAll()
                 // swagger 페이지 접근 허용
-                .antMatchers(  "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll();
                 /**
                  * swagger 테스트 할때는 밑줄을 주석 처리하면 됩니다.
                  */
-//                .anyRequest().authenticated(); // 다른 경로는 인증필요
+                .anyRequest().authenticated(); // 다른 경로는 인증필요
 
         return http.build();
     }
