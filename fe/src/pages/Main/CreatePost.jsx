@@ -96,7 +96,7 @@ const CreatePost = (props) => {
   }, []);
 
   function serializeTag(tagObjs) {
-    console.log(tagObjs);
+    // console.log(tagObjs);
     var str = "";
     if (tagObjs != null) {
       tagObjs.map((tagObj) => {
@@ -110,10 +110,10 @@ const CreatePost = (props) => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("submit form");
+    // console.log("submit form");
     // console.log(event.target.img.files[0].name);
-    console.log(event.target.content.value);
-    console.log(event.target.tag.value);
+    // console.log(event.target.content.value);
+    // console.log(event.target.tag.value);
     const tagObjs = parseTags(event.target.tag.value);
     const formData = {
       content: event.target.content.value,
@@ -121,7 +121,7 @@ const CreatePost = (props) => {
       // img: event.target.img.files[0].name,
       img: "image",
     };
-    console.log(formData);
+    // console.log(formData);
 
     if (variant === "create") {
       const postData = {
@@ -129,10 +129,10 @@ const CreatePost = (props) => {
         userId: loginUser.userId,
         groupId: 1,
       };
-      console.log(postData);
+      // console.log(postData);
       httpClient.post("/boards/board/", postData)
         .then((data) => {
-          console.log(data)
+          // console.log(data)
           alert("article posted");
           navigate("/");
         })
@@ -146,10 +146,10 @@ const CreatePost = (props) => {
         ...formData,
         id: articleId,
       };
-      console.log(putData);
+      // console.log(putData);
       httpClient.put("/boards/board/", putData)
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           alert("modified");
           navigate("/");
         })
@@ -161,12 +161,11 @@ const CreatePost = (props) => {
   }
 
   function parseTags(str) {
-    console.log(str);
-    console.log(str.split(" "));
+    // console.log(str);
     const tags = str.split(" ");
     let ret = [];
     tags.map((tag, index) => {
-      console.log(tag);
+      // console.log(tag);
       ret.push({ tagContent: tag });
     })
     return ret;

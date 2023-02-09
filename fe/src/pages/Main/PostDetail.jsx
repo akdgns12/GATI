@@ -39,7 +39,7 @@ const PostDetail = () => {
     };
     dispatch(loadPostDetail(reqData))
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setLoaded(true);
       })
       .catch((error) => {
