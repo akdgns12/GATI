@@ -9,10 +9,14 @@ import Calendar from "./pages/Calendar/CalendarPage";
 import PhotoBookPage from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
-import Box from "@mui/material/Box";
+import AdminPage from "./pages/Admins/AdminPage";
 import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage"
+import AdminRouter from "./pages/Admins/AdminRouter";
+
+import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
 
+import { Container } from "@mui/material";
 const App = () => {
   const location = useLocation();
   const { loginUser, logIn } = useSelector((state) => state.user);
@@ -29,7 +33,7 @@ const App = () => {
   }
 
   return (
-    <Box className="App">
+    <Container fixed maxWidth="lg" className="App">
       {/* {doRedirect() && <Navigate to="/login" replace={true} />} */}
       {!excludeHeader() && <AppBar />}
       <Routes>
@@ -39,9 +43,10 @@ const App = () => {
         <Route path="/gotg" element={<GoTogether />} />
         <Route path="/pictg/*" element={<PictureTogetherPage />} />
         <Route path="/login/*" element={<Login />} />
+        <Route path="/admin/*" element={<AdminRouter/>}/>
       </Routes>
       {!excludeHeader() && <NavBar />}
-    </Box>
+    </Container>
   );
 };
 
