@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import PhotoBook from "./PhotoBook";
-import CreatePhoto from "./CreatePhoto";
-import PhotoDetail from "./PhotoDetail";
+import PhotoBook from "../../components/PhotoBook/PhotoBook";
+import CreatePhoto from "../../components/PhotoBook/CreatePhoto";
+import PhotoDetail from "../../components/PhotoBook/PhotoDetail";
 
 const PhotoBookPage = (props) => {
   return (

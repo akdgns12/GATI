@@ -1,11 +1,14 @@
 package com.family.gati.dto;
 
 import com.family.gati.entity.Board;
+import com.family.gati.entity.BoardTag;
 import com.family.gati.util.CommonBuilder;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,8 +21,8 @@ public class BoardDto {
     private String userId;
     @ApiModelProperty(example = "게시글의 내용 입니다.")
     private String content;
-    @ApiModelProperty(example = "@부산")
-    private String tag;
+    @ApiModelProperty(example = "['부산', '울산']")
+    private List<TagDto> tag;
     @ApiModelProperty(example = "img.img")
     private String img;
     @ApiModelProperty(example = "10")
@@ -32,6 +35,10 @@ public class BoardDto {
     private Integer comments;
     @ApiModelProperty(example = "akdgns12")
     private String nickname;
+    @ApiModelProperty(example = "1 : 좋아요 o, 0 : 좋아요 x")
+    private Integer userLike;
+    @ApiModelProperty(example = "[boardComment]")
+    private List<BoardCommentDto> boardCommentDtos;
 
     private BoardDto(BoardDtoBuilder builder) {
         this.id = builder.id;
@@ -45,6 +52,7 @@ public class BoardDto {
         this.updateTime = builder.updateTime;
         this.comments = builder.comments;
         this.nickname = builder.nickname;
+        this.userLike = 1;
     }
 
     public static class BoardDtoBuilder implements CommonBuilder<BoardDto> {
@@ -52,7 +60,7 @@ public class BoardDto {
         private Integer groupId;
         private String userId;
         private String content;
-        private String tag;
+        private List<TagDto> tag;
         private String img;
         private Integer likes;
         private Timestamp createTime;
@@ -66,7 +74,12 @@ public class BoardDto {
             this.groupId = board.getGroupId();
             this.userId = board.getUserId();
             this.content = board.getContent();
-            this.tag = board.getTag();
+            this.tag = new ArrayList<>();
+            for (BoardTag boardTag: board.getTag()) {
+                TagDto tagDto = new TagDto();
+                tagDto.setTagContent(boardTag.getTag());
+                this.tag.add(tagDto);
+            }
             this.img = board.getImg();
             this.likes = board.getLikes();
             this.createTime = board.getCreateTime();

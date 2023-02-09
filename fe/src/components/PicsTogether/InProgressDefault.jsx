@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from 'react-redux';
-import {Typography, Paper, Button} from '@mui/material';
+import {Typography, Paper, Button, Box} from '@mui/material';
 import SetMemberModal from './SetMemberModal';
 import DinnerImg from "../../static/PicsTgExampleDinner.png";
 
@@ -40,39 +40,30 @@ export default function InProgressDefault(props) {
   // }
 
   return (
-    <Paper
-      style={{
-        display:'flex',
-        flexDirection:'column',
-        flexWrap:'wrap',
-        width:'80vw',
-        alignItems:'center',
-      }}>
-        <div
-        style={{ flex:'auto'}}>
-          <Typography style={{ fontWeight:'bold', margin:'20px' }}>{mission.title}</Typography>
-        </div>
-        <div>
-          <Typography
-            style={{ margin:'20px'}}>
-            {mission.description}
-          </Typography>
-        </div>
-        <div
-          style={{
-            display:'flex',
-            flexDirection:'column',
-            alignItems:'center',
-          }}>
-          <img
-            src={DinnerImg}
-            alt='exampleImg'
-            width='200px'/>
-        </div>
-      <div
-        style={{ margin:'20px'}}>
+    <Paper sx={{
+      padding:3,
+    }}>
+      <Typography style={{ fontWeight:'bold', marginBottom:'20px'}}>{mission.title}</Typography>
+      <Typography style={{ marginBottom:'30px'}}>
+        {mission.description}
+      </Typography>
+      <Box
+        style={{
+          display:'flex',
+          justifyContent:'center',
+          marginBottom:'30px'
+        }}>
+        <img
+          src={DinnerImg}
+          alt='exampleImg'
+          width='200px'/>
+      </Box>
+      <Box
+        style={{
+          display:'flex',
+          justifyContent:'center',}}>
         <Button onClick={openModal} size="medium" variant="contained" disableElevation>미션 참여하기</Button>
-      </div>
+      </Box>
       { modal === true ?
         <SetMemberModal
           deliverPicNum={(_pic)=>{ setPicNum(_pic)}}
