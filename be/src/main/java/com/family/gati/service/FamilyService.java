@@ -1,6 +1,6 @@
 package com.family.gati.service;
 
-import com.family.gati.dto.FamilyInviteDto;
+import com.family.gati.dto.FamilyNotiDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
@@ -84,9 +84,9 @@ public class FamilyService {
 
     //
     @Transactional
-    public void acceptInvite(FamilyInviteDto familyInviteDto){
-        int familyId = familyInviteDto.getId();
-        String userId = familyInviteDto.getUserId();
+    public void acceptInvite(FamilyNotiDto familyNotiDto){
+        int familyId = familyNotiDto.getId();
+        String userId = familyNotiDto.getUserId();
         Family family = familyRepository.findById(familyId);
 
         // 기존 멤버 수 +1

@@ -26,7 +26,7 @@ public class NotiController {
     public ResponseEntity<?> getNotiByUserId(@ApiParam(value = "path로 userId 전달받음")@PathVariable("userId") String userId){
         log.debug("userId: {}", userId);
 
-        List<NotiDto> findDtos = notiService.findByUserId(userId);
+        List<NotiDto> findDtos = notiService.getByUserId(userId);
         return ResponseEntity.ok(findDtos);
     }
 }

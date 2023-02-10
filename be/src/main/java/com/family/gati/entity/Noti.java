@@ -1,9 +1,6 @@
 package com.family.gati.entity;
 
 
-import com.family.gati.dto.NotiDto;
-import com.family.gati.util.CommonBuilder;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "NOTIFICATION")

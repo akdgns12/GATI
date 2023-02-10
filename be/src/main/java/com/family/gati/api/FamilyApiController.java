@@ -1,12 +1,13 @@
 package com.family.gati.api;
 
-import com.family.gati.dto.FamilyInviteDto;
+import com.family.gati.dto.FamilyNotiDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
 import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
+import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.service.FamilyMemberService;
 import com.family.gati.service.FamilyService;
 import io.swagger.annotations.Api;
@@ -39,6 +40,7 @@ public class FamilyApiController {
     private final FamilyService familyService;
     private final FamilyMemberService familyMemberService;
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
@@ -151,17 +153,29 @@ public class FamilyApiController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
+
+    @ApiOperation(value = "그룹 초대")
+    @PostMapping
+    public ResponseEntity<?> inviteFamily(@RequestHeader String token){
+        User user = jwtTokenProvider.getUser(token);
+        String nickName = user.getNickName(); // 보내는 사람
+        logger.debug("보내는 사람 nickName");
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+
+    }
     
     // 그룹 초대 수락
     @ApiOperation(value = "그룹 초대 수락", notes = "Family id, userId 받음")
     @PostMapping("/invite/{userId}")
-    public ResponseEntity<?> acceptInviteFamily(@RequestBody FamilyInviteDto familyInviteDto){
-        logger.debug("userId: {}", familyInviteDto);
+    public ResponseEntity<?> acceptInviteFamily(@RequestBody FamilyNotiDto familyNotiDto){
+        logger.debug("userId: {}", familyNotiDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            familyService.acceptInvite(familyInviteDto);
+            familyService.acceptInvite(familyNotiDto);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e) {
