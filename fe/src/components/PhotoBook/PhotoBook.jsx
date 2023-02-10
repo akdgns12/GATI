@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import SearchBar from "./SearchBar";
 import Img from './Img'
 import NoImg from "./NoImg";
-import PhotoData from "../PicsTogether/PhotoData";
+import PhotoData from "./PhotoData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddButton from "../Main/AddButton";
 

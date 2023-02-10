@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
@@ -10,7 +9,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
-import { useDispatch,useSelector } from 'react-redux';
 // import { plus } from '../../store/PicsTogether/picsTg';
 
 export default function UploadDrawer(props) {
