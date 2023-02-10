@@ -16,7 +16,7 @@ const CommentView = (props) => {
     <Box css={contStyle}>
       <SubdirectoryArrowRightIcon />
       <b>{props.comment.userId}</b>
-      : {props.comment.comment}
+      : {props.comment.content}
     </Box>
   );
 }

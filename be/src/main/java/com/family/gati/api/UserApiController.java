@@ -113,16 +113,20 @@ public class UserApiController {
 
             // accessToken 발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
+            String refreshToken = null;
             // 발급받은적 없거나 만료된 RefreshToken이 아니라면 발급
             if(user.getRefreshToken() == null){ // || jwtTokenProvider.validateRefreshToken(user.getRefreshToken()) 추가할 필요있나? 어차피
                 // refreshToken 발급하고 DB에 저장
-                String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
+                refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
                 userRepository.updateRefreshToken(userSeq, refreshToken);
+            } else{ // 발급받은 적 없다면
+                refreshToken = userRepository.getRefreshTokenByUserSeq(userSeq);
             }
-           
 
             resultMap.put("msg", SUCCESS);
+            // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
             resultMap.put("accessToken", accessToken);
+            resultMap.put("resfreshToken", refreshToken);
             resultMap.put("userId", user.getUserId());
             resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;
@@ -290,7 +294,7 @@ public class UserApiController {
 
     // 비밀번호 찾기
     @ApiOperation(value = "비밀번호 찾기", notes = "입력받은 이메일로 임시 비밀번호 전달")
-    @PostMapping("/{email}")
+    @PostMapping("/findPassword/{email}")
     public ResponseEntity<?> findPassword(@PathVariable("email") String email){
         logger.debug("email: {}", email);
         Map<String, Object> resultMap = new HashMap<>();
@@ -348,7 +352,7 @@ public class UserApiController {
         HttpStatus status = null;
 
         // 유효성 검사
-        if(!jwtTokenProvider.validateAccessToken(token)){
+        if(!jwtTokenProvider.validateToken(token)){
             log.debug("올바르지 않은 token: {}", token);
             resultMap.put("msg", FAIL);
             resultMap.put("result", "Invalid token");

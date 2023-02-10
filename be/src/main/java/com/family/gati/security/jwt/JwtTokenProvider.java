@@ -134,23 +134,19 @@ public class JwtTokenProvider {
     }
 
     // 토큰 유효성, 만료시간 검사
-    public Boolean validateAccessToken(String accessToken) {
+    public Boolean validateToken(String token) {
+
         try {
-            Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(accessToken);
+            log.debug("유효성 검사 시작");
+            Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
             log.info("만료된 accessToken 입니다.");
-            /*
-                1. accessToken이 만료 -> DB에 저장된 refreshToken 가져와 유효성 검사하고, 적합하다면 다시 프론트로 보내주기
-                    1-1) front는 받은 refreshToken 로컬스토리지에 저장하고, 저장한 token을 이용해 request
-                2. refreshToken이 만료 -> DB에 저장된 refreshToken 지우고 login 화면으로 사용자 보내기
-             */
-            int userSeq = getUserSeq(accessToken);
-            String refreshToken = userRepository.getRefreshTokenByUserSeq(userSeq);
-
-            if(validateRefreshToken(refreshToken)){
-                sendRefreshToken(refreshToken);
-            }
+            log.info("refreshToken을 보내주세요.");
+            // 클라이언트는 accessToken가지고만 로그인 요청, accessToken 만료시 refreshToken 쏴달라고 go
+//            sendResponse();
+            // 클라이언트는 자기가 가지고 있던 refreshToken 보내면 우리는 그 refreshToken이랑 DB에 있는 user의 refreshToken 비교
+            sendRequestForRefreshToken();
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 accessToken 입니다.");
         } catch (IllegalStateException e) {
@@ -159,9 +155,37 @@ public class JwtTokenProvider {
         return false;
     }
 
+    public ResponseEntity<?> sendRequestForRefreshToken(){
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        resultMap.put("msg", "refreshToken 보내세요");
+        status = HttpStatus.BAD_REQUEST;
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    public ResponseEntity<?> sendAccessToken(String accessToken){
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        log.debug("accessToken 재발급");
+        resultMap.put("재발급 accessToken", accessToken);
+        resultMap.put("HTTP error Code", "401");
+        status = HttpStatus.UNAUTHORIZED;
+        
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
     // RefreshToken 유효성 검사
     public Boolean validateRefreshToken(String refreshToken){
         try{
+            int userSeq = getUserSeq(refreshToken);
+            String dbRefreshToken = userRepository.getRefreshTokenByUserSeq(userSeq);
+            if(!refreshToken.equals(dbRefreshToken)){ // 전달받은 refreshToken과 db에 있는 refreshToken 정보 다르면 유효성 검사 통과 실패
+                return false;
+            }
+
             Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(refreshToken);
             return true;
         }catch (ExpiredJwtException e){ // 만료된 refreshToken이라면 DB에 있는 refreshToken 지우고, login화면으로 돌아가게끔
