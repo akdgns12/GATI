@@ -33,7 +33,7 @@ const store = configureStore({
   middleware: customizedMiddleware,
 });
 
-const persistor = persistStore(store);
+export const persistor = persistStore(store);
 
 root.render(
   <React.StrictMode>
