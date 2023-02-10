@@ -1,5 +1,6 @@
 package com.family.gati.api;
 
+import com.family.gati.dto.FamilyInviteDto;
 import com.family.gati.dto.FamilyNotiDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
@@ -7,9 +8,11 @@ import com.family.gati.entity.Family;
 import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
+import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.service.FamilyMemberService;
 import com.family.gati.service.FamilyService;
+import com.family.gati.service.NotiService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -26,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static javafx.scene.input.KeyCode.F;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +46,8 @@ public class FamilyApiController {
     private final FamilyMemberService familyMemberService;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final NotiService notiService;
 
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
@@ -154,28 +161,44 @@ public class FamilyApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-    @ApiOperation(value = "그룹 초대")
+    @ApiOperation(value = "그룹 초대", notes = "Dto에 그룹 id, 그룹 명, 초대 받는 사람, type 전달받음")
     @PostMapping
-    public ResponseEntity<?> inviteFamily(@RequestHeader String token){
+    public ResponseEntity<?> inviteFamily(@RequestHeader String token,
+                                          @RequestBody FamilyInviteDto familyInviteDto){
+        jwtAuthenticationFilter.parseBearerToken(token);
+
         User user = jwtTokenProvider.getUser(token);
         String nickName = user.getNickName(); // 보내는 사람
         logger.debug("보내는 사람 nickName");
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
+        FamilyNotiDto familyNotiDto = new FamilyNotiDto();
+        familyNotiDto.set
 
+        try{
+            notiService.saveFamilyInvite();
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            log.debug("그룹 초대 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
     
     // 그룹 초대 수락
     @ApiOperation(value = "그룹 초대 수락", notes = "Family id, userId 받음")
     @PostMapping("/invite/{userId}")
-    public ResponseEntity<?> acceptInviteFamily(@RequestBody FamilyNotiDto familyNotiDto){
-        logger.debug("userId: {}", familyNotiDto);
+    public ResponseEntity<?> acceptInviteFamily(@RequestBody FamilyInviteDto familyInviteDto){
+        logger.debug("userId: {}", familyInviteDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            familyService.acceptInvite(familyNotiDto);
+            familyService.acceptInvite(familyInviteDto);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e) {

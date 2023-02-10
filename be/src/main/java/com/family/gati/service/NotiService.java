@@ -1,6 +1,6 @@
 package com.family.gati.service;
 
-import com.family.gati.dto.FamilyNotiDto;
+import com.family.gati.dto.FamilyInviteDto;
 import com.family.gati.dto.NotiDto;
 import com.family.gati.entity.Noti;
 import com.family.gati.repository.NotiRepository;
@@ -32,11 +32,11 @@ public class NotiService {
 
 
     // 그룹 초대
-    public void saveFamilyInvite(FamilyNotiDto familyNotiDto){
+    public void saveFamilyInvite(FamilyInviteDto familyInviteDto){
         Noti noti = new Noti();
-        noti.setGroupId(familyNotiDto.getId());
-        noti.setGroupName(familyNotiDto.getName());
-        noti.setType(familyNotiDto.getType());
+        noti.setGroupId(familyInviteDto.getId());
+        noti.setGroupName(familyInviteDto.getName());
+        noti.setType(familyInviteDto.getType());
 
         notiRepository.save(noti);
     }
