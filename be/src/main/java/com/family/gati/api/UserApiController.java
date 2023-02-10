@@ -125,8 +125,8 @@ public class UserApiController {
 
             resultMap.put("msg", SUCCESS);
             // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
-            resultMap.put("accessToken: ", accessToken);
-            resultMap.put("resfreshToken: ", refreshToken);
+            resultMap.put("accessToken", accessToken);
+            resultMap.put("resfreshToken", refreshToken);
             resultMap.put("userId", user.getUserId());
             resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;
@@ -294,7 +294,7 @@ public class UserApiController {
 
     // 비밀번호 찾기
     @ApiOperation(value = "비밀번호 찾기", notes = "입력받은 이메일로 임시 비밀번호 전달")
-    @PostMapping("/{email}")
+    @PostMapping("/findPassword/{email}")
     public ResponseEntity<?> findPassword(@PathVariable("email") String email){
         logger.debug("email: {}", email);
         Map<String, Object> resultMap = new HashMap<>();

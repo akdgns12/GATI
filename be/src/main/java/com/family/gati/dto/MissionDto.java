@@ -62,7 +62,7 @@ public class MissionDto {
         public MissionDtoBuilder(Mission mission) {
             this.id = mission.getId();
             this.title = mission.getTitle();
-            this.content = mission.getImg();
+            this.content = mission.getContent();
             this.img = mission.getImg();
             this.memNumber = mission.getMemNumber();
             this.adminMissionId = mission.getAdminMissionId();
