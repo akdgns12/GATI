@@ -30,8 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static javafx.scene.input.KeyCode.F;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -178,7 +176,7 @@ public class FamilyApiController {
         familyNotiDto.setSenderNickname(nickName);
         familyNotiDto.setReceiverId(familyInviteDto.getReceiverId());
         familyNotiDto.setGroupName(familyInviteDto.getGroupName());
-        familyNotiDto.setGroupId(familyInviteDto.getGroupId());
+        familyNotiDto.setGroupId(familyInviteDto.getFamilyId());
         familyNotiDto.setType(1);
 
         try{
@@ -204,6 +202,7 @@ public class FamilyApiController {
 
         try{
             familyService.acceptInvite(familyInviteDto);
+
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e) {

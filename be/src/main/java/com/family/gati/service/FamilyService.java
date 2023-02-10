@@ -85,8 +85,8 @@ public class FamilyService {
     //
     @Transactional
     public void acceptInvite(FamilyInviteDto familyInviteDto){
-        int familyId = familyInviteDto.getId();
-        String userId = familyInviteDto.getUserId();
+        int familyId = familyInviteDto.getFamilyId();
+        String userId = familyInviteDto.getReceiverId();
         Family family = familyRepository.findById(familyId);
 
         // 기존 멤버 수 +1
@@ -97,6 +97,13 @@ public class FamilyService {
         FamilyMember familyMember = new FamilyMember();
         familyMember.setUserId(userId);
         familyMember.setFamilyId(familyId);
+        // 초대받은 유저의 mainFamily가 없다면 수락과 동시에 Main그룹으로 설정
+        User user = userRepository.findByUserId(userId);
+        if(user.getMainFamily() == null){
+            user.setMainFamily(familyId);
+            userRepository.save(user);
+        }
+
 
         familyMemberRepository.save(familyMember);
     }

@@ -6,6 +6,8 @@ import com.family.gati.repository.NotiRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,6 @@ public class NotiService {
         }
         return result;
     }
-
 
     // 그룹 초대 Notifiction에 저장
     public void saveFamilyInvite(FamilyNotiDto familyNotiDto){
