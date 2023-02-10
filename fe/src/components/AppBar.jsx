@@ -29,6 +29,7 @@ import Logout from './SideBar/Logout';
 import FamilyCreate from './SideBar/FamilyCreate';
 import { useNavigate } from 'react-router';
 import { doLogOut } from '../utils/logOutUtil';
+import CreateFamilyModal from './SideBar/CreateFamilyModal';
 
 const PrimaryAppBar = () => {
 
@@ -38,6 +39,7 @@ const PrimaryAppBar = () => {
   const [myinfo, setMyinfo] = useState(false)
   const [family, setFamily] = useState(false)
   const [familyinfo, setFamilyinfo] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
 
@@ -149,12 +151,13 @@ const PrimaryAppBar = () => {
           <Container sx={{ height: '70%' }}>
             {myinfo && <MyInfo />}
             {family && <Family />}
-            {familyinfo && <FamilyCreate />}
+            {familyinfo && <FamilyCreate setOpen={setModalOpen} />}
             {logout && <Logout />}
           </Container>
           <Divider />
         </Drawer>
       </Box>
+      <CreateFamilyModal open={modalOpen} setOpen={setModalOpen} />
     </Box>
   );
 }

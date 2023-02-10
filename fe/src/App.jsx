@@ -29,6 +29,7 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("RELOADED");
     httpClient.interceptors.response.use(
       function (response) {
         // console.log(response);
