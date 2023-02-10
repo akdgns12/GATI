@@ -28,22 +28,53 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
 
+    // 인증에서 제외할 url -> 적용 안되는듯 일단;
+//    private static final List<String> EXCLUDE_URL = Collections.unmodifiableList(
+//            Arrays.asList(
+//                    "/**/join",
+//                    "/**/login",
+//                    "/**/user/id",
+//                    "/api/v2/api-docs",
+//                    "/api/swagger.json",
+//                    "api/swagger-ui.html#",
+//                    "/api/swagger-resources",
+//                    "/api/webjars"
+//                    ,"/api/swagger.json"
+//                    ,"/api/swagger-ui.html"
+//                    ,"/api/swagger-resources"
+//            )
+//    );
+//
+//    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+//        return EXCLUDE_URL.stream().anyMatch(exclude -> exclude.equalsIgnoreCase(request.getContextPath()));
+//    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = parseBearerToken(request); // 추출한 token
-        // Validation Access Token
-        if (StringUtils.hasText(token) && tokenProvider.validateAccessToken(token)) {
+        
+        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
+            log.debug("token의 userId", tokenProvider.getUserId(token));
+            System.out.println(tokenProvider.getUserId(token));
+            if(!authentication.getName().matches(tokenProvider.getUserId(token))){ // 다른 유저의 토큰일 경우 예외처리
+                log.debug("다른 유저의 토큰입니다.");
+                throw new ServletException();
+            }
+
             // 시큐리티에 authentication 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug(authentication.getName() + "의 인증정보 저장");
-        } else {
-            log.debug("유효한 JWT 토큰이 없습니다.");
+        }else{
+            log.debug("유효하지 않은 토큰입니다.");
         }
 
         filterChain.doFilter(request, response);
     }
-    
+
+
+
     // request에서 "Authorization" token 추출
     private String parseBearerToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");

@@ -11,6 +11,7 @@ const Home = (props) => {
       <Route path='/' element={<MainFeed />} />
       <Route path='/post' element={<CreatePost />} />
       <Route path='/detail/:articleId' element={<PostDetail />} />
+      <Route path='/modify/:articleId' element={<CreatePost variant="modify" />} />
     </Routes>
   );
 };
