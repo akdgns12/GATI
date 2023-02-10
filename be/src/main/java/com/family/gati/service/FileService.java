@@ -27,7 +27,7 @@ public class FileService {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HHmmssSSS");
 
 //        ubuntu only
-        String filePath = uploadDir+"/"+location+multipartFile.getOriginalFilename();
+        String filePath = uploadDir+"/"+location+"/"+multipartFile.getOriginalFilename();
         String fileDir = uploadDir+"/"+location;
         //        window only
 //        String filePath = uploadDir+"\\"+location+"\\"+date.format(dateTimeFormatter)+"_"+multipartFile.getOriginalFilename();
