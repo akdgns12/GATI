@@ -111,17 +111,10 @@ public class UserApiController {
             String userId = user.getUserId();
             int userSeq = user.getUserSeq();
 
-            // accessToken 발급
+            // 유저 로그인할 때 accessToken, refreshToken 둘 다 재발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
-            String refreshToken = null;
-            // 발급받은적 없거나 만료된 RefreshToken이 아니라면 발급
-            if(user.getRefreshToken() == null){ // || jwtTokenProvider.validateRefreshToken(user.getRefreshToken()) 추가할 필요있나? 어차피
-                // refreshToken 발급하고 DB에 저장
-                refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
-                userRepository.updateRefreshToken(userSeq, refreshToken);
-            } else{ // 발급받은 적 없다면
-                refreshToken = userRepository.getRefreshTokenByUserSeq(userSeq);
-            }
+            String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
+            userRepository.updateRefreshToken(userSeq, refreshToken);
 
             resultMap.put("msg", SUCCESS);
             // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
