@@ -4,26 +4,42 @@ import InProgressDefault from './Inprogress/InProgressDefault';
 import OnMission from './OnMission/OnMission';
 import Completed from './Completed/Completed';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeMode } from '../../store/PicsTogether/picsTg';
+import { asyncGetMission, changeMode } from '../../store/PicsTogether/picsTg';
+import httpClient from '../../utils/axios';
+import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 
 export default function PictureTogether() {
-  const dispatch = useDispatch()
-  // 진행 중, 완료 모드 전환
+  const dispatch = useDispatch();
+  const groupId = 2;
+
+  React.useEffect(()=>{
+    dispatch(asyncGetMission(groupId))
+      // .then(data=>console.log(data))
+      // .catch(err=>console.log(err))
+    },[])
+
+  // 진행 중, 완료 모드 토글 전환
   const mode = useSelector(state => {
-    console.log('state',state)
+    // console.log(state) -> state는 redux 저장소에 모인 데이터들
     return state.picsTg.mode
   })
 
-  // 미션 전(InprogressDefault), 미션 중(OnMission) 모드 전환
-  const missionMode = useSelector(state => {
-    return state.picsTg.missionMode
+  // 진행 중 - 미션 전(InprogressDefault), 미션 중(OnMission) 모드 전환
+  const missionStatus = useSelector(state => {
+    return state.picsTg.getMission
   })
 
+  // test
+  console.log('mode',mode)
+  console.log('completed',missionStatus.completed)
+  
   // mode에 따라 달라질 content
   let content = null
-  if (mode === 'inprogress' && missionMode === false) {
+  if (mode === 'inprogress' && missionStatus.completed === 0) {
     content = <InProgressDefault />
-  } else if (mode === 'inprogress' && missionMode === true) {
+  } else if (mode === 'inprogress' && missionStatus.completed === 1) {
     content = <OnMission />
   } else {
     content = <Completed />

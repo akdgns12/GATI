@@ -5,6 +5,8 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import PicsTgExampleDinner from '../../../static/PicsTgExampleDinner.png'
 import PicsTgExampleSky from '../../../static/PicsTgExampleSky.png'
 import { Box } from '@mui/material';
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 
 // AXIOS 연결 전 테스트용
 const MissionImgs = [
@@ -30,6 +32,14 @@ const MissionImgs = [
   },
 ]
 
+const contStyle = css`
+  width: 500 ;
+  height: 450 ;
+  '-ms-overflow-style': 'none';
+  'scrollbar-width': 'none';
+  '&::-webkit-scrollbar': {display: 'none'} ;
+`;
+
 export default function Completed() {
   return (
     <Box
@@ -38,14 +48,7 @@ export default function Completed() {
         flexWrap:'wrap',
         height:'100vh'
       }}>
-      <ImageList
-        sx={{
-          width: 500,
-          height: 450,
-          '-ms-overflow-style': 'none',  /* IE and Edge */
-          'scrollbar-width': 'none',  /* Firefox */
-          '&::-webkit-scrollbar': {display: 'none'} /* Chrome */
-          }}>
+      <ImageList css={contStyle} >
         {MissionImgs.map((item) => (
           <ImageListItem key={item.img}>
             <img
