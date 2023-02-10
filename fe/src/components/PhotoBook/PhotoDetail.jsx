@@ -5,10 +5,10 @@ import { css } from "@emotion/react";
 import { Box, IconButton } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { useNavigate } from 'react-router';
-import ArticleCard from '../Main/ArticleCard';
 import CommentInput from '../Main/CommentInput';
 import CommentView from '../Main/CommentView';
-import PhotoData from '../PicsTogether/PhotoData';
+import PhotoData from './PhotoData';
+import PhotoCard from './PhotoCard';
 
 const PhotoDetail = () => {
   const {photoId} = useParams()
@@ -27,7 +27,7 @@ const PhotoDetail = () => {
         onClick={() => navigate(-1)}>
         <ArrowBackIosIcon />
       </IconButton>
-      <ArticleCard article={thisPhoto} style={{ width: '100%' }} variant="detail" mode="photobook"/>
+      <PhotoCard article={thisPhoto} style={{ width: '100%' }} variant="detail" mode="photobook"/>
       <CommentInput />
       {
         thisPhoto.comments.map((comm, index) => {
