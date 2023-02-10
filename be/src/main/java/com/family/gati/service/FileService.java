@@ -26,11 +26,12 @@ public class FileService {
         LocalDateTime date = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HHmmssSSS");
 
-        //        ubuntu only
-        //        String filePath = uploadDir+"/"+location+multipartFile.getOriginalFilename();
+//        ubuntu only
+        String filePath = uploadDir+"/"+location+multipartFile.getOriginalFilename();
+        String fileDir = uploadDir+"/"+location;
         //        window only
-        String filePath = uploadDir+"\\"+location+"\\"+date.format(dateTimeFormatter)+"_"+multipartFile.getOriginalFilename();
-        String fileDir = uploadDir+"\\"+location;
+//        String filePath = uploadDir+"\\"+location+"\\"+date.format(dateTimeFormatter)+"_"+multipartFile.getOriginalFilename();
+//        String fileDir = uploadDir+"\\"+location;
         File file = new File(fileDir);
         if(!file.exists()){
             file.mkdir();
