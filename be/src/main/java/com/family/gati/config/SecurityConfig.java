@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -42,20 +43,21 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    // swagger는 security 무시 -> 적용 안되는듯
-//    @Bean
-//    public WebSecurityCustomizer configure() {
-//        return web -> { web.ignoring()
-//                .antMatchers("/**/join", "/**/login")
-//                .antMatchers(
-//                        "/v2/api-docs/**"
-//                        , "/swagger.json"
-//                        , "/swagger-ui.html/**"
-//                        , "/swagger-resources/**"
-//                        , "/webjars/**"
-//                );
-//            };
-//    }
+    // swagger는 security 무시
+    @Bean
+    public WebSecurityCustomizer configure() {
+        return web -> { web.ignoring()
+//                .antMatchers("/**/join", "/**/login","/**/user/findId/**", "/**/user/findPassword/**"
+//                        ,"/refresh")
+                .antMatchers(
+                        "/v2/api-docs/**"
+                        , "/swagger.json"
+                        , "/swagger-ui.html/**"
+                        , "/swagger-resources/**"
+                        , "/webjars/**"
+                );
+            };
+    }
 
     // HttpSecurity 설정
     @Bean
@@ -64,7 +66,8 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable() // security 기본 로그인 사용 X
                 // cors허용
-                .cors().and().cors().configurationSource(corsConfigurationSource()).and()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .csrf().disable() // csrf 보안 설정 비활성화
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter보다 앞으로 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
@@ -78,7 +81,9 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() // 보호된 리소스 URI에 접근할 수 있는 권한 설정
                 // 로그인, 회원가입 접근 허용
-                .antMatchers("/**/login", "/**/join").permitAll()
+                .antMatchers("/**/login", "/**/join", "/**/user/findId/**", "/**/user/findPassword/**"
+                ,"/refresh"
+                ).permitAll()
                 .antMatchers(
                         "/v2/api-docs/**"
                         , "/swagger.json"
@@ -86,9 +91,7 @@ public class SecurityConfig {
                         , "/swagger-resSources/**"
                         , "/webjars/**"
                 ).permitAll()
-//                .antMatchers("/**/user/**/**").permitAll()
                 // swagger 페이지 접근 허용
-                .antMatchers(  "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll();
                 /**
                  * swagger 테스트 할때는 밑줄을 주석 처리하면 됩니다.
                  */
