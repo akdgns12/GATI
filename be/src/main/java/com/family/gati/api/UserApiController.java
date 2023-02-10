@@ -30,7 +30,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/user")
+@RequestMapping("/user")
 @Api(tags = "User API")
 public class UserApiController {
 
@@ -126,7 +126,7 @@ public class UserApiController {
             resultMap.put("msg", SUCCESS);
             // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
             resultMap.put("accessToken", accessToken);
-            resultMap.put("resfreshToken", refreshToken);
+            resultMap.put("refreshToken", refreshToken);
             resultMap.put("userId", user.getUserId());
             resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;
@@ -315,7 +315,7 @@ public class UserApiController {
     }
 
     @ApiOperation(value = "아이디 찾기", notes = "입력받은 이메일로 아이디 전달")
-    @PostMapping("/id/{email}")
+    @PostMapping("/findId/{email}")
     public ResponseEntity<?> findId(@PathVariable("email") String email){
         logger.debug("email: {}", email);
         Map<String, Object> resultMap = new HashMap<>();
