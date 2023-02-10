@@ -9,12 +9,12 @@ import lombok.Data;
 public class CommentNotiDto {
     
     @ApiModelProperty(value = "댓글 달린 사람(board주인)")
-    private String to;
+    private String receiverId;
 
-    private String boardId;
+    private int boardId;
     
     @ApiModelProperty(value = "댓글 남긴 사람")
-    private String from;
+    private String senderNickname;
 
     private int type;
 }

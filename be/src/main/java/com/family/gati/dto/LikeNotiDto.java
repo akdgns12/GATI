@@ -9,12 +9,12 @@ import lombok.Data;
 public class LikeNotiDto {
 
     @ApiModelProperty(value = "좋아요 받은 사람(board주인)")
-    private String to;
+    private String receiverId;
 
-    private String boardId;
+    private int boardId;
 
     @ApiModelProperty(value = "좋아요 누른 사람")
-    private String from;
+    private String senderNickname;
 
     private int type;
 }

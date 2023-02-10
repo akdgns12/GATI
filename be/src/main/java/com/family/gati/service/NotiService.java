@@ -1,7 +1,6 @@
 package com.family.gati.service;
 
-import com.family.gati.dto.FamilyInviteDto;
-import com.family.gati.dto.NotiDto;
+import com.family.gati.dto.*;
 import com.family.gati.entity.Noti;
 import com.family.gati.repository.NotiRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,24 +30,44 @@ public class NotiService {
     }
 
 
-    // 그룹 초대
-    public void saveFamilyInvite(FamilyInviteDto familyInviteDto){
+    // 그룹 초대 Notifiction에 저장
+    public void saveFamilyInvite(FamilyNotiDto familyNotiDto){
         Noti noti = new Noti();
-        noti.setGroupId(familyInviteDto.getId());
-        noti.setGroupName(familyInviteDto.getName());
-        noti.setType(familyInviteDto.getType());
+        noti.setGroupId(familyNotiDto.getGroupId());
+        noti.setGroupName(familyNotiDto.getGroupName());
+        noti.setNickname(familyNotiDto.getSenderNickname());
+        noti.setUserId(familyNotiDto.getReceiverId());
+        noti.setType(familyNotiDto.getType());
 
         notiRepository.save(noti);
     }
 
-    // 댓글
-    public void saveComment(){
+    // 댓글 Notification에 저장
+    public void saveComment(CommentNotiDto commentNotiDto){
+        Noti noti = new Noti();
 
+        noti.setNickname(commentNotiDto.getReceiverId());
+        noti.setBoardId(commentNotiDto.getBoardId());
+        noti.setNickname(commentNotiDto.getSenderNickname());
+        noti.setType(2);
+
+        notiRepository.save(noti);
     }
 
     // 좋아요
-    
+    public void saveLike(LikeNotiDto likeNotiDto){
+        Noti noti = new Noti();
+
+        noti.setNickname(likeNotiDto.getReceiverId());
+        noti.setBoardId(likeNotiDto.getBoardId());
+        noti.setNickname(likeNotiDto.getSenderNickname());
+        noti.setType(3);
+
+        notiRepository.save(noti);
+    }
+
     // 미션 시작
+//    public void saveMissionStart()
     
     // 미션 완료
 }

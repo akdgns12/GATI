@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -163,21 +164,25 @@ public class FamilyApiController {
 
     @ApiOperation(value = "그룹 초대", notes = "Dto에 그룹 id, 그룹 명, 초대 받는 사람, type 전달받음")
     @PostMapping
-    public ResponseEntity<?> inviteFamily(@RequestHeader String token,
+    public ResponseEntity<?> inviteFamily(HttpServletRequest request,
                                           @RequestBody FamilyInviteDto familyInviteDto){
-        jwtAuthenticationFilter.parseBearerToken(token);
-
+        String token = jwtAuthenticationFilter.parseBearerToken(request);
         User user = jwtTokenProvider.getUser(token);
         String nickName = user.getNickName(); // 보내는 사람
+
         logger.debug("보내는 사람 nickName");
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         FamilyNotiDto familyNotiDto = new FamilyNotiDto();
-        familyNotiDto.set
+        familyNotiDto.setSenderNickname(nickName);
+        familyNotiDto.setReceiverId(familyInviteDto.getReceiverId());
+        familyNotiDto.setGroupName(familyInviteDto.getGroupName());
+        familyNotiDto.setGroupId(familyInviteDto.getGroupId());
+        familyNotiDto.setType(1);
 
         try{
-            notiService.saveFamilyInvite();
+            notiService.saveFamilyInvite(familyNotiDto);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e){

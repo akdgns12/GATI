@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class FamilyInviteDto {
-    private int id;
-    private String name;
+    private int groupId;
+    private String groupName;
     @ApiModelProperty(value = "초대 받는 사람")
-    private String to;
+    private String receiverId;
     private int type;
 }
