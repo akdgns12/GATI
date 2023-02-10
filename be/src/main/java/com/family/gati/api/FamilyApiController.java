@@ -1,11 +1,15 @@
 package com.family.gati.api;
 
+import com.family.gati.dto.FamilyMemberDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
 import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.User;
+import com.family.gati.repository.FamilyRepository;
 import com.family.gati.repository.UserRepository;
+import com.family.gati.security.jwt.JwtAuthenticationFilter;
+import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.service.FamilyMemberService;
 import com.family.gati.service.FamilyService;
 import io.swagger.annotations.Api;
@@ -19,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,19 +44,20 @@ public class FamilyApiController {
     private final FamilyService familyService;
     private final FamilyMemberService familyMemberService;
     private final UserRepository userRepository;
+    private final FamilyRepository familyRepository;
 
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
     @PostMapping("/{userId}")
-    public ResponseEntity<?> Family(@PathVariable("userId") String userId
-            ,@RequestBody FamilySignUpDto familySignUpDto){
+    public ResponseEntity<?> Family(@PathVariable("userId") String userId,
+                                    @RequestBody FamilySignUpDto familySignUpDto){
         logger.debug("familySignUpDto: {}", familySignUpDto);
+        logger.debug("");
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
             familyService.createFamily(userId, familySignUpDto);
-            familyMemberService.createFamilyMember(familySignUpDto);
 
             // 첫 그룹 생성 시, 생성 그룹이 mainFamily가 될 수 있게
             User user = userRepository.findByUserId(userId);
