@@ -25,6 +25,7 @@ const contStyle = css`
 const PostDetail = () => {
   const [loaded, setLoaded] = useState(false);
   const { article } = useSelector((state) => state.board);
+  const { loginUser } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,10 +35,11 @@ const PostDetail = () => {
     // console.log("detail page mounted");
     const reqData = {
       articleId: articleId,
+      userId: loginUser.userId,
     };
     dispatch(loadPostDetail(reqData))
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setLoaded(true);
       })
       .catch((error) => {
@@ -62,8 +64,8 @@ const PostDetail = () => {
         </>
       }
       {
-        article != null && article.comment != null &&
-        article.comment.map((comm, index) => {
+        article != null && article.boardCommentDtos != null &&
+        article.boardCommentDtos.map((comm, index) => {
           return <CommentView key={index} comment={comm} />;
         })
       }

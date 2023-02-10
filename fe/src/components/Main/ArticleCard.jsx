@@ -1,4 +1,4 @@
-import { React } from "react";
+import { useState } from "react";
 import Card from "@mui/material/Card";
 import { Box } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
@@ -12,12 +12,26 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import CardOptionModal from "./CardOptionModal";
+import httpClient from "../../utils/axios";
+import { useEffect } from "react";
 
 export default function ArticleCard(props) {
   const navigate = useNavigate();
+  const { loginUser } = useSelector((state) => state.user);
+  const [open, setOpen] = useState(false);
+  const [likeVar, setLikeVar] = useState(0);
+  const [toggleLike, setToggleLike] = useState(false);
 
   const article = props.article;
   const variant = props.variant == null ? "feed" : props.variant;
+
+  useEffect(() => {
+    if (toggleLike) {
+      setLikeVar(article.userLike === 1 ? -1 : +1);
+    } else setLikeVar(0);
+  }, [toggleLike]);
 
   const mvToDetail = () => {
     // console.log("move to detail page");
@@ -26,13 +40,19 @@ export default function ArticleCard(props) {
   };
 
   function showOptions() {
-    console.log("show options");
-    alert("show options");
+    // console.log("show options");
+    setOpen(true);
   }
 
   function toggleFav() {
-    console.log("add/remove this article to/from favorite");
-    alert("toggle icon effects");
+    // console.log("add/remove this article to/from favorite");
+    httpClient
+      .post(`/boards/likes?boardId=${article.id}&userId=${loginUser.userId}`)
+      .then((data) => {
+        // console.log(data)
+      })
+      .catch((data) => console.log(data));
+    setToggleLike(toggleLike ? false : true);
   }
 
   function addToPhotoBook() {
@@ -50,65 +70,78 @@ export default function ArticleCard(props) {
   }
 
   return (
-    <Card
-      sx={{ borderRadius: 1 }}
-      style={{ marginBottom: "10px", width: "100%" }}
-    >
-      <CardHeader
-        action={
-          <IconButton aria-label="settings" onClick={showOptions}>
-            <MoreHorizIcon />
-          </IconButton>
-        }
-        title={article.userId}
-        titleTypographyProps={{ variant: "body1" }}
-        style={{ textAlign: "left", padding: "10px" }}
-      />
-      {article.img != null ? (
-        <CardMedia
-          component="img"
-          width="100%"
-          image={article.img}
-          alt="No photo"
+    <>
+      <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
+        <CardHeader
+          action={
+            <IconButton
+              aria-label="settings"
+              onClick={showOptions}
+              style={{
+                display: article.userId == loginUser.userId ? "inline-block" : "none",
+              }}
+            >
+              <MoreHorizIcon />
+            </IconButton>
+          }
+          title={article.userId}
+          titleTypographyProps={{ variant: "body1" }}
+          style={{ textAlign: "left", padding: "10px" }}
         />
-      ) : (
-        "no img"
-      )}
+        {article.img != null ? (
+          <CardMedia component="img" width="100%" image={article.img} alt="No photo" />
+        ) : (
+          "no img"
+        )}
 
-      <CardActions disableSpacing={true}>
-        <IconButton aria-label="add to favorites" onClick={toggleFav}>
-          <FavoriteIcon />
-        </IconButton>
-        {article.likes}
-        <Box style={{ marginLeft: "auto" }}>
-          <Typography
-            variant="body4"
-            style={{ fontWeight: "bold", marginRight: "10px" }}
-          >
-            {article.createTime.split("T")[0]}
-          </Typography>
-          {bookmark}
-        </Box>
-      </CardActions>
-
-      <CardContent>
-        <Typography variant="body2" style={{ textAlign: "left" }}>
-          {article.content}
-        </Typography>
-      </CardContent>
-
-      {variant == "feed" ? (
-        <CardActions style={{ height: "30px" }}>
-          <Typography
-            variant="body2"
-            onClick={mvToDetail}
-            style={{ marginLeft: 10, cursor: "pointer" }}
-          >
-            Comment &nbsp;
-            {article.comments > 0 && article.comments}
-          </Typography>
+        <CardActions disableSpacing={true}>
+          <IconButton aria-label="add to favorites" onClick={toggleFav}>
+            <FavoriteIcon
+              style={{
+                color: (article.userLike === 1) ^ toggleLike ? "red" : "grey",
+              }}
+            />
+          </IconButton>
+          {article.likes + likeVar}
+          <Box style={{ marginLeft: "auto" }}>
+            <Typography variant="body4" style={{ fontWeight: "bold", marginRight: "10px" }}>
+              {article.createTime.split("T")[0]}
+            </Typography>
+            {bookmark}
+          </Box>
         </CardActions>
-      ) : null}
-    </Card>
+
+        {
+          (variant == "detail") &&
+          (article.tag != null) &&
+          article.tag.map((tag, index) => {
+            return (
+              <>
+                #{tag.tagContent}&nbsp;
+              </>
+            )
+          })
+        }
+        <CardContent>
+          <Typography variant="body2" style={{ textAlign: "left" }}>
+            {article.content}
+          </Typography>
+        </CardContent>
+
+        {variant == "feed" ? (
+          <CardActions style={{ height: "30px" }}>
+            <Typography
+              variant="body2"
+              onClick={mvToDetail}
+              style={{ marginLeft: 10, cursor: "pointer" }}
+            >
+              Comment &nbsp;
+              {article.comments > 0 && article.comments}
+            </Typography>
+          </CardActions>
+        ) : null}
+      </Card>
+      <CardOptionModal open={open} setOpen={setOpen} articleId={article.id} />
+    </>
   );
 }

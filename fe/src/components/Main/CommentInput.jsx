@@ -1,12 +1,13 @@
-import { React } from 'react';
+import { React } from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import { Box, CardContent, OutlinedInput, IconButton, FormControl } from '@mui/material';
-import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import { Box, CardContent, OutlinedInput, IconButton, FormControl } from "@mui/material";
+import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 
-import httpClient from '../../utils/axios';
-import { useNavigate } from 'react-router';
+import httpClient from "../../utils/axios";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
 const contStyle = css`
   width: 100%;
@@ -14,7 +15,7 @@ const contStyle = css`
   // align-item: center;
   .comment-area {
     width: 80%;
-    height:40px;
+    height: 40px;
     font-size: meduim;
     background-color: #ededed;
   }
@@ -24,36 +25,47 @@ const contStyle = css`
 `;
 
 const CommentInput = (props) => {
+  const { loginUser } = useSelector((state) => state.user);
 
   function writeComment(event) {
     event.preventDefault();
-    console.log("write comment");
-    console.log(props.articleId);
-    console.log(event.target.comment.value);
-    httpClient.post("/boards/comment/", {
-      boardId: props.articleId,
-      content: event.target.comment.value,
-    })
+    // console.log("write comment");
+    // console.log(props.articleId);
+    // console.log(event.target.comment.value);
+    // console.log(loginUser.userId);
+    httpClient
+      .post("/boards/comment/", {
+        boardId: props.articleId,
+        content: event.target.comment.value,
+        userId: loginUser.userId,
+      })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
   }
 
   return (
-    <CardContent component="form" onSubmit={writeComment} css={contStyle}>
-      <Box style={{
-        fontWeight: 'bold', textAlign: 'left', marginBottom: '8px',
-      }}> Comments </Box>
-      <OutlinedInput className='comment-area' placeholder="댓글을 입력하세요." name="comment" />
+    <Box component="form" onSubmit={writeComment} css={contStyle}>
+      <Box
+        style={{
+          fontWeight: "bold",
+          textAlign: "left",
+          marginBottom: "8px",
+        }}
+      >
+        {" "}
+        Comments{" "}
+      </Box>
+      <OutlinedInput className="comment-area" placeholder="댓글을 입력하세요." name="comment" />
 
-      <IconButton type='submit' className='submit-btn'>
-        <ArrowCircleUpIcon color='primary' fontSize='large' />
+      <IconButton type="submit" className="submit-btn">
+        <ArrowCircleUpIcon color="primary" fontSize="large" />
       </IconButton>
-    </CardContent>
+    </Box>
   );
-}
+};
 
 export default CommentInput;
