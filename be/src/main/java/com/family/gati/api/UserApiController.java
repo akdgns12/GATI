@@ -125,8 +125,8 @@ public class UserApiController {
 
             resultMap.put("msg", SUCCESS);
             // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
-            resultMap.put("accessToken: ", accessToken);
-            resultMap.put("resfreshToken: ", refreshToken);
+            resultMap.put("accessToken", accessToken);
+            resultMap.put("resfreshToken", refreshToken);
             resultMap.put("userId", user.getUserId());
             resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;

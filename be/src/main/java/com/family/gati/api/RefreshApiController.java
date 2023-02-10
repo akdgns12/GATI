@@ -26,7 +26,7 @@ public class RefreshApiController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @ApiOperation(value = "refreshToken 전달받음")
-    @PostMapping("/{token}")
+    @PostMapping()
     public ResponseEntity<?> checkRefreshToken(String token){
         logger.debug("Refresh Token: {}", token);
         Map<String, Object> resultMap = new HashMap<>();
@@ -34,7 +34,6 @@ public class RefreshApiController {
 
         try{
             // refreshToken이 들어온다면
-        if(token.contains("refresh")){
             if (jwtTokenProvider.validateRefreshToken(token)) { // refreshToken 유효성 검사 통과하면, accessToken 재발급
                 String userId = jwtTokenProvider.getUserId(token);
                 int userSeq = jwtTokenProvider.getUserSeq(token);
@@ -43,9 +42,9 @@ public class RefreshApiController {
                 resultMap.put("msg", "유효하지 않은 refreshToken 다시 로그인 하세요");
                 status = HttpStatus.UNAUTHORIZED;
             }
-        }
         }catch (Exception e){
-
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
