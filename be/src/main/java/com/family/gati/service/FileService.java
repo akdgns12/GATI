@@ -3,19 +3,13 @@ package com.family.gati.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -36,11 +30,12 @@ public class FileService {
         File file = new File(fileDir);
         if(!file.exists()){
             file.mkdir();
-            file = new File(filePath);
+            Path path = Paths.get(filePath);
+            multipartFile.transferTo(path);
         }else{
-            file = new File(filePath);
+            Path path = Paths.get(filePath);
+            multipartFile.transferTo(path);
         }
-        multipartFile.transferTo(file);
         return filePath;
     }
 
