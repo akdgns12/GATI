@@ -1,6 +1,5 @@
 package com.family.gati.dto;
 
-import com.family.gati.entity.BoardTag;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;

@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Integer> {
-    List<Mission> findByGroupId(Integer groupId);
+    List<Mission> findByGroupIdOrderByAdminMissionIdDesc(Integer groupId);
+    Mission findByGroupIdAndAdminMissionId(Integer groupId, Integer adminMissionId);
 }

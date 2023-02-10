@@ -145,13 +145,7 @@ public class JwtTokenProvider {
             // 클라이언트는 accessToken가지고만 로그인 요청, accessToken 만료시 refreshToken 쏴달라고 go
 //            sendResponse();
             // 클라이언트는 자기가 가지고 있던 refreshToken 보내면 우리는 그 refreshToken이랑 DB에 있는 user의 refreshToken 비교
-
-
-            if (validateRefreshToken(token)) { // refreshToken 유효성 검사 통과하면, accessToken 재발급
-                String userId = getUserId(token);
-                int userSeq = getUserSeq(token);
-                sendAccessToken(createAccessTokenByUserInfo(userId, userSeq));
-            }else return false; // // 만료된 refreshToken 이거나 유저 DB에 저장된 refreshToken과 정보가 다른 경우, login 화면으로 이동하게끔
+            sendRequestForRefreshToken();
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 accessToken 입니다.");
         } catch (IllegalStateException e) {
@@ -160,13 +154,24 @@ public class JwtTokenProvider {
         return false;
     }
 
+    public ResponseEntity<?> sendRequestForRefreshToken(){
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        resultMap.put("msg", "refreshToken 보내세요");
+        status = HttpStatus.BAD_REQUEST;
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
     public ResponseEntity<?> sendAccessToken(String accessToken){
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         log.debug("accessToken 재발급");
         resultMap.put("재발급 accessToken", accessToken);
-        status = HttpStatus.CREATED;
+        resultMap.put("HTTP error Code", "401");
+        status = HttpStatus.UNAUTHORIZED;
         
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
@@ -174,10 +179,8 @@ public class JwtTokenProvider {
     // RefreshToken 유효성 검사
     public Boolean validateRefreshToken(String refreshToken){
         try{
-
             int userSeq = getUserSeq(refreshToken);
             String dbRefreshToken = userRepository.getRefreshTokenByUserSeq(userSeq);
-
             if(!refreshToken.equals(dbRefreshToken)){ // 전달받은 refreshToken과 db에 있는 refreshToken 정보 다르면 유효성 검사 통과 실패
                 return false;
             }

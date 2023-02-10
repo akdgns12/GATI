@@ -16,6 +16,10 @@ public class AdminMissionDto {
     private Integer id;
     @ApiModelProperty(example = "미션의 제목 입니다.")
     private String title;
+    @ApiModelProperty(example = "미션의 내용 입니다.")
+    private String content;
+    @ApiModelProperty(example = "img.img")
+    private String img;
     @ApiModelProperty(example = "2023-02-06 14:31:19")
     private Timestamp createTime;
     @ApiModelProperty(example = "2023-02-06 14:31:19")
@@ -28,6 +32,8 @@ public class AdminMissionDto {
     private AdminMissionDto(AdminMissionDtoBuilder builder) {
         this.id = builder.id;
         this.title = builder.title;
+        this.content = builder.content;
+        this.img = builder.img;
         this.createTime = builder.createTime;
         this.updateTime = builder.updateTime;
         this.startDate = builder.startDate;
@@ -37,6 +43,8 @@ public class AdminMissionDto {
     public static class AdminMissionDtoBuilder implements CommonBuilder<AdminMissionDto> {
         private Integer id;
         private String title;
+        private String content;
+        private String img;
         private Timestamp createTime;
         private Timestamp updateTime;
         private Date startDate;
@@ -45,6 +53,8 @@ public class AdminMissionDto {
         public AdminMissionDtoBuilder(AdminMission adminMission) {
             this.id = adminMission.getId();
             this.title = adminMission.getTitle();
+            this.content = adminMission.getContent();
+            this.img = adminMission.getImg();
             this.createTime = adminMission.getCreateTime();
             this.updateTime = adminMission.getUpdateTime();
             this.startDate = adminMission.getStartDate();

@@ -17,6 +17,10 @@ public class AdminMissionUpdateDto {
     private Integer id;
     @ApiModelProperty(example = "미션의 제목 입니다.")
     private String title;
+    @ApiModelProperty(example = "미션의 내용 입니다.")
+    private String content;
+    @ApiModelProperty(example = "img.img")
+    private String img;
     @ApiModelProperty(example = "2023-02-06")
     private Date startDate;
     @ApiModelProperty(example = "2023-02-12")
