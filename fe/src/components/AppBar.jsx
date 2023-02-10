@@ -21,11 +21,14 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Img from "../static/user img.png";
 import { useState } from 'react';
+import { persistor } from '../index.jsx';
 
 import MyInfo from './SideBar/MyInfo';
 import Family from './SideBar/Family';
 import Logout from './SideBar/Logout';
 import FamilyCreate from './SideBar/FamilyCreate';
+import { useNavigate } from 'react-router';
+import { doLogOut } from '../utils/logOutUtil';
 
 const PrimaryAppBar = () => {
 
@@ -35,7 +38,8 @@ const PrimaryAppBar = () => {
   const [myinfo, setMyinfo] = useState(false)
   const [family, setFamily] = useState(false)
   const [familyinfo, setFamilyinfo] = useState(false)
-  
+  const navigate = useNavigate();
+
 
   const theme = useTheme();
 
@@ -65,30 +69,34 @@ const PrimaryAppBar = () => {
     setFamilyinfo(true)
     setLogout(false)
   }
-  const openLogout = () => {
+  const openLogout = async () => {
     setLogout(true)
     setMyinfo(false)
     setFamily(false)
     setFamilyinfo(false)
+
+    if (window.confirm("LOG OUT ?")) {
+      doLogOut();
+      navigate("/login");
+    }
   }
 
-
   return (
-    <Box  sx={{flexGrow: 1, height:55}}>
-      <AppBar open={open} position="fixed" style={{background: 'rgb(86, 113, 137)'}}>
+    <Box sx={{ flexGrow: 1, height: 55 }}>
+      <AppBar open={open} position="fixed" style={{ background: 'rgb(86, 113, 137)' }}>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Avatar
             sx={{
-            height: 40,
+              height: 40,
             }}
             alt="User img."
             src={Img}
           />
           <Typography
             variant="h4"
-            fontWeight= '1000'
+            fontWeight='1000'
             color='skyblue'
-            >
+          >
             가 티
           </Typography>
           <IconButton
@@ -96,10 +104,10 @@ const PrimaryAppBar = () => {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ m: 0, p: 0 }}
+            // sx={{ m: 0, p: 0 }}
             onClick={handleDrawerOpen}
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-            >
+            sx={{ mr: 2, ...(open && { display: 'none' }), m: 0, p: 0 }}
+          >
             <MenuIcon />
           </IconButton>
         </Toolbar>
@@ -118,19 +126,19 @@ const PrimaryAppBar = () => {
           open={open}
         >
           <Container>
-            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-              <IconButton onClick={handleDrawerClose} sx={{fontSize: 'large'}}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <IconButton onClick={handleDrawerClose} sx={{ fontSize: 'large' }}>
                 {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
               </IconButton>
-              <HomeOutlinedIcon fontSize='large' sx={{p: 2}}/>
+              <HomeOutlinedIcon fontSize='large' sx={{ p: 2 }} />
             </Box>
-            <Typography variant='h5' sx={{p: 2}}>
+            <Typography variant='h5' sx={{ p: 2 }}>
               username 님 안녕하세요
             </Typography>
           </Container>
           <Divider />
           <Container>
-            <Box display='flex' spacing={1} justifyContent='space-between' sx={{p: 1}}>
+            <Box display='flex' spacing={1} justifyContent='space-between' sx={{ p: 1 }}>
               <Button onClick={openMyinfo} variant='outlined'>내 정보</Button>
               <Button onClick={openFamily} variant='outlined'>가족 그룹</Button>
               <Button onClick={openFamilyinfo} variant='outlined'>가족 등록</Button>
@@ -138,11 +146,11 @@ const PrimaryAppBar = () => {
             </Box>
           </Container>
           <Divider />
-          <Container sx={{height: '70%'}}>
-            {myinfo && <MyInfo/>}
-            {family && <Family/>}
-            {familyinfo && <FamilyCreate/>}
-            {logout && <Logout/>}
+          <Container sx={{ height: '70%' }}>
+            {myinfo && <MyInfo />}
+            {family && <Family />}
+            {familyinfo && <FamilyCreate />}
+            {logout && <Logout />}
           </Container>
           <Divider />
         </Drawer>
