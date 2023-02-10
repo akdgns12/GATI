@@ -135,7 +135,6 @@ public class JwtTokenProvider {
 
     // 토큰 유효성, 만료시간 검사
     public Boolean validateToken(String token) {
-
         try {
             log.debug("유효성 검사 시작");
             Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);
