@@ -70,7 +70,12 @@ public class AlbumServiceImpl implements AlbumService{
             albumTag.setAlbum(album);
             album.putTag(albumTag);
         }
-        return new AlbumDto.AlbumDtoBuilder(albumRepository.save(album)).build();
+        AlbumDto resultDto = new AlbumDto.AlbumDtoBuilder(albumRepository.save(album)).build();
+        AlbumLikes albumLikes = albumLikesRepository.findByAlbumIdAndUserId(album.getId(), album.getUserId());
+        if (albumLikes == null) {
+            resultDto.setUserLike(0);
+        }
+        return resultDto;
     }
 
     @Override
