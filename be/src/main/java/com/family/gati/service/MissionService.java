@@ -14,5 +14,5 @@ public interface MissionService {
     MissionDto findById(Integer id);
     MissionDto findMissionThisWeek(Integer groupId);
     MissionDto setMissionMemNumber(MissionRegistDto missionRegistDto);
-    MissionDto completeMission(MissionCompleteDto missionCompleteDto);
+    MissionDto completeMission(Integer id, String path);
 }

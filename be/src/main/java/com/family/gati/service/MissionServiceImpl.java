@@ -6,6 +6,7 @@ import com.family.gati.dto.MissionRegistDto;
 import com.family.gati.entity.AdminMission;
 import com.family.gati.entity.Mission;
 import com.family.gati.repository.AdminMissionRepository;
+import com.family.gati.repository.FamilyRepository;
 import com.family.gati.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +23,7 @@ public class MissionServiceImpl implements MissionService{
     private final MissionRepository missionRepository;
     private final AdminMissionRepository adminMissionRepository;
     private final MissionImageService missionImageService;
+    private final FamilyRepository familyRepository;
     @Override
     public List<MissionDto> findByGroupId(Integer groupId) {
         List<Mission> missions = missionRepository.findByGroupIdOrderByAdminMissionIdDesc(groupId);
@@ -59,7 +61,9 @@ public class MissionServiceImpl implements MissionService{
         AdminMission adminMission = adminMissionRepository.findByStartDateIsLessThanEqualAndEndDateGreaterThanEqual(date, date);
         Mission mission = missionRepository.findByGroupIdAndAdminMissionId(groupId, adminMission.getId());
         if (mission == null) {
-            return new MissionDto.MissionDtoBuilder(missionRepository.save(new Mission(adminMission, groupId))).build();
+            MissionDto missionDto = new MissionDto.MissionDtoBuilder(missionRepository.save(new Mission(adminMission, groupId))).build();
+            missionDto.setMemNumber(familyRepository.findById(groupId).getFamilyTotal());
+            return missionDto;
         }
         MissionDto missionDto = new MissionDto.MissionDtoBuilder(mission).build();
         if (mission.getCompleted() == 1) {
@@ -80,12 +84,12 @@ public class MissionServiceImpl implements MissionService{
     }
 
     @Override
-    public MissionDto completeMission(MissionCompleteDto missionCompleteDto) {
-        Mission mission = missionRepository.findById(missionCompleteDto.getId()).get();
+    public MissionDto completeMission(Integer id, String path) {
+        Mission mission = missionRepository.findById(id).get();
         if (mission.getCompleted() != 1) {
             return new MissionDto.MissionDtoBuilder(mission).build();
         }
-        mission.setImg(missionCompleteDto.getImg());
+        mission.setImg(path);
         mission.setCompleted(2);
         return new MissionDto.MissionDtoBuilder(missionRepository.save(mission)).build();
     }
