@@ -1,34 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Paper, Box, Typography, Stack, IconButton, Button, TextField } from "@mui/material";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-
-// 이미지 업로드 filepond  라이브러리
-import { FilePond, registerPlugin } from 'react-filepond';
-import 'filepond/dist/filepond.min.css';
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import ShowPics from "./ShowPics";
 import UploadPic from "./UploadPic";
+import CombineImgs from "./CombineImgs";
 
-// Register the plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
-
-
-// 업로드된 이미지를 담는 Box
-const BoxStyle = {
-  display:'flex',
-  justifyContent:'center',
-  alignItems:'center',
-  width:'65px',
-  height:'65px',
-  border:'2px dashed #8888',
-  borderRadius:'16px',
-  margin:3,
-}
 
 export default function OnMission() {
   const dispatch = useDispatch()
@@ -47,12 +27,19 @@ export default function OnMission() {
   }
   
   // content Area : 업로드된 사진들이 놓여지는 공간
-  let [pic,setPic] = React.useState('')
   let content = []
-  for(let i=0; i< getMission.memNumber; i++){
-    content.push(<Box style={BoxStyle} key={i} ></Box>)
+  getMission.missionImageDtos.map((dto,index) => content.push(<ShowPics key={index+15} dto={dto} />))
+  let blankBox = getMission.memNumber - getMission.missionImageDtos.length
+  for (let i=0; i<blankBox; i++) {
+    content.push(<ShowPics key={i}/>)
   }
-    
+
+  // 사진을 모두 업로드하면 미션 완료 버튼 활성화
+  let btnDisabled = true
+  if (getMission.missionImageDtos.length === getMission.memNumber) {
+    btnDisabled = false
+  }
+
   return (
     <Box>
       {/* 미션 설명하는 부분 */}
@@ -77,13 +64,10 @@ export default function OnMission() {
           display:'flex',
           justifyContent:'center',
           flexWrap:'wrap',
-          margin:'20px 0 20px 0',
+          margin:'20px 0 70px 0',
         }}>
         {content}
       </Box>
-
-      {/* 이미지 업로드 form */}
-      {/* <FilePond files={files} onupdatefiles={setFiles} allowMultiple={true} maxFiles={1} name='files' server='./' /> */}
 
       {/* 사진과 함께 description 넣을지 말지 고민
       <Box
@@ -110,12 +94,15 @@ export default function OnMission() {
           display:'flex',
           flexDirection:'column',
           alignItems:'center',
+          marginTop:'20px'
         }}>
         <UploadPic />
-        <Button margin='30px' size="medium" variant="contained" disableElevation>
+        <Button disabled={btnDisabled} margin='30px' size="medium" variant="contained" disableElevation>
           <Link to="/pictg/missionCompleted" style={{ textDecoration: 'none', color:'white' }}>미션 완료</Link>
         </Button>
       </Box>
+
+      <CombineImgs/>
     </Box>
   )
 };

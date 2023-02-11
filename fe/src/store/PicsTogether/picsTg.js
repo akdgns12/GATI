@@ -1,7 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import DinnerImg from "../../static/PicsTgExampleDinner.png";
 import httpClient from "../../utils/axios";
 
 // 비동기 actions
@@ -10,7 +7,7 @@ export const asyncGetMission = createAsyncThunk(
   async (groupId) => {
     const resp = await httpClient.get("/missions/" + groupId)
     // const resp = await axios.get('https://i8a805.p.ssafy.io/api/missions/' + groupId)
-    console.log('resp',resp)
+    console.log('GetMission/Resp',resp)
     const data = await resp.data
     // console.log('data', data)
     return data;
@@ -20,7 +17,7 @@ export const asyncPutMission = createAsyncThunk(
   'picsTgSlice/asyncPutMission',
   async (reqData) => {
     const resp = await httpClient.put("/missions/setMemNumber/", reqData)
-    console.log('resp',resp)
+    console.log('asyncPutMission/Resp',resp)
     const data = await resp.data
     // console.log('data', data)
     return data;
@@ -28,11 +25,27 @@ export const asyncPutMission = createAsyncThunk(
 )
 export const asyncPostImg = createAsyncThunk(
   'picsTgSlice/asyncPostImg',
-  async (reqData) => {
-    const resp = await httpClient.post("/missions/image/", reqData)
-      .then(res => console.log(res.data))
-      .catch(err => console.log(err))
-    console.log('resp',resp)
+  async (formData) => {
+    const resp = await httpClient.post(
+      "/missions/image/",
+      formData,
+      { headers: {
+          // "Authorization": "YOUR_API_AUTHORIZATION_KEY_SHOULD_GOES_HERE_IF_HAVE",
+          "Content-type": "multipart/form-data",
+        },
+      }
+    )
+    console.log('asyncPostImg/Resp',resp)
+    const data = await resp.data
+    console.log('data', data)
+    return data;
+  }
+)
+export const asyncDeleteImg = createAsyncThunk(
+  'picsTgSlice/asyncDeleteImg',
+  async (id) => {
+    const resp = await httpClient.delete("/missions/image/" + id)
+    console.log('asyncDeleteImg/Resp',resp)
     const data = await resp.data
     // console.log('data', data)
     return data;
@@ -45,7 +58,7 @@ export const picsTgSlice = createSlice({
   initialState:{
     mode:'inprogress',
     status:null,
-    getMission:{completed:0,},
+    getMission:{completed:0}
   },
   reducers:{
     changeMode:(state, action) =>{
@@ -92,8 +105,24 @@ export const picsTgSlice = createSlice({
     builder.addCase(asyncPostImg.fulfilled, (state,action)=>{
       // console.log('fulfilled')
       state.status = '로딩완료'
+      state.getMission = action.payload
+      // window.location.reload()
     })
     builder.addCase(asyncPostImg.rejected, (state,action)=>{
+      // console.log('rejected')
+      alert('에러가 발생했습니다.')
+    })
+    builder.addCase(asyncDeleteImg.pending, (state,action)=>{
+      // console.log('pending')
+      state.status = "로딩중"
+    })
+    builder.addCase(asyncDeleteImg.fulfilled, (state,action)=>{
+      // console.log('fulfilled')
+      state.status = '로딩완료'
+      state.getMission = action.payload
+      // window.location.reload()
+    })
+    builder.addCase(asyncDeleteImg.rejected, (state,action)=>{
       // console.log('rejected')
       alert('에러가 발생했습니다.')
     })
