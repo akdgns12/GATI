@@ -1,60 +1,75 @@
-// redux ducks
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import httpClient from "../../utils/axios";
 
-// action types
-const RELOAD = "photoBoard/RELOAD";
-const LOAD_MORE = "photoBoard/LOAD_MORE";
+// actions
+export const loadPhotoBook = createAsyncThunk(
+  "album/loadPhotoBook",
+  async (reqData, { rejectWithValue }) => {
+    // console.log(reqData);
+    try {
+      const response = await httpClient.get("/albums/page", {
+        params: reqData,
+      });
+      // console.log(response.data)
+      return response.data;
+      
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
 
-// action creators
-export const reload = () => ({ type: RELOAD });
-export const loadMore = () => ({ type: LOAD_MORE });
+export const loadPhotoDetail = createAsyncThunk(
+  "album/loadPhotoDetail",
+  async (reqData, { rejectWithValue }) => {
+    try {
+      // console.log(reqData);
+      const response = await httpClient.get(
+        "/albums/album/" + reqData.photoId,
+        { params: { userId: reqData.userId } }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
 
 // initial state
-const initialState = {
-  photoCards: [
-    {
-      postId:1,
-      userId: "gina",
-      content: "어쩌구저쩌구",
-      tag: "# 전주",
-      img: "https://picsum.photos/400/300",
-      like: 3,
-      createTime: "23.01.27",
-      comment: 2,
-      comments: [
-        { userId: "akdgns12", comment: "ㅋ" },
-        { userId: "gkagu12", comment: "ㅋㅋ" },
-        { userId: "podif", comment: "호엥" },
-      ],
-    },
-    {
-      postId:2,
-      userId: "tina",
-      content: "블라블라",
-      tag: "# 서울",
-      img: "https://picsum.photos/400/300",
-      like: 3,
-      createTime: "23.01.27",
-      comment: 2,
-      comments: [
-        { userId: "akdgns12", comment: "ㅋ" },
-        { userId: "gkagu12", comment: "ㅋㅋ" },
-        { userId: "podif", comment: "호엥" },
-      ],
-    },
-  ]
-}
-// reducer
-export default function photoBoard(state = initialState, action) {
-  switch (action.type) {
-    case RELOAD:
-      return {
-        ...state,
-      };
-    case LOAD_MORE:
-      return {
-        ...state,
-      };
-    default:
-      return state;
+const initialState = {};
+
+// slice
+const albumSlice = createSlice({
+  name: 'album',
+  initialState,
+  reducers: {
+
+  },
+  extraReducers: (builder) => {
+    builder.addCase(loadPhotoBook.pending, (state) => {
+      
+    })
+    builder.addCase(loadPhotoBook.fulfilled, (state, action) => {
+      state.photoInfo = action.payload
+    })
+    builder.addCase(loadPhotoBook.rejected, (state) => {
+      console.log(state)
+    });
+
+    builder.addCase(loadPhotoDetail.pending, (state) => {
+      
+    })
+    builder.addCase(loadPhotoDetail.fulfilled, (state, action) => {
+      state.photoDetail = action.payload
+    })
+    builder.addCase(loadPhotoDetail.rejected, (state) => {
+      console.log(state)
+    });
+
   }
-}
+})
+
+export default albumSlice.reducer;
