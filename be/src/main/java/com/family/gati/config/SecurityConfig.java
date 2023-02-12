@@ -95,7 +95,7 @@ public class SecurityConfig {
                 /**
                  * swagger 테스트 할때는 밑줄을 주석 처리하면 됩니다.
                  */
-                .anyRequest().authenticated(); // 다른 경로는 인증필요
+//                .anyRequest().authenticated(); // 다른 경로는 인증필요
 
         return http.build();
     }
