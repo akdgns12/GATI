@@ -2,7 +2,7 @@ import {Box, IconButton} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { asyncDeleteImg, asyncPostImg } from '../../../store/PicsTogether/picsTg';
+import { asyncDeleteImg, asyncPostImg } from '../../../../store/PicsTogether/picsTg';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 export default function UploadPic() {
@@ -39,7 +39,7 @@ export default function UploadPic() {
       // console.log('file',file)
       // console.log('DataUrl',reader.result)
       const formData = new FormData()
-      formData.append('img', file)
+      formData.append('img', file, 'image.jpg')
       formData.append('missionId', missionId)
       formData.append('userId', userId)
       dispatch(asyncPostImg(formData))
@@ -47,7 +47,7 @@ export default function UploadPic() {
   };
 
   // myUpload : 내가 올린 사진 정보
-  const uploadedImgList = getMission.missionImageDtos
+  const uploadedImgList = getMission.missionImageDtos ? getMission.missionImageDtos : []
   const myUpload = uploadedImgList.filter(obj => obj.userId === userId)
   console.log('myUpload',myUpload)
   

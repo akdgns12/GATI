@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Paper, Box, Typography, Stack, IconButton, Button, TextField } from "@mui/material";
@@ -7,12 +7,11 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ShowPics from "./ShowPics";
 import UploadPic from "./UploadPic";
-import CombineImgs from "./CombineImgs";
+import { asyncPostMission } from "../../../../store/PicsTogether/picsTg";
+import CombinedImg from "./CombinedImg";
 
 
 export default function OnMission() {
-  const dispatch = useDispatch()
-
   // getMission 데이터 가져오기
   const getMission = useSelector(state=>{return state.picsTg.getMission})
   
@@ -28,18 +27,32 @@ export default function OnMission() {
   
   // content Area : 업로드된 사진들이 놓여지는 공간
   let content = []
-  getMission.missionImageDtos.map((dto,index) => content.push(<ShowPics key={index+15} dto={dto} />))
-  let blankBox = getMission.memNumber - getMission.missionImageDtos.length
+  let blankBox = 0
+
+  if (getMission) {
+    if (getMission.missionImageDtos) {
+      getMission.missionImageDtos.map((dto, index) => content.push(<ShowPics key={index + 15} dto={dto} />));
+      blankBox = getMission.memNumber - getMission.missionImageDtos.length;
+    } else {
+      blankBox = getMission.memNumber;
+    }
+  }
+
   for (let i=0; i<blankBox; i++) {
     content.push(<ShowPics key={i}/>)
   }
 
   // 사진을 모두 업로드하면 미션 완료 버튼 활성화
   let btnDisabled = true
-  if (getMission.missionImageDtos.length === getMission.memNumber) {
+  if (getMission.missionImageDtos && getMission.missionImageDtos.length === getMission.memNumber) {
     btnDisabled = false
   }
 
+  // 미션 완료 버튼 누르면 유저가 업로드한 이미지들 합쳐주는 컴포넌트 실행
+  const navigate = useNavigate()
+  const missionComplete = () => {
+    navigate('/pictg/congrats')
+  }
   return (
     <Box>
       {/* 미션 설명하는 부분 */}
@@ -97,12 +110,16 @@ export default function OnMission() {
           marginTop:'20px'
         }}>
         <UploadPic />
-        <Button disabled={btnDisabled} margin='30px' size="medium" variant="contained" disableElevation>
-          <Link to="/pictg/missionCompleted" style={{ textDecoration: 'none', color:'white' }}>미션 완료</Link>
+        <Button
+          disabled={btnDisabled}
+          margin='30px'
+          size="medium"
+          variant="contained"
+          onClick={missionComplete}
+          disableElevation>
+            미션 완료
         </Button>
       </Box>
-
-      <CombineImgs/>
     </Box>
   )
 };

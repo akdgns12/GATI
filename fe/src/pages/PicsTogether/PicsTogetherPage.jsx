@@ -1,13 +1,15 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import PictureTogether from '../../components/PicsTogether/PictureTogether';
-import MissionCompleted from '../../components/PicsTogether/Completed/MissionCompleted';
+import PicsMainPage from './PicsMainPage';
+import CongratsPage from './CongratsPage';
+import MissionDetailPage from './MissionDetailPage';
 
 const PicsTogetherPage = (props) => {
   return (
     <Routes>
-      <Route path='/' element={<PictureTogether />} />
-      <Route path='/missionCompleted' element={<MissionCompleted />} />
+      <Route path='/' element={<PicsMainPage />} />
+      <Route path='/congrats' element={<CongratsPage />} />
+      <Route path='/detail/:id' element={<MissionDetailPage />} />
     </Routes>
   );
 };

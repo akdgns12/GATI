@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {ToggleButtonGroup, ToggleButton, Box } from '@mui/material';
-import InProgressDefault from './Inprogress/InProgressDefault';
-import OnMission from './OnMission/OnMission';
-import Completed from './Completed/Completed';
+import InProgressDefault from '../../components/PicsTogether/Inprogress/OpenMission/InProgressDefault';
+import OnMission from '../../components/PicsTogether/Inprogress/OnMission/OnMission';
+import Completed from '../../components/PicsTogether/Completed/Completed';
 import { useDispatch, useSelector } from 'react-redux';
 import { asyncGetMission, changeMode } from '../../store/PicsTogether/picsTg';
+import MissionCompleted from '../../components/PicsTogether/Inprogress/MissionComplete/MissionCompleted';
 
 
-export default function PictureTogether() {
+export default function PicsMainPage() {
   const dispatch = useDispatch();
-  const groupId = 2;
+  const groupId = 1;
   React.useEffect(()=>{
     dispatch(asyncGetMission(groupId))
   },[])
@@ -37,9 +38,12 @@ export default function PictureTogether() {
     content = <InProgressDefault />
   } else if (mode === 'inprogress' && missionStatus === 1) {
     content = <OnMission />
+  } else if (mode === 'inprogress' && missionStatus === 2) {
+    content = <MissionCompleted />
   } else {
     content = <Completed />
   }
+
 
   return (
     <Box

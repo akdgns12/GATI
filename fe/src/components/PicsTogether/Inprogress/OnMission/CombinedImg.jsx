@@ -1,9 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { asyncPostMission } from '../../../../store/PicsTogether/picsTg';
 
-const CombineImgs = () => {
+const CombinedImg = () => {
+  console.log('combinedImg 실행')
+  const dispatch = useDispatch();
+  
+  const id = useSelector(state => {return state.picsTg.getMission}).id
   const imgList = useSelector(state=>{return state.picsTg.getMission}).missionImageDtos
-  console.log(imgList)
+
   const canvasRef = useRef(null);
   const [images, setImages] = useState([]);
 
@@ -13,6 +18,8 @@ const CombineImgs = () => {
       imagePromises.push(
         new Promise((resolve) => {
           const image = new Image();
+          // This will allow the image to be exported without any CORS restrictions:
+          image.crossOrigin = 'anonymous'
           image.src = obj.img;
           image.onload = () => {
             resolve(image);
@@ -46,18 +53,29 @@ const CombineImgs = () => {
       }
       ctx.drawImage(image, xPos, yPos, imageWidth, imageHeight);
     });
+
+    // 대안) canvas 데이터 url 형식으로 받는 방법
+    // 주의) The canvasRef.current will only have a value after the canvas element has been rendered, which occurs after the component has been mounted.
+    // const dataURL = canvasRef.current.toDataURL('image/jpeg');
+    // console.log('dataURL',dataURL)
+    
+    // 합쳐진 이미지 파일 formData 형식으로 미션 완료 axios 보내기
+    canvasRef.current.toBlob((blob) => {
+      const formData = new FormData();
+      formData.append('id', id);
+      formData.append('img', blob, 'combined-image.jpg');
+      dispatch(asyncPostMission(formData))
+    })
   }, [images]);
-
-
-  // const dataURL = canvasRef.current.toDataURL('image/jpeg');
-  // console.log('dataURL',dataURL)
-
+  
 
   return (
-    <>
-      <canvas style={{ backgroundColor: '#F5F5F5', borderRadius:'16px' }} ref={canvasRef} width={300} height={300} />
-    </>
+    <canvas
+      style={{ backgroundColor: '#F5F5F5', borderRadius:'16px' }} ref={canvasRef}
+      width="100%"
+      height="100%"
+    />
   );
 };
 
-export default CombineImgs;
+export default CombinedImg;
