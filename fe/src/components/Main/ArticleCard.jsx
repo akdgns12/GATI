@@ -17,6 +17,8 @@ import CardOptionModal from "./CardOptionModal";
 import httpClient from "../../utils/axios";
 import { useEffect } from "react";
 
+import noImgPath from "../../static/no_img_icon.png";
+
 export default function ArticleCard(props) {
   const navigate = useNavigate();
   const { loginUser } = useSelector((state) => state.user);
@@ -89,7 +91,15 @@ export default function ArticleCard(props) {
           style={{ textAlign: "left", padding: "10px" }}
         />
         {article.img != null ? (
-          <CardMedia component="img" width="100%" image={article.img} alt="No photo" />
+          <CardMedia
+            component="img"
+            width="100%"
+            image={article.img}
+            alt="NO IMAGE"
+            onError={(e) => {
+              e.target.src = noImgPath;
+            }}
+          />
         ) : (
           "no img"
         )}
@@ -111,17 +121,11 @@ export default function ArticleCard(props) {
           </Box>
         </CardActions>
 
-        {
-          (variant == "detail") &&
-          (article.tag != null) &&
+        {variant == "detail" &&
+          article.tag != null &&
           article.tag.map((tag, index) => {
-            return (
-              <>
-                #{tag.tagContent}&nbsp;
-              </>
-            )
-          })
-        }
+            return <>#{tag.tagContent}&nbsp;</>;
+          })}
         <CardContent>
           <Typography variant="body2" style={{ textAlign: "left" }}>
             {article.content}
