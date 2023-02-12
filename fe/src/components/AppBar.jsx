@@ -30,6 +30,7 @@ import FamilyCreate from "./SideBar/FamilyCreate";
 import { useNavigate } from "react-router";
 import { doLogOut } from "../utils/logOutUtil";
 import CreateFamilyModal from "./SideBar/CreateFamilyModal";
+import { useSelector } from "react-redux";
 
 const PrimaryAppBar = () => {
   const drawerWidth = "80%";
@@ -39,6 +40,8 @@ const PrimaryAppBar = () => {
   const [family, setFamily] = useState(false);
   const [familyinfo, setFamilyinfo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const { mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const theme = useTheme();
@@ -82,30 +85,41 @@ const PrimaryAppBar = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, height: 55 }}>
-      <AppBar open={open} position="fixed" style={{ background: "rgb(86, 113, 137)" }}>
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Avatar
-            sx={{
-              height: 40,
-            }}
-            alt="User img."
-            src={Img}
-          />
-          <Typography variant="h4" fontWeight="1000" color="skyblue">
-            가 티
-          </Typography>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            // sx={{ m: 0, p: 0 }}
-            onClick={handleDrawerOpen}
-            sx={{ mr: 2, ...(open && { display: "none" }), m: 0, p: 0 }}
-          >
-            <MenuIcon />
-          </IconButton>
+    <Box sx={{ flexGrow: 1, height: "100px" }}>
+      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
+        <Toolbar sx={{ justifyContent: "space-between", height: "70px" }}>
+          <Box>
+            <Avatar
+              sx={{
+                width: 50,
+                height: 50,
+              }}
+              alt="User img."
+              src={Img}
+              style={{ display: "inline-block" }}
+            />
+            <Typography
+              variant="h5"
+              fontWeight="1000"
+              color="rgb(32,32,32)"
+              style={{ display: "inline-block" }}
+            >
+              {mainGroup.name}
+            </Typography>
+          </Box>
+          <Box>
+            <IconButton
+              size="large"
+              edge="start"
+              color="rgb(0,0,0,0.75)"
+              aria-label="open drawer"
+              // sx={{ m: 0, p: 0 }}
+              onClick={handleDrawerOpen}
+              sx={{ mr: 2, ...(open && { display: "none" }), m: 0, p: 0 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Box open={open}>
@@ -156,7 +170,7 @@ const PrimaryAppBar = () => {
             {familyinfo && <FamilyCreate setOpen={setModalOpen} />}
             {logout && <Logout />}
           </Container>
-          <Divider />
+          {/* <Divider /> */}
         </Drawer>
       </Box>
       <CreateFamilyModal open={modalOpen} setOpen={setModalOpen} />
