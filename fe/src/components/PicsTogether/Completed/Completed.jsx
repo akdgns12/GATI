@@ -4,66 +4,57 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import PicsTgExampleDinner from '../../../static/PicsTgExampleDinner.png'
 import PicsTgExampleSky from '../../../static/PicsTgExampleSky.png'
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import { useDispatch, useSelector } from 'react-redux';
+import { asynGetMissionList } from '../../../store/PicsTogether/picsTg';
+import { useNavigate } from 'react-router';
 
-// AXIOS 연결 전 테스트용
-const MissionImgs = [
-  {
-    title:'오늘 저녁은 무엇인가요?',
-    img : PicsTgExampleSky
-  },
-  {
-    title:'오늘 하늘은 어땠나요?',
-    img : PicsTgExampleDinner
-  },
-  {
-    title:'짱구',
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjplK5Iw7kiaLK5XX1g5VJwc3W8m92UjVRgw&usqp=CAU",
-  },
-  {
-    title:'짱구2',
-    img: "https://media.bunjang.co.kr/product/188410848_1_1653044293_w360.jpg",
-  },
-  {
-    title:'짱구3',
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFqRXeZ9Fqf0LJOyjSISoJkVXG26pxpRTji6ANAQ98iYYsJavoIgRu8xjMqSKfFBf1U9Y&usqp=CAU",
-  },
-]
-
-const contStyle = css`
-  width: 500 ;
-  height: 450 ;
-  '-ms-overflow-style': 'none';
-  'scrollbar-width': 'none';
-  '&::-webkit-scrollbar': {display: 'none'} ;
-`;
 
 export default function Completed() {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const groupId = 1
+
+  // MissionList 데이터 가져오기
+  React.useEffect(()=>{
+    dispatch(asynGetMissionList(groupId))
+  },[])
+  
+  let getMissionList = useSelector(state=>{return state.picsTg.getMissionList})
+
   return (
     <Box
       sx={{
         display:'flex',
+        flexDirection:'column',
         flexWrap:'wrap',
-        height:'100vh'
       }}>
-      <ImageList css={contStyle} >
-        {MissionImgs.map((item) => (
-          <ImageListItem key={item.img}>
-            <img
-              src={`${item.img}?w=248&fit=crop&auto=format`}
-              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.title}
-              loading="로딩중.."
-            />
-            <ImageListItemBar
-              title={item.title}
-              subtitle={item.author}
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
+      {getMissionList ? 
+        <ImageList cols={3} rowHeight={164}>
+          {getMissionList.map((item) => (
+            <ImageListItem
+              style={{ overflow: 'hidden', display: 'flex', width: '100%', }}
+              key={item.img}
+            >
+              <Box onClick={()=>navigate('/pictg/detail/'+ item.id)}>
+                <img
+                  style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                  src={item.img}
+                  srcSet={item.img}
+                  alt={item.title}
+                  loading="loading..."
+                />
+                <ImageListItemBar
+                  title={item.title}
+                  subtitle='2023.02.13'
+                />
+              </Box>
+            </ImageListItem>
+          ))}
+        </ImageList>
+      : <Typography>아직 완료한 미션이 없습니다.</Typography> }
     </Box>
   );
 }

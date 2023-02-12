@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Box, Typography, Modal, Button, InputLabel, MenuItem, FormControl, Select} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
-import { asyncPutMission } from '../../../store/PicsTogether/picsTg';
+import { asyncPutMission } from '../../../../store/PicsTogether/picsTg';
 
 const style = {
   display:'flex',

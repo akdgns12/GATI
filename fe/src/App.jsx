@@ -22,6 +22,8 @@ import httpClient from "./utils/axios";
 import refreshClient from "./utils/refreshClient";
 import { doLogOut } from "./utils/logOutUtil";
 
+import './App.css'
+
 const App = () => {
   const location = useLocation();
   const { loginUser, logIn } = useSelector((state) => state.user);
