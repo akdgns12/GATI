@@ -26,21 +26,18 @@ const contStyle = css`
 
 const CommentInput = (props) => {
   const { loginUser } = useSelector((state) => state.user);
-
-  function writeComment(event) {
-    // event.preventDefault();
-    // console.log("write comment");
-    // console.log(props.articleId);
-    // console.log(event.target.comment.value);
-    // console.log(loginUser.userId);
+  const albumId = props.photoId
+  function writeComment2(event) {
+    
     httpClient
-      .post("/boards/comment/", {
-        boardId: props.articleId,
+      .post("/albums/comment", {
+        albumId: albumId,
         content: event.target.comment.value,
-        userId: loginUser.userId,
+        // userId: loginUser.userId,
+        userId: 'userid'
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
       })
       .catch((error) => {
         console.log(error);
@@ -48,7 +45,7 @@ const CommentInput = (props) => {
   }
 
   return (
-    <Box component="form" onSubmit={writeComment} css={contStyle}>
+    <Box component="form" onSubmit={writeComment2} css={contStyle}>
       <Box
         style={{
           fontWeight: "bold",
