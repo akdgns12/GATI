@@ -85,6 +85,13 @@ public class UserApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+    @Data
+    public static class LoginResponseDto{
+        private String userId;
+        private Role role;
+        private String nickName;
+    }
+
     /**
      * 로그인 JWT 발급
      * @param {userId, password}
@@ -120,12 +127,15 @@ public class UserApiController {
             String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
             userRepository.updateRefreshToken(userSeq, refreshToken);
 
+            LoginResponseDto loginResponseDto = new LoginResponseDto();
+            loginResponseDto.setUserId(userId);
+            loginResponseDto.setRole(user.getRole());
+            loginResponseDto.setNickName(user.getNickName());
             resultMap.put("msg", SUCCESS);
             // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
             resultMap.put("accessToken", accessToken);
             resultMap.put("refreshToken", refreshToken);
-            resultMap.put("userId", user.getUserId());
-            resultMap.put("role", user.getRole());
+            resultMap.put("user Info", loginResponseDto);
             resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;
         }catch (Exception e){
