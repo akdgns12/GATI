@@ -357,16 +357,23 @@ public class UserApiController {
     @ApiOperation(value = "비밀번호 변경")
     @PutMapping("/account/password")
     public ResponseEntity<?> changePassword(@RequestBody changePasswordRequest request){
-        // front에서 비밀번호 변경할때도 입력 form에 대해 규칙성 검사해주면 bindingresult 검사는 굳이?
         logger.debug("token: {}", request);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
             User user = userRepository.findByUserId(request.getUserId());
-            userService.changePassword(user, request.getChangePassword());
-            resultMap.put("msg", SUCCESS);
-            status = HttpStatus.ACCEPTED;
+            // 입력받은 비밀번호가 user 비밀번호와 일치할시 변경
+            if(passwordEncoder.matches(request.password, user.getPassword())) { 
+                userService.changePassword(user, request.getChangePassword());
+                resultMap.put("msg", SUCCESS);
+                status = HttpStatus.ACCEPTED;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }else{
+                resultMap.put("msg", "비밀번호 틀림");
+                status = HttpStatus.UNAUTHORIZED;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
         }catch (Exception e){
             log.debug("비밀번호 변경 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
