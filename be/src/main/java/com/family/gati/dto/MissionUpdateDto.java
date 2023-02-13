@@ -13,8 +13,6 @@ import lombok.Setter;
 public class MissionUpdateDto {
     @ApiModelProperty(example = "1")
     private Integer id;
-    @ApiModelProperty(example = "img.img")
-    private String img;
     @ApiModelProperty(example = "4")
     private Integer memNumber;
     @ApiModelProperty(example = "1")

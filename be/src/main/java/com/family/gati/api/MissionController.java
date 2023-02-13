@@ -1,10 +1,12 @@
 package com.family.gati.api;
 
 import com.family.gati.dto.*;
+import com.family.gati.service.FileService;
 import com.family.gati.service.MissionImageService;
 import com.family.gati.service.MissionService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,7 @@ import java.util.List;
 public class MissionController {
     private final MissionService missionService;
     private final MissionImageService missionImageService;
+    private final FileService fileService;
 
     @ApiOperation(
             value = "현재 그룹의 Mission List 조회"
@@ -68,8 +71,16 @@ public class MissionController {
             value = "Mission 완료"
             , notes = "Mission을 완료한다.")
     @PostMapping("/complete")
-    public ResponseEntity<?> addMission(@RequestBody MissionCompleteDto missionCompleteDto) {
-        MissionDto resultDto = missionService.completeMission(missionCompleteDto);
+        public ResponseEntity<?> addMission(@ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file,
+                                            @ApiParam(value = "mission의 id", required = true) @RequestParam Integer id) {
+        String path;
+        try {
+            path = fileService.fileUpload(file, "mission");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
+        MissionDto resultDto = missionService.completeMission(id, path);
         return ResponseEntity.ok(resultDto);
     }
 
@@ -93,13 +104,22 @@ public class MissionController {
 
     @ApiOperation(
             value = "MissionImage 등록"
-            , notes = "MissionImage를 등록한다.")
+            , notes = "MissionImage를 등록한다."
+            , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PostMapping("/image")
-    public ResponseEntity<?> addMissionImage(@RequestBody MissionImageRegistDto missionImageRegistDto) {
+    public ResponseEntity<?> addMissionImage(@ApiParam(value = "The DTO object", required = true) @ModelAttribute MissionImageRegistDto missionImageRegistDto,
+                                             @ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file) {
         MissionImageDto missionImageDto = new MissionImageDto();
+        String path;
+        try {
+            path = fileService.fileUpload(file, "missionimg");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
         missionImageDto.setMissionId(missionImageRegistDto.getMissionId());
         missionImageDto.setUserId(missionImageRegistDto.getUserId());
-        missionImageDto.setImg(missionImageRegistDto.getImg());
+        missionImageDto.setImg(path);
         MissionImageDto resultDto = missionImageService.insertMissionImage(missionImageDto);
         return ResponseEntity.ok(resultDto);
     }
@@ -108,7 +128,18 @@ public class MissionController {
             value = "MissionImage 수정"
             , notes = "MissionImage를 수정한다.")
     @PutMapping("/image")
-    public ResponseEntity<?> updateMissionImage(@RequestBody MissionImageUpdateDto missionImageUpdateDto) {
+    public ResponseEntity<?> updateMissionImage(@ApiParam(value = "missionImage의 Id", required = true) @RequestParam Integer id,
+                                                @ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file) {
+        String path;
+        try {
+            path = fileService.fileUpload(file, "missionimg");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
+        MissionImageUpdateDto missionImageUpdateDto = new MissionImageUpdateDto();
+        missionImageUpdateDto.setId(id);
+        missionImageUpdateDto.setImg(path);
         MissionImageDto resultDto = missionImageService.updateMissionImage(missionImageUpdateDto);
         return ResponseEntity.ok(resultDto);
     }
