@@ -1,102 +1,69 @@
-// redux ducks
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import httpClient from "../../utils/axios";
 
-// action types
-const RELOAD = "board/RELOAD";
-const LOAD_MORE = "board/LOAD_MORE";
+// actions
+export const loadMainFeed = createAsyncThunk(
+  "board/loadMainFeed",
+  async (reqData, { rejectWithValue }) => {
+    // console.log(reqData);
+    try {
+      const response = await httpClient.get("/boards/page", {
+        params: reqData,
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
 
-// action creators
-export const reload = () => ({ type: RELOAD });
-export const loadMore = () => ({ type: LOAD_MORE });
+export const loadPostDetail = createAsyncThunk(
+  "board/loadPostDetail",
+  async (reqData, { rejectWithValue }) => {
+    try {
+      // console.log(reqData);
+      const response = await httpClient.get(
+        "/boards/board/" + reqData.articleId,
+        { params: { userId: reqData.userId } }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
 
 // initial state
-const initialState = {
-  // userId: "tester",
-  articles: [
-    {
-      userId: "test",
-      content: "description",
-      tag: "#ex",
-      img: "https://picsum.photos/400/300",
-      like: 3,
-      createTime: "23.01.27",
-      comment: 2,
-    },
-    {
-      postId: 1,
-      userId: "seotai78",
-      content: "호에엥",
-      tag: "#ex",
-      img: "https://picsum.photos/400/300",
-      like: 1,
-      createTime: "23.01.01",
-      comment: 3,
-    },
-    {
-      userId: "akdgns12",
-      content: "description",
-      tag: "#ex",
-      img: "..",
-      like: 3,
-      createTime: "22.12.31",
-      comment: 0,
-    },
-    {
-      userId: "akdgns13",
-      content: "desc",
-      tag: "#ex",
-      img: "https://picsum.photos/400/300",
-      like: 1,
-      createTime: "22.12.31",
-      comment: 1,
-    },
-    {
-      userId: "gkagu12",
-      content: "desc",
-      tag: "#ex",
-      img: null,
-      like: 3,
-      createTime: "23.12.25",
-      comment: 4,
-    },
-    {
-      userId: "podif",
-      content: "description",
-      tag: "#ex",
-      img: "https://picsum.photos/400/300",
-      like: 3,
-      createTime: "23.12.01",
-      comment: 4,
-    },
-  ],
-  article: {
-    postId: 1,
-    userId: "seotai78",
-    content: "호에엥",
-    tag: "#호엥",
-    img: "https://picsum.photos/400/300",
-    like: 3,
-    createTime: "22.12.31",
-    comment: 4,
-    comments: [
-      { userId: "akdgns12", comment: "ㅋ" },
-      { userId: "gkagu12", comment: "ㅋㅋ" },
-      { userId: "podif", comment: "호엥" },
-    ],
-  },
-};
+const initialState = {};
 
-// reducer
-export default function board(state = initialState, action) {
-  switch (action.type) {
-    case RELOAD:
-      return {
-        ...state,
-      };
-    case LOAD_MORE:
-      return {
-        ...state,
-      };
-    default:
-      return state;
-  }
-}
+// slice
+const boardSlice = createSlice({
+  name: "board",
+  initialState,
+  reducers: {
+    updateLike: (state, action) => {
+      console.log(action.payload);
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(loadMainFeed.pending, (state) => {
+      // console.log("pending...");
+    });
+    builder.addCase(loadMainFeed.fulfilled, (state, action) => {
+      state.articles = action.payload;
+    });
+    builder.addCase(loadMainFeed.rejected, (state) => {
+      console.log(state);
+    });
+    builder.addCase(loadPostDetail.pending, (state) => {});
+    builder.addCase(loadPostDetail.fulfilled, (state, action) => {
+      state.article = action.payload;
+    });
+    builder.addCase(loadPostDetail.rejected, (state) => {});
+  },
+});
+
+export default boardSlice.reducer;
+export const { updateLike } = boardSlice.actions;

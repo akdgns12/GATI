@@ -6,9 +6,8 @@ import com.family.gati.repository.NotiRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,4 +70,9 @@ public class NotiService {
 //    public void saveMissionStart()
     
     // 미션 완료
+
+    @Transactional
+    public void deleteNoti(String userId, int familyId){
+        notiRepository.deleteByFamilyIdAndUserId(userId, familyId);
+    }
 }

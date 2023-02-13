@@ -5,6 +5,7 @@ import com.family.gati.entity.Family;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
+import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.service.FamilyService;
 import com.family.gati.service.UserService;
 import com.family.gati.security.jwt.JwtTokenProvider;
@@ -23,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class UserApiController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final FamilyService familyService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     @Value("${spring.mail.username}")
     private String from; // 발신자 메일(관리자)
 
@@ -111,23 +114,17 @@ public class UserApiController {
             String userId = user.getUserId();
             int userSeq = user.getUserSeq();
 
-            // accessToken 발급
+            // 유저 로그인할 때 accessToken, refreshToken 둘 다 재발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
-            String refreshToken = null;
-            // 발급받은적 없거나 만료된 RefreshToken이 아니라면 발급
-            if(user.getRefreshToken() == null){ // || jwtTokenProvider.validateRefreshToken(user.getRefreshToken()) 추가할 필요있나? 어차피
-                // refreshToken 발급하고 DB에 저장
-                refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
-                userRepository.updateRefreshToken(userSeq, refreshToken);
-            } else{ // 발급받은 적 없다면
-                refreshToken = userRepository.getRefreshTokenByUserSeq(userSeq);
-            }
+            String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
+            userRepository.updateRefreshToken(userSeq, refreshToken);
 
             resultMap.put("msg", SUCCESS);
             // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
             resultMap.put("accessToken", accessToken);
             resultMap.put("refreshToken", refreshToken);
             resultMap.put("userId", user.getUserId());
+            resultMap.put("role", user.getRole());
             resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;
         }catch (Exception e){
@@ -175,14 +172,28 @@ public class UserApiController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto();
         try{
-           User userInfo = userService.getUserByUserId(userId);
-            logger.debug("userInfo: {}", userInfo);
-            if(userInfo == null){
+           User user = userService.getUserByUserId(userId);
+
+           userInfoResponseDto.setUserSeq(user.getUserSeq());
+           userInfoResponseDto.setUserId(user.getUserId());
+           userInfoResponseDto.setEmail(user.getEmail());
+           userInfoResponseDto.setBirth(user.getBirth());
+           userInfoResponseDto.setMainFamily(user.getMainFamily());
+           userInfoResponseDto.setNickName(user.getNickName());
+           userInfoResponseDto.setPhoneNumber(user.getPhoneNumber());
+           userInfoResponseDto.setPlusMinus(user.getPlusMinus());
+           userInfoResponseDto.setCreateTime(user.getCreateTime());
+           userInfoResponseDto.setUpdateTime(user.getUpdateTime());
+           userInfoResponseDto.setRole(user.getRole());
+
+            logger.debug("userInfo: {}", userInfoResponseDto);
+            if(userInfoResponseDto == null){
                 status = HttpStatus.NO_CONTENT;
             }else{
                 resultMap.put("msg", SUCCESS);
-                resultMap.put("userInfo", userInfo);
+                resultMap.put("userInfo", userInfoResponseDto);
                 status = HttpStatus.OK;
             }
         }catch (Exception e){
@@ -242,16 +253,15 @@ public class UserApiController {
 
     // 회원정보 변경
     @ApiOperation(value = "회원정보 변경")
-    @PutMapping("/change/{userId}")
-    public ResponseEntity<?> update(@PathVariable("userId") String userId,
-                                    @RequestBody UserUpdateDto userUpdateDto){
-        logger.debug("user: {}", userId);
+    @PutMapping("/change")
+    public ResponseEntity<?> update(@RequestBody UserUpdateDto userUpdateDto){
+        logger.debug("user: {}", userUpdateDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            userService.updateUser(userId, userUpdateDto);
-            User modifiedUser = userRepository.findByUserId(userId);
+            userService.updateUser(userUpdateDto.getUserId(), userUpdateDto);
+            User modifiedUser = userRepository.findByUserId(userUpdateDto.getUserId());
             resultMap.put("msg", SUCCESS);
             resultMap.put("modifiedUser", modifiedUser);
             status = HttpStatus.OK;
@@ -337,6 +347,7 @@ public class UserApiController {
 
     @Data
     public static class changePasswordRequest{
+        private String userId;
         private String password;
         private String changePassword;
     }
@@ -344,30 +355,43 @@ public class UserApiController {
     // 유저 비밀번호 변경
     @ApiOperation(value = "비밀번호 변경")
     @PutMapping("/account/password")
-    public ResponseEntity<?> changePassword(@RequestHeader(value = "Authroize") String token,
-                                             changePasswordRequest request){
+    public ResponseEntity<?> changePassword(@RequestBody changePasswordRequest request){
         // front에서 비밀번호 변경할때도 입력 form에 대해 규칙성 검사해주면 bindingresult 검사는 굳이?
-        logger.debug("token: {}", token);
+        logger.debug("token: {}", request);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
-        // 유효성 검사
-        if(!jwtTokenProvider.validateToken(token)){
-            log.debug("올바르지 않은 token: {}", token);
-            resultMap.put("msg", FAIL);
-            resultMap.put("result", "Invalid token");
-            status = HttpStatus.NOT_FOUND;
-
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
-        }
-
         try{
-            User user = jwtTokenProvider.getUser(token);
+            User user = userRepository.findByUserId(request.getUserId());
             userService.changePassword(user, request.getChangePassword());
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.ACCEPTED;
         }catch (Exception e){
             log.debug("비밀번호 변경 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @ApiOperation(value = "로그아웃", notes = "로그아웃시 refreshToken 삭제")
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request){
+        String token = jwtAuthenticationFilter.parseBearerToken(request);
+        User user = jwtTokenProvider.getUser(token);
+        logger.debug("user", user);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            user.setRefreshToken(null);
+            userRepository.save(user);
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("로그아웃 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }

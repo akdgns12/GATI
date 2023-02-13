@@ -6,17 +6,10 @@ import SearchIcon from '@mui/icons-material/Search';
 const InputSearchKeyword = () => {
   const [keyword, setKeyword] = React.useState("")
 
-  // const onChange = (e) => {
-  //   setKeyword(e.target.value)
-  // }
-
-  const onKeyDownHandler = (e) => {
-    setKeyword(e.target.value)
-    console.log('엔터 전:',keyword)
-    if (e.key === 'Enter') {
-      console.log('엔터 후:',keyword)
-    }
-  }
+  const onChange = event => {
+    setKeyword(event.target.value);
+    console.log(event.target.value)
+  };
 
   return (
     <div
@@ -36,8 +29,8 @@ const InputSearchKeyword = () => {
       <InputBase
         component="form"
         defaultValue={keyword}
-        // onChange={onChange}
-        onKeyDown={onKeyDownHandler}
+        onChange={onChange}
+        
         sx={{
           width:'100%',
         }}
