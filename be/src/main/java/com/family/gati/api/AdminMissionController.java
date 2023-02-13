@@ -5,10 +5,12 @@ import com.family.gati.dto.AdminMissionResgistDto;
 import com.family.gati.dto.AdminMissionUpdateDto;
 import com.family.gati.exception.BadRequestException;
 import com.family.gati.service.AdminMissionService;
+import com.family.gati.service.FileService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -20,6 +22,7 @@ import java.util.List;
 @Api(tags = "AdminMission API")
 public class AdminMissionController {
     private final AdminMissionService adminMissionService;
+    private final FileService fileService;
 
     @ApiOperation(
             value = "AdminMissions 조회"
@@ -71,14 +74,22 @@ public class AdminMissionController {
             value = "AdminMission 작성"
             , notes = "AdminMission을 작성한다.")
     @PostMapping("/adminMission")
-    public ResponseEntity<?> addAdminMission(@RequestBody AdminMissionResgistDto adminMissionResgistDto) {
+    public ResponseEntity<?> addAdminMission(@ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file,
+                                             @ApiParam(value = "The DTO object", required = true) @ModelAttribute AdminMissionResgistDto adminMissionResgistDto) {
         if (new Timestamp(adminMissionResgistDto.getStartDate().getTime()).getDay() != 1) {
             return ResponseEntity.ok("오류 : 입력한 startDate가 월요일이 아닙니다!");
         }
         AdminMissionDto adminMissionDto = new AdminMissionDto();
+        String path;
+        try {
+            path = fileService.fileUpload(file, "adminmission");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
         adminMissionDto.setTitle(adminMissionResgistDto.getTitle());
         adminMissionDto.setContent(adminMissionResgistDto.getContent());
-        adminMissionDto.setImg(adminMissionResgistDto.getImg());
+        adminMissionDto.setImg(path);
         adminMissionDto.setStartDate(adminMissionResgistDto.getStartDate());
         adminMissionDto.setEndDate(adminMissionResgistDto.getEndDate());
         adminMissionDto.setCreateTime(new Timestamp(new Date().getTime()));;
@@ -96,15 +107,23 @@ public class AdminMissionController {
             value = "AdminMission 수정"
             , notes = "AdminMission을 수정한다.")
     @PutMapping("/adminMission")
-    public ResponseEntity<?> updateAdminMission(@RequestBody AdminMissionUpdateDto adminMissionUpdateDto) {
+    public ResponseEntity<?> updateAdminMission(@ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file,
+                                                @ApiParam(value = "The DTO object", required = true) @ModelAttribute AdminMissionUpdateDto adminMissionUpdateDto) {
         if (new Timestamp(adminMissionUpdateDto.getStartDate().getTime()).getDay() != 1) {
             return ResponseEntity.ok("오류 : 입력한 startDate가 월요일이 아닙니다!");
         }
         AdminMissionDto adminMissionDto = new AdminMissionDto();
+        String path;
+        try {
+            path = fileService.fileUpload(file, "adminmission");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
         adminMissionDto.setId(adminMissionUpdateDto.getId());
         adminMissionDto.setTitle(adminMissionUpdateDto.getTitle());
         adminMissionDto.setContent(adminMissionUpdateDto.getContent());
-        adminMissionDto.setImg(adminMissionUpdateDto.getImg());
+        adminMissionDto.setImg(path);
         adminMissionDto.setStartDate(adminMissionUpdateDto.getStartDate());
         adminMissionDto.setEndDate(adminMissionUpdateDto.getEndDate());
         adminMissionDto.setCreateTime(new Timestamp(new Date().getTime()));;

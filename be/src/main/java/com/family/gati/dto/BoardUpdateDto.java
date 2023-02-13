@@ -19,6 +19,4 @@ public class BoardUpdateDto {
     private String content;
     @ApiModelProperty(example = "[{'tagContent':'부산'}, {'tagContent':'울산'}]")
     private List<TagDto> tagDtos;
-    @ApiModelProperty(example = "img.img")
-    private String img;
 }

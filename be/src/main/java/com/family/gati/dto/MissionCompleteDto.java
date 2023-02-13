@@ -13,6 +13,4 @@ import lombok.Setter;
 public class MissionCompleteDto {
     @ApiModelProperty(example = "1")
     private Integer id;
-    @ApiModelProperty(example = "img.img")
-    private String img;
 }
