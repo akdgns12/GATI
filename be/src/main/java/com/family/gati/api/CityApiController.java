@@ -1,14 +1,17 @@
 package com.family.gati.api;
 
-import com.family.gati.dto.BoardDto;
+import com.family.gati.dto.CityDto;
 import com.family.gati.service.CityService;
+import com.family.gati.service.RecommandService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,16 +19,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "City API")
 public class CityApiController {
     private final CityService cityService;
+    private final RecommandService recommandService;
 
-    @ApiOperation(
-            value = "현재 그룹의 Board page 조회"
-            , notes = "GroupId와 page 번호(0부터 시작)를 통해 현재 그룹의 Board page를 최신순으로 12개 조회한다.")
-    @ApiResponses({
-            @ApiResponse(
-                    code = 200
-                    , message = "조회 성공"
-                    , response = BoardDto.class
-                    , responseContainer = "List"
-            )
-    })
+    @GetMapping("/tag")
+    public ResponseEntity<?> findAllOrderByTagCnt(){
+        List<CityDto> dtos;
+        dtos = cityService.findAllOrderByTagCnt();
+        return ResponseEntity.ok(dtos);
+    }
+    @GetMapping("/pushdb")
+    public ResponseEntity<?> pushDb() throws Exception {
+        recommandService.apiResponseData();
+        return ResponseEntity.ok(null);
+    }
+
+
 }
