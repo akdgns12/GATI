@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,10 @@ public class MissionDto {
     private Integer completed;
     @ApiModelProperty(example = "['MissionImageDto', 'MissionImageDto']")
     private List<MissionImageDto> missionImageDtos;
+    @Column(name = "START_DATE", nullable = false)
+    private Date startDate;
+    @Column(name = "END_DATE", nullable = false)
+    private Date endDate;
 
 //    public void setMissionImages(List<MissionImage> missionImages) {
 //        for (MissionImage missionImage: missionImages) {
@@ -47,6 +53,8 @@ public class MissionDto {
         this.adminMissionId = builder.adminMissionId;
         this.groupId = builder.groupId;
         this.completed = builder.completed;
+        this.startDate = builder.startDate;
+        this.endDate = builder.endDate;
     }
 
     public static class MissionDtoBuilder implements CommonBuilder<MissionDto> {
@@ -58,6 +66,9 @@ public class MissionDto {
         private Integer adminMissionId;
         private Integer groupId;
         private Integer completed;
+        private Date startDate;
+        private Date endDate;
+
 
         public MissionDtoBuilder(Mission mission) {
             this.id = mission.getId();
@@ -68,6 +79,8 @@ public class MissionDto {
             this.adminMissionId = mission.getAdminMissionId();
             this.groupId = mission.getGroupId();
             this.completed = mission.getCompleted();
+            this.startDate = mission.getStartDate();
+            this.endDate = mission.getEndDate();
         }
 
         public MissionDto build() {

@@ -11,4 +11,5 @@ public interface MissionImageService {
     MissionImageDto insertMissionImage(MissionImageDto missionImageDto);
     MissionImageDto updateMissionImage(MissionImageUpdateDto missionImageUpdateDto);
     void deleteMissionImageById(Integer id);
+    MissionImageDto findById(Integer id);
 }
