@@ -104,7 +104,7 @@ const PrimaryAppBar = () => {
               color="rgb(32,32,32)"
               style={{ display: "inline-block" }}
             >
-              {mainGroup.name}
+              {mainGroup != null && mainGroup.name != null && mainGroup.name}
             </Typography>
           </Box>
           <Box>
