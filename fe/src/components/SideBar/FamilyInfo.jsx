@@ -1,12 +1,19 @@
 import React, { useEffect } from "react";
-import { Grid, Typography, TextField, Button, Divider, Box } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Divider,
+  Box,
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import { FilePond } from "react-filepond";
 import { useState } from "react";
 import httpClient from "../../utils/axios";
 
 export default function FamilyInfo() {
-  const { mainGroup } = useSelector((state) => state.user);
+  const { mainGroup, loginUser } = useSelector((state) => state.user);
   const [file, setFile] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [memberList, setMemberList] = useState([]);
@@ -14,19 +21,22 @@ export default function FamilyInfo() {
   useEffect(() => {
     console.log("LOAD FAMILY MEMBERS");
     setMemberList([]);
-    // console.log(memberList);
-    // dummy values
-    for (var i = 0; i < 2; i++) {
-      const newList = memberList;
-      newList.push({
-        userId: `user${i}`,
-        userBD: "YYYY-MM-DD",
-        phoneNumber: "010-XXXX-XXXX",
-      });
-      setMemberList(newList);
-      // console.log(memberList);
-    }
-    setLoaded(true);
+    //   newList.push({
+    //     userId: `user${i}`,
+    //     userBD: "YYYY-MM-DD",
+    //     phoneNumber: "010-XXXX-XXXX",
+    //   });
+    httpClient
+      .get(`/family/memberList/${mainGroup.id}`)
+      .then(({ data }) => {
+        console.log(data);
+        if (data.msg === "success") {
+          setMemberList(data["Info result"]);
+          setLoaded(true);
+        }
+      })
+      .catch((error) => console.log(error));
+    // setLoaded(true);
   }, []);
 
   function handleModify(event) {
@@ -50,7 +60,14 @@ export default function FamilyInfo() {
 
   function handleInvitation(event) {
     event.preventDefault();
-    console.log(event.target.memberId.value);
+    // console.log(event.target.memberId.value);
+    const reqData = {
+      familyId: mainGroup.id,
+      groupName: mainGroup.name,
+      nickName: loginUser.nickName,
+      receiverId: event.target.memberId.value,
+    };
+    console.log(reqData);
   }
 
   return (
