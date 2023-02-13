@@ -18,48 +18,48 @@ public class Recommand {
     @Column(name = "ID", nullable = false)
     @GeneratedValue
     private Integer id;
-    @Column(name = "ADDR1", nullable = false)
+    @Column(name = "ADDR1")
     private String addr1;
-    @Column(name = "ADDR2", nullable = true)
+    @Column(name = "ADDR2")
     private String addr2;
-    @Column(name = "AREACODE", nullable = false)
+    @Column(name = "AREACODE")
     private Integer areacode;
-    @Column(name = "BOOKTOUR", nullable = true)
+    @Column(name = "BOOKTOUR")
     private String booktour;
-    @Column(name = "CAT1", nullable = false)
+    @Column(name = "CAT1")
     private String cat1;
-    @Column(name = "CAT2", nullable = false)
+    @Column(name = "CAT2")
     private String cat2;
-    @Column(name = "CAT3", nullable = false)
+    @Column(name = "CAT3")
     private String cat3;
-    @Column(name = "CONTENT_ID", nullable = false)
+    @Column(name = "CONTENT_ID")
     private Integer contentid;
-    @Column(name = "CONTENT_TYPE_ID", nullable = false)
+    @Column(name = "CONTENT_TYPE_ID")
     private Integer contenttypeid;
-    @Column(name = "CREATE_TIME", nullable = false)
+    @Column(name = "CREATE_TIME")
     private Date createdtime;
-    @Column(name = "FIRST_IMAGE", nullable = false)
+    @Column(name = "FIRST_IMAGE")
     private String firstimage;
-    @Column(name = "FIRST_IMAGE2", nullable = true)
+    @Column(name = "FIRST_IMAGE2")
     private String firstimage2;
-    @Column(name = "MAP_X", nullable = false)
+    @Column(name = "MAP_X")
     private Double mapx;
-    @Column(name = "MAP_Y", nullable = false)
+    @Column(name = "MAP_Y")
     private Double mapy;
-    @Column(name = "M_LEVEL", nullable = false)
+    @Column(name = "M_LEVEL")
     private Integer mlevel;
-    @Column(name = "MODIFIED_TIME", nullable = false)
+    @Column(name = "MODIFIED_TIME")
     private Date modifiedtime;
-    @Column(name = "READCOUNT", nullable = false)
+    @Column(name = "READCOUNT")
     private Integer readcount;
-    @Column(name = "SIGUNGUCODE", nullable = false)
+    @Column(name = "SIGUNGUCODE")
     private Integer sigungucode;
-    @Column(name = "TEL", nullable = false)
+    @Column(name = "TEL")
     private String tel;
-    @Column(name = "TITLE", nullable = false)
+    @Column(name = "TITLE")
     private String title;
-    @Column(name = "ZIPCODE", nullable = false)
-    private Integer zipcode;
+    @Column(name = "ZIPCODE")
+    private String zipcode;
 
     private Recommand(RecommandBuilder builder) {
         this.id = builder.id;
@@ -108,7 +108,7 @@ public class Recommand {
         private Integer sigungucode;
         private String tel;
         private String title;
-        private Integer zipcode;
+        private String zipcode;
 
 
         public RecommandBuilder(RecommandDto recommandDto) {

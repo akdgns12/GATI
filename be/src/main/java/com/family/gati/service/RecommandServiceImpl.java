@@ -4,9 +4,12 @@ import com.family.gati.dto.RecommandDto;
 import com.family.gati.entity.Recommand;
 import com.family.gati.repository.RecommandRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -59,7 +62,7 @@ public class RecommandServiceImpl implements RecommandService{
         System.out.println("Response code: " + conn.getResponseCode());
         RestTemplate restTemplate = new RestTemplate();
         //http://apis.data.go.kr/B551011/KorService/areaBasedList?ServiceKey=QUz1fBx92fphiG1OGe%2F291wDWUP4wjIMHXmxwTOnUt%2B38pbi3npnb%2Fl%2FCfKHtQlbKsfbIi68Oy8hw89JzbVYsg%3D%3D&numOfRows=15&pageNo=1&MobileOS=ETC&MobileApp=ggati&_type=json
-        URI uri = new URI("http://apis.data.go.kr/B551011/KorService/areaBasedList?ServiceKey=QUz1fBx92fphiG1OGe%2F291wDWUP4wjIMHXmxwTOnUt%2B38pbi3npnb%2Fl%2FCfKHtQlbKsfbIi68Oy8hw89JzbVYsg%3D%3D&numOfRows=15&pageNo=1&MobileOS=ETC&MobileApp=ggati&_type=json");
+        URI uri = new URI("http://apis.data.go.kr/B551011/KorService/areaBasedList?ServiceKey=QUz1fBx92fphiG1OGe%2F291wDWUP4wjIMHXmxwTOnUt%2B38pbi3npnb%2Fl%2FCfKHtQlbKsfbIi68Oy8hw89JzbVYsg%3D%3D&numOfRows=10000&pageNo=1&MobileOS=ETC&MobileApp=ggati&_type=json");
         String jsonString = restTemplate.getForObject(uri, String.class);
 
 
@@ -77,24 +80,36 @@ public class RecommandServiceImpl implements RecommandService{
 //        }
 
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Map<String, Object> map = new HashMap<>();
         SimpleDateFormat formmater = new SimpleDateFormat("yyyyMMddHHmmss");
         map = objectMapper.readValue(jsonString, new TypeReference<Map<String, Object>>(){});
 
         Map<String , Object> getRecommend = (Map<String, Object>) map.get("response");
-        List<Map<String, Object>> itemList = (List<Map<String, Object>>) getRecommend.get("items");
+        Map<String , Object> getBody = (Map<String, Object>) getRecommend.get("body");
+        Map<String , Object> getitem = (Map<String, Object>) getBody.get("items");
+        List<Map<String, Object>> itemList = (List<Map<String,Object>>) getitem.get("item");
 
+//        List<Map<String,Object>> itemList = objectMapper.convertValue(getBody.get("items"), new TypeReference<List<Map<String, Object>>>() {});
         System.out.println(map.get("response"));
         System.out.println(getRecommend.get("body"));
-        System.out.println(getRecommend.get("items"));
+        System.out.println(getitem.get("item"));
 
+//        JSONArray jsonArray = (JSONArray) getBody.get("body");
+//
         List<RecommandDto> recommandDtos = new ArrayList<>();
-
-        for (Map<String, Object> item : itemList){
+//        for(int i=0; i<jsonArray.size(); i++){
+//
+//
+//
+//        }
+        for (Map<String, Object> item : itemList) {
             RecommandDto dto = new RecommandDto();
             dto.setAddr1(item.get("addr1").toString());
             dto.setAddr2(item.get("addr2").toString());
-            dto.setAreacode(Integer.valueOf(item.get("areacode").toString()));
+            if(item.get("areacode").equals("")) dto.setAreacode(-1);
+            else dto.setAreacode(Integer.valueOf(item.get("areacode").toString()));
             dto.setBooktour(item.get("booktour").toString());
             dto.setCat1(item.get("cat1").toString());
             dto.setCat2(item.get("cat2").toString());
@@ -104,19 +119,28 @@ public class RecommandServiceImpl implements RecommandService{
             dto.setCreatedtime(formmater.parse(item.get("createdtime").toString()));
             dto.setFirstimage(item.get("firstimage").toString());
             dto.setFirstimage2(item.get("firstimage2").toString());
-            dto.setMapx(Double.valueOf(item.get("mapx").toString()));
-            dto.setMapy(Double.valueOf(item.get("mapy").toString()));
-            dto.setMlevel(Integer.valueOf(item.get("mlevel").toString()));
+            if(item.get("mapx").equals("")) dto.setMapx(-1.0);
+            else dto.setMapx(Double.valueOf(item.get("mapx").toString()));
+            if(item.get("mapy").equals("")) dto.setMapx(-1.0);
+            else dto.setMapy(Double.valueOf(item.get("mapy").toString()));
+            if(item.get("mlevel").equals("")){
+                dto.setMlevel(-1);
+            }else {
+                dto.setMlevel(Integer.valueOf(item.get("mlevel").toString()));
+            }
             dto.setModifiedtime(formmater.parse(item.get("modifiedtime").toString()));
-            dto.setReadcount(Integer.valueOf(item.get("readcount").toString()));
-            dto.setSigungucode(Integer.valueOf(item.get("sigungucode").toString()));
+            if(item.get("readcount").equals("")) dto.setReadcount(-1);
+            else dto.setReadcount(Integer.valueOf(item.get("readcount").toString()));
+            if(item.get("sigungucode").equals("")) dto.setSigungucode(-1);
+            else dto.setSigungucode(Integer.valueOf(item.get("sigungucode").toString()));
             dto.setTel(item.get("tel").toString());
             dto.setTitle(item.get("title").toString());
-            dto.setZipcode(Integer.valueOf(item.get("zipcode").toString()));
+            dto.setZipcode(item.get("zipcode").toString());
             recommandDtos.add(dto);
             Recommand recommand = new Recommand.RecommandBuilder(dto).build();
             recommandRepository.save(recommand);
         }
+
 
 //        br.close();
         conn.disconnect();

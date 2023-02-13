@@ -30,7 +30,7 @@ public class RecommandDto {
     private Integer sigungucode;
     private String tel;
     private String title;
-    private Integer zipcode;
+    private String zipcode;
 
     public RecommandDto(RecommandDtoBuilder builder) {
         this.addr1 = builder.addr1;
@@ -79,7 +79,7 @@ public class RecommandDto {
         private Integer sigungucode;
         private String tel;
         private String title;
-        private Integer zipcode;
+        private String zipcode;
 
 
         public RecommandDtoBuilder(Recommand recommand) {
