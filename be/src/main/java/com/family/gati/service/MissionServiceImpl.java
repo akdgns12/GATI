@@ -52,7 +52,12 @@ public class MissionServiceImpl implements MissionService{
 
     @Override
     public MissionDto findById(Integer id) {
-        return new MissionDto.MissionDtoBuilder(missionRepository.findById(id).get()).build();
+        Mission mission = missionRepository.findById(id).get();
+        MissionDto missionDto = new MissionDto.MissionDtoBuilder(mission).build();
+        if (mission.getCompleted() == 1) {
+            missionDto.setMissionImageDtos(missionImageService.findByMissionId(mission.getId()));
+        }
+        return missionDto;
     }
 
     @Override
