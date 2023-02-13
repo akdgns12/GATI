@@ -11,7 +11,8 @@ import {
   ListItemText,
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateMainGroup } from "../../store/User/user";
 
 const contStyle = css`
   width: 100%;
@@ -24,6 +25,7 @@ const FamilyItem = (props) => {
   const groupName = props.group.name;
   const { userId } = useSelector((state) => state.user.loginUser);
   const { id } = useSelector((state) => state.user.mainGroup);
+  const dispatch = useDispatch();
 
   function setMainGroup(event) {
     event.preventDefault();
@@ -31,6 +33,8 @@ const FamilyItem = (props) => {
 
   function mvToGroup(event) {
     event.preventDefault();
+    dispatch(updateMainGroup(props.group));
+    props.setSideOpen(false);
     // do sth about main group
   }
 

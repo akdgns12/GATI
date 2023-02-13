@@ -35,7 +35,7 @@ export default function Family(props) {
     httpClient
       .get(`/family/list/${userId}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setGroupList(data.familyList);
       })
       .catch((error) => console.log(error));
@@ -52,11 +52,7 @@ export default function Family(props) {
     <Box css={contStyle}>
       <Box className="list-header">
         <Box className="text-box">메인 그룹 설정</Box>
-        <Button
-          variant="outlined"
-          onClick={() => setOpen(true)}
-          className="create-btn"
-        >
+        <Button variant="outlined" onClick={() => setOpen(true)} className="create-btn">
           <span
             style={{
               width: "100%",
@@ -72,7 +68,7 @@ export default function Family(props) {
       {loaded &&
         groupList.length > 0 &&
         groupList.map((group, index) => {
-          return <FamilyItem key={index} group={group} />;
+          return <FamilyItem key={index} group={group} setSideOpen={props.setSideOpen} />;
         })}
     </Box>
   );

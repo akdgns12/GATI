@@ -31,20 +31,19 @@ const MainFeed = () => {
   useEffect(() => {
     let iObserver;
     if (target) {
-      iObserver = new IntersectionObserver(
-        (entries) => onIntersect(entries, curPageNo),
-        {
-          threshold: 1.0,
-        }
-      );
+      iObserver = new IntersectionObserver((entries) => onIntersect(entries, curPageNo), {
+        threshold: 1.0,
+      });
       iObserver.observe(target);
     }
     return () => iObserver && iObserver.disconnect();
   }, [target, curPageNo]);
 
   useEffect(() => {
-    console.log("articles loaded");
-    setLoaded(true);
+    if (articles != null && articles.length > 0) {
+      console.log("articles loaded");
+      setLoaded(true);
+    } else console.log("No content to load");
   }, [articles]);
 
   async function onIntersect(entries, nextPageNo) {
@@ -52,9 +51,7 @@ const MainFeed = () => {
     if (entries[0].isIntersecting) {
       setLoaded(false);
       console.log("LOAD MORE");
-      dispatch(
-        loadMainFeed({ groupId: 1, userId: loginUser.userId, page: nextPageNo })
-      )
+      dispatch(loadMainFeed({ groupId: mainGroup.id, userId: loginUser.userId, page: nextPageNo }))
         .then(({ payload }) => {
           // console.log(payload);
           if (payload.length > 1) {

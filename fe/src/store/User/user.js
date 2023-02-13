@@ -45,22 +45,18 @@ const userSlice = createSlice({
       // console.log(state.loginUser.accessToken);
     },
     updateMainGroup: (state, action) => {
-      console.log(action);
+      // console.log(action);
       state.mainGroup = { ...state.mainGroup, ...action.payload };
-      console.log(state.mainGroup);
     }
   },
   extraReducers: (builder) => {
     builder.addCase(doLoginUser.pending, (state) => { });
     builder.addCase(doLoginUser.fulfilled, (state, action) => {
-      state.loading = "success";
       state.logIn = true;
-      // state.loginUser.userId = action.payload.userId;
       state.loginUser = action.payload['user Info'];
       state.loginUser.accessToken = action.payload.accessToken;
       state.loginUser.refreshToken = action.payload.refreshToken;
-      // console.log(action.payload.accessToken);
-      // console.log(action.payload.resfreshToken);
+
       if (action.payload["mainGroup Info"].body.msg === "success")
         state.mainGroup = action.payload["mainGroup Info"].body["Main family"];
       else state.mainGroup = {};

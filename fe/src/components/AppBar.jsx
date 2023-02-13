@@ -166,7 +166,7 @@ const PrimaryAppBar = () => {
           <Divider />
           <Container sx={{ height: "70%" }}>
             {myinfo && <MyInfo />}
-            {family && <Family setOpen={setModalOpen} />}
+            {family && <Family setOpen={setModalOpen} setSideOpen={setOpen} />}
             {familyinfo && <FamilyCreate setOpen={setModalOpen} />}
             {logout && <Logout />}
           </Container>
