@@ -223,7 +223,6 @@ public class FamilyApiController {
 
         try{
             familyService.acceptInvite(familyInviteDto);
-
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e) {

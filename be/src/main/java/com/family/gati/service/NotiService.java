@@ -24,7 +24,6 @@ public class NotiService {
     private final FamilyRepository familyRepository;
 
     public List<NotiDto> getByUserId(String userId) {
-        //회원 인증 토큰
         List<Noti> noties = notiRepository.findByUserId(userId);
         int size = noties.size();
         List<NotiDto> result = new ArrayList<>();
@@ -104,7 +103,7 @@ public class NotiService {
     }
 
     @Transactional
-    public void deleteNoti(String userId, int familyId){
+    public void deleteNoti(String userId, int familyId) {
         notiRepository.deleteByFamilyIdAndUserId(userId, familyId);
     }
 }
