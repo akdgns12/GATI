@@ -132,7 +132,7 @@ export default function FamilyInfo() {
 
       <Divider />
       <br />
-      <Grid xs={6}>
+      <Grid item xs={6}>
         <Button fullWidth variant="contained" type="submit" form="modify-form">
           save
         </Button>
