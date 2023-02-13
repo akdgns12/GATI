@@ -29,6 +29,15 @@ const MainFeed = () => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
+    dispatch(loadMainFeed({ groupId: mainGroup.id, userId: loginUser.userId, page: curPageNo }))
+      .then((res) => {
+        console.log(res);
+        dispatch(updatePageNo(curPageNo + 1));
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
     let iObserver;
     if (target) {
       iObserver = new IntersectionObserver((entries) => onIntersect(entries, curPageNo), {
@@ -43,7 +52,10 @@ const MainFeed = () => {
     if (articles != null && articles.length > 0) {
       console.log("articles loaded");
       setLoaded(true);
-    } else console.log("No content to load");
+    } else {
+      setLoaded(false);
+      console.log("No content to load");
+    }
   }, [articles]);
 
   async function onIntersect(entries, nextPageNo) {

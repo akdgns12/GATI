@@ -5,7 +5,7 @@ import httpClient from "../../utils/axios";
 export const loadMainFeed = createAsyncThunk(
   "board/loadMainFeed",
   async (reqData, { rejectWithValue }) => {
-    // console.log(reqData);
+    console.log(reqData);
     try {
       const response = await httpClient.get("/boards/page", {
         params: reqData,
@@ -58,6 +58,7 @@ const boardSlice = createSlice({
       // console.log("pending...");
     });
     builder.addCase(loadMainFeed.fulfilled, (state, action) => {
+      console.log(action.payload);
       if (state.articles != null && state.articles.length > 0) {
         if (action.payload.length > 0) {
           var lastIdx = state.articles.findIndex(
