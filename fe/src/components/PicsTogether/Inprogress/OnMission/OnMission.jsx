@@ -77,7 +77,7 @@ export default function OnMission() {
           display:'flex',
           justifyContent:'center',
           flexWrap:'wrap',
-          margin:'20px 0 70px 0',
+          margin:'20px 0 20px 0',
         }}>
         {content}
       </Box>

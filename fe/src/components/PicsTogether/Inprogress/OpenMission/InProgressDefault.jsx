@@ -16,9 +16,12 @@ export default function InProgressDefault() {
   }
 
   return (
-    <Paper sx={{
-      padding:3,
-    }}>
+    <Paper
+      elevation={2}
+      sx={{
+        padding:3,
+      }}
+    >
       <Typography align="center" style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
       <Typography align="center" style={{ marginBottom:'30px'}}>
         {getMission.content}
