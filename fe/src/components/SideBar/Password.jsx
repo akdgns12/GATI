@@ -68,7 +68,7 @@ export default function Password() {
         <Grid p={1} display="flex" justifyContent="center">
           <TextField
             required
-            helperText="*8~20자의 영문,숫자,특수문자를 사용하세요"
+            helperText="*8~20자의 영문,숫자를 사용하세요"
             label="새 비밀번호 확인"
             variant="outlined"
             type="password"
@@ -78,11 +78,7 @@ export default function Password() {
         </Grid>
       </Grid>
       <Grid p={1} display="flex" justifyContent="center">
-        <Button
-          variant="outlined"
-          type="submit"
-          disabled={confirmed ? false : true}
-        >
+        <Button variant="outlined" type="submit" disabled={confirmed ? false : true}>
           저장
         </Button>
       </Grid>

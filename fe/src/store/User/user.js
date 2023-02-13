@@ -30,6 +30,7 @@ const initialState = {
     refreshToken: "",
   },
   mainGroup: {},
+  defaultGroup: {},
   // token & other stuffs
 };
 
@@ -57,8 +58,10 @@ const userSlice = createSlice({
       state.loginUser.accessToken = action.payload.accessToken;
       state.loginUser.refreshToken = action.payload.refreshToken;
 
-      if (action.payload["mainGroup Info"].body.msg === "success")
+      if (action.payload["mainGroup Info"].body.msg === "success") {
         state.mainGroup = action.payload["mainGroup Info"].body["Main family"];
+        state.defaultGroup = action.payload["mainGroup Info"].body["Main family"];
+      }
       else state.mainGroup = {};
     });
     builder.addCase(doLoginUser.rejected, (state) => { });

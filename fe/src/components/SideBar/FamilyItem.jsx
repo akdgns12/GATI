@@ -23,8 +23,7 @@ const contStyle = css`
 
 const FamilyItem = (props) => {
   const groupName = props.group.name;
-  const { userId } = useSelector((state) => state.user.loginUser);
-  const { id } = useSelector((state) => state.user.mainGroup);
+  const { defaultGroup, mainGroup } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   function setMainGroup(event) {
@@ -45,7 +44,7 @@ const FamilyItem = (props) => {
           variant="contained"
           onClick={setMainGroup}
           style={{ width: "20%" }}
-          disabled={props.group.id === id ? true : false}
+          disabled={props.group.id === defaultGroup.id ? true : false}
         >
           Main
         </Button>
@@ -53,7 +52,12 @@ const FamilyItem = (props) => {
       disablePadding={true}
       css={contStyle}
     >
-      <ListItemButton className="list-btn" onClick={mvToGroup} disableGutters>
+      <ListItemButton
+        className="list-btn"
+        onClick={mvToGroup}
+        disableGutters
+        disabled={mainGroup.id === props.group.id ? true : false}
+      >
         <ListItemAvatar>
           <Avatar className="group-img">
             <FolderIcon />

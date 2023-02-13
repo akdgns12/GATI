@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Grid, Typography, Button, Avatar } from "@mui/material";
+import { Grid, Typography, Button, Avatar, Box } from "@mui/material";
 import FamilyInfo from "./FamilyInfo";
 import { useSelector } from "react-redux";
 export default function FamilyCreate(props) {
@@ -10,7 +10,7 @@ export default function FamilyCreate(props) {
   // console.log(mainGroup.id == null);
 
   return (
-    <Grid container display="flex" justifyContent="center">
+    <Grid>
       {mainGroup.id == null ? (
         <>
           <Grid item m={1} xs={10}>
