@@ -66,13 +66,14 @@ public class FamilyApiController {
 
             // 첫 그룹 생성 시, 생성 그룹이 mainFamily가 될 수 있게
             User user = userRepository.findByUserId(userId);
+            Family newFamily = null;
             if(user.getMainFamily() == null){
                 log.debug("회원");
-                Family newFamily = familyService.getByMasterId(userId);
+                newFamily = familyService.getByMasterId(userId);
                 user.setMainFamily(newFamily.getId());
                 userRepository.save(user);
             }
-            resultMap.put("created Family", familySignUpDto);
+            resultMap.put("created Family", newFamily);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.CREATED;
         }catch (Exception e){
