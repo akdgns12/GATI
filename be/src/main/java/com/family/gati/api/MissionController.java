@@ -98,8 +98,10 @@ public class MissionController {
             , notes = "Mission을 삭제한다.")
     @DeleteMapping("/mission/{id}")
     public ResponseEntity<?> deleteMission(@ApiParam(value = "삭제 할 missionId")@PathVariable("id") Integer id) {
-        missionService.deleteMissionById(id);
-        return ResponseEntity.ok(null);
+        Integer groupId = missionService.findById(id).getGroupId();
+        missionService.deleteMissionById(id);;
+        List<MissionDto> findDtos = missionService.findByGroupId(groupId);
+        return ResponseEntity.ok(findDtos);
     }
 
     @ApiOperation(
@@ -121,7 +123,7 @@ public class MissionController {
         missionImageDto.setUserId(missionImageRegistDto.getUserId());
         missionImageDto.setImg(path);
         MissionImageDto resultDto = missionImageService.insertMissionImage(missionImageDto);
-        return ResponseEntity.ok(resultDto);
+        return ResponseEntity.ok(missionService.findById(missionImageDto.getMissionId()));
     }
 
     @ApiOperation(
@@ -141,7 +143,7 @@ public class MissionController {
         missionImageUpdateDto.setId(id);
         missionImageUpdateDto.setImg(path);
         MissionImageDto resultDto = missionImageService.updateMissionImage(missionImageUpdateDto);
-        return ResponseEntity.ok(resultDto);
+        return ResponseEntity.ok(missionService.findById(resultDto.getMissionId()));
     }
 
     @ApiOperation(
@@ -149,8 +151,10 @@ public class MissionController {
             , notes = "MissionImage를 삭제한다.")
     @DeleteMapping("/image/{id}")
     public ResponseEntity<?> deleteMissionImage(@ApiParam(value = "삭제 할 missionImageId")@PathVariable("id") Integer id) {
+        Integer missionId = missionImageService.findById(id).getMissionId();
         missionImageService.deleteMissionImageById(id);
-        return ResponseEntity.ok(null);
+        MissionDto missionDto = missionService.findById(missionId);
+        return ResponseEntity.ok(missionDto);
     }
 
 //    @GetMapping("/mission/{id}")
