@@ -4,6 +4,7 @@ import com.family.gati.dto.*;
 import com.family.gati.service.BoardCommentService;
 import com.family.gati.service.BoardService;
 import com.family.gati.service.FileService;
+import com.family.gati.service.NotiService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardCommentService boardCommentService;
     private final FileService fileService;
+    private final NotiService notiService;
 
 //    @ApiOperation(
 //            value = "현재 그룹의 Board 조회"
@@ -170,7 +172,16 @@ public class BoardController {
         boardCommentDto.setCreateTime(new Timestamp(new Date().getTime()));
         boardCommentDto.setUpdateTime(new Timestamp(new Date().getTime()));
 
-        BoardCommentDto resultDto = boardCommentService.insertBoardComment(boardCommentDto);
+        boardCommentService.insertBoardComment(boardCommentDto);
+        BoardDto resultDto = boardService.findById(boardCommentDto.getBoardId(), boardCommentDto.getUserId());
+
+        CommentNotiDto commentNotiDto = new CommentNotiDto(
+                resultDto.getUserId(),
+                resultDto.getId(),
+                resultDto.getNickname(),
+                2
+        );
+        notiService.saveComment(commentNotiDto);
         return ResponseEntity.ok(resultDto);
     }
 
@@ -211,7 +222,13 @@ public class BoardController {
             , notes = "BoardId, 현재 user를 확인하여 좋아요 상태를 변경한다.")
     @PostMapping("/likes")
     public ResponseEntity<?> addBoardLikes(@RequestParam Integer boardId, @RequestParam String userId) {
-        boardService.findLikes(boardId, userId);
+        if (boardService.findLikes(boardId, userId)) {
+            String receiverId = boardService.findById(boardId, userId).getUserId();
+            LikeNotiDto likeNotiDto = new LikeNotiDto(
+                    receiverId, boardId, userId, 3
+            );
+            notiService.saveLike(likeNotiDto);
+        };
         return ResponseEntity.ok(null);
     }
 }

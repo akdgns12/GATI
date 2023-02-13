@@ -1,7 +1,10 @@
 package com.family.gati.service;
 
 import com.family.gati.dto.*;
+import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.Noti;
+import com.family.gati.repository.FamilyMemberRepository;
+import com.family.gati.repository.FamilyRepository;
 import com.family.gati.repository.NotiRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +20,12 @@ import java.util.List;
 public class NotiService {
 
     private final NotiRepository notiRepository;
+    private final FamilyMemberRepository familyMemberRepository;
+    private final FamilyRepository familyRepository;
 
     public List<NotiDto> getByUserId(String userId) {
         //회원 인증 토큰
-        List<Noti> noties = notiRepository.findAll();
+        List<Noti> noties = notiRepository.findByUserId(userId);
         int size = noties.size();
         List<NotiDto> result = new ArrayList<>();
         for (int i=0; i<size; i++){
@@ -46,7 +51,7 @@ public class NotiService {
     public void saveComment(CommentNotiDto commentNotiDto){
         Noti noti = new Noti();
 
-        noti.setNickname(commentNotiDto.getReceiverId());
+        noti.setUserId(commentNotiDto.getReceiverId());
         noti.setBoardId(commentNotiDto.getBoardId());
         noti.setNickname(commentNotiDto.getSenderNickname());
         noti.setType(2);
@@ -58,7 +63,7 @@ public class NotiService {
     public void saveLike(LikeNotiDto likeNotiDto){
         Noti noti = new Noti();
 
-        noti.setNickname(likeNotiDto.getReceiverId());
+        noti.setUserId(likeNotiDto.getReceiverId());
         noti.setBoardId(likeNotiDto.getBoardId());
         noti.setNickname(likeNotiDto.getSenderNickname());
         noti.setType(3);
@@ -67,9 +72,36 @@ public class NotiService {
     }
 
     // 미션 시작
-//    public void saveMissionStart()
-    
+    public void saveMissionStart(MissionDto missionDto) {
+        Integer groupId = missionDto.getGroupId();
+        String groupName = familyRepository.findById(groupId).getName();
+        List<FamilyMember> familyMembers = familyMemberRepository.findALlByFamilyId(groupId);
+        for (FamilyMember familyMember: familyMembers) {
+            Noti noti = new Noti();
+            noti.setGroupId(groupId);
+            noti.setMissionId(missionDto.getId());
+            noti.setUserId(familyMember.getUserId());
+            noti.setGroupName(groupName);
+            noti.setType(4);
+            notiRepository.save(noti);
+        }
+    }
+
     // 미션 완료
+    public void completeMission(MissionDto missionDto) {
+        Integer groupId = missionDto.getGroupId();
+        String groupName = familyRepository.findById(groupId).getName();
+        List<FamilyMember> familyMembers = familyMemberRepository.findALlByFamilyId(groupId);
+        for (FamilyMember familyMember: familyMembers) {
+            Noti noti = new Noti();
+            noti.setGroupId(groupId);
+            noti.setMissionId(missionDto.getId());
+            noti.setUserId(familyMember.getUserId());
+            noti.setGroupName(groupName);
+            noti.setType(5);
+            notiRepository.save(noti);
+        }
+    }
 
     @Transactional
     public void deleteNoti(String userId, int familyId){
