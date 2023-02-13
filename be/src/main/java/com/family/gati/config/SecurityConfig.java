@@ -46,8 +46,8 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return web -> { web.ignoring()
-                .antMatchers("/**/join", "/**/login","/**/user/findId/**", "/**/user/findPassword/**"
-                        ,"/refresh")
+//                .antMatchers("/**/join", "/**/login","/**/user/findId/**", "/**/user/findPassword/**"
+//                        ,"/refresh")
                 .antMatchers(
                         "/v2/api-docs/**"
                         , "/swagger.json"

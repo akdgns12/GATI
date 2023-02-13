@@ -6,8 +6,8 @@ import { BrowserRouter } from "react-router-dom";
 // react-redux
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 import App from "./App";
 import rootReducer from "./store";
@@ -16,9 +16,9 @@ import { PersistGate } from "redux-persist/integration/react";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  blacklist: ['user'],
+  whitelist: ["user"],
 };
 
 const _persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -29,11 +29,11 @@ const customizedMiddleware = getDefaultMiddleware({
 
 const store = configureStore({
   reducer: _persistedReducer,
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: process.env.NODE_ENV !== "production",
   middleware: customizedMiddleware,
 });
 
-const persistor = persistStore(store);
+export const persistor = persistStore(store);
 
 root.render(
   <React.StrictMode>

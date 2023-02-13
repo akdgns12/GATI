@@ -7,7 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserUpdateDto {
     private String userId;
-    private String password;
     private String email;
     private String nickName;
     private String birth;

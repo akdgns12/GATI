@@ -1,32 +1,44 @@
-const LOAD = "schedule/LOAD";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import httpClient from "../../utils/axios";
 
-export const load = () => ({ type: LOAD });
+// actions
+export const postCalendar = createAsyncThunk(
+  "plan/createPlan",
 
-const initialState = {
-  planData: [
-    {
-      title: "가족 외식",
-      content: "월요일 저녁7시 oo삼겹살 집 앞",
-      start: "2023-01-15 16:00",
-      end: "2023-01-18 18:30",
-    },
-    {
-      title: "가족 여행",
-      content: "화요일 김포공항 아침 8시",
-      start: "2022-02-12 13:00",
-      end: "2022-02-18 11:30",
-    },
-  ],
-};
+  async (planData, { rejectWithValue }) => {
+    const Data = {
+      title: planData.title,
+      startDate: planData.startDate,
+      endDate: planData.endDate,
+      groupId: planData.groupId,
+      userId: planData.userId,
+      memo: planData.memo,
+      place: planData.place,
+    };
 
-// reducer
-export default function schedule(state = initialState, action) {
-  switch (action.type) {
-    case LOAD:
-      return {
-        ...state,
-      };
-    default:
-      return state;
+    try {
+      const response = await httpClient.post("/plan", Data);
+      console.log(response.data);
+      return response.plan;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
   }
-}
+);
+
+const initialState = {};
+
+// slice
+const userSlice = createSlice({
+  name: "plan",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(postCalendar.fulfilled, (state, action) => {
+      state = action.payload;
+    });
+  },
+});
+
+export default userSlice.reducer;

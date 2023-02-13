@@ -9,6 +9,12 @@ import Datepicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
+import { logDOM } from '@testing-library/react';
+import { useDispatch } from 'react-redux';
+import { postCalendar } from '../../store/Schedule/schedule';
+import { useNavigate } from 'react-router';
+
+
 const locales = {
   'ko-KR': require('date-fns/locale/ko')
 }
@@ -19,7 +25,7 @@ const localizer = dateFnsLocalizer({
   startOfWeek,
   getDay,
   locales
-})
+ })
 
 const events = [
   {
@@ -42,19 +48,43 @@ const events = [
 
 
 export default function Scheduler() {
+  const navigate = useNavigate()
+
   const [newEvent, setNewEvent] = useState({
     title: '', start: '', end: ''
   });
   const [allEvents, setAllEvents] = useState(events)
+  const dispatch = useDispatch()
+  
   
   function handleAddEvent() {
     setAllEvents([...allEvents, newEvent])
-    // console.log('hi')
+    // console.log(allEvents);
+  }
+  function handlePlan() {
+    const info = {
+      title: newEvent.title,
+      startDate: newEvent.start,
+      endDate: newEvent.end,
+      groupId: 1,
+      userId: 'podif',
+      memo: 'test axios',
+      place: 'multicampus'
+    }
+
+    // console.log('a')
+    if (info.title && info.startDate && info.endDate) {
+      dispatch(postCalendar(info))
+      // console.log('hello')
+    } else {
+      alert('빈칸을 채워주세여')
+    }
+    // console.log('b')
   }
 
   return (
     <Box>
-      <Box sx={{justifyContent: 'center'}}>
+      <Box>
         <input type="text" placeholder='Add title' style={{width: '20%', marginRight: '10px'}}
           value={newEvent.title} onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
         />
@@ -63,7 +93,7 @@ export default function Scheduler() {
         <Datepicker placeholderText='종료일'
           selected={newEvent.end} onChange={(end) => setNewEvent({...newEvent, end})}
         />
-        <button style={{marginTop: '10px'}} onClick={handleAddEvent}>일정 등록</button>
+        <button style={{marginTop: '10px'}} onClick={() => {handleAddEvent(); handlePlan(); navigate(0)}}>일정 등록</button>
       </Box>
       <Calendar localizer={localizer} events={allEvents}
       startAccessor='start' endAccessor='end'
