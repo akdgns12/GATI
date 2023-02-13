@@ -115,7 +115,7 @@ export default function ArticleCard(props) {
           {article.likes + likeVar}
           <Box style={{ marginLeft: "auto" }}>
             <Typography variant="body4" style={{ fontWeight: "bold", marginRight: "10px" }}>
-              {article.createTime.split("T")[0]}
+              {article.createTime != null && article.createTime.split("T")[0]}
             </Typography>
             {bookmark}
           </Box>
