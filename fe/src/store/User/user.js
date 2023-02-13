@@ -29,7 +29,7 @@ const initialState = {
     accessToken: "",
     refreshToken: "",
   },
-  groups: [],
+  mainGroup: {},
   // token & other stuffs
 };
 
@@ -53,8 +53,11 @@ const userSlice = createSlice({
       state.loginUser.userId = action.payload.userId;
       state.loginUser.accessToken = action.payload.accessToken;
       state.loginUser.refreshToken = action.payload.refreshToken;
-      console.log(action.payload.accessToken);
+      // console.log(action.payload.accessToken);
       // console.log(action.payload.resfreshToken);
+      if (action.payload["mainGroup Info"].body.msg === "success")
+        state.mainGroup = action.payload["mainGroup Info"].body["Main family"];
+      else state.mainGroup = {};
     });
     builder.addCase(doLoginUser.rejected, (state) => {});
     builder.addCase(PURGE, (state) => {
