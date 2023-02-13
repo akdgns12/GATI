@@ -2,7 +2,6 @@ package com.family.gati.api;
 
 import com.family.gati.dto.NotiDto;
 import com.family.gati.service.NotiService;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public class NotiControllerTest {
         notiDto.setGroupName("family");
         userId = "hhj";
 
-        List<NotiDto> result = notiService.findByUserId(userId);
+        List<NotiDto> result = notiService.getByUserId(userId);
 
         assertTrue(userId.equals(result.get(0).getUserId()));
     }
