@@ -13,8 +13,7 @@ import java.util.List;
 
 @Repository
 public interface NotiRepository extends JpaRepository<Noti, String> {
-    @Query(value = "select * from NOTIFICATION where user_id = :userId", nativeQuery = true)
-    List<Noti> findByUserId(@Param("userId") String userId);
+    List<Noti> findByUserId(String userId);
 
     @Modifying
     @Query(value = "delete from NOTIFICATION where USER_ID = :userId AND GROUP_ID = :familyId", nativeQuery = true)

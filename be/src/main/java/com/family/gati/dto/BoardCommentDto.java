@@ -4,12 +4,14 @@ import com.family.gati.entity.BoardComment;
 import com.family.gati.util.CommonBuilder;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
+@Getter
 public class BoardCommentDto {
     @ApiModelProperty(example = "1")
     private Integer id;
