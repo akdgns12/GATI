@@ -53,7 +53,7 @@ public class UserApiController {
     @ApiOperation(value = "유저 회원가입", notes = "id, email, password, nickname, birth, phoneNumber")
     @PostMapping("/join")
     public ResponseEntity<?> join(@ApiParam(value = "id, email, password, nickname, birth, phoneNumber")
-                                      @RequestBody UserSignUpRequest request){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
+                                      @RequestBody UserSignUpRequestDto request){ // User 엔티티말고, payload.SignUpRequest로 가져오는 형식 고려해보자
         logger.debug("user: {}", request.toString());
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
@@ -67,6 +67,7 @@ public class UserApiController {
         newUser.setNickName(request.getNickName());
         newUser.setBirth(request.getBirth());
         newUser.setPhoneNumber(request.getPhoneNumber());
+        newUser.setPlusMinus(request.getPlusMinus());
         newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setUpdateTime(LocalDateTime.now());

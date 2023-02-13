@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -163,7 +162,7 @@ public class FamilyApiController {
             status = HttpStatus.OK;
 
             // 삭제 후 유저 그룹 조회해서 하나도 없다면 생성 화면으로, 하나라도 있다면 main_group 선택 화면으로
-            if(familyService.getFamilyListByUserId(user.getUserId()) == null){
+            if(familyMemberService.getFamilyListByUserId(user.getUserId()) == null){
                 resultMap.put("msg", "유저 그룹 존재 X 생성화면으로");
             }else{
                 resultMap.put("msg", "그룹 하나 이상 존재 main_group 선택화면으로");

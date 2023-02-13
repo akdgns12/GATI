@@ -32,10 +32,6 @@ public class FamilyService {
         return familyRepository.findById(familyId);
     }
 
-    public List<Family> getFamilyListByUserId(String userId){
-        return familyRepository.findAllByUserId(userId);
-    }
-
     // 유저의 메인 그룹 조회
     public Family getMainFamilyByUserId(String userId){
         User user = userRepository.findByUserId(userId);
