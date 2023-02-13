@@ -8,12 +8,14 @@ import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.User;
 import com.family.gati.repository.FamilyMemberRepository;
 import com.family.gati.repository.FamilyRepository;
+import com.family.gati.repository.NotiRepository;
 import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,9 +25,15 @@ public class FamilyService {
     private final FamilyRepository familyRepository;
     private final FamilyMemberRepository familyMemberRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
+    private final NotiService notiService;
 
     public Family getFamilyById(int familyId){
         return familyRepository.findById(familyId);
+    }
+
+    public List<Family> getFamilyListByUserId(String userId){
+        return familyRepository.findAllByUserId(userId);
     }
 
     // 유저의 메인 그룹 조회
@@ -88,8 +96,6 @@ public class FamilyService {
         familyRepository.deleteById(id);
     }
 
-    //
-    @Transactional
     public void acceptInvite(FamilyInviteDto familyInviteDto){
         int familyId = familyInviteDto.getFamilyId();
         String userId = familyInviteDto.getReceiverId();
@@ -99,18 +105,23 @@ public class FamilyService {
         family.setFamilyTotal(family.getFamilyTotal() + 1);
         familyRepository.save(family);
 
+        log.debug("familyMember 추가");
         // familyMember 테이블에 user 추가
         FamilyMember familyMember = new FamilyMember();
         familyMember.setUserId(userId);
         familyMember.setFamilyId(familyId);
+
+        familyMemberRepository.save(familyMember);
+
         // 초대받은 유저의 mainFamily가 없다면 수락과 동시에 Main그룹으로 설정
-        User user = userRepository.findByUserId(userId);
+        User user = userService.getUserByUserId(userId);
+
         if(user.getMainFamily() == null){
             user.setMainFamily(familyId);
             userRepository.save(user);
         }
 
-
-        familyMemberRepository.save(familyMember);
+        // 초대 수락 후 Notification 테이블에서 알림 제거
+        notiService.deleteNoti(familyInviteDto.getReceiverId(), familyInviteDto.getFamilyId());
     }
 }

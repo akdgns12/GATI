@@ -11,5 +11,6 @@ public interface FamilyRepository extends JpaRepository<Family, Long> {
     Family findById(int id);
     Family findByName(String name);
     Family findByMasterId(String masterId);
+    List<Family> findAllByUserId(String userId);
     void deleteById(int id);
 }

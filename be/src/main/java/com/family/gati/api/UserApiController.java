@@ -124,6 +124,7 @@ public class UserApiController {
             resultMap.put("accessToken", accessToken);
             resultMap.put("refreshToken", refreshToken);
             resultMap.put("userId", user.getUserId());
+            resultMap.put("role", user.getRole());
             resultMap.put("mainGroup Info", getMainFamilyByUserId(user.getUserId()));
             status = HttpStatus.OK;
         }catch (Exception e){
@@ -171,14 +172,28 @@ public class UserApiController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto();
         try{
-           User userInfo = userService.getUserByUserId(userId);
-            logger.debug("userInfo: {}", userInfo);
-            if(userInfo == null){
+           User user = userService.getUserByUserId(userId);
+
+           userInfoResponseDto.setUserSeq(user.getUserSeq());
+           userInfoResponseDto.setUserId(user.getUserId());
+           userInfoResponseDto.setEmail(user.getEmail());
+           userInfoResponseDto.setBirth(user.getBirth());
+           userInfoResponseDto.setMainFamily(user.getMainFamily());
+           userInfoResponseDto.setNickName(user.getNickName());
+           userInfoResponseDto.setPhoneNumber(user.getPhoneNumber());
+           userInfoResponseDto.setPlusMinus(user.getPlusMinus());
+           userInfoResponseDto.setCreateTime(user.getCreateTime());
+           userInfoResponseDto.setUpdateTime(user.getUpdateTime());
+           userInfoResponseDto.setRole(user.getRole());
+
+            logger.debug("userInfo: {}", userInfoResponseDto);
+            if(userInfoResponseDto == null){
                 status = HttpStatus.NO_CONTENT;
             }else{
                 resultMap.put("msg", SUCCESS);
-                resultMap.put("userInfo", userInfo);
+                resultMap.put("userInfo", userInfoResponseDto);
                 status = HttpStatus.OK;
             }
         }catch (Exception e){
@@ -238,16 +253,15 @@ public class UserApiController {
 
     // 회원정보 변경
     @ApiOperation(value = "회원정보 변경")
-    @PutMapping("/change/{userId}")
-    public ResponseEntity<?> update(@PathVariable("userId") String userId,
-                                    @RequestBody UserUpdateDto userUpdateDto){
-        logger.debug("user: {}", userId);
+    @PutMapping("/change")
+    public ResponseEntity<?> update(@RequestBody UserUpdateDto userUpdateDto){
+        logger.debug("user: {}", userUpdateDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            userService.updateUser(userId, userUpdateDto);
-            User modifiedUser = userRepository.findByUserId(userId);
+            userService.updateUser(userUpdateDto.getUserId(), userUpdateDto);
+            User modifiedUser = userRepository.findByUserId(userUpdateDto.getUserId());
             resultMap.put("msg", SUCCESS);
             resultMap.put("modifiedUser", modifiedUser);
             status = HttpStatus.OK;
@@ -333,6 +347,7 @@ public class UserApiController {
 
     @Data
     public static class changePasswordRequest{
+        private String userId;
         private String password;
         private String changePassword;
     }
@@ -340,25 +355,14 @@ public class UserApiController {
     // 유저 비밀번호 변경
     @ApiOperation(value = "비밀번호 변경")
     @PutMapping("/account/password")
-    public ResponseEntity<?> changePassword(@RequestHeader(value = "Authroize") String token,
-                                             changePasswordRequest request){
+    public ResponseEntity<?> changePassword(@RequestBody changePasswordRequest request){
         // front에서 비밀번호 변경할때도 입력 form에 대해 규칙성 검사해주면 bindingresult 검사는 굳이?
-        logger.debug("token: {}", token);
+        logger.debug("token: {}", request);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
-        // 유효성 검사
-        if(!jwtTokenProvider.validateToken(token)){
-            log.debug("올바르지 않은 token: {}", token);
-            resultMap.put("msg", FAIL);
-            resultMap.put("result", "Invalid token");
-            status = HttpStatus.NOT_FOUND;
-
-            return new ResponseEntity<Map<String, Object>>(resultMap, status);
-        }
-
         try{
-            User user = jwtTokenProvider.getUser(token);
+            User user = userRepository.findByUserId(request.getUserId());
             userService.changePassword(user, request.getChangePassword());
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.ACCEPTED;

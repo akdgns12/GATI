@@ -143,17 +143,31 @@ public class FamilyApiController {
 
     // 그룹 삭제
     @ApiOperation(value = "그룹 삭제")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteFamily(@PathVariable int id){
-        logger.debug("id: {}", id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteFamily(@RequestBody DeleteFamilyDto deleteFamilyDto){
+        logger.debug("id: {}", deleteFamilyDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            familyService.deleteFamily(id);
-            familyMemberService.deleteFamilyMember(id);
+            familyService.deleteFamily(deleteFamilyDto.getFamilyId());
+            familyMemberService.deleteFamilyMember(deleteFamilyDto.getFamilyId());
+            // 지울 그룹이 user의 mainFamily이면 user 정보에서도 삭제
+            User user = userService.getUserByUserId(deleteFamilyDto.getUserId());
+            if(user.getMainFamily() == deleteFamilyDto.getFamilyId()){
+                user.setMainFamily(null);
+                userRepository.save(user);
+            }
+
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
+
+            // 삭제 후 유저 그룹 조회해서 하나도 없다면 생성 화면으로, 하나라도 있다면 main_group 선택 화면으로
+            if(familyService.getFamilyListByUserId(user.getUserId()) == null){
+                resultMap.put("msg", "유저 그룹 존재 X 생성화면으로");
+            }else{
+                resultMap.put("msg", "그룹 하나 이상 존재 main_group 선택화면으로");
+            }
         }catch (Exception e){
             logger.debug("그룹 삭제 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
@@ -165,18 +179,23 @@ public class FamilyApiController {
 
     @ApiOperation(value = "그룹 초대", notes = "Dto에 그룹 id, 그룹 명, 초대 받는 사람, type 전달받음")
     @PostMapping
-    public ResponseEntity<?> inviteFamily(HttpServletRequest request,
-                                          @RequestBody FamilyInviteDto familyInviteDto){
-        String token = jwtAuthenticationFilter.parseBearerToken(request);
-        User user = jwtTokenProvider.getUser(token);
-        String nickName = user.getNickName(); // 보내는 사람
-
-        logger.debug("보내는 사람 nickName");
+    public ResponseEntity<?> inviteFamily(@RequestBody FamilyInviteDto familyInviteDto){
+        logger.debug("familyInviteDto", familyInviteDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
+        // 이미 가족에 포함된 멤버라면 return
+        if(familyMemberService.isAlreadyExist(familyInviteDto.getFamilyId(), familyInviteDto.getReceiverId())){
+            logger.debug("이미 존재하는 멤버");
+            resultMap.put("msg", FAIL);
+            resultMap.put("result", "이미 존재하는 멤버");
+            status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        }
+
+
         FamilyNotiDto familyNotiDto = new FamilyNotiDto();
-        familyNotiDto.setSenderNickname(nickName);
+        familyNotiDto.setSenderNickname(familyInviteDto.getNickName());
         familyNotiDto.setReceiverId(familyInviteDto.getReceiverId());
         familyNotiDto.setGroupName(familyInviteDto.getGroupName());
         familyNotiDto.setGroupId(familyInviteDto.getFamilyId());
@@ -197,7 +216,7 @@ public class FamilyApiController {
     
     // 그룹 초대 수락
     @ApiOperation(value = "그룹 초대 수락", notes = "Family id, userId 받음")
-    @PostMapping("/invite/{userId}")
+    @PostMapping("/inviteAccpet")
     public ResponseEntity<?> acceptInviteFamily(@RequestBody FamilyInviteDto familyInviteDto){
         logger.debug("userId: {}", familyInviteDto);
         Map<String, Object> resultMap = new HashMap<>();
@@ -209,7 +228,28 @@ public class FamilyApiController {
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e) {
-            logger.debug("그룹 초대 실패: {}", e.getMessage());
+            logger.debug("그룹 초대 수락 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    // 그룹 초대 거절
+    @ApiOperation(value = "그룹 초대 거절", notes = "초대 거절시 NOTIFICATION에 등록된 알림 삭제")
+    @DeleteMapping("/inviteReject")
+    public ResponseEntity<?> rejectInviteFamily(@RequestBody FamilyInviteRejectDto familyInviteRejectDto){
+        logger.debug("userId: {}", familyInviteRejectDto);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            notiService.deleteNoti(familyInviteRejectDto.getUserId(), familyInviteRejectDto.getFamilyId());
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e) {
+            logger.debug("초대 거절, 알림 삭제 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
