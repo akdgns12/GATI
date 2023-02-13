@@ -29,16 +29,26 @@ public class RecommandServiceImpl implements RecommandService{
     @Override
     public void apiResponseData() throws Exception {
 
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B551011/KorService/areaBasedList?numOfRows=10"); /*URL*/
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B551011/KorService/areaBasedList"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "="+URLEncoder.encode("QUz1fBx92fphiG1OGe%2F291wDWUP4wjIMHXmxwTOnUt%2B38pbi3npnb%2Fl%2FCfKHtQlbKsfbIi68Oy8hw89JzbVYsg%3D%3D")); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*페이지 번호*/
+        urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("AppTest", "UTF-8")); /*요청 데이터기간 (하루 : DAILY, 한달 : MONTH, 3달 : 3MONTH)*/
         urlBuilder.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*측정소 이름*/
-        urlBuilder.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("ggati", "UTF-8")); /*요청 데이터기간 (하루 : DAILY, 한달 : MONTH, 3달 : 3MONTH)*/
-        urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=QUz1fBx92fphiG1OGe/291wDWUP4wjIMHXmxwTOnUt+38pbi3npnb/l/CfKHtQlbKsfbIi68Oy8hw89JzbVYsg=="); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("_type","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*버전별 상세 결과 참고문서 참조*/
+        StringBuilder urlBuilder2 = new StringBuilder("http://apis.data.go.kr/B551011/KorService/areaBasedList"); /*URL*/
+        urlBuilder2.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "="+URLEncoder.encode("QUz1fBx92fphiG1OGe/291wDWUP4wjIMHXmxwTOnUt+38pbi3npnb/l/CfKHtQlbKsfbIi68Oy8hw89JzbVYsg==")); /*Service Key*/
+        urlBuilder2.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
+        urlBuilder2.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*페이지 번호*/
+        urlBuilder2.append("&" + URLEncoder.encode("MobileApp","UTF-8") + "=" + URLEncoder.encode("ggati", "UTF-8")); /*요청 데이터기간 (하루 : DAILY, 한달 : MONTH, 3달 : 3MONTH)*/
+        urlBuilder2.append("&" + URLEncoder.encode("MobileOS","UTF-8") + "=" + URLEncoder.encode("ETC", "UTF-8")); /*측정소 이름*/
+        urlBuilder2.append("&" + URLEncoder.encode("_type","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*버전별 상세 결과 참고문서 참조*/
         URL url = new URL(urlBuilder.toString());
+        URL url2 = new URL(urlBuilder2.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
+        conn.setConnectTimeout(500000000);
         System.out.println("Response code: " + conn.getResponseCode());
         BufferedReader br;
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
