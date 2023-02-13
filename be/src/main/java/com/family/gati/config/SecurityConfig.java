@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -46,8 +47,8 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return web -> { web.ignoring()
-                .antMatchers("/**/join", "/**/login","/**/user/findId/**", "/**/user/findPassword/**"
-                        ,"/refresh")
+//                .antMatchers("/**/join", "/**/login","/**/user/findId/**", "/**/user/findPassword/**"
+//                        ,"/refresh")
                 .antMatchers(
                         "/v2/api-docs/**"
                         , "/swagger.json"
@@ -65,7 +66,8 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable() // security 기본 로그인 사용 X
                 // cors허용
-                .cors().and().cors().configurationSource(corsConfigurationSource()).and()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .csrf().disable() // csrf 보안 설정 비활성화
                 // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter보다 앞으로 설정
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
@@ -80,7 +82,8 @@ public class SecurityConfig {
                 .authorizeRequests() // 보호된 리소스 URI에 접근할 수 있는 권한 설정
                 // 로그인, 회원가입 접근 허용
                 .antMatchers("/**/login", "/**/join", "/**/user/findId/**", "/**/user/findPassword/**"
-                ,"/refresh").permitAll()
+                ,"/refresh"
+                ).permitAll()
                 .antMatchers(
                         "/v2/api-docs/**"
                         , "/swagger.json"
