@@ -48,7 +48,7 @@ const PostDetail = () => {
   }, [])
 
   function mvBack() {
-    navigate(-1);
+    navigate('/');
   }
 
   return (

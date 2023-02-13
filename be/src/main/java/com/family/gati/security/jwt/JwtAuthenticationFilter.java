@@ -60,8 +60,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         HttpStatus status = null;
         String token = parseBearerToken(request); // 추출한 token
 
-
-
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
             log.debug("token의 userId", tokenProvider.getUserId(token));
@@ -82,7 +80,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     // request에서 "Authorization" token 추출
-    private String parseBearerToken(HttpServletRequest request) {
+    public String parseBearerToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {

@@ -29,8 +29,8 @@ import java.util.Map;
 public class JwtTokenProvider {
 
     private final String SECRET_KEY;
-    private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60;		// 1시간
-    private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 7;	// 1주
+    private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 1;		// 1시간
+    private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 2;	// 1주
 //    private final String AUTHORITIES_KEY = "role";
 
     @Autowired
@@ -135,7 +135,6 @@ public class JwtTokenProvider {
 
     // 토큰 유효성, 만료시간 검사
     public Boolean validateToken(String token) {
-
         try {
             log.debug("유효성 검사 시작");
             Jwts.parserBuilder().setSigningKey(getSignKey(SECRET_KEY)).build().parseClaimsJws(token);

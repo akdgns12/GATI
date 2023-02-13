@@ -3,10 +3,12 @@ package com.family.gati.api;
 import com.family.gati.dto.*;
 import com.family.gati.service.AlbumCommentService;
 import com.family.gati.service.AlbumService;
+import com.family.gati.service.FileService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.List;
 public class AlbumController {
     private final AlbumService albumService;
     private final AlbumCommentService albumCommentService;
+    private final FileService fileService;
 
 //    @ApiOperation(
 //            value = "현재 그룹의 Album 조회"
@@ -52,7 +55,7 @@ public class AlbumController {
 
     @ApiOperation(
             value = "현재 그룹의 Album page 조회"
-            , notes = "GroupId와 page 번호(0부터 시작)를 통해 현재 그룹의 Album page를 최신순으로 12개 조회한다.")
+            , notes = "GroupId와 page 번호(0부터 시작)를 통해 현재 그룹의 Album page를 최신순으로 8개 조회한다.")
     @ApiResponses({
             @ApiResponse(
                     code = 200
@@ -77,7 +80,7 @@ public class AlbumController {
     public ResponseEntity<?> getAlbumsByGroupIdAndPage(@RequestParam Integer groupId, @RequestParam Integer page, @RequestParam String userId) {
         List<AlbumDto> albumDtos = albumService.findByGroupId(groupId, userId);
         List<AlbumDto> findDtos = new ArrayList<>();
-        for (int i = page*12; i < Math.min((page+1)*12, albumDtos.size()); i++) {
+        for (int i = page*8; i < Math.min((page+1)*8, albumDtos.size()); i++) {
             findDtos.add(albumDtos.get(i));
         }
         return ResponseEntity.ok(findDtos);
@@ -107,19 +110,28 @@ public class AlbumController {
             value = "Album 작성"
             , notes = "Album을 작성한다.")
     @PostMapping("/album")
-    public ResponseEntity<?> addAlbum(@RequestBody AlbumRegistDto albumRegistDto) {
+    public ResponseEntity<?> addAlbum(@ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file,
+                                      @ApiParam(value = "The DTO object", required = true) @ModelAttribute AlbumRegistDto albumRegistDto) {
         AlbumDto albumDto = new AlbumDto();
+        String path;
+        try {
+            path = fileService.fileUpload(file, "album");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
         albumDto.setGroupId(albumRegistDto.getGroupId());
         albumDto.setUserId(albumRegistDto.getUserId());
         albumDto.setContent(albumRegistDto.getContent());
         albumDto.setTag(albumRegistDto.getTagDtos());
-        albumDto.setImg(albumRegistDto.getImg());
+        albumDto.setImg(path);
         albumDto.setLikes(0);
         albumDto.setCreateTime(new Timestamp(new Date().getTime()));
         albumDto.setUpdateTime(new Timestamp(new Date().getTime()));
         albumDto.setComments(0);
 
         AlbumDto resultDto = albumService.insertAlbum(albumDto);
+        resultDto.setUserLike(0);
         return ResponseEntity.ok(resultDto);
     }
 
@@ -127,12 +139,20 @@ public class AlbumController {
             value = "Album 수정"
             , notes = "Album을 수정한다.")
     @PutMapping("/album")
-    public ResponseEntity<?> updateAlbum(@RequestBody AlbumUpdateDto albumUpdateDto){
+    public ResponseEntity<?> updateAlbum(@ApiParam(value = "The file to upload", required = true)@RequestPart MultipartFile file,
+                                         @ApiParam(value = "The DTO object", required = true) @ModelAttribute AlbumUpdateDto albumUpdateDto){
         AlbumDto albumDto = new AlbumDto();
+        String path;
+        try {
+            path = fileService.fileUpload(file, "album");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
         albumDto.setId(albumUpdateDto.getId());
         albumDto.setContent(albumUpdateDto.getContent());
         albumDto.setTag(albumUpdateDto.getTagDtos());
-        albumDto.setImg(albumUpdateDto.getImg());
+        albumDto.setImg(path);
         albumDto.setUpdateTime(new Timestamp(new Date().getTime()));
 
         AlbumDto resultDto = albumService.updateAlbum(albumDto);

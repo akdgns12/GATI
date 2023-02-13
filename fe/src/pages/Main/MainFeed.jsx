@@ -28,13 +28,15 @@ const MainFeed = () => {
 
   // console.log(state);
   const { articles } = useSelector((state) => state.board);
-  const groupId = 11;
+  // const groupId = 11;
+  const { mainGroup } = useSelector((state) => state.user);
+  console.log(mainGroup);
   // const groupId = null;
   const { notifications } = useSelector((state) => state.noti);
 
   const [show, setShow] = useState(true);
 
-  if (groupId) {
+  if (mainGroup != null && mainGroup != undefined && mainGroup.id != null) {
     return (
       <div>
         <AddButton mode="feed" />
