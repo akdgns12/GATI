@@ -5,6 +5,7 @@ import com.family.gati.entity.Family;
 import com.family.gati.entity.Role;
 import com.family.gati.entity.User;
 import com.family.gati.repository.UserRepository;
+import com.family.gati.security.jwt.JwtAuthenticationFilter;
 import com.family.gati.service.FamilyService;
 import com.family.gati.service.UserService;
 import com.family.gati.security.jwt.JwtTokenProvider;
@@ -23,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class UserApiController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final FamilyService familyService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     @Value("${spring.mail.username}")
     private String from; // 발신자 메일(관리자)
 
@@ -111,17 +114,10 @@ public class UserApiController {
             String userId = user.getUserId();
             int userSeq = user.getUserSeq();
 
-            // accessToken 발급
+            // 유저 로그인할 때 accessToken, refreshToken 둘 다 재발급
             String accessToken = jwtTokenProvider.createAccessTokenByUserInfo(userId, userSeq);
-            String refreshToken = null;
-            // 발급받은적 없거나 만료된 RefreshToken이 아니라면 발급
-            if(user.getRefreshToken() == null){ // || jwtTokenProvider.validateRefreshToken(user.getRefreshToken()) 추가할 필요있나? 어차피
-                // refreshToken 발급하고 DB에 저장
-                refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
-                userRepository.updateRefreshToken(userSeq, refreshToken);
-            } else{ // 발급받은 적 없다면
-                refreshToken = userRepository.getRefreshTokenByUserSeq(userSeq);
-            }
+            String refreshToken = jwtTokenProvider.createRefreshTokenByUserInfo(userId, userSeq);
+            userRepository.updateRefreshToken(userSeq, refreshToken);
 
             resultMap.put("msg", SUCCESS);
             // 유저 로그인 성공시 accessToken, refreshToken 모두 보내줌
@@ -368,6 +364,30 @@ public class UserApiController {
             status = HttpStatus.ACCEPTED;
         }catch (Exception e){
             log.debug("비밀번호 변경 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @ApiOperation(value = "로그아웃", notes = "로그아웃시 refreshToken 삭제")
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request){
+        String token = jwtAuthenticationFilter.parseBearerToken(request);
+        User user = jwtTokenProvider.getUser(token);
+        logger.debug("user", user);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+        try{
+            user.setRefreshToken(null);
+            userRepository.save(user);
+            resultMap.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("로그아웃 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }

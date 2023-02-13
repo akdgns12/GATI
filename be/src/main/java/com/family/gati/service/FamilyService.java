@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -24,23 +23,22 @@ public class FamilyService {
     private final FamilyMemberRepository familyMemberRepository;
     private final UserRepository userRepository;
 
-    public Family getFamilyById(int groupId){
-        return familyRepository.findById(groupId);
+    public Family getFamilyById(int familyId){
+        return familyRepository.findById(familyId);
     }
-
 
     // 유저의 메인 그룹 조회
     public Family getMainFamilyByUserId(String userId){
         User user = userRepository.findByUserId(userId);
 
-        Family mainGroup = familyRepository.findById(user.getMainFamily());
+        Family mainFamily = familyRepository.findById(user.getMainFamily());
 
-        if(mainGroup == null){
+        if(mainFamily == null){
             log.debug("메인 그룹 없음:{}");
             return null;
         }
 
-        return mainGroup;
+        return mainFamily;
     }
 
     public void createFamily(String userId, FamilySignUpDto familySignUpDto){
@@ -54,8 +52,15 @@ public class FamilyService {
         // 로그인 한 유저 ID로 가져옴
         family.setMasterId(userId);
 
-        familyRepository.save(family);
-    }
+        family = familyRepository.save(family);
+        int familyId = family.getId();
+
+        FamilyMember familyMember = new FamilyMember();
+        familyMember.setFamilyId(familyId);
+        familyMember.setUserId(userId);
+
+        familyMemberRepository.save(familyMember);
+   }
 
     public Family getByMasterId(String masterId){
         return familyRepository.findByMasterId(masterId);
