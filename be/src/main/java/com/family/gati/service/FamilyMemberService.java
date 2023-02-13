@@ -28,18 +28,9 @@ public class FamilyMemberService {
         return familyMemberRepository.findAllByUserId(userId);
     }
 
-//    public void createFamilyMember(FamilyMemberDto familyMemberDto){
-//        Family family = familyRepository.findByName(familySignUpDto.getName());
-//
-//        int id = family.getId();
-//        FamilyMember familyMember = new FamilyMember();
-//
-//        familyMember.setFamilyId(id);
-//        familyRepository.findById()
-//        familyMember.setUserId("akdgns12");
-//
-//        familyMemberRepository.save(familyMember);
-//    }
+    public List<FamilyMember> getFamilyMemberListByFamilyId(int familyId){
+        return familyMemberRepository.findALlByFamilyId(familyId);
+    }
 
     @Transactional
     public void deleteFamilyMember(int id){

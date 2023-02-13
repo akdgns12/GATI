@@ -1,10 +1,6 @@
 package com.family.gati.api;
 
-import com.family.gati.dto.FamilyMemberDto;
-import com.family.gati.dto.FamilyInviteDto;
-import com.family.gati.dto.FamilyNotiDto;
-import com.family.gati.dto.FamilySignUpDto;
-import com.family.gati.dto.FamilyUpdateDto;
+import com.family.gati.dto.*;
 import com.family.gati.entity.Family;
 import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.User;
@@ -15,6 +11,7 @@ import com.family.gati.security.jwt.JwtTokenProvider;
 import com.family.gati.service.FamilyMemberService;
 import com.family.gati.service.FamilyService;
 import com.family.gati.service.NotiService;
+import com.family.gati.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +43,7 @@ public class FamilyApiController {
 
     private final FamilyService familyService;
     private final FamilyMemberService familyMemberService;
+    private final UserService userService;
     private final UserRepository userRepository;
     private final FamilyRepository familyRepository;
     private final JwtTokenProvider jwtTokenProvider;
@@ -211,6 +210,39 @@ public class FamilyApiController {
             status = HttpStatus.OK;
         }catch (Exception e) {
             logger.debug("그룹 초대 실패: {}", e.getMessage());
+            resultMap.put("msg", FAIL);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    // 같은 그룹 멤버 조회
+    @ApiOperation(value = "같은 그룹 멤버 조회", notes = "familyId 받음")
+    @GetMapping("/memberList/{familyId}")
+    public ResponseEntity<?> getFamilyMemberInfo(@PathVariable int familyId){
+        logger.debug("familyId: {}", familyId);
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+
+
+        List<FamilyMemberResponseDto> familyMemberInfoList = new ArrayList<>();
+        try{
+            List<FamilyMember> familyMemberList = familyMemberService.getFamilyMemberListByFamilyId(familyId);
+            for(FamilyMember data : familyMemberList) {
+                User user = userService.getUserByUserId(data.getUserId());
+                FamilyMemberResponseDto familyMemberResponseDto = new FamilyMemberResponseDto();
+                familyMemberResponseDto.setUserId(user.getUserId());
+                familyMemberResponseDto.setBirth(user.getBirth());
+                familyMemberResponseDto.setNickName(user.getNickName());
+                familyMemberResponseDto.setPhone(user.getPhoneNumber());
+                familyMemberInfoList.add(familyMemberResponseDto);
+            }
+            resultMap.put("msg", SUCCESS);
+            resultMap.put("Info result", familyMemberInfoList);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            logger.debug("그룹 멤버 죄회 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
