@@ -34,10 +34,21 @@ export default function MyInfochange() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(event.target.nickname.value);
-    console.log(event.target.email.value);
-    console.log(event.target.phoneNumber.value);
-    console.log(event.target.birth.value);
+    const reqData = {
+      birth: event.target.birth.value,
+      email: event.target.email.value,
+      nickName: event.target.nickname.value,
+      phoneNumber: event.target.phoneNumber.value,
+      userId: userId,
+    };
+    console.log(reqData);
+    httpClient
+      .put("/user/change/", reqData)
+      .then((res) => {
+        // console.log(res);
+        window.alert("회원 정보가 수정되었습니다.");
+      })
+      .catch((error) => console.log(error));
   }
   return (
     <Grid component="form" onSubmit={handleSubmit}>
@@ -48,7 +59,7 @@ export default function MyInfochange() {
               label="닉네임"
               variant="outlined"
               name="nickname"
-              defaultValue={userInfo.username}
+              defaultValue={userInfo.nickName}
             />
           </Grid>
           <Grid p={1} display="flex" justifyContent="center">
