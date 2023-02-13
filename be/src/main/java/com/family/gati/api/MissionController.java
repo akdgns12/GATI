@@ -151,10 +151,9 @@ public class MissionController {
             , notes = "MissionImage를 삭제한다.")
     @DeleteMapping("/image/{id}")
     public ResponseEntity<?> deleteMissionImage(@ApiParam(value = "삭제 할 missionImageId")@PathVariable("id") Integer id) {
-        Integer missionId = missionImageService.findById(id).getMissionId();
-        missionImageService.deleteMissionImageById(id);
-        MissionDto missionDto = missionService.findById(missionId);
+        MissionDto missionDto = missionImageService.deleteMissionImageById(id);
         return ResponseEntity.ok(missionDto);
+
     }
 
 //    @GetMapping("/mission/{id}")
