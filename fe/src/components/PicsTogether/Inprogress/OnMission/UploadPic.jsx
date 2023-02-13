@@ -30,21 +30,16 @@ export default function UploadPic() {
   
   // 이미지 파일 업로드 함수
   const imgRef = useRef();
-  const reader = new FileReader();
-
   const upload = () => {
+    console.log('upload 함수 실행')
     const file = imgRef.current.files[0];
-    console.log('file',file)
-    reader.onloadend = () => {
-      // console.log('file',file)
-      // console.log('DataUrl',reader.result)
-      const formData = new FormData()
-      formData.append('img', file, 'image.jpg')
-      formData.append('missionId', missionId)
-      formData.append('userId', userId)
-      dispatch(asyncPostImg(formData))
+    const formData = new FormData()
+    formData.append('img', file, 'image.jpg')
+    formData.append('missionId', missionId)
+    formData.append('userId', userId)
+    dispatch(asyncPostImg(formData))
+    console.log('formData',formData)
     };
-  };
 
   // myUpload : 내가 올린 사진 정보
   const uploadedImgList = getMission.missionImageDtos ? getMission.missionImageDtos : []
@@ -73,7 +68,7 @@ export default function UploadPic() {
   else {
     content =
     <IconButton sx={{margin:'auto'}} component="label">
-      <input hidden accept="image/*" type="file" onInput={upload} onChange={changeBoxStyle} ref={imgRef} />
+      <input hidden accept="image/png, image/jpeg" type="file" onInput={upload} onChange={changeBoxStyle} ref={imgRef} />
       <AddIcon fontSize="large"/>
     </IconButton>
   }

@@ -30,6 +30,7 @@ export const asyncPutMission = createAsyncThunk(
 export const asyncPostImg = createAsyncThunk(
   'picsTgSlice/asyncPostImg',
   async (formData) => {
+    console.log('here')
     const resp = await httpClient.post(
       "/missions/image/",
       formData,
@@ -152,12 +153,11 @@ export const picsTgSlice = createSlice({
     })
     builder.addCase(asyncDeleteMission.fulfilled, (state,action)=>{
       if (action.payload) {
-        state.getMission = action.payload
+        state.getMissionList = action.payload
       } else {
         alert('에러가 발생했습니다.')
       }
     })
-
     // Completed 모드에서 사용하는 actions
     builder.addCase(asynGetMissionList.fulfilled, (state,action)=>{
       if (action.payload) {

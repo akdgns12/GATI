@@ -47,4 +47,9 @@ public class MissionImageServiceImpl implements MissionImageService{
     public void deleteMissionImageById(Integer id) {
         missionImageRepository.deleteById(id);
     }
+
+    @Override
+    public MissionImageDto findById(Integer id) {
+        return new MissionImageDto.MissionImageDtoBuilder(missionImageRepository.getById(id)).build();
+    }
 }
