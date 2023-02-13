@@ -30,7 +30,7 @@ public class JwtTokenProvider {
 
     private final String SECRET_KEY;
     private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 1;		// 1시간
-    private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 10 * 1 * 1;	// 1주
+    private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 2;	// 1주
 //    private final String AUTHORITIES_KEY = "role";
 
     @Autowired
