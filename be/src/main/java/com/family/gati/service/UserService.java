@@ -74,8 +74,6 @@ public class UserService {
         }
 
         originUser.setEmail(request.getEmail());
-        originUser.setPassword(request.getPassword());
-        originUser.setPassword(passwordEncoder.encode(request.getPassword()));
         originUser.setNickName(request.getNickName());
         originUser.setBirth(request.getBirth());
         originUser.setPhoneNumber(request.getPhoneNumber());
@@ -163,7 +161,7 @@ public class UserService {
     // 비밀번호 변경
     @Transactional
     public void changePassword(User user, String newPassword){
-        user.setUserId(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
 }
