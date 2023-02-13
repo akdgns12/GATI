@@ -1,5 +1,6 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.FamilyInviteDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -80,5 +80,31 @@ public class FamilyService {
     @Transactional
     public void deleteFamily(int id){
         familyRepository.deleteById(id);
+    }
+
+    //
+    @Transactional
+    public void acceptInvite(FamilyInviteDto familyInviteDto){
+        int familyId = familyInviteDto.getFamilyId();
+        String userId = familyInviteDto.getReceiverId();
+        Family family = familyRepository.findById(familyId);
+
+        // 기존 멤버 수 +1
+        family.setFamilyTotal(family.getFamilyTotal() + 1);
+        familyRepository.save(family);
+
+        // familyMember 테이블에 user 추가
+        FamilyMember familyMember = new FamilyMember();
+        familyMember.setUserId(userId);
+        familyMember.setFamilyId(familyId);
+        // 초대받은 유저의 mainFamily가 없다면 수락과 동시에 Main그룹으로 설정
+        User user = userRepository.findByUserId(userId);
+        if(user.getMainFamily() == null){
+            user.setMainFamily(familyId);
+            userRepository.save(user);
+        }
+
+
+        familyMemberRepository.save(familyMember);
     }
 }
