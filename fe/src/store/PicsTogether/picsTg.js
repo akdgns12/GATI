@@ -150,13 +150,13 @@ export const picsTgSlice = createSlice({
         alert('에러가 발생했습니다.')
       }
     })
-    builder.addCase(asyncDeleteMission.fulfilled, (state,action)=>{
-      if (action.payload) {
-        state.getMission = action.payload
-      } else {
-        alert('에러가 발생했습니다.')
-      }
-    })
+    // builder.addCase(asyncDeleteMission.fulfilled, (state,action)=>{
+    //   if (action.payload) {
+    //     state.getMissionList = action.payload
+    //   } else {
+    //     alert('에러가 발생했습니다.')
+    //   }
+    // })
 
     // Completed 모드에서 사용하는 actions
     builder.addCase(asynGetMissionList.fulfilled, (state,action)=>{

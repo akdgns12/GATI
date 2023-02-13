@@ -29,7 +29,7 @@ const initialState = {
     accessToken: "",
     refreshToken: "",
   },
-  mainGroup: {},
+  mainGroup: 1,
   // token & other stuffs
 };
 
