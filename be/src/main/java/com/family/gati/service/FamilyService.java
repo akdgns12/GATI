@@ -81,7 +81,7 @@ public class FamilyService {
         Family family = familyRepository.findById(id);
 
         if(family == null){
-            log.debug("없는 그룹입니다: {}", family);
+            log.debug("없는 그룹입니다:  {}", family);
             return;
         }
 
