@@ -19,7 +19,7 @@ import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Img from "../static/user img.png";
+import Img from "../static/big-family.png";
 import { useState } from "react";
 import { persistor } from "../index.jsx";
 
@@ -94,7 +94,7 @@ const PrimaryAppBar = () => {
                 width: 50,
                 height: 50,
               }}
-              alt="User img."
+              alt="gati img."
               src={Img}
               style={{ display: "inline-block" }}
             />
