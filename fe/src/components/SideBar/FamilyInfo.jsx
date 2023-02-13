@@ -1,22 +1,17 @@
 import React, { useEffect } from "react";
-import {
-  Grid,
-  Typography,
-  TextField,
-  Button,
-  Divider,
-  Box,
-} from "@mui/material";
-import { useSelector } from "react-redux";
+import { Grid, Typography, TextField, Button, Divider, Box } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import { FilePond } from "react-filepond";
 import { useState } from "react";
 import httpClient from "../../utils/axios";
+import { updateMainGroup } from "../../store/User/user";
 
 export default function FamilyInfo() {
   const { mainGroup, loginUser } = useSelector((state) => state.user);
   const [file, setFile] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [memberList, setMemberList] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("LOAD FAMILY MEMBERS");
@@ -29,7 +24,7 @@ export default function FamilyInfo() {
     httpClient
       .get(`/family/memberList/${mainGroup.id}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         if (data.msg === "success") {
           setMemberList(data["Info result"]);
           setLoaded(true);
@@ -54,6 +49,10 @@ export default function FamilyInfo() {
         console.log(data);
         alert("정보 수정이 완료되었습니다");
         // update main group info here
+        const modifiedData = {
+          name: reqData.name,
+        };
+        dispatch(updateMainGroup(modifiedData));
       })
       .catch((error) => console.log(error));
   }
@@ -99,7 +98,7 @@ export default function FamilyInfo() {
           memberList.length > 0 &&
           memberList.map((member, index) => {
             // console.log(member);
-            return <Box>{member.userId}</Box>;
+            return <Box key={index}>{member.userId}</Box>;
           })}
       </Box>
       <Box>
