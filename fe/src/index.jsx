@@ -13,6 +13,9 @@ import App from "./App";
 import rootReducer from "./store";
 import { PersistGate } from "redux-persist/integration/react";
 
+// 달력용 recoil
+import { RecoilRoot } from "recoil";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const persistConfig = {
@@ -38,11 +41,13 @@ export const persistor = persistStore(store);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+      <RecoilRoot>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <App />
         </PersistGate>
       </Provider>
+      </RecoilRoot>
     </BrowserRouter>
   </React.StrictMode>
 );
