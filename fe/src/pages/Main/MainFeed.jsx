@@ -3,13 +3,15 @@ import ReactDOM from "react-dom/client";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMainFeed, updatePageNo } from "../../store/Board/board";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { Box } from "@mui/material";
 
 import ArticleCard from "../../components/Main/ArticleCard";
 import NotInGroup from "../../components/Main/NotInGroup";
 import AddButton from "../../components/Main/AddButton";
 import NoGroupAlertDialog from "../../components/Main/NoGroupAlert";
 import GroupInvitation from "../../components/Notification/GroupInvitation";
-import { Box } from "@mui/material";
+
+import { clearFeed } from "../../store/Board/board";
 
 const MainFeed = () => {
   const dispatch = useDispatch();
@@ -29,20 +31,32 @@ const MainFeed = () => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    dispatch(loadMainFeed({ groupId: mainGroup.id, userId: loginUser.userId, page: curPageNo }))
+    console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
+    console.log(curPageNo);
+    dispatch(clearFeed());
+    dispatch(
+      loadMainFeed({
+        groupId: mainGroup.id,
+        userId: loginUser.userId,
+        page: 0,
+      })
+    )
       .then((res) => {
         console.log(res);
-        dispatch(updatePageNo(curPageNo + 1));
+        dispatch(updatePageNo(1));
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [mainGroup]);
 
   useEffect(() => {
     let iObserver;
     if (target) {
-      iObserver = new IntersectionObserver((entries) => onIntersect(entries, curPageNo), {
-        threshold: 1.0,
-      });
+      iObserver = new IntersectionObserver(
+        (entries) => onIntersect(entries, curPageNo),
+        {
+          threshold: 1.0,
+        }
+      );
       iObserver.observe(target);
     }
     return () => iObserver && iObserver.disconnect();
@@ -58,12 +72,23 @@ const MainFeed = () => {
     }
   }, [articles]);
 
+  // useEffect(() => {
+  //   console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
+  //   dispatch(updatePageNo(0));
+  // }, [mainGroup]);
+
   async function onIntersect(entries, nextPageNo) {
     // console.log(entries);
     if (entries[0].isIntersecting) {
       setLoaded(false);
       console.log("LOAD MORE");
-      dispatch(loadMainFeed({ groupId: mainGroup.id, userId: loginUser.userId, page: nextPageNo }))
+      dispatch(
+        loadMainFeed({
+          groupId: mainGroup.id,
+          userId: loginUser.userId,
+          page: nextPageNo,
+        })
+      )
         .then(({ payload }) => {
           // console.log(payload);
           if (payload.length > 1) {
