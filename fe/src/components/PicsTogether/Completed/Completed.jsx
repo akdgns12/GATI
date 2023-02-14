@@ -10,6 +10,7 @@ import { css } from "@emotion/react";
 import { useDispatch, useSelector } from 'react-redux';
 import { asynGetMissionList } from '../../../store/PicsTogether/picsTg';
 import { useNavigate } from 'react-router';
+import MissionContribution from './MissionContribution';
 
 
 export default function Completed() {
@@ -23,6 +24,7 @@ export default function Completed() {
   },[])
   
   let getMissionList = useSelector(state=>{return state.picsTg.getMissionList})
+  console.log('getMissionList',getMissionList)
 
   return (
     <Box
@@ -31,6 +33,7 @@ export default function Completed() {
         flexDirection:'column',
         flexWrap:'wrap',
       }}>
+      <MissionContribution />
       {getMissionList ? 
         <ImageList cols={3} rowHeight={164}>
           {getMissionList.map((item) => (
