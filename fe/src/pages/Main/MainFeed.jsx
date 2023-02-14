@@ -31,8 +31,8 @@ const MainFeed = () => {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
-    console.log(curPageNo);
+    // console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
+    // console.log(curPageNo);
     dispatch(clearFeed());
     dispatch(
       loadMainFeed({
