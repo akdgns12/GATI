@@ -14,10 +14,10 @@ export default function PicsMainPage() {
   // 유저 정보 받아오기
   const userId = useSelector(state=>{return state.user.loginUser.userId})
   const mainGroup = useSelector(state=>{return state.user.mainGroup})
-  console.log('userId', userId, 'mainGroup', mainGroup)
+  console.log('userId', userId, 'mainGroup', mainGroup.id)
 
   React.useEffect(()=>{
-    dispatch(asyncGetMission(mainGroup))
+    dispatch(asyncGetMission(mainGroup.id))
   },[])
 
   // 진행 중, 완료 모드 토글 전환
