@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
-@Transactional(readOnly = true) // 기본적으로 트랜잭션 안에서만 데이터 변경하게 설정(그만큼 최적화 되어 읽는게 빨라짐)
+//@Transactional(readOnly = true) // 기본적으로 트랜잭션 안에서만 데이터 변경하게 설정(그만큼 최적화 되어 읽는게 빨라짐)
 @RequiredArgsConstructor // final, @NotNull 붙은 필드의 생성자 자동 생성해주는 롬복 어노테이션
 @Slf4j
 public class UserService {
@@ -74,8 +74,6 @@ public class UserService {
         }
 
         originUser.setEmail(request.getEmail());
-        originUser.setPassword(request.getPassword());
-        originUser.setPassword(passwordEncoder.encode(request.getPassword()));
         originUser.setNickName(request.getNickName());
         originUser.setBirth(request.getBirth());
         originUser.setPhoneNumber(request.getPhoneNumber());
@@ -163,7 +161,7 @@ public class UserService {
     // 비밀번호 변경
     @Transactional
     public void changePassword(User user, String newPassword){
-        user.setUserId(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
 }

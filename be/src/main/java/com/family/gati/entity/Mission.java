@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,6 +40,11 @@ public class Mission {
 
     @Column(name = "COMPLETED", nullable = false)
     private Integer completed;
+    @Column(name = "START_DATE", nullable = false)
+    private Date startDate;
+
+    @Column(name = "END_DATE", nullable = false)
+    private Date endDate;
 
     public Mission(AdminMission adminMission, Integer groupId) {
         this.title = adminMission.getTitle();
@@ -48,6 +54,8 @@ public class Mission {
         this.adminMissionId = adminMission.getId();
         this.groupId = groupId;
         this.completed = 0;
+        this.startDate = adminMission.getStartDate();
+        this.endDate = adminMission.getEndDate();
     }
 
     private Mission(MissionBuilder builder) {
@@ -59,6 +67,8 @@ public class Mission {
         this.adminMissionId = builder.adminMissionId;
         this.groupId = builder.groupId;
         this.completed = builder.completed;
+        this.startDate = builder.startDate;
+        this.endDate = builder.endDate;
     }
 
     public static class MissionBuilder implements CommonBuilder<Mission> {
@@ -70,6 +80,8 @@ public class Mission {
         private Integer adminMissionId;
         private Integer groupId;
         private Integer completed;
+        private Date startDate;
+        private Date endDate;
 
         public MissionBuilder(MissionDto missionDto) {
             this.id = missionDto.getId();
@@ -80,6 +92,8 @@ public class Mission {
             this.adminMissionId = missionDto.getAdminMissionId();
             this.groupId = missionDto.getGroupId();
             this.completed = missionDto.getCompleted();
+            this.startDate = missionDto.getStartDate();
+            this.endDate = missionDto.getEndDate();
         }
 
         public Mission build() {

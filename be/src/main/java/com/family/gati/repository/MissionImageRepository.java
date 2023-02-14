@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface MissionImageRepository extends JpaRepository<MissionImage, Integer> {
     List<MissionImage> findByMissionId(Integer missionId);
+    
 }

@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 import httpClient from "../../utils/axios";
 
-
 // actions
-
 
 export const doLoginUser = createAsyncThunk(
   "user/loginUser",
@@ -24,13 +23,14 @@ export const doLoginUser = createAsyncThunk(
 
 // initial state
 const initialState = {
-  loading: "",
   logIn: false,
   loginUser: {
     userId: "",
     accessToken: "",
+    refreshToken: "",
   },
-  groups: [],
+  mainGroup: {},
+  defaultGroup: {},
   // token & other stuffs
 };
 
@@ -38,22 +38,52 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    updateToken: (state, action) => {
+      // console.log(action);
+      console.log("STATE TOKEN HAS BEEN MODIFIED !");
+      state.loginUser.accessToken = action.payload;
+      // console.log(state.loginUser.accessToken);
+    },
+    updateMainGroup: (state, action) => {
+      // console.log(action);
+      state.mainGroup = { ...state.mainGroup, ...action.payload };
+    },
+    updateDefaultGroup: (state, action) => {
+      console.log(action);
+      state.defaultGroup = action.payload;
+    },
+    updateUserNickName: (state, action) => {
+      // console.log(action);
+      state.loginUser.nickName = action.payload;
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(doLoginUser.pending, (state) => {
-      state.loading = "pending";
-    });
+    builder.addCase(doLoginUser.pending, (state) => {});
     builder.addCase(doLoginUser.fulfilled, (state, action) => {
-      state.loading = "success";
       state.logIn = true;
+      state.loginUser = action.payload["user Info"];
       state.loginUser.accessToken = action.payload.accessToken;
-      state.loginUser.userId = action.payload.userId;
-      // console.log(action.payload.accessToken);
+      state.loginUser.refreshToken = action.payload.refreshToken;
+
+      if (action.payload["mainGroup Info"].body.msg === "success") {
+        state.mainGroup = action.payload["mainGroup Info"].body["Main family"];
+        state.defaultGroup =
+          action.payload["mainGroup Info"].body["Main family"];
+      } else state.mainGroup = {};
     });
-    builder.addCase(doLoginUser.rejected, (state) => {
-      state.loading = "rejected";
+    builder.addCase(doLoginUser.rejected, (state) => {});
+    builder.addCase(PURGE, (state) => {
+      console.log("PURGE !");
+      state = initialState;
     });
   },
 });
 
 export default userSlice.reducer;
+export const {
+  updateToken,
+  updateMainGroup,
+  updateDefaultGroup,
+  updateUserNickName,
+} = userSlice.actions;

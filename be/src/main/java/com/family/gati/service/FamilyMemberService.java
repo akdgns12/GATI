@@ -1,5 +1,6 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.FamilyMemberDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
@@ -27,16 +28,14 @@ public class FamilyMemberService {
         return familyMemberRepository.findAllByUserId(userId);
     }
 
-    public void createFamilyMember(FamilySignUpDto familySignUpDto){
-        Family family = familyRepository.findByName(familySignUpDto.getName());
+    public List<FamilyMember> getFamilyMemberListByFamilyId(int familyId){
+        return familyMemberRepository.findALlByFamilyId(familyId);
+    }
 
-        int id = family.getId();
-        FamilyMember familyMember = new FamilyMember();
-
-        familyMember.setFamilyId(id);
-        familyMember.setUserId("akdgns12");
-
-        familyMemberRepository.save(familyMember);
+    // 이미 존재하는 User인지 검사
+    public boolean isAlreadyExist(int familyId, String userId){
+        if(familyMemberRepository.findFamilyMemberAlreadyExist(familyId, userId) != null) return true;
+        return false;
     }
 
     @Transactional
