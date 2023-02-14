@@ -12,4 +12,5 @@ public interface CityRepository extends JpaRepository<City, Integer> {
 
     @Query("select c from City as c order by c.tagCnt")
     List<City> findAllOrderByTagCntDesc();
+
 }
