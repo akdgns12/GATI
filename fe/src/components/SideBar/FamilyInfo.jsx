@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { Grid, Typography, TextField, Button, Divider, Box, Container } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Divider,
+  Box,
+  Container,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { FilePond } from "react-filepond";
 import { useState } from "react";
@@ -15,7 +23,7 @@ export default function FamilyInfo() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("LOAD FAMILY MEMBERS");
+    // console.log("LOAD FAMILY MEMBERS");
     setMemberList([]);
     //   newList.push({
     //     userId: `user${i}`,
@@ -37,7 +45,7 @@ export default function FamilyInfo() {
 
   function handleModify(event) {
     event.preventDefault();
-    console.log("MODIFY");
+    // console.log("MODIFY");
     const reqData = {
       id: mainGroup.id,
       img: "string",
@@ -47,7 +55,7 @@ export default function FamilyInfo() {
     httpClient
       .put("/family", reqData)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         alert("정보 수정이 완료되었습니다");
         // update main group info here
         const modifiedData = {
@@ -67,7 +75,7 @@ export default function FamilyInfo() {
       nickName: loginUser.nickName,
       receiverId: event.target.memberId.value,
     };
-    console.log(reqData);
+    // console.log(reqData);
     httpClient.put("/family/", reqData).then(({ data }) => {
       if (data.msg === "success") {
         window.alert("초대 메세지가 성공적으로 전송되었습니다.");
@@ -79,7 +87,13 @@ export default function FamilyInfo() {
   }
 
   return (
-    <Grid container justifyContent="center" alignItems="center" spacing={0} display="flex">
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      spacing={0}
+      display="flex"
+    >
       <Grid item m={1} xs={12}>
         <Typography>가족 프로필 설정</Typography>
       </Grid>
@@ -121,7 +135,12 @@ export default function FamilyInfo() {
       <Grid item xs={12} display="flex">
         <Typography>가족 구성원 초대</Typography>
       </Grid>
-      <Grid container component="form" onSubmit={handleInvitation} justifyContent="center">
+      <Grid
+        container
+        component="form"
+        onSubmit={handleInvitation}
+        justifyContent="center"
+      >
         <TextField size="small" fullWidth label="member-id" name="memberId" />
         <Grid item xs={6} m={1}>
           <Button fullWidth variant="outlined" type="submit">

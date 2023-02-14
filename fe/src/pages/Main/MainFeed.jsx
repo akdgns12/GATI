@@ -42,7 +42,7 @@ const MainFeed = () => {
       })
     )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         dispatch(updatePageNo(1));
       })
       .catch((error) => console.log(error));
@@ -112,7 +112,7 @@ const MainFeed = () => {
               <ArticleCard
                 key={index}
                 article={article}
-                style={{ "margin-top": "10px" }}
+                style={{ marginTop: "10px" }}
                 mode="feed"
               />
             );

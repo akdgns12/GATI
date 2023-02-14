@@ -30,7 +30,7 @@ export default function MyInfochange() {
 
   useEffect(() => {
     // console.log("data has been modified");
-    console.log(userInfo);
+    // console.log(userInfo);
     if (userInfo != undefined) setLoaded(true);
   }, [userInfo]);
 
@@ -43,7 +43,7 @@ export default function MyInfochange() {
       phoneNumber: event.target.phoneNumber.value,
       userId: userId,
     };
-    console.log(reqData);
+    // console.log(reqData);
     httpClient
       .put("/user/change/", reqData)
       .then((res) => {
