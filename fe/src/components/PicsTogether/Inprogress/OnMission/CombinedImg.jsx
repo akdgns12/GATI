@@ -63,7 +63,7 @@ const CombinedImg = () => {
     canvasRef.current.toBlob((blob) => {
       const formData = new FormData();
       formData.append('id', id);
-      formData.append('img', blob, 'combined-image.jpg');
+      formData.append('file', blob, 'combined-image.jpg');
       dispatch(asyncPostMission(formData))
     })
   }, [images]);
