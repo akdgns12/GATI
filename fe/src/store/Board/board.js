@@ -45,12 +45,12 @@ const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    updateLike: (state, action) => {
-      console.log(action.payload);
-    },
     updatePageNo: (state, action) => {
       // console.log(action);
       state.curPageNo = action.payload;
+    },
+    clearFeed: (state) => {
+      state.articles = [];
     },
   },
   extraReducers: (builder) => {
@@ -58,6 +58,7 @@ const boardSlice = createSlice({
       // console.log("pending...");
     });
     builder.addCase(loadMainFeed.fulfilled, (state, action) => {
+      // console.log(action.payload);
       if (state.articles != null && state.articles.length > 0) {
         if (action.payload.length > 0) {
           var lastIdx = state.articles.findIndex(
@@ -85,4 +86,4 @@ const boardSlice = createSlice({
 });
 
 export default boardSlice.reducer;
-export const { updateLike, updatePageNo } = boardSlice.actions;
+export const { clearFeed, updatePageNo } = boardSlice.actions;
