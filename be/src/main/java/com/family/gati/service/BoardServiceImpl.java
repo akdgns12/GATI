@@ -5,14 +5,17 @@ import com.family.gati.dto.TagDto;
 import com.family.gati.entity.Board;
 import com.family.gati.entity.BoardLikes;
 import com.family.gati.entity.BoardTag;
+import com.family.gati.entity.City;
 import com.family.gati.repository.BoardLikesRepository;
 import com.family.gati.repository.BoardRepository;
+import com.family.gati.repository.CityRepository;
 import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Log4j2
@@ -22,6 +25,7 @@ public class BoardServiceImpl implements BoardService{
     private final BoardRepository boardRepository;
     private final BoardLikesRepository boardLikesRepository;
     private final UserRepository userRepository;
+    private final CityRepository cityRepository;
     @Override
     public List<BoardDto> findByGroupId(Integer groupId, String userId) {
         List<Board> boards = boardRepository.findByGroupIdOrderByCreateTimeDesc(groupId);
@@ -50,25 +54,47 @@ public class BoardServiceImpl implements BoardService{
     }
 
     public BoardDto insertBoard(BoardDto boardDto) {
+        List<City> cities = cityRepository.findAll();
         boardDto.setNickname(userRepository.findByUserId(boardDto.getUserId()).getNickName());
         Board board = new Board.BoardBuilder(boardDto).build();
+        HashSet<City> cityHashSet = new HashSet<>();
         for (TagDto tagDto: boardDto.getTag()) {
             BoardTag boardTag = new BoardTag(tagDto.getTagContent());
             boardTag.setBoard(board);
             board.putTag(boardTag);
+            for (City city : cities) {
+                if (tagDto.getTagContent().contains(city.getTag())) {
+                    cityHashSet.add(city);
+                }
+            }
+        }
+        for (City city : cityHashSet) {
+            city.plusTagCnt(1);
+            cityRepository.save(city);
         }
         return new BoardDto.BoardDtoBuilder(boardRepository.save(board)).build();
     }
 
     public BoardDto updateBoard(BoardDto boardDto) {
+        List<City> cities = cityRepository.findAll();
         Board board = boardRepository.findById(boardDto.getId()).get();
         board.setContent(boardDto.getContent());
         board.setImg(boardDto.getImg());
         board.setTag(new ArrayList<>());
+        HashSet<City> cityHashSet = new HashSet<>();
         for (TagDto tagDto: boardDto.getTag()) {
             BoardTag boardTag = new BoardTag(tagDto.getTagContent());
             boardTag.setBoard(board);
             board.putTag(boardTag);
+            for (City city : cities) {
+                if (tagDto.getTagContent().contains(city.getTag())) {
+                    cityHashSet.add(city);
+                }
+            }
+        }
+        for (City city : cityHashSet) {
+            city.plusTagCnt(1);
+            cityRepository.save(city);
         }
         return new BoardDto.BoardDtoBuilder(boardRepository.save(board)).build();
     }
