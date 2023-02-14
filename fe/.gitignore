@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
+/.gif
 .pnp.js
 
 # testing

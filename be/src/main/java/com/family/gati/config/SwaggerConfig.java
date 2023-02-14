@@ -8,17 +8,19 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
+@EnableSwagger2
 public class SwaggerConfig {
-
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.OAS_30)
+        return new Docket(DocumentationType.SWAGGER_2)
+                .host("i8a805.p.ssafy.io")
                 .useDefaultResponseMessages(false)
                 .select()
-                // basPackage 수정해야함
-                .apis(RequestHandlerSelectors.basePackage("com.example.springswagger.controller"))
+                // BasPackage 수정해야함
+                .apis(RequestHandlerSelectors.basePackage("com.family.gati.api"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
