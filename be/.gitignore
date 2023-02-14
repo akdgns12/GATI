@@ -40,3 +40,4 @@ out/
 ### resourece ###
 application-db.yml
 application-oauth.yml
+build.sh
