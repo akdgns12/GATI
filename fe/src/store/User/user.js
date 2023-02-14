@@ -48,23 +48,27 @@ const userSlice = createSlice({
     updateMainGroup: (state, action) => {
       // console.log(action);
       state.mainGroup = { ...state.mainGroup, ...action.payload };
-    }
+    },
+    updateUserNickName: (state, action) => {
+      // console.log(action);
+      state.loginUser.nickName = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(doLoginUser.pending, (state) => { });
+    builder.addCase(doLoginUser.pending, (state) => {});
     builder.addCase(doLoginUser.fulfilled, (state, action) => {
       state.logIn = true;
-      state.loginUser = action.payload['user Info'];
+      state.loginUser = action.payload["user Info"];
       state.loginUser.accessToken = action.payload.accessToken;
       state.loginUser.refreshToken = action.payload.refreshToken;
 
       if (action.payload["mainGroup Info"].body.msg === "success") {
         state.mainGroup = action.payload["mainGroup Info"].body["Main family"];
-        state.defaultGroup = action.payload["mainGroup Info"].body["Main family"];
-      }
-      else state.mainGroup = {};
+        state.defaultGroup =
+          action.payload["mainGroup Info"].body["Main family"];
+      } else state.mainGroup = {};
     });
-    builder.addCase(doLoginUser.rejected, (state) => { });
+    builder.addCase(doLoginUser.rejected, (state) => {});
     builder.addCase(PURGE, (state) => {
       console.log("PURGE !");
       state = initialState;
@@ -73,4 +77,5 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { updateToken, updateMainGroup } = userSlice.actions;
+export const { updateToken, updateMainGroup, updateUserNickName } =
+  userSlice.actions;

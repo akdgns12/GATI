@@ -1,14 +1,16 @@
 import React from "react";
 import { Grid, TextField, Button } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
 import httpClient from "../../utils/axios";
+import { updateUserNickName } from "../../store/User/user";
 
 export default function MyInfochange() {
   const { userId } = useSelector((state) => state.user.loginUser);
   const [userInfo, setUserInfo] = useState();
   const [loaded, setLoaded] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     httpClient
@@ -37,7 +39,7 @@ export default function MyInfochange() {
     const reqData = {
       birth: event.target.birth.value,
       email: event.target.email.value,
-      nickName: event.target.nickname.value,
+      nickName: event.target.nickName.value,
       phoneNumber: event.target.phoneNumber.value,
       userId: userId,
     };
@@ -47,6 +49,7 @@ export default function MyInfochange() {
       .then((res) => {
         // console.log(res);
         window.alert("회원 정보가 수정되었습니다.");
+        dispatch(updateUserNickName(event.target.nickName.value));
       })
       .catch((error) => console.log(error));
   }
@@ -58,7 +61,7 @@ export default function MyInfochange() {
             <TextField
               label="닉네임"
               variant="outlined"
-              name="nickname"
+              name="nickName"
               defaultValue={userInfo.nickName}
             />
           </Grid>
