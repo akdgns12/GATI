@@ -19,7 +19,7 @@ import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import Img from "../static/user img.png";
+import Img from "../static/big-family.png";
 import { useState } from "react";
 import { persistor } from "../index.jsx";
 
@@ -41,7 +41,7 @@ const PrimaryAppBar = () => {
   const [familyinfo, setFamilyinfo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { mainGroup } = useSelector((state) => state.user);
+  const { loginUser, mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const theme = useTheme();
@@ -94,7 +94,7 @@ const PrimaryAppBar = () => {
                 width: 50,
                 height: 50,
               }}
-              alt="User img."
+              alt="gati img."
               src={Img}
               style={{ display: "inline-block" }}
             />
@@ -104,7 +104,7 @@ const PrimaryAppBar = () => {
               color="rgb(32,32,32)"
               style={{ display: "inline-block" }}
             >
-              {mainGroup.name}
+              {mainGroup != null && mainGroup.name != null && mainGroup.name}
             </Typography>
           </Box>
           <Box>
@@ -143,7 +143,7 @@ const PrimaryAppBar = () => {
               <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
             </Box>
             <Typography variant="h5" sx={{ p: 2 }}>
-              username 님 안녕하세요
+              {loginUser != null ? loginUser.nickName : "?"} 님 안녕하세요
             </Typography>
           </Container>
           <Divider />
@@ -166,7 +166,7 @@ const PrimaryAppBar = () => {
           <Divider />
           <Container sx={{ height: "70%" }}>
             {myinfo && <MyInfo />}
-            {family && <Family setOpen={setModalOpen} />}
+            {family && <Family setOpen={setModalOpen} setSideOpen={setOpen} />}
             {familyinfo && <FamilyCreate setOpen={setModalOpen} />}
             {logout && <Logout />}
           </Container>

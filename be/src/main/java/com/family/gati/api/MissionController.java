@@ -4,6 +4,7 @@ import com.family.gati.dto.*;
 import com.family.gati.service.FileService;
 import com.family.gati.service.MissionImageService;
 import com.family.gati.service.MissionService;
+import com.family.gati.service.NotiService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ public class MissionController {
     private final MissionService missionService;
     private final MissionImageService missionImageService;
     private final FileService fileService;
+    private final NotiService notiService;
 
     @ApiOperation(
             value = "현재 그룹의 Mission List 조회"
@@ -81,6 +83,7 @@ public class MissionController {
             throw new RuntimeException(e);
         }
         MissionDto resultDto = missionService.completeMission(id, path);
+        notiService.completeMission(resultDto);
         return ResponseEntity.ok(resultDto);
     }
 
@@ -90,6 +93,7 @@ public class MissionController {
     @PutMapping("/setMemNumber")
     public ResponseEntity<?> registMissionMemNumber(@RequestBody MissionRegistDto missionRegistDto) {
         MissionDto resultDto = missionService.setMissionMemNumber(missionRegistDto);
+        notiService.saveMissionStart(resultDto);
         return ResponseEntity.ok(resultDto);
     }
 
@@ -151,17 +155,16 @@ public class MissionController {
             , notes = "MissionImage를 삭제한다.")
     @DeleteMapping("/image/{id}")
     public ResponseEntity<?> deleteMissionImage(@ApiParam(value = "삭제 할 missionImageId")@PathVariable("id") Integer id) {
-        Integer missionId = missionImageService.findById(id).getMissionId();
-        missionImageService.deleteMissionImageById(id);
-        MissionDto missionDto = missionService.findById(missionId);
+        MissionDto missionDto = missionImageService.deleteMissionImageById(id);
         return ResponseEntity.ok(missionDto);
+
     }
 
-//    @GetMapping("/mission/{id}")
-//    public ResponseEntity<?> getMissionById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id) {
-//        MissionDto findDto = missionService.findById(id);
-//        return ResponseEntity.ok(findDto);
-//    }
+    @GetMapping("/mission/{id}")
+    public ResponseEntity<?> getMissionById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id) {
+        MissionDto findDto = missionService.findById(id);
+        return ResponseEntity.ok(findDto);
+    }
 
 //    @ApiOperation(
 //            value = "Mission 수정"

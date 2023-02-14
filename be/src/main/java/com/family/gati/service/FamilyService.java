@@ -1,5 +1,6 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.FamilyDto;
 import com.family.gati.dto.FamilyInviteDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
@@ -23,58 +24,64 @@ public class FamilyService {
     private final FamilyRepository familyRepository;
     private final FamilyMemberRepository familyMemberRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
+    private final NotiService notiService;
 
-    public Family getFamilyById(int groupId){
-        return familyRepository.findById(groupId);
+    public Family getFamilyById(int familyId){
+        return familyRepository.findById(familyId);
     }
-
 
     // 유저의 메인 그룹 조회
     public Family getMainFamilyByUserId(String userId){
         User user = userRepository.findByUserId(userId);
 
-        Family mainGroup = familyRepository.findById(user.getMainFamily());
+        Family mainFamily = familyRepository.findById(user.getMainFamily());
 
-        if(mainGroup == null){
-            log.debug("메인 그룹 없음:{}");
+        if(mainFamily == null){
             return null;
         }
 
-        return mainGroup;
+        return mainFamily;
     }
 
-    public void createFamily(String userId, FamilySignUpDto familySignUpDto){
+    public Family createFamily(FamilyDto familyDto){
         Family family = new Family();
 
-        family.setName(familySignUpDto.getName());
+        family.setName(familyDto.getName());
         // 우리가 제공해줄 기본 이미지 or 사용자가 업로드한 이미지로
-        family.setImg(familySignUpDto.getImg());
+        family.setImg(familyDto.getImg());
         // 생성할때 그룹 인원 1
         family.setFamilyTotal(1);
         // 로그인 한 유저 ID로 가져옴
-        family.setMasterId(userId);
+        family.setMasterId(familyDto.getMasterId());
 
-        familyRepository.save(family);
-    }
+        family = familyRepository.save(family);
+        int familyId = family.getId();
+
+        FamilyMember familyMember = new FamilyMember();
+        familyMember.setFamilyId(familyId);
+        familyMember.setUserId(familyDto.getMasterId());
+
+        familyMemberRepository.save(familyMember);
+
+        return family;
+   }
 
     public Family getByMasterId(String masterId){
         return familyRepository.findByMasterId(masterId);
     }
 
     @Transactional
-    public void updateFamily(FamilyUpdateDto familyUpdateDto) {
-        int id = familyUpdateDto.getId();
+    public Family updateFamily(FamilyDto familyDto) {
+        int id = familyDto.getId();
         Family family = familyRepository.findById(id);
 
-        if(family == null){
-            log.debug("없는 그룹입니다: {}", family);
-            return;
-        }
-
-        family.setName(familyUpdateDto.getName());
-        family.setImg(familyUpdateDto.getImg());
-
+        family.setName(familyDto.getName());
+        family.setImg(familyDto.getImg());
+        System.out.println(family);
         familyRepository.save(family);
+
+        return family;
     }
 
     @Transactional
@@ -82,8 +89,6 @@ public class FamilyService {
         familyRepository.deleteById(id);
     }
 
-    //
-    @Transactional
     public void acceptInvite(FamilyInviteDto familyInviteDto){
         int familyId = familyInviteDto.getFamilyId();
         String userId = familyInviteDto.getReceiverId();
@@ -97,14 +102,18 @@ public class FamilyService {
         FamilyMember familyMember = new FamilyMember();
         familyMember.setUserId(userId);
         familyMember.setFamilyId(familyId);
+
+        familyMemberRepository.save(familyMember);
+
         // 초대받은 유저의 mainFamily가 없다면 수락과 동시에 Main그룹으로 설정
-        User user = userRepository.findByUserId(userId);
+        User user = userService.getUserByUserId(userId);
+
         if(user.getMainFamily() == null){
             user.setMainFamily(familyId);
             userRepository.save(user);
         }
 
-
-        familyMemberRepository.save(familyMember);
+        // 초대 수락 후 Notification 테이블에서 알림 제거
+        notiService.deleteNoti(familyInviteDto.getReceiverId(), familyInviteDto.getFamilyId());
     }
 }

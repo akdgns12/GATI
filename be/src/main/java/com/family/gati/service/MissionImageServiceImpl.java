@@ -1,11 +1,10 @@
 package com.family.gati.service;
 
-import com.family.gati.dto.MissionImageDto;
-import com.family.gati.dto.MissionImageRegistDto;
-import com.family.gati.dto.MissionImageUpdateDto;
-import com.family.gati.dto.MissionUpdateDto;
+import com.family.gati.dto.*;
+import com.family.gati.entity.Mission;
 import com.family.gati.entity.MissionImage;
 import com.family.gati.repository.MissionImageRepository;
+import com.family.gati.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -18,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MissionImageServiceImpl implements MissionImageService{
     private final MissionImageRepository missionImageRepository;
+    private final MissionRepository missionRepository;
 
     @Override
     public List<MissionImageDto> findByMissionId(Integer missionId) {
@@ -44,8 +44,15 @@ public class MissionImageServiceImpl implements MissionImageService{
     }
 
     @Override
-    public void deleteMissionImageById(Integer id) {
+    public MissionDto deleteMissionImageById(Integer id) {
+        Integer missionId = missionImageRepository.findById(id).get().getMissionId();
         missionImageRepository.deleteById(id);
+        Mission mission = missionRepository.findById(missionId).get();
+        MissionDto missionDto = new MissionDto.MissionDtoBuilder(mission).build();
+        if (mission.getCompleted() == 1) {
+            missionDto.setMissionImageDtos(findByMissionId(mission.getId()));
+        }
+        return missionDto;
     }
 
     @Override

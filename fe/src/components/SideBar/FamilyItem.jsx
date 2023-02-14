@@ -11,7 +11,9 @@ import {
   ListItemText,
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateMainGroup, updateDefaultGroup } from "../../store/User/user";
+import httpClient from "../../utils/axios";
 
 const contStyle = css`
   width: 100%;
@@ -22,15 +24,29 @@ const contStyle = css`
 
 const FamilyItem = (props) => {
   const groupName = props.group.name;
-  const { userId } = useSelector((state) => state.user.loginUser);
-  const { id } = useSelector((state) => state.user.mainGroup);
+  const { defaultGroup, mainGroup, loginUser } = useSelector(
+    (state) => state.user
+  );
+  const dispatch = useDispatch();
 
   function setMainGroup(event) {
     event.preventDefault();
+    const reqData = {
+      mainFamily: props.group.id,
+      userId: loginUser.userId,
+    };
+    httpClient.put("/user/main", reqData).then(({ data }) => {
+      if (data.msg === "success") {
+        window.alert("Main 그룹이 변경되었습니다.");
+        dispatch(updateDefaultGroup(props.group));
+      }
+    });
   }
 
   function mvToGroup(event) {
     event.preventDefault();
+    dispatch(updateMainGroup(props.group));
+    props.setSideOpen(false);
     // do sth about main group
   }
 
@@ -41,7 +57,7 @@ const FamilyItem = (props) => {
           variant="contained"
           onClick={setMainGroup}
           style={{ width: "20%" }}
-          disabled={props.group.id === id ? true : false}
+          disabled={props.group.id === defaultGroup.id ? true : false}
         >
           Main
         </Button>
@@ -49,7 +65,12 @@ const FamilyItem = (props) => {
       disablePadding={true}
       css={contStyle}
     >
-      <ListItemButton className="list-btn" onClick={mvToGroup} disableGutters>
+      <ListItemButton
+        className="list-btn"
+        onClick={mvToGroup}
+        disableGutters
+        disabled={mainGroup.id === props.group.id ? true : false}
+      >
         <ListItemAvatar>
           <Avatar className="group-img">
             <FolderIcon />

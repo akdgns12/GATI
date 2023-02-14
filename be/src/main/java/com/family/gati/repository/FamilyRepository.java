@@ -2,6 +2,7 @@ package com.family.gati.repository;
 
 import com.family.gati.entity.Family;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

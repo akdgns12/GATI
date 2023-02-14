@@ -22,6 +22,12 @@ const PhotoBook = () => {
   const dispatch = useDispatch()
   const {loginUser} = useSelector((state) => state.user)
   const {photoInfo} = useSelector((state) => state.photoBoard)
+  const {search, setSearch} = useState('')
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value)
+    
+  }
 
   useEffect(() => {
     dispatch(loadPhotoBook({ groupId: 1, userId: loginUser.userId, page: 0 }))
@@ -33,30 +39,29 @@ const PhotoBook = () => {
   }, []);
 
   return (
-    <Container>
-      <SearchBar/>
-      <Container>
-        <Grid container spacing={2}>
-          {photoInfo != null &&
-            photoInfo.map((photo, index) => {
-              return (
-                <Grid item xs={6} >
-                  <PhotoCard
-                    component="img"
-                    photo={photo}
-                    key={index}
-                    image={photo.img}
-                    sx={{ borderRadius: 1 }}
-                    style={{cursor: 'pointer'}}
-                    />
-                </Grid>
-                );
-              })}
+    <Grid container>
+      <Grid item xs={12}>
+        <SearchBar onchange={handleSearch}/>
+      </Grid>
+      <Grid container spacing={2}>
+        {photoInfo != null &&
+          photoInfo.map((photo, index) => {
+            return (
+              <Grid item xs={6} >
+                <PhotoCard
+                  component="img"
+                  photo={photo}
+                  key={index}
+                  image={photo.img}
+                  sx={{ borderRadius: 1 }}
+                  style={{cursor: 'pointer'}}
+                  />
+              </Grid>
+              );
+            })}
         </Grid>
-      </Container>
-      {/* <NoImg/> */}
-      <AddButton />
-    </Container>
+        <AddButton/>
+    </Grid>
   )
 }
 

@@ -2,11 +2,13 @@ package com.family.gati.dto;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Data
 @Getter @Setter
-public class FamilySignUpDto {
+@RequiredArgsConstructor
+public class FamilyInviteRejectDto {
     private String userId;
-    private String name;
+    private int familyId;
 }
