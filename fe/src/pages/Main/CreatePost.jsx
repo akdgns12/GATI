@@ -73,8 +73,6 @@ const CreatePost = (props) => {
   const { article } = useSelector((state) => state.board);
   const { loginUser, mainGroup } = useSelector((state) => state.user);
 
-  var imgPath = process.env.REACT_APP_IMG_ROOT + "/" + article.img;
-
   useEffect(() => {
     console.log("mounted");
     if (variant === "modify") {
@@ -87,6 +85,7 @@ const CreatePost = (props) => {
           // console.log(data);
           console.log(data.payload.img);
           // setImgURL(URL.createObjectURL(event.target.files[0]));
+          var imgPath = process.env.REACT_APP_IMG_ROOT + "/" + data.payload.img;
           setImgURL(imgPath);
           setSerializedTag(serializeTag(data.payload.tag));
           setLoaded(true);
@@ -122,11 +121,7 @@ const CreatePost = (props) => {
     formData.append("content", event.target.content.value);
     // formData.append('tagDtos', tagObjs);
     formData.append("tagDtos[0].tagContent", tagObjs);
-    formData.append(
-      "file",
-      event.target.img.files[0],
-      event.target.img.files[0].name
-    );
+    formData.append("file", event.target.img.files[0], event.target.img.files[0].name);
     // console.log(formData);
 
     if (variant === "create") {
@@ -188,12 +183,7 @@ const CreatePost = (props) => {
       <Box className="photo">
         <Box className="photo-label">사진 선택</Box>
         <Box className="photo-box">
-          <Box
-            className="photo-prev"
-            component="img"
-            src={imgURL}
-            alt="please select photo"
-          />
+          <Box className="photo-prev" component="img" src={imgURL} alt="please select photo" />
         </Box>
         <label htmlFor="select-img">
           <Button className="edit-btn" component="span">
