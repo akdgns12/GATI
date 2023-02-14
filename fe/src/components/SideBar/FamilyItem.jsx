@@ -24,9 +24,7 @@ const contStyle = css`
 
 const FamilyItem = (props) => {
   const groupName = props.group.name;
-  const { defaultGroup, mainGroup, loginUser } = useSelector(
-    (state) => state.user
-  );
+  const { defaultGroup, mainGroup, loginUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   function setMainGroup(event) {
@@ -72,7 +70,10 @@ const FamilyItem = (props) => {
         disabled={mainGroup.id === props.group.id ? true : false}
       >
         <ListItemAvatar>
-          <Avatar className="group-img">
+          <Avatar
+            className="group-img"
+            src={process.env.REACT_APP_IMG_ROOT + "/" + props.group.img}
+          >
             <FolderIcon />
           </Avatar>
         </ListItemAvatar>

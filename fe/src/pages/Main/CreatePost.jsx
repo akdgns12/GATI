@@ -27,7 +27,7 @@ const contStyle = css`
       border-radius: 10px;
       text-align: center;
       display: inline-flex;
-      // display: flex;
+      overflow: hidden;
       .photo-prev {
         max-width: 100%;
         max-height: 100%;
@@ -105,7 +105,7 @@ const CreatePost = (props) => {
         str += " ";
       });
     }
-    console.log(str);
+    // console.log(str);
     return str;
   }
 
@@ -115,14 +115,15 @@ const CreatePost = (props) => {
     // console.log(event.target.img.files[0].name);
     // console.log(event.target.content.value);
     // console.log(event.target.tag.value);
-    const tagObjs = parseTags(event.target.tag.value);
+    const tagArr = parseTags(event.target.tag.value);
 
     const formData = new FormData();
     formData.append("content", event.target.content.value);
     // formData.append('tagDtos', tagObjs);
-    formData.append("tagDtos[0].tagContent", tagObjs);
+    for (let i = 0; i < tagArr.length; i++) {
+      formData.append(`tagDtos[${i}].tagContent`, tagArr[i]);
+    }
     formData.append("file", event.target.img.files[0], event.target.img.files[0].name);
-    // console.log(formData);
 
     if (variant === "create") {
       formData.append("userId", loginUser.userId);
@@ -131,7 +132,7 @@ const CreatePost = (props) => {
       httpClient
         .post("/boards/board/", formData)
         .then((data) => {
-          // console.log(data)
+          console.log(data);
           alert("article posted");
           navigate("/");
         })
@@ -161,7 +162,7 @@ const CreatePost = (props) => {
     let ret = [];
     tags.map((tag, index) => {
       // console.log(tag);
-      ret.push({ tagContent: tag });
+      ret.push(tag);
     });
     return ret;
   }

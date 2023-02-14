@@ -16,13 +16,9 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
 import Img from "../static/big-family.png";
 import { useState } from "react";
-import { persistor } from "../index.jsx";
 
 import MyInfo from "./SideBar/MyInfo";
 import Family from "./SideBar/Family";
@@ -44,6 +40,7 @@ const PrimaryAppBar = () => {
   const [family, setFamily] = useState(false);
   const [familyinfo, setFamilyinfo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [groupIMG, setGroupIMG] = useState("");
 
   const { loginUser, mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -52,9 +49,12 @@ const PrimaryAppBar = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    console.log("APP BAR LOAD");
     dispatch(loadNotification(loginUser.userId));
   }, []);
+
+  useEffect(() => {
+    setGroupIMG(process.env.REACT_APP_IMG_ROOT + "/" + mainGroup.img);
+  }, [mainGroup]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -94,13 +94,15 @@ const PrimaryAppBar = () => {
     }
   };
 
+  function handleNotFound(e) {
+    console.log("GROUP IMG NOT FOUND");
+    console.log(Img);
+    e.target.src = Img;
+  }
+
   return (
     <Box sx={{ flexGrow: 1, height: "100px" }}>
-      <AppBar
-        open={open}
-        position="fixed"
-        style={{ background: "rgb(255, 255, 255, 1.0)" }}
-      >
+      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
         <Toolbar sx={{ justifyContent: "space-between", height: "70px" }}>
           <Box>
             <Avatar
@@ -108,10 +110,11 @@ const PrimaryAppBar = () => {
                 width: 50,
                 height: 50,
               }}
-              alt="gati img."
-              src={Img}
+              src={groupIMG}
               style={{ display: "inline-block" }}
-            />
+            >
+              <img src={Img} style={{ width: 50, height: 50 }} alt="X" />
+            </Avatar>
             <Typography
               variant="h5"
               fontWeight="1000"
@@ -154,15 +157,8 @@ const PrimaryAppBar = () => {
         >
           <Container>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <IconButton
-                onClick={handleDrawerClose}
-                sx={{ fontSize: "large" }}
-              >
-                {theme.direction === "rtl" ? (
-                  <ChevronLeftIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
+              <IconButton onClick={handleDrawerClose} sx={{ fontSize: "large" }}>
+                {theme.direction === "rtl" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
               </IconButton>
               <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
             </Box>
@@ -172,12 +168,7 @@ const PrimaryAppBar = () => {
           </Container>
           <Divider />
           <Container>
-            <Box
-              display="flex"
-              spacing={1}
-              justifyContent="space-between"
-              sx={{ p: 1 }}
-            >
+            <Box display="flex" spacing={1} justifyContent="space-between" sx={{ p: 1 }}>
               <Button onClick={openMyinfo} variant="outlined">
                 내 정보
               </Button>
