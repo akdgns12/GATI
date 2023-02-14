@@ -3,10 +3,13 @@ package com.family.gati.api;
 import com.family.gati.dto.*;
 import com.family.gati.service.BoardCommentService;
 import com.family.gati.service.BoardService;
+import com.family.gati.service.FileService;
+import com.family.gati.service.NotiService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -20,6 +23,8 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final BoardCommentService boardCommentService;
+    private final FileService fileService;
+    private final NotiService notiService;
 
 //    @ApiOperation(
 //            value = "현재 그룹의 Board 조회"
@@ -107,13 +112,21 @@ public class BoardController {
             value = "Board 작성"
             , notes = "Board를 작성한다.")
     @PostMapping("/board")
-    public ResponseEntity<?> addBoard(@RequestBody BoardRegistDto boardRegistDto) {
+    public ResponseEntity<?> addBoard(@ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file,
+                                      @ApiParam(value = "The DTO object", required = true) @ModelAttribute BoardRegistDto boardRegistDto) {
         BoardDto boardDto = new BoardDto();
+        String path;
+        try {
+            path = fileService.fileUpload(file, "board");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
         boardDto.setGroupId(boardRegistDto.getGroupId());
         boardDto.setUserId(boardRegistDto.getUserId());
         boardDto.setContent(boardRegistDto.getContent());
         boardDto.setTag(boardRegistDto.getTagDtos());
-        boardDto.setImg(boardRegistDto.getImg());
+        boardDto.setImg(path);
         boardDto.setLikes(0);
         boardDto.setCreateTime(new Timestamp(new Date().getTime()));
         boardDto.setUpdateTime(new Timestamp(new Date().getTime()));
@@ -127,12 +140,20 @@ public class BoardController {
             value = "Board 수정"
             , notes = "Board를 수정한다.")
     @PutMapping("/board")
-    public ResponseEntity<?> updateBoard(@RequestBody BoardUpdateDto boardUpdateDto){
+    public ResponseEntity<?> updateBoard(@ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file,
+                                         @ApiParam(value = "The DTO object", required = true) @ModelAttribute BoardUpdateDto boardUpdateDto){
         BoardDto boardDto = new BoardDto();
+        String path;
+        try {
+            path = fileService.fileUpload(file, "board");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
         boardDto.setId(boardUpdateDto.getId());
         boardDto.setContent(boardUpdateDto.getContent());
         boardDto.setTag(boardUpdateDto.getTagDtos());
-        boardDto.setImg(boardUpdateDto.getImg());
+        boardDto.setImg(path);
         boardDto.setUpdateTime(new Timestamp(new Date().getTime()));
 
         BoardDto resultDto = boardService.updateBoard(boardDto);
@@ -151,7 +172,16 @@ public class BoardController {
         boardCommentDto.setCreateTime(new Timestamp(new Date().getTime()));
         boardCommentDto.setUpdateTime(new Timestamp(new Date().getTime()));
 
-        BoardCommentDto resultDto = boardCommentService.insertBoardComment(boardCommentDto);
+        boardCommentService.insertBoardComment(boardCommentDto);
+        BoardDto resultDto = boardService.findById(boardCommentDto.getBoardId(), boardCommentDto.getUserId());
+
+        CommentNotiDto commentNotiDto = new CommentNotiDto(
+                resultDto.getUserId(),
+                resultDto.getId(),
+                resultDto.getNickname(),
+                2
+        );
+        notiService.saveComment(commentNotiDto);
         return ResponseEntity.ok(resultDto);
     }
 
@@ -192,7 +222,13 @@ public class BoardController {
             , notes = "BoardId, 현재 user를 확인하여 좋아요 상태를 변경한다.")
     @PostMapping("/likes")
     public ResponseEntity<?> addBoardLikes(@RequestParam Integer boardId, @RequestParam String userId) {
-        boardService.findLikes(boardId, userId);
+        if (boardService.findLikes(boardId, userId)) {
+            String receiverId = boardService.findById(boardId, userId).getUserId();
+            LikeNotiDto likeNotiDto = new LikeNotiDto(
+                    receiverId, boardId, userId, 3
+            );
+            notiService.saveLike(likeNotiDto);
+        };
         return ResponseEntity.ok(null);
     }
 }

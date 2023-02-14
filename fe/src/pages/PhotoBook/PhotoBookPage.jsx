@@ -1,15 +1,15 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import PhotoBook from "../../components/PhotoBook/PhotoBook";
-import CreatePhoto from "../../components/PhotoBook/CreatePhoto";
-import PhotoDetail from "../../components/PhotoBook/PhotoDetail";
+import PhotoBook from "./PhotoBook";
+import CreatePhoto from "./CreatePhoto";
+import PhotoDetail from './PhotoDetail';
 
 const PhotoBookPage = (props) => {
   return (
     <Routes>
       <Route path='/' element={<PhotoBook />} />
-      <Route path='/post' element={<CreatePhoto />} />
-      <Route path='/:photoId' element={<PhotoDetail />} />
+      <Route path='/create' element={<CreatePhoto/>} />
+      <Route path='/detail/:photoId' element={<PhotoDetail/>} />
     </Routes>
   );
 };

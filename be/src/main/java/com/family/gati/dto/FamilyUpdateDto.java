@@ -7,6 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class FamilyUpdateDto {
     private int id;
-    private String img;
     private String name;
 }

@@ -36,15 +36,21 @@ export const loadPostDetail = createAsyncThunk(
 );
 
 // initial state
-const initialState = {};
+const initialState = {
+  curPageNo: 0,
+};
 
 // slice
 const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    updateLike: (state, action) => {
-      console.log(action.payload);
+    updatePageNo: (state, action) => {
+      // console.log(action);
+      state.curPageNo = action.payload;
+    },
+    clearFeed: (state) => {
+      state.articles = [];
     },
   },
   extraReducers: (builder) => {
@@ -52,18 +58,32 @@ const boardSlice = createSlice({
       // console.log("pending...");
     });
     builder.addCase(loadMainFeed.fulfilled, (state, action) => {
-      state.articles = action.payload;
+      // console.log(action.payload);
+      if (state.articles != null && state.articles.length > 0) {
+        if (action.payload.length > 0) {
+          var lastIdx = state.articles.findIndex(
+            (item) => item.id === action.payload[0].id
+          );
+          lastIdx = lastIdx === -1 ? state.articles.length : lastIdx;
+          state.articles = [
+            ...state.articles.slice(0, lastIdx),
+            ...action.payload,
+          ];
+        } else console.log("Nothing to append");
+      } else {
+        console.log("loading inital feeds");
+        state.articles = action.payload;
+      }
+      // console.log(state.articles);
     });
     builder.addCase(loadMainFeed.rejected, (state) => {
       console.log(state);
     });
-    builder.addCase(loadPostDetail.pending, (state) => {});
     builder.addCase(loadPostDetail.fulfilled, (state, action) => {
       state.article = action.payload;
     });
-    builder.addCase(loadPostDetail.rejected, (state) => {});
   },
 });
 
 export default boardSlice.reducer;
-export const { updateLike } = boardSlice.actions;
+export const { clearFeed, updatePageNo } = boardSlice.actions;
