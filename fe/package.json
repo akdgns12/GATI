@@ -28,11 +28,8 @@
     "filepond-plugin-image-preview": "^4.6.11",
     "firebase": "^9.17.1",
     "font-awesome": "^4.7.0",
-<<<<<<< HEAD
     "fs": "^0.0.1-security",
-=======
     "framer-motion": "^9.0.2",
->>>>>>> bb3d0af0bbd564c4d4a5ade34ad843157ab5a342
     "image-gallery": "^0.3.1",
     "lottie-web": "^5.10.2",
     "material-ui-upload": "^1.2.1",
