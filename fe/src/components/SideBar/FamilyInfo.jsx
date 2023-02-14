@@ -25,11 +25,6 @@ export default function FamilyInfo() {
   useEffect(() => {
     // console.log("LOAD FAMILY MEMBERS");
     setMemberList([]);
-    //   newList.push({
-    //     userId: `user${i}`,
-    //     userBD: "YYYY-MM-DD",
-    //     phoneNumber: "010-XXXX-XXXX",
-    //   });
     httpClient
       .get(`/family/memberList/${mainGroup.id}`)
       .then(({ data }) => {
@@ -46,20 +41,24 @@ export default function FamilyInfo() {
   function handleModify(event) {
     event.preventDefault();
     // console.log("MODIFY");
-    const reqData = {
-      id: mainGroup.id,
-      img: "string",
-      name: event.target.familyName.value,
-    };
-    // console.log(reqData);
+    // const reqData = {
+    //   id: mainGroup.id,
+    //   img: "string",
+    //   name: event.target.familyName.value,
+    // };
+    const formData = new FormData();
+    formData.append("id", mainGroup.id);
+    formData.append("name", event.target.familyName.value);
+    formData.append("multipartFile", file[0].file, file[0].file.name);
+
     httpClient
-      .put("/family", reqData)
+      .put("/family", formData)
       .then(({ data }) => {
         // console.log(data);
         alert("정보 수정이 완료되었습니다");
         // update main group info here
         const modifiedData = {
-          name: reqData.name,
+          name: event.target.familyName.value,
         };
         dispatch(updateMainGroup(modifiedData));
       })

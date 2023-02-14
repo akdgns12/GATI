@@ -1,5 +1,6 @@
 package com.family.gati.entity;
 
+import com.family.gati.util.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FamilyMember {
+public class FamilyMember extends BaseTimeEntity {
 
     @Id
     @Column(name = "ID")
@@ -25,7 +26,5 @@ public class FamilyMember {
 
     @Column(name = "FAMILY_ID", length = 20)
     @NotNull
-//    @ManyToOne
-//    @JoinColumn(name = "FAMILY_ID")
     private int familyId;
 }
