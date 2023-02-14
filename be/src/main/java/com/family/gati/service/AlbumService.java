@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface AlbumService {
     List<AlbumDto> findByGroupId(Integer groupId, String userId);
+    List<AlbumDto> findByGroupIdAndSearchCondition(Integer groupId, String userId, String search);
     AlbumDto insertAlbum(AlbumDto albumDto);
     AlbumDto findById(Integer id, String userId);
     AlbumDto updateAlbum(AlbumDto albumDto);
