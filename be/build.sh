@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME="gati-backend"
+IMAGE_NAME="gati-backend-dev"
 CONTAINER_ID="$(docker container ls |grep ${IMAGE_NAME}|awk '{print $1}')"
 IMAGE_ID="$(docker images -q ${IMAGE_NAME})"
 EMPTY_STR=""
@@ -35,6 +35,6 @@ fi
 echo "image rm end"
 
 echo "docker run start"
-docker rm -f "gati-backend"
-docker run -d -p 8080:8080 -v /home/ubuntu/image:/home/ubuntu/image --name gati-backend --network gati-net ${IMAGE_NAME}
+docker rm -f "gati-backend-dev"
+docker run -d -p 8081:8080 -v /home/ubuntu/image_dev:/home/ubuntu/image_dev --name gati-backend-dev --network gati-net ${IMAGE_NAME}
 echo "docker run end"
