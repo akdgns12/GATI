@@ -75,8 +75,8 @@ export default function FamilyInfo() {
       nickName: loginUser.nickName,
       receiverId: event.target.memberId.value,
     };
-    // console.log(reqData);
-    httpClient.put("/family/", reqData).then(({ data }) => {
+    console.log(reqData);
+    httpClient.post("/family/", reqData).then(({ data }) => {
       if (data.msg === "success") {
         window.alert("초대 메세지가 성공적으로 전송되었습니다.");
         event.target.memberId.value = "";
