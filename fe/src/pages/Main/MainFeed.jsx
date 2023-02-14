@@ -34,18 +34,20 @@ const MainFeed = () => {
     // console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
     // console.log(curPageNo);
     dispatch(clearFeed());
-    dispatch(
-      loadMainFeed({
-        groupId: mainGroup.id,
-        userId: loginUser.userId,
-        page: 0,
-      })
-    )
-      .then((res) => {
-        // console.log(res);
-        dispatch(updatePageNo(1));
-      })
-      .catch((error) => console.log(error));
+    if (mainGroup != null && mainGroup.id != null) {
+      dispatch(
+        loadMainFeed({
+          groupId: mainGroup.id,
+          userId: loginUser.userId,
+          page: 0,
+        })
+      )
+        .then((res) => {
+          // console.log(res);
+          dispatch(updatePageNo(1));
+        })
+        .catch((error) => console.log(error));
+    }
   }, [mainGroup]);
 
   useEffect(() => {
@@ -127,13 +129,17 @@ const MainFeed = () => {
   } else {
     return (
       <div>
-        {notifications.invitations != null
-          ? notifications.invitations.map((invitation, index) => {
-              return <GroupInvitation key={index} invitation={invitation} />;
+        {notifications != null
+          ? notifications.map((notification, index) => {
+              // console.log(notification);
+              if (notification.type === 1)
+                return (
+                  <GroupInvitation key={index} invitation={notification} />
+                );
             })
           : null}
         <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
-        <div style={{ "margin-top": "40%" }}>
+        <div style={{ marginTop: "40%" }}>
           <NotInGroup />
         </div>
       </div>
