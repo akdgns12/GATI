@@ -10,9 +10,14 @@ import MissionCompleted from '../../components/PicsTogether/Inprogress/MissionCo
 
 export default function PicsMainPage() {
   const dispatch = useDispatch();
-  const groupId = 100;
+
+  // 유저 정보 받아오기
+  const userId = useSelector(state=>{return state.user.loginUser.userId})
+  const mainGroup = useSelector(state=>{return state.user.mainGroup})
+  console.log('userId', userId, 'mainGroup', mainGroup)
+
   React.useEffect(()=>{
-    dispatch(asyncGetMission(groupId))
+    dispatch(asyncGetMission(mainGroup))
   },[])
 
   // 진행 중, 완료 모드 토글 전환

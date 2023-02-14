@@ -41,13 +41,13 @@ export const asyncPostImg = createAsyncThunk(
     )
     console.log('asyncPostImg/Resp',resp)
     const data = await resp.data
-    console.log('data', data)
     return data;
   }
 )
 export const asyncDeleteImg = createAsyncThunk(
   'picsTgSlice/asyncDeleteImg',
   async (id) => {
+    console.log(id)
     const resp = await httpClient.delete("/missions/image/" + id)
     console.log('asyncDeleteImg/Resp',resp)
     const data = await resp.data
@@ -84,7 +84,7 @@ export const asyncDeleteMission = createAsyncThunk(
   }
 )
 
-// Completed 모드에섯 사용하는 비동기 actions
+// Completed 모드에서 사용하는 비동기 actions
 export const asynGetMissionList = createAsyncThunk(
   'picsTgSlice/asynGetMissionList',
   async (groupId) => {
@@ -153,6 +153,7 @@ export const picsTgSlice = createSlice({
     builder.addCase(asyncDeleteMission.fulfilled, (state,action)=>{
       if (action.payload) {
         state.getMissionList = action.payload
+        window.location.reload(true)
       } else {
         alert('에러가 발생했습니다.')
       }

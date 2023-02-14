@@ -24,6 +24,7 @@ export default function Completed() {
   },[])
   
   let getMissionList = useSelector(state=>{return state.picsTg.getMissionList})
+  console.log('getMissionList',getMissionList)
 
   return (
     <Box
@@ -33,7 +34,7 @@ export default function Completed() {
         flexWrap:'wrap',
       }}>
       <MissionContribution />
-      {getMissionList === [] ? 
+      {getMissionList ? 
         <ImageList cols={3} rowHeight={164}>
           {getMissionList.map((item) => (
             <ImageListItem
