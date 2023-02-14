@@ -24,6 +24,7 @@ public class FileService {
         String filePath = uploadDir+"/"+location+File.separator+date.format(dateTimeFormatter)+"_"+multipartFile.getOriginalFilename();
         System.out.println(filePath);
         String fileDir = uploadDir+"/"+location;
+        String returnPath = "image_dev"+File.separator+location+File.separator+date.format(dateTimeFormatter)+"_"+multipartFile.getOriginalFilename();
         //        window only
 //        String filePath = uploadDir+"\\"+location+"\\"+date.format(dateTimeFormatter)+"_"+multipartFile.getOriginalFilename();
 //        String fileDir = uploadDir+"\\"+location;
@@ -36,7 +37,7 @@ public class FileService {
             Path path = Paths.get(filePath);
             multipartFile.transferTo(path);
         }
-        return filePath;
+        return returnPath;
     }
 
     public boolean fileDelete(String path) throws Exception{
