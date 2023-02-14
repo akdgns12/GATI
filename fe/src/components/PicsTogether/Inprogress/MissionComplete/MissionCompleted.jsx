@@ -11,6 +11,7 @@ export default function MissionCompleted() {
   const getMission = useSelector(state => {
     return state.picsTg.getMission
   })
+  const imageURL = 'https://i8a805.p.ssafy.io/'
 
   // 미션 삭제 함수
   const deleteMission = () => {
@@ -38,7 +39,7 @@ export default function MissionCompleted() {
           marginBottom:'30px'
         }}>
         <img
-          src={getMission.img}
+          src={imageURL + getMission.img}
           alt='exampleImg'
           width='200px'/>
       </Box>
