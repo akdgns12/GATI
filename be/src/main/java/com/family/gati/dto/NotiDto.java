@@ -1,17 +1,20 @@
 package com.family.gati.dto;
 
 import com.family.gati.entity.Noti;
+import com.family.gati.util.BaseTimeEntity;
 import com.family.gati.util.CommonBuilder;
 import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class NotiDto {
+public class NotiDto extends BaseTimeEntity{
     private Integer id;
     private String userId;
     private Integer type;
@@ -21,6 +24,8 @@ public class NotiDto {
     private String nickname;
     private Integer missionId;
     private String groupName;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 
     List<Noti> noties = new ArrayList<>();
 
@@ -34,6 +39,8 @@ public class NotiDto {
         this.nickname = builder.nickname;
         this.missionId = builder.missionId;
         this.groupName = builder.groupName;
+        this.createTime = builder.createTime;
+        this.updateTime = builder.updateTime;
     }
 
     public static class NotiDtoBuilder implements CommonBuilder<NotiDto> {
@@ -46,7 +53,8 @@ public class NotiDto {
         private String nickname;
         private Integer missionId;
         private String groupName;
-
+        private LocalDateTime createTime;
+        private LocalDateTime updateTime;
 
         public NotiDtoBuilder(Noti noti) {
             this.id = noti.getId();
@@ -58,6 +66,8 @@ public class NotiDto {
             this.nickname = noti.getNickname();
             this.missionId = noti.getMissionId();
             this.groupName = noti.getGroupName();
+            this.createTime = noti.getCreateTime();
+            this.updateTime = noti.getUpdateTime();
         }
 
         @Override

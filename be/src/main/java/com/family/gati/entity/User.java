@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor // 기본 생성자 세팅
 @AllArgsConstructor
 @Table(name = "USER")
-public class User implements UserDetails{
+public class User implements UserDetails {
 
     @JsonIgnore
     @Id // DB 테이블의 PK와 객체의 필드 매핑
@@ -59,17 +59,14 @@ public class User implements UserDetails{
     @Column(name = "PLUS_MINUS", columnDefinition = "TINYINT(1) DEFAULT 0", length = 1)
     private int plusMinus;
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATE_TIME")
     @NotNull
     private LocalDateTime createTime;
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATE_TIME")
     private LocalDateTime updateTime;
 
     @Column(name = "REFRESH_TOKEN", length = 200)
-//    @NotNull
     private String refreshToken;
 
     @Column(name = "ROLE", length = 20)
