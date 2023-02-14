@@ -60,17 +60,20 @@ const CreateFamilyModal = (props) => {
   function handleSubmit(event) {
     event.preventDefault();
     // console.log(event.target.fileTag.files[0]);
-    console.log(file[0].file);
-    console.log(event.target.familyName.value);
-    console.log(userId);
-    const reqData = {
-      img: "string",
-      name: event.target.familyName.value,
-    };
+    // console.log(file[0].file);
+    // console.log(event.target.familyName.value);
+    // console.log(userId);
+
+    const formData = new FormData();
+    formData.append("name", event.target.familyName.value);
+    formData.append("multipartFile", file[0].file, file[0].file.name);
+    // console.log(file[0].file);
+    formData.append("userId", userId);
+    // console.log(formData);
     httpClient
-      .post(`/family/${userId}`, reqData)
+      .post(`/family/create`, formData)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         if (data != null && data.msg != null && data.msg === "success") {
           alert("가족 그룹이 생성되었습니다");
         }

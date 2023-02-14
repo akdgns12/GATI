@@ -73,6 +73,8 @@ const CreatePost = (props) => {
   const { article } = useSelector((state) => state.board);
   const { loginUser, mainGroup } = useSelector((state) => state.user);
 
+  var imgPath = process.env.REACT_APP_IMG_ROOT + "/" + article.img;
+
   useEffect(() => {
     console.log("mounted");
     if (variant === "modify") {
@@ -85,7 +87,7 @@ const CreatePost = (props) => {
           // console.log(data);
           console.log(data.payload.img);
           // setImgURL(URL.createObjectURL(event.target.files[0]));
-          setImgURL("https://picsum.photos/400/300");
+          setImgURL(imgPath);
           setSerializedTag(serializeTag(data.payload.tag));
           setLoaded(true);
         })
@@ -115,12 +117,7 @@ const CreatePost = (props) => {
     // console.log(event.target.content.value);
     // console.log(event.target.tag.value);
     const tagObjs = parseTags(event.target.tag.value);
-    // const formData = {
-    //   content: event.target.content.value,
-    //   tagDtos: tagObjs,
-    //   // img: event.target.img.files[0].name,
-    //   img: "image",
-    // };
+
     const formData = new FormData();
     formData.append("content", event.target.content.value);
     // formData.append('tagDtos', tagObjs);
@@ -135,7 +132,7 @@ const CreatePost = (props) => {
     if (variant === "create") {
       formData.append("userId", loginUser.userId);
       formData.append("groupId", mainGroup.id);
-      console.log(formData);
+      // console.log(formData);
       httpClient
         .post("/boards/board/", formData)
         .then((data) => {
@@ -182,7 +179,7 @@ const CreatePost = (props) => {
   }
 
   function handleIMGChange(event) {
-    console.log(event.target.files[0]);
+    // console.log(event.target.files[0]);
     setImgURL(URL.createObjectURL(event.target.files[0]));
   }
 
