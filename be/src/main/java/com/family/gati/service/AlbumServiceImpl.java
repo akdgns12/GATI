@@ -40,6 +40,32 @@ public class AlbumServiceImpl implements AlbumService{
     }
 
     @Override
+    public List<AlbumDto> findByGroupIdAndSearchCondition(Integer groupId, String userId, String search) {
+        List<Album> albums = albumRepository.findByGroupIdOrderByCreateTime(groupId);
+        int size = albums.size();
+        List<AlbumDto> result = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            Album album = albums.get(i);
+            int flag = 0;
+            for (AlbumTag albumTag : album.getTag()) {
+                if (albumTag.getTag().contains(search)) {
+                    flag = 1;
+                    break;
+                }
+            }
+            if (flag == 0)
+                continue;
+            AlbumDto albumDto = new AlbumDto.AlbumDtoBuilder(album).build();
+            AlbumLikes albumLikes = albumLikesRepository.findByAlbumIdAndUserId(album.getId(), userId);
+            if (albumLikes == null) {
+                albumDto.setUserLike(0);
+            }
+            result.add(albumDto);
+        }
+        return result;
+    }
+
+    @Override
     public AlbumDto findById(Integer id, String userId) {
         AlbumDto result = new AlbumDto.AlbumDtoBuilder(albumRepository.findById(id).get()).build();
         AlbumLikes albumLikes = albumLikesRepository.findByAlbumIdAndUserId(id, userId);
@@ -52,6 +78,7 @@ public class AlbumServiceImpl implements AlbumService{
     public AlbumDto insertAlbum(AlbumDto albumDto) {
         albumDto.setNickname(userRepository.findByUserId(albumDto.getUserId()).getNickName());
         Album album = new Album.AlbumBuilder(albumDto).build();
+
         for (TagDto tagDto : albumDto.getTag()) {
             AlbumTag albumTag = new AlbumTag(tagDto.getTagContent());
             albumTag.setAlbum(album);
