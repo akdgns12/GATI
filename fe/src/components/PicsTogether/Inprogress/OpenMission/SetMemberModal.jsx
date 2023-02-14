@@ -24,7 +24,6 @@ export default function SetMemberModal(props) {
   // 미션 업로드 사진 수(인원 설정)
   const [picNum, setPicNum] = React.useState('1')
   const handleChange = (event) => {
-    console.log('사진 갯수 변해랏!')
     setPicNum(event.target.value)
   };
   
