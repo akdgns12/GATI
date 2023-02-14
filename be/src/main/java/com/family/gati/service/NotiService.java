@@ -27,7 +27,8 @@ public class NotiService {
         List<Noti> noties = notiRepository.findByUserId(userId);
         int size = noties.size();
         List<NotiDto> result = new ArrayList<>();
-        for (int i=0; i<size; i++){
+        for (int i=1; i<size; i++) {
+            if(i > 15) break;
             NotiDto noti = new NotiDto.NotiDtoBuilder(noties.get(i)).build();
             result.add(noti);
         }
