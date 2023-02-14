@@ -1,6 +1,7 @@
 package com.family.gati.entity;
 
 
+import com.family.gati.util.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "NOTIFICATION")
-public class Noti {
+public class Noti extends BaseTimeEntity {
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue
@@ -55,33 +56,4 @@ public class Noti {
         this.missionId = missionId;
         this.groupName = groupName;
     }
-
-//    public static class NotiBuilder implements CommonBuilder<Noti> {
-//        private Integer id;
-//        private String userId;
-//        private Integer type;
-//        private Integer groupId;
-//        private Integer commentId;
-//        private Integer boardId;
-//        private String nickname;
-//        private Integer missionId;
-//        private String groupName;
-//
-//        public NotiBuilder(NotiDto notiDto) {
-//            this.id = notiDto.getId();
-//            this.userId = notiDto.getUserId();
-//            this.type = notiDto.getType();
-//            this.groupId = notiDto.getGroupId();
-//            this.commentId = notiDto.getCommentId();
-//            this.boardId = notiDto.getBoardId();
-//            this.nickname = notiDto.getNickname();
-//            this.missionId = notiDto.getMissionId();
-//            this.groupName = notiDto.getGroupName();
-//        }
-
-//        @Override
-//        public Noti build() {
-//            return new Noti(this);
-//        }
-//    }
 }
