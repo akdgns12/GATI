@@ -89,4 +89,4 @@ logging.level:
   org.hibernate.type: trace
 
 #ubuntu only
-upload.dir: home/ubuntu/image
+upload.dir: home/ubuntu/image_dev
