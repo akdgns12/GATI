@@ -1,5 +1,6 @@
 package com.family.gati.service;
 
+import com.family.gati.dto.FamilyDto;
 import com.family.gati.dto.FamilyInviteDto;
 import com.family.gati.dto.FamilySignUpDto;
 import com.family.gati.dto.FamilyUpdateDto;
@@ -8,14 +9,12 @@ import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.User;
 import com.family.gati.repository.FamilyMemberRepository;
 import com.family.gati.repository.FamilyRepository;
-import com.family.gati.repository.NotiRepository;
 import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -45,25 +44,27 @@ public class FamilyService {
         return mainFamily;
     }
 
-    public void createFamily(String userId, FamilySignUpDto familySignUpDto){
+    public Family createFamily(FamilyDto familyDto){
         Family family = new Family();
 
-        family.setName(familySignUpDto.getName());
+        family.setName(familyDto.getName());
         // 우리가 제공해줄 기본 이미지 or 사용자가 업로드한 이미지로
-        family.setImg(familySignUpDto.getImg());
+        family.setImg(familyDto.getImg());
         // 생성할때 그룹 인원 1
         family.setFamilyTotal(1);
         // 로그인 한 유저 ID로 가져옴
-        family.setMasterId(userId);
+        family.setMasterId(familyDto.getMasterId());
 
         family = familyRepository.save(family);
         int familyId = family.getId();
 
         FamilyMember familyMember = new FamilyMember();
         familyMember.setFamilyId(familyId);
-        familyMember.setUserId(userId);
+        familyMember.setUserId(familyDto.getMasterId());
 
         familyMemberRepository.save(familyMember);
+
+        return family;
    }
 
     public Family getByMasterId(String masterId){
@@ -71,18 +72,16 @@ public class FamilyService {
     }
 
     @Transactional
-    public void updateFamily(FamilyUpdateDto familyUpdateDto) {
-        int id = familyUpdateDto.getId();
+    public Family updateFamily(FamilyDto familyDto) {
+        int id = familyDto.getId();
         Family family = familyRepository.findById(id);
 
-        if(family == null){
-            return;
-        }
-
-        family.setName(familyUpdateDto.getName());
-        family.setImg(familyUpdateDto.getImg());
-
+        family.setName(familyDto.getName());
+        family.setImg(familyDto.getImg());
+        System.out.println(family);
         familyRepository.save(family);
+
+        return family;
     }
 
     @Transactional

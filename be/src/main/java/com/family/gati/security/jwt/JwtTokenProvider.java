@@ -25,13 +25,11 @@ import java.util.Map;
 
 @Slf4j
 @Service
-//@RequiredArgsConstructor
 public class JwtTokenProvider {
 
     private final String SECRET_KEY;
     private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 1;		// 1시간
-    private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 2;	// 1주
-//    private final String AUTHORITIES_KEY = "role";
+    private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24;	// 1주
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
