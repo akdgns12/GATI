@@ -1,6 +1,7 @@
 package com.family.gati.api;
 
 import com.family.gati.dto.CityDto;
+import com.family.gati.dto.RecommandDto;
 import com.family.gati.service.CityService;
 import com.family.gati.service.RecommandService;
 import io.swagger.annotations.Api;
@@ -23,8 +24,7 @@ public class CityApiController {
 
     @GetMapping("/tag")
     public ResponseEntity<?> findAllOrderByTagCnt(){
-        List<CityDto> dtos;
-        dtos = cityService.findAllOrderByTagCnt();
+        List<CityDto> dtos = cityService.findAllOrderByTagCnt();
         return ResponseEntity.ok(dtos);
     }
     @GetMapping("/pushdb")
@@ -37,13 +37,6 @@ public class CityApiController {
     public ResponseEntity<?> pushCityDb() throws Exception {
         cityService.pushCityDb();
         return ResponseEntity.ok(null);
-    }
-
-    @GetMapping("/cities")
-    public ResponseEntity<?> findCities(){
-        List<CityDto> dtos;
-        dtos = cityService.findAllOrderByTagCnt();
-        return ResponseEntity.ok(dtos);
     }
 
 }

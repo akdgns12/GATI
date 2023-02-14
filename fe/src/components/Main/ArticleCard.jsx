@@ -29,6 +29,9 @@ export default function ArticleCard(props) {
   const article = props.article;
   const variant = props.variant == null ? "feed" : props.variant;
 
+  var imgPath = process.env.REACT_APP_IMG_ROOT + "/" + article.img;
+  // console.log(imgURL);
+
   useEffect(() => {
     if (toggleLike) {
       setLikeVar(article.userLike === 1 ? -1 : +1);
@@ -73,14 +76,18 @@ export default function ArticleCard(props) {
 
   return (
     <>
-      <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
+      <Card
+        sx={{ borderRadius: 1 }}
+        style={{ marginBottom: "10px", width: "100%" }}
+      >
         <CardHeader
           action={
             <IconButton
               aria-label="settings"
               onClick={showOptions}
               style={{
-                display: article.userId == loginUser.userId ? "inline-block" : "none",
+                display:
+                  article.userId == loginUser.userId ? "inline-block" : "none",
               }}
             >
               <MoreHorizIcon />
@@ -94,7 +101,7 @@ export default function ArticleCard(props) {
           <CardMedia
             component="img"
             width="100%"
-            image={article.img}
+            image={imgPath}
             alt="NO IMAGE"
             onError={(e) => {
               e.target.src = noImgPath;
@@ -114,7 +121,10 @@ export default function ArticleCard(props) {
           </IconButton>
           {article.likes + likeVar}
           <Box style={{ marginLeft: "auto" }}>
-            <Typography variant="body4" style={{ fontWeight: "bold", marginRight: "10px" }}>
+            <Typography
+              variant="body4"
+              style={{ fontWeight: "bold", marginRight: "10px" }}
+            >
               {article.createTime != null && article.createTime.split("T")[0]}
             </Typography>
             {bookmark}

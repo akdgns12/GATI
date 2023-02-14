@@ -62,7 +62,7 @@ const contStyle = css`
 `;
 
 const CreatePost = (props) => {
-  const variant = (props.variant == null) ? "create" : props.variant;
+  const variant = props.variant == null ? "create" : props.variant;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [imgURL, setImgURL] = useState(null);
@@ -71,7 +71,9 @@ const CreatePost = (props) => {
 
   const articleId = useParams().articleId;
   const { article } = useSelector((state) => state.board);
-  const { loginUser } = useSelector((state) => state.user);
+  const { loginUser, mainGroup } = useSelector((state) => state.user);
+
+  var imgPath = process.env.REACT_APP_IMG_ROOT + "/" + article.img;
 
   useEffect(() => {
     console.log("mounted");
@@ -85,13 +87,13 @@ const CreatePost = (props) => {
           // console.log(data);
           console.log(data.payload.img);
           // setImgURL(URL.createObjectURL(event.target.files[0]));
-          setImgURL("https://picsum.photos/400/300");
+          setImgURL(imgPath);
           setSerializedTag(serializeTag(data.payload.tag));
           setLoaded(true);
         })
         .catch((error) => {
           console.log(error);
-        })
+        });
     }
   }, []);
 
@@ -102,7 +104,7 @@ const CreatePost = (props) => {
       tagObjs.map((tagObj) => {
         str += tagObj.tagContent;
         str += " ";
-      })
+      });
     }
     console.log(str);
     return str;
@@ -115,39 +117,37 @@ const CreatePost = (props) => {
     // console.log(event.target.content.value);
     // console.log(event.target.tag.value);
     const tagObjs = parseTags(event.target.tag.value);
-    const formData = {
-      content: event.target.content.value,
-      tagDtos: tagObjs,
-      // img: event.target.img.files[0].name,
-      img: "image",
-    };
+
+    const formData = new FormData();
+    formData.append("content", event.target.content.value);
+    // formData.append('tagDtos', tagObjs);
+    formData.append("tagDtos[0].tagContent", tagObjs);
+    formData.append(
+      "file",
+      event.target.img.files[0],
+      event.target.img.files[0].name
+    );
     // console.log(formData);
 
     if (variant === "create") {
-      const postData = {
-        ...formData,
-        userId: loginUser.userId,
-        groupId: 1,
-      };
-      // console.log(postData);
-      httpClient.post("/boards/board/", postData)
+      formData.append("userId", loginUser.userId);
+      formData.append("groupId", mainGroup.id);
+      // console.log(formData);
+      httpClient
+        .post("/boards/board/", formData)
         .then((data) => {
           // console.log(data)
           alert("article posted");
           navigate("/");
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           alert("failed to post article");
         });
-    }
-    else if (variant === "modify") {
-      const putData = {
-        ...formData,
-        id: articleId,
-      };
-      // console.log(putData);
-      httpClient.put("/boards/board/", putData)
+    } else if (variant === "modify") {
+      formData.append("id", articleId);
+      httpClient
+        .put("/boards/board/", formData)
         .then((data) => {
           // console.log(data);
           alert("modified");
@@ -156,7 +156,7 @@ const CreatePost = (props) => {
         .catch((error) => {
           console.log(error);
           alert("failed to modify data");
-        })
+        });
     }
   }
 
@@ -167,7 +167,7 @@ const CreatePost = (props) => {
     tags.map((tag, index) => {
       // console.log(tag);
       ret.push({ tagContent: tag });
-    })
+    });
     return ret;
   }
 
@@ -179,7 +179,7 @@ const CreatePost = (props) => {
   }
 
   function handleIMGChange(event) {
-    console.log(event.target.files[0]);
+    // console.log(event.target.files[0]);
     setImgURL(URL.createObjectURL(event.target.files[0]));
   }
 
@@ -188,7 +188,12 @@ const CreatePost = (props) => {
       <Box className="photo">
         <Box className="photo-label">사진 선택</Box>
         <Box className="photo-box">
-          <Box className="photo-prev" component="img" src={imgURL} alt="please select photo" />
+          <Box
+            className="photo-prev"
+            component="img"
+            src={imgURL}
+            alt="please select photo"
+          />
         </Box>
         <label htmlFor="select-img">
           <Button className="edit-btn" component="span">
@@ -213,7 +218,7 @@ const CreatePost = (props) => {
           multiline={true}
           name="content"
           style={{ height: "150px" }}
-          defaultValue={(variant === "modify" && loaded) ? article.content : ""}
+          defaultValue={variant === "modify" && loaded ? article.content : ""}
         />
       </FormControl>
       <FormControl variant="standard" style={{ width: "100%" }}>
@@ -223,7 +228,7 @@ const CreatePost = (props) => {
           placeholder="사진의 태그를 입력하세요."
           multiline={true}
           name="tag"
-          defaultValue={(variant === "modify" && loaded) ? serializedTag : ""}
+          defaultValue={variant === "modify" && loaded ? serializedTag : ""}
         />
       </FormControl>
       <Box className="button-group">

@@ -27,18 +27,18 @@ export default function SearchBar() {
         width: '90vw',
         height: '40px'}}>
       <InputSearchKeyword />
-      <Divider sx={{ height: 28, m: 0.5, backgroundColor: '#E8E8E8'}} orientation="vertical" />
+      {/* <Divider sx={{ height: 28, m: 0.5, backgroundColor: '#E8E8E8'}} orientation="vertical" />
       <IconButton onClick={OpenCalendar} color="primary" sx={{ p: '10px'}} aria-label="directions">
         <CalendarMonthIcon/>
-      </IconButton>
-      <Modal
+      </IconButton> */}
+      {/* <Modal
         open={open}
         onClose={CloseCalendar}>
           
         <Paper>
           <ModalDatePicker />
         </Paper>
-      </Modal>
+      </Modal> */}
     </Container>
   );
 }
