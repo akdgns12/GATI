@@ -30,7 +30,6 @@ export const asyncPutMission = createAsyncThunk(
 export const asyncPostImg = createAsyncThunk(
   'picsTgSlice/asyncPostImg',
   async (formData) => {
-    console.log('here')
     const resp = await httpClient.post(
       "/missions/image/",
       formData,

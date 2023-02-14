@@ -17,7 +17,7 @@ export default function UploadPic() {
     height:'200px',
     border:'2px dashed #8888',
     borderRadius:'16px',
-    margin:3
+    margin:1
   })
   const changeBoxStyle = () => {
     setBoxStyle({...boxStyle, border:'2px dashed white'})
@@ -34,7 +34,7 @@ export default function UploadPic() {
     console.log('upload 함수 실행')
     const file = imgRef.current.files[0];
     const formData = new FormData()
-    formData.append('img', file, 'image.jpg')
+    formData.append('file', file, 'image.jpg')
     formData.append('missionId', missionId)
     formData.append('userId', userId)
     dispatch(asyncPostImg(formData))
@@ -74,8 +74,16 @@ export default function UploadPic() {
   }
 
   return (
-    <Box sx={boxStyle}>
-      {content}
+    <Box
+      sx={{
+        display:'flex',
+        flexDirection:"column",
+        alignItems:'center',
+        width:'250px'
+      }}>
+      <Box sx={boxStyle}>
+        {content}
+      </Box>
     </Box>
   )
 }

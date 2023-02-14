@@ -10,12 +10,10 @@ import MissionCompleted from '../../components/PicsTogether/Inprogress/MissionCo
 
 export default function PicsMainPage() {
   const dispatch = useDispatch();
-  const groupId = 1;
+  const groupId = 100;
   React.useEffect(()=>{
     dispatch(asyncGetMission(groupId))
   },[])
-    // .then(data=>console.log(data))
-    // .catch(err=>console.log(err))
 
   // 진행 중, 완료 모드 토글 전환
   const mode = useSelector(state => {
@@ -29,8 +27,8 @@ export default function PicsMainPage() {
   }).completed
 
   // test
-  console.log('mode',mode)
-  console.log('missionStatus',missionStatus)
+  console.log('메인 mode',mode)
+  console.log('메인 missionStatus',missionStatus)
   
   // mode에 따라 달라질 content
   let content = null
@@ -43,7 +41,6 @@ export default function PicsMainPage() {
   } else {
     content = <Completed />
   }
-
 
   return (
     <Box
