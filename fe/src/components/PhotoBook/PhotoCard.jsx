@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Card from "@mui/material/Card";
-import { Box, Container, Grid, Button } from "@mui/material";
+import { Box, Container, Grid, Button,} from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -26,7 +26,11 @@ export default function PhotoCard(props) {
   };
 
   return (
-    <Grid item xs={6}>
+    <>
+      {/* {photo.tag != null &&
+        photo.tag.map((tag, index) => {
+        return <>#{tag.tagContent}&nbsp;</>;
+        })} */}
       <CardMedia
         component="img"
         height="150px"
@@ -34,7 +38,7 @@ export default function PhotoCard(props) {
         sx={{ borderRadius: 1 }}
         style={{ cursor: "pointer" }}
         onClick={moveToDetail}
-      />
-    </Grid>
+        />
+    </>
   );
 }

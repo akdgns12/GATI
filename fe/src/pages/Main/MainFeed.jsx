@@ -1,40 +1,72 @@
 import { React, useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { useDispatch, useSelector } from "react-redux";
-import { loadMainFeed } from "../../store/Board/board";
+import { loadMainFeed, updatePageNo } from "../../store/Board/board";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import ArticleCard from "../../components/Main/ArticleCard";
 import NotInGroup from "../../components/Main/NotInGroup";
 import AddButton from "../../components/Main/AddButton";
 import NoGroupAlertDialog from "../../components/Main/NoGroupAlert";
 import GroupInvitation from "../../components/Notification/GroupInvitation";
+import { Box } from "@mui/material";
 
 const MainFeed = () => {
   const dispatch = useDispatch();
   const { loginUser } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    // console.log("main feed mounted");
-    // console.log(loginUser.userId);
-    dispatch(loadMainFeed({ groupId: 1, userId: loginUser.userId, page: 0 }))
-      .then((data) => {
-        // console.log(data.payload);
-      })
-      .catch((error) => console.log(error));
-    return () => {
-      // console.log("main feed umnounted");
-    };
-  }, []);
+  const [target, setTarget] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const { curPageNo } = useSelector((state) => state.board);
 
   // console.log(state);
   const { articles } = useSelector((state) => state.board);
   // const groupId = 11;
   const { mainGroup } = useSelector((state) => state.user);
-  console.log(mainGroup);
+  // console.log(mainGroup);
   // const groupId = null;
   const { notifications } = useSelector((state) => state.noti);
 
   const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    let iObserver;
+    if (target) {
+      iObserver = new IntersectionObserver(
+        (entries) => onIntersect(entries, curPageNo),
+        {
+          threshold: 1.0,
+        }
+      );
+      iObserver.observe(target);
+    }
+    return () => iObserver && iObserver.disconnect();
+  }, [target, curPageNo]);
+
+  useEffect(() => {
+    console.log("articles loaded");
+    setLoaded(true);
+  }, [articles]);
+
+  async function onIntersect(entries, nextPageNo) {
+    // console.log(entries);
+    if (entries[0].isIntersecting) {
+      setLoaded(false);
+      console.log("LOAD MORE");
+      dispatch(
+        loadMainFeed({ groupId: 1, userId: loginUser.userId, page: nextPageNo })
+      )
+        .then(({ payload }) => {
+          // console.log(payload);
+          if (payload.length > 1) {
+            console.log("new feeds");
+            dispatch(updatePageNo(nextPageNo + 1));
+            setLoaded(true);
+          }
+        })
+        .catch((error) => console.log(error));
+      // console.log(articles);
+    }
+  }
 
   if (mainGroup != null && mainGroup != undefined && mainGroup.id != null) {
     return (
@@ -51,6 +83,11 @@ const MainFeed = () => {
               />
             );
           })}
+        {loaded && (
+          <Box ref={setTarget} style={{ textAlign: "center" }}>
+            <RefreshIcon />
+          </Box>
+        )}
       </div>
     );
   } else {
@@ -58,8 +95,8 @@ const MainFeed = () => {
       <div>
         {notifications.invitations != null
           ? notifications.invitations.map((invitation, index) => {
-            return <GroupInvitation key={index} invitation={invitation} />;
-          })
+              return <GroupInvitation key={index} invitation={invitation} />;
+            })
           : null}
         <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
         <div style={{ "margin-top": "40%" }}>

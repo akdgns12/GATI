@@ -158,15 +158,12 @@ public class FamilyApiController {
                 userRepository.save(user);
             }
 
+            // 삭제 후 유저 그룹 조회해서 하나도 없다면 생성 화면으로, 하나라도 있다면 main_group 선택 화면으로
+            if(familyMemberService.getFamilyListByUserId(user.getUserId()) == null) resultMap.put("isGroup", "XXXXXXX");
+            else resultMap.put("isGroup", "OOOOOOO");
+
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
-
-            // 삭제 후 유저 그룹 조회해서 하나도 없다면 생성 화면으로, 하나라도 있다면 main_group 선택 화면으로
-            if(familyMemberService.getFamilyListByUserId(user.getUserId()) == null){
-                resultMap.put("msg", "유저 그룹 존재 X 생성화면으로");
-            }else{
-                resultMap.put("msg", "그룹 하나 이상 존재 main_group 선택화면으로");
-            }
         }catch (Exception e){
             logger.debug("그룹 삭제 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
@@ -223,7 +220,6 @@ public class FamilyApiController {
 
         try{
             familyService.acceptInvite(familyInviteDto);
-
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e) {

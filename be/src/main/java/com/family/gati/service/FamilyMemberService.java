@@ -34,7 +34,7 @@ public class FamilyMemberService {
 
     // 이미 존재하는 User인지 검사
     public boolean isAlreadyExist(int familyId, String userId){
-        if(familyMemberRepository.findFamilyMemberAlreadyExist(familyId, userId) == null) return true;
+        if(familyMemberRepository.findFamilyMemberAlreadyExist(familyId, userId) != null) return true;
         return false;
     }
 

@@ -39,7 +39,6 @@ public class FamilyService {
         Family mainFamily = familyRepository.findById(user.getMainFamily());
 
         if(mainFamily == null){
-            log.debug("메인 그룹 없음:{}");
             return null;
         }
 
@@ -77,7 +76,6 @@ public class FamilyService {
         Family family = familyRepository.findById(id);
 
         if(family == null){
-            log.debug("없는 그룹입니다:  {}", family);
             return;
         }
 
@@ -101,7 +99,6 @@ public class FamilyService {
         family.setFamilyTotal(family.getFamilyTotal() + 1);
         familyRepository.save(family);
 
-        log.debug("familyMember 추가");
         // familyMember 테이블에 user 추가
         FamilyMember familyMember = new FamilyMember();
         familyMember.setUserId(userId);
