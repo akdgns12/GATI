@@ -49,6 +49,10 @@ const userSlice = createSlice({
       // console.log(action);
       state.mainGroup = { ...state.mainGroup, ...action.payload };
     },
+    updateDefaultGroup: (state, action) => {
+      console.log(action);
+      state.defaultGroup = action.payload;
+    },
     updateUserNickName: (state, action) => {
       // console.log(action);
       state.loginUser.nickName = action.payload;
@@ -77,5 +81,9 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { updateToken, updateMainGroup, updateUserNickName } =
-  userSlice.actions;
+export const {
+  updateToken,
+  updateMainGroup,
+  updateDefaultGroup,
+  updateUserNickName,
+} = userSlice.actions;

@@ -12,7 +12,8 @@ import {
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import { useDispatch, useSelector } from "react-redux";
-import { updateMainGroup } from "../../store/User/user";
+import { updateMainGroup, updateDefaultGroup } from "../../store/User/user";
+import httpClient from "../../utils/axios";
 
 const contStyle = css`
   width: 100%;
@@ -23,11 +24,23 @@ const contStyle = css`
 
 const FamilyItem = (props) => {
   const groupName = props.group.name;
-  const { defaultGroup, mainGroup } = useSelector((state) => state.user);
+  const { defaultGroup, mainGroup, loginUser } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
 
   function setMainGroup(event) {
     event.preventDefault();
+    const reqData = {
+      mainFamily: props.group.id,
+      userId: loginUser.userId,
+    };
+    httpClient.put("/user/main", reqData).then(({ data }) => {
+      if (data.msg === "success") {
+        window.alert("Main 그룹이 변경되었습니다.");
+        dispatch(updateDefaultGroup(props.group));
+      }
+    });
   }
 
   function mvToGroup(event) {
