@@ -9,5 +9,8 @@ import java.util.List;
 @Repository
 public interface RecommandRepository extends JpaRepository<Recommand, Integer> {
     List<Recommand> findAllByAreacodeOrderBySigungucode(int areacode);
+    List<Recommand> findAllByAreacodeOrderByReadcountDesc(int areacode);
     List<Recommand> findAllByAreacodeAndSigungucode(int areacode, int sigungucode);
+    List<Recommand> findAllByAreacodeAndSigungucodeOrderByReadcountDesc(int areacode, int sigungucode);
+
 }
