@@ -4,14 +4,8 @@ import com.family.gati.dto.*;
 import com.family.gati.entity.Family;
 import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.User;
-import com.family.gati.repository.FamilyRepository;
 import com.family.gati.repository.UserRepository;
-import com.family.gati.security.jwt.JwtAuthenticationFilter;
-import com.family.gati.security.jwt.JwtTokenProvider;
-import com.family.gati.service.FamilyMemberService;
-import com.family.gati.service.FamilyService;
-import com.family.gati.service.NotiService;
-import com.family.gati.service.UserService;
+import com.family.gati.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,8 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,30 +38,39 @@ public class FamilyApiController {
     private final FamilyMemberService familyMemberService;
     private final UserService userService;
     private final UserRepository userRepository;
-    private final FamilyRepository familyRepository;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final NotiService notiService;
+    private final FileService fileService;
 
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
-    @PostMapping("/{userId}")
-    public ResponseEntity<?> Family(@PathVariable("userId") String userId,
-                                    @RequestBody FamilySignUpDto familySignUpDto){
+    @PostMapping("/create")
+    public ResponseEntity<?> Family(@RequestPart MultipartFile multipartFile,
+                                    @ModelAttribute FamilySignUpDto familySignUpDto){
         logger.debug("familySignUpDto: {}", familySignUpDto);
-        logger.debug("");
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
+        String path;
+        try {
+            path = fileService.fileUpload(multipartFile, "family");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
+
+        FamilyDto familyDto = new FamilyDto();
+        familyDto.setMasterId(familySignUpDto.getUserId());
+        familyDto.setName(familySignUpDto.getName());
+        familyDto.setImg(path);
+
         try{
-            familyService.createFamily(userId, familySignUpDto);
+            Family newFamily = familyService.createFamily(familyDto);
 
             // 첫 그룹 생성 시, 생성 그룹이 mainFamily가 될 수 있게
-            User user = userRepository.findByUserId(userId);
-            Family newFamily = null;
+            User user = userRepository.findByUserId(familySignUpDto.getUserId());
             if(user.getMainFamily() == null){
                 log.debug("회원");
-                newFamily = familyService.getByMasterId(userId);
+                newFamily = familyService.getByMasterId(familySignUpDto.getUserId());
                 user.setMainFamily(newFamily.getId());
                 userRepository.save(user);
             }
@@ -116,19 +119,36 @@ public class FamilyApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
-
-
     // 그룹 정보 수정
     @ApiOperation(value = "그룹 정보 수정", notes = "그룹 id, 바꿀 그룹 정보(img, name)")
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody FamilyUpdateDto familyUpdateDto){
+    public ResponseEntity<?> update(@RequestPart MultipartFile multipartFile,
+                                    @ModelAttribute FamilyUpdateDto familyUpdateDto){
         logger.debug("family: {}", familyUpdateDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
+        String path;
+        try {
+            path = fileService.fileUpload(multipartFile, "family");
+        } catch (Exception e) {
+            // 에러코드 전송
+            throw new RuntimeException(e);
+        }
+
+        FamilyDto familyDto = new FamilyDto();
+        familyDto.setId(familyUpdateDto.getId());
+        familyDto.setName(familyUpdateDto.getName());
+        familyDto.setImg(path);
+
         try{
-            familyService.updateFamily(familyUpdateDto);
-            resultMap.put("modifedFamily: {}", familyUpdateDto);
+            if(familyService.getFamilyById(familyUpdateDto.getId()) == null){
+                resultMap.put("msg", FAIL);
+                status = HttpStatus.NOT_FOUND;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+            Family family = familyService.updateFamily(familyDto);
+            resultMap.put("modifedFamily: {}", family);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
         }catch (Exception e){
