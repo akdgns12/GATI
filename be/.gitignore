@@ -38,5 +38,6 @@ out/
 
 
 ### resourece ###
-resources/
+application-db.yml
+application-oauth.yml
 build.sh
