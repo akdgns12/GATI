@@ -41,7 +41,7 @@ const PrimaryAppBar = () => {
   const [familyinfo, setFamilyinfo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { mainGroup } = useSelector((state) => state.user);
+  const { loginUser, mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const theme = useTheme();
@@ -143,7 +143,7 @@ const PrimaryAppBar = () => {
               <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
             </Box>
             <Typography variant="h5" sx={{ p: 2 }}>
-              username 님 안녕하세요
+              {loginUser != null ? loginUser.nickName : "?"} 님 안녕하세요
             </Typography>
           </Container>
           <Divider />
@@ -166,7 +166,7 @@ const PrimaryAppBar = () => {
           <Divider />
           <Container sx={{ height: "70%" }}>
             {myinfo && <MyInfo />}
-            {family && <Family setOpen={setModalOpen} />}
+            {family && <Family setOpen={setModalOpen} setSideOpen={setOpen} />}
             {familyinfo && <FamilyCreate setOpen={setModalOpen} />}
             {logout && <Logout />}
           </Container>

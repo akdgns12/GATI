@@ -31,18 +31,17 @@ export default function Family(props) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const userId_ = "akdgns12";
     httpClient
-      .get(`/family/list/${userId_}`)
+      .get(`/family/list/${userId}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setGroupList(data.familyList);
       })
       .catch((error) => console.log(error));
   }, []);
 
   useEffect(() => {
-    if (groupList != null) {
+    if (groupList != null && groupList.length > 0) {
       // console.log(groupList);
       setLoaded(true);
     }
@@ -52,7 +51,11 @@ export default function Family(props) {
     <Box css={contStyle}>
       <Box className="list-header">
         <Box className="text-box">메인 그룹 설정</Box>
-        <Button variant="outlined" onClick={() => setOpen(true)} className="create-btn">
+        <Button
+          variant="outlined"
+          onClick={() => setOpen(true)}
+          className="create-btn"
+        >
           <span
             style={{
               width: "100%",
@@ -68,7 +71,13 @@ export default function Family(props) {
       {loaded &&
         groupList.length > 0 &&
         groupList.map((group, index) => {
-          return <FamilyItem key={index} group={group} />;
+          return (
+            <FamilyItem
+              key={index}
+              group={group}
+              setSideOpen={props.setSideOpen}
+            />
+          );
         })}
     </Box>
   );
