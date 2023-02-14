@@ -31,6 +31,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CityServiceImpl implements CityService {
     private final CityRepository cityRepository;
+    private final RecommandRepository recommandRepository;
 
     @Override
     public List<CityDto> findAllOrderByTagCnt(){
@@ -44,7 +45,40 @@ public class CityServiceImpl implements CityService {
         return result;
     }
 
-
-
-
+    @Override
+    public void pushCityDb() {
+        for (int i = 1; i <= 8; i++) {
+            List<Recommand> recommands = recommandRepository.findAllByAreacodeOrderBySigungucode(i);
+            if (recommands.size() == 0)
+                continue;
+            for (Recommand recommand : recommands) {
+                if (recommand.getSigungucode() == -1)
+                    continue;
+                if (recommand.getSigungucode() != null
+                        && recommand.getAddr1() != null && !recommand.getAddr1().isEmpty()) {
+                    System.out.println(recommand.getAddr1());
+                    System.out.println(recommand.getAddr1().isEmpty());
+                    City city = new City(recommand, 0);
+                    cityRepository.save(city);
+                    break;
+                }
+            }
+        }
+        for (int i = 31; i <= 39; i++) {
+            for (int j = 1; j <= 31; j++) {
+                List<Recommand> recommands = recommandRepository.findAllByAreacodeAndSigungucode(i, j);
+                if (recommands.size() == 0)
+                    break;
+                for (Recommand recommand : recommands) {
+                    if (recommand.getAddr1() != null && !recommand.getAddr1().isEmpty()) {
+                        System.out.println(recommand.getAddr1());
+                        System.out.println(recommand.getAddr1().isEmpty());
+                        City city = new City(recommand, 1);
+                        cityRepository.save(city);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }

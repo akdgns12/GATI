@@ -33,5 +33,17 @@ public class CityApiController {
         return ResponseEntity.ok(null);
     }
 
+    @GetMapping("/pushcitydb")
+    public ResponseEntity<?> pushCityDb() throws Exception {
+        cityService.pushCityDb();
+        return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/cities")
+    public ResponseEntity<?> findCities(){
+        List<CityDto> dtos;
+        dtos = cityService.findAllOrderByTagCnt();
+        return ResponseEntity.ok(dtos);
+    }
 
 }
