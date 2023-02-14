@@ -21,7 +21,7 @@ public class Family {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "NAME", length = 20, unique = true)
+    @Column(name = "NAME", length = 30)
     @NotNull
     private String name;
 
