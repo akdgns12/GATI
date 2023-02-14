@@ -67,7 +67,7 @@ const CreateFamilyModal = (props) => {
     const formData = new FormData();
     formData.append("name", event.target.familyName.value);
     formData.append("multipartFile", file[0].file, file[0].file.name);
-    console.log(file[0].file);
+    // console.log(file[0].file);
     formData.append("userId", userId);
     // console.log(formData);
     httpClient
