@@ -5,14 +5,17 @@ import com.family.gati.dto.TagDto;
 import com.family.gati.entity.Album;
 import com.family.gati.entity.AlbumLikes;
 import com.family.gati.entity.AlbumTag;
+import com.family.gati.entity.City;
 import com.family.gati.repository.AlbumLikesRepository;
 import com.family.gati.repository.AlbumRepository;
+import com.family.gati.repository.CityRepository;
 import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Log4j2
@@ -22,6 +25,7 @@ public class AlbumServiceImpl implements AlbumService{
     private final AlbumRepository albumRepository;
     private final AlbumLikesRepository albumLikesRepository;
     private final UserRepository userRepository;
+    private final CityRepository cityRepository;
     @Override
     public List<AlbumDto> findByGroupId(Integer groupId, String userId) {
         List<Album> albums = albumRepository.findByGroupIdOrderByCreateTime(groupId);
@@ -76,26 +80,47 @@ public class AlbumServiceImpl implements AlbumService{
     }
 
     public AlbumDto insertAlbum(AlbumDto albumDto) {
+        List<City> cities = cityRepository.findAll();
         albumDto.setNickname(userRepository.findByUserId(albumDto.getUserId()).getNickName());
         Album album = new Album.AlbumBuilder(albumDto).build();
-
+        HashSet<City> cityHashSet = new HashSet<>();
         for (TagDto tagDto : albumDto.getTag()) {
             AlbumTag albumTag = new AlbumTag(tagDto.getTagContent());
             albumTag.setAlbum(album);
             album.putTag(albumTag);
+            for (City city : cities) {
+                if (tagDto.getTagContent().contains(city.getTag())) {
+                    cityHashSet.add(city);
+                }
+            }
+        }
+        for (City city : cityHashSet) {
+            city.plusTagCnt(1);
+            cityRepository.save(city);
         }
         return new AlbumDto.AlbumDtoBuilder(albumRepository.save(album)).build();
     }
 
     public AlbumDto updateAlbum(AlbumDto albumDto) {
+        List<City> cities = cityRepository.findAll();
         Album album = albumRepository.findById(albumDto.getId()).get();
         album.setContent(albumDto.getContent());
         album.setImg(albumDto.getImg());
         album.setTag(new ArrayList<>());
+        HashSet<City> cityHashSet = new HashSet<>();
         for (TagDto tagDto: albumDto.getTag()) {
             AlbumTag albumTag = new AlbumTag(tagDto.getTagContent());
             albumTag.setAlbum(album);
             album.putTag(albumTag);
+            for (City city : cities) {
+                if (tagDto.getTagContent().contains(city.getTag())) {
+                    cityHashSet.add(city);
+                }
+            }
+        }
+        for (City city : cityHashSet) {
+            city.plusTagCnt(1);
+            cityRepository.save(city);
         }
         AlbumDto resultDto = new AlbumDto.AlbumDtoBuilder(albumRepository.save(album)).build();
         AlbumLikes albumLikes = albumLikesRepository.findByAlbumIdAndUserId(album.getId(), album.getUserId());

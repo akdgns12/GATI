@@ -22,7 +22,7 @@ public class CityDto {
     @ApiModelProperty(example = "2")
     private Integer sigungucode;
     @ApiModelProperty(example = "[Recommand]")
-    private List<RecommandDto> recommandDtos;
+    private List<RecommandReturnDto> recommandDtos;
 
     private CityDto(CityDtoBuilder builder){
         this.id = builder.id;
