@@ -14,10 +14,10 @@ export default function PicsMainPage() {
   // 유저 정보 받아오기
   const userId = useSelector(state=>{return state.user.loginUser.userId})
   const mainGroup = useSelector(state=>{return state.user.mainGroup})
-  console.log('userId', userId, 'mainGroup', mainGroup)
+  console.log('userId', userId, 'mainGroup', mainGroup.id)
 
   React.useEffect(()=>{
-    dispatch(asyncGetMission(mainGroup))
+    dispatch(asyncGetMission(mainGroup.id))
   },[])
 
   // 진행 중, 완료 모드 토글 전환
@@ -68,12 +68,26 @@ export default function PicsMainPage() {
         <ToggleButton
           onClick={()=>{dispatch(changeMode('inprogress'))}}
           value="inprogress"
-          style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중
+          style={{
+            flex:1, 
+            height:'40px', 
+            color: mode === 'inprogress' ? 'white' :'#FF9494',
+            backgroundColor: mode === 'inprogress' ? '#FF9494' : 'white',
+            border:'1px solid',
+            fontSize: mode === 'inprogress' ? '16px' :'14px',
+          }}>
+            진행 중
         </ToggleButton>
         <ToggleButton
           onClick={()=>{dispatch(changeMode('completed'))}}
           value="completed"
-          style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>완료
+          style={{ 
+            flex:1, 
+            height:'40px', 
+            color: mode === 'completed' ? 'white' :'#FF9494',
+            backgroundColor: mode === 'completed' ? '#FF9494' : 'white',
+            fontSize: mode === 'completed' ? '16px' :'14px',
+            border:'1px solid'}}>완료
         </ToggleButton>
       </ToggleButtonGroup>
       <Box
