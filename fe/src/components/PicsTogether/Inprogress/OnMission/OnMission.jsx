@@ -82,8 +82,7 @@ export default function OnMission() {
           flexWrap:'wrap',
           margin:'30px 0 30px 0',
           borderRadius:'16px',
-          backgroundColor:'white',
-          border:'2px solid #E1EEDD',
+          backgroundColor:'#E1EEDD',
           padding:'10px'
         }}>
         {content}
