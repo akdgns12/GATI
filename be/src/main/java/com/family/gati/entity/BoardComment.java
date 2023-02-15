@@ -38,6 +38,14 @@ public class BoardComment {
 
     @Column(name = "NICKNAME", nullable = false, length = 20)
     private String nickname;
+    public BoardComment(AlbumComment albumComment, Integer boardId) {
+        this.boardId = boardId;
+        this.userId = albumComment.getUserId();
+        this.content = albumComment.getContent();
+        this.createTime = albumComment.getCreateTime();
+        this.updateTime = albumComment.getUpdateTime();
+        this.nickname = albumComment.getNickname();
+    }
 
     private BoardComment(BoardCommentBuilder builder) {
         this.id = builder.id;
@@ -48,6 +56,7 @@ public class BoardComment {
         this.updateTime = builder.updateTime;
         this.nickname = builder.nickname;
     }
+
 
     public static class BoardCommentBuilder implements CommonBuilder<BoardComment> {
         private Integer id;

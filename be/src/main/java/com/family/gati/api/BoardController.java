@@ -233,4 +233,13 @@ public class BoardController {
         };
         return ResponseEntity.ok(null);
     }
+
+    @ApiOperation(
+            value = "Board에서 Album 저장"
+            , notes = "Board에서 Album 저장한다.")
+    @PostMapping("/save")
+    public ResponseEntity<?> addBoardLikes(@RequestParam Integer boardId) {
+        boardService.saveAlbum(boardId);
+        return ResponseEntity.ok(null);
+    }
 }

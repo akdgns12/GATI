@@ -126,7 +126,6 @@ public class AlbumController {
     public ResponseEntity<?> getAlbumById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id,
                                           @RequestParam String userId) {
         AlbumDto findDto = albumService.findById(id, userId);
-        findDto.setAlbumCommentDtos(albumCommentService.findByAlbumId(id));
         return ResponseEntity.ok(findDto);
     }
 
