@@ -24,6 +24,7 @@ import MyInfo from "./SideBar/MyInfo";
 import Family from "./SideBar/Family";
 import Logout from "./SideBar/Logout";
 import FamilyCreate from "./SideBar/FamilyCreate";
+import NotificationMenu from "./Notification/NotificationMenu";
 import { useNavigate } from "react-router";
 import { doLogOut } from "../utils/logOutUtil";
 import CreateFamilyModal from "./SideBar/CreateFamilyModal";
@@ -40,6 +41,7 @@ const PrimaryAppBar = () => {
   const [family, setFamily] = useState(false);
   const [familyinfo, setFamilyinfo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [groupIMG, setGroupIMG] = useState("");
 
   const { loginUser, mainGroup } = useSelector((state) => state.user);
@@ -99,20 +101,34 @@ const PrimaryAppBar = () => {
     navigate("/");
   };
 
+  function handleNotiOpen(event) {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+  }
+
   return (
-    <Box sx={{ flexGrow: 1, height:'100px'}}>
-      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
-        <Toolbar sx={{
-          display:'flex', 
-          flexWrap:'wrap',  
-          alignItems:'center', 
-          justifyContent: "space-between", 
-          height: "70px"
-        }}>
+    <Box sx={{ flexGrow: 1, height: "100px" }}>
+      <AppBar
+        open={open}
+        position="fixed"
+        style={{ background: "rgb(255, 255, 255, 1.0)" }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: "70px",
+          }}
+        >
           <Box
             sx={{
-              display:"flex", alignItems:"center", width:"77%"
-            }}>
+              display: "flex",
+              alignItems: "center",
+              width: "77%",
+            }}
+          >
             <Avatar
               onClick={showmsg}
               sx={{
@@ -121,12 +137,12 @@ const PrimaryAppBar = () => {
                 marginRight: 1.5,
               }}
               alt="gati img."
-              src={Img}
+              src={groupIMG}
               style={{ display: "inline-block", cursor: "pointer" }}
             />
             <Typography
               variant="h6"
-              sx={{fontFamily:'ONE-Mobile-POP'}}
+              sx={{ fontFamily: "ONE-Mobile-POP" }}
               color="rgb(32,32,32)"
               style={{ display: "inline-block" }}
             >
@@ -135,12 +151,16 @@ const PrimaryAppBar = () => {
           </Box>
           <Box
             sx={{
-              display:"flex",
-              justifyContent:"center",
-              alignItems:"center"
-            }}>
-            <IconButton >
-              <NotificationsOutlinedIcon style={{ fontSize:"30px", color:"FF9494"}}/>
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <IconButton>
+              <NotificationsOutlinedIcon
+                style={{ fontSize: "30px", color: "FF9494" }}
+                onClick={handleNotiOpen}
+              />
             </IconButton>
             <IconButton
               size="large"
@@ -151,7 +171,7 @@ const PrimaryAppBar = () => {
               onClick={handleDrawerOpen}
               sx={{ mr: 2, ...(open && { display: "none" }), m: 0, p: 0 }}
             >
-              <MenuIcon style={{ fontSize:'30px', color:'FF9494'}} />
+              <MenuIcon style={{ fontSize: "30px", color: "FF9494" }} />
             </IconButton>
           </Box>
         </Toolbar>
@@ -220,6 +240,7 @@ const PrimaryAppBar = () => {
         </Drawer>
       </Box>
       <CreateFamilyModal open={modalOpen} setOpen={setModalOpen} />
+      <NotificationMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </Box>
   );
 };
