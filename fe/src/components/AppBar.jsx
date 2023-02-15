@@ -108,11 +108,7 @@ const PrimaryAppBar = () => {
 
   return (
     <Box sx={{ flexGrow: 1, height: "100px" }}>
-      <AppBar
-        open={open}
-        position="fixed"
-        style={{ background: "rgb(255, 255, 255, 1.0)" }}
-      >
+      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
         <Toolbar
           sx={{
             display: "flex",
@@ -191,15 +187,8 @@ const PrimaryAppBar = () => {
         >
           <Container>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <IconButton
-                onClick={handleDrawerClose}
-                sx={{ fontSize: "large" }}
-              >
-                {theme.direction === "rtl" ? (
-                  <ChevronLeftIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
+              <IconButton onClick={handleDrawerClose} sx={{ fontSize: "large" }}>
+                {theme.direction === "rtl" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
               </IconButton>
               <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
             </Box>
@@ -209,12 +198,7 @@ const PrimaryAppBar = () => {
           </Container>
           <Divider />
           <Container>
-            <Box
-              display="flex"
-              spacing={1}
-              justifyContent="space-between"
-              sx={{ p: 1 }}
-            >
+            <Box display="flex" spacing={1} justifyContent="space-between" sx={{ p: 1 }}>
               <Button onClick={openMyinfo} variant="outlined">
                 내 정보
               </Button>
