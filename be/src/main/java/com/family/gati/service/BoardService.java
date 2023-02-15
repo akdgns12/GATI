@@ -10,4 +10,5 @@ public interface BoardService {
     BoardDto updateBoard(BoardDto boardDto);
     void deleteBoardById(Integer id);
     boolean findLikes(Integer boardId, String userId);
+    void saveAlbum(Integer boardId);
 }
