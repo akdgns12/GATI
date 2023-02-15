@@ -68,7 +68,7 @@ public class UserApiController {
         newUser.setBirth(request.getBirth());
         newUser.setPhoneNumber(request.getPhoneNumber());
         newUser.setPlusMinus(request.getPlusMinus());
-        newUser.setRole(Role.ADMIN);
+        newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setUpdateTime(LocalDateTime.now());
 
@@ -313,16 +313,30 @@ public class UserApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+    @Data
+    public static class FindPasswordRequestDto {
+        String userId;
+        String email;
+    }
+
     // 비밀번호 찾기
     @ApiOperation(value = "비밀번호 찾기", notes = "입력받은 이메일로 임시 비밀번호 전달")
-    @PostMapping("/findPassword/{email}")
-    public ResponseEntity<?> findPassword(@PathVariable("email") String email){
-        logger.debug("email: {}", email);
+    @PostMapping("/findPassword")
+    public ResponseEntity<?> findPassword(@RequestBody FindPasswordRequestDto findPasswordRequestDto){
+        logger.debug("email: {}", findPasswordRequestDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            MailDto mail = userService.createMailAndChangePassword(email);
+            User user = userRepository.findByEmail(findPasswordRequestDto.getEmail());
+            log.debug("DB에서 불러온 user INFO", user);
+            if(!user.getUserId().equals(findPasswordRequestDto.getUserId())){
+                log.debug("유저 아이디 불일치");
+                resultMap.put("msg", FAIL);
+                status = HttpStatus.BAD_REQUEST;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+            MailDto mail = userService.createMailAndChangePassword(findPasswordRequestDto.getEmail());
             userService.mailSend(mail, from);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;

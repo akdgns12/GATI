@@ -94,11 +94,10 @@ const PrimaryAppBar = () => {
     }
   };
 
-  function handleNotFound(e) {
-    console.log("GROUP IMG NOT FOUND");
-    console.log(Img);
-    e.target.src = Img;
-  }
+  const showmsg = (event) => {
+    event.stopPropagation();
+    navigate("/");
+  };
 
   return (
     <Box sx={{ flexGrow: 1, height:'70px'}}>
@@ -112,19 +111,19 @@ const PrimaryAppBar = () => {
         }}>
           <Box
             sx={{
-              display:'flex', alignItems:'center', width:'77%'
+              display:"flex", alignItems:"center", width:"77%"
             }}>
             <Avatar
+              onClick={showmsg}
               sx={{
                 width: 50,
                 height: 50,
-                marginRight:1.5
+                marginRight: 1.5,
               }}
-              src={groupIMG}
-              style={{ display: "inline-block" }}
-            >
-              <img src={Img} style={{ width: 50, height: 50 }} alt="X" />
-            </Avatar>
+              alt="gati img."
+              src={Img}
+              style={{ display: "inline-block", cursor: "pointer" }}
+            />
             <Typography
               variant="h6"
               sx={{fontFamily:'ONE-Mobile-POP'}}
@@ -136,12 +135,12 @@ const PrimaryAppBar = () => {
           </Box>
           <Box
             sx={{
-              display:'flex',
-              justifyContent:'center',
-              alignItems:'center'
+              display:"flex",
+              justifyContent:"center",
+              alignItems:"center"
             }}>
             <IconButton >
-              <NotificationsOutlinedIcon style={{ fontSize:'30px', color:'FF9494'}}/>
+              <NotificationsOutlinedIcon style={{ fontSize:"30px", color:"FF9494"}}/>
             </IconButton>
             <IconButton
               size="large"
@@ -172,8 +171,15 @@ const PrimaryAppBar = () => {
         >
           <Container>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <IconButton onClick={handleDrawerClose} sx={{ fontSize: "large" }}>
-                {theme.direction === "rtl" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              <IconButton
+                onClick={handleDrawerClose}
+                sx={{ fontSize: "large" }}
+              >
+                {theme.direction === "rtl" ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
               </IconButton>
               <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
             </Box>
@@ -183,7 +189,12 @@ const PrimaryAppBar = () => {
           </Container>
           <Divider />
           <Container>
-            <Box display="flex" spacing={1} justifyContent="space-between" sx={{ p: 1 }}>
+            <Box
+              display="flex"
+              spacing={1}
+              justifyContent="space-between"
+              sx={{ p: 1 }}
+            >
               <Button onClick={openMyinfo} variant="outlined">
                 내 정보
               </Button>
