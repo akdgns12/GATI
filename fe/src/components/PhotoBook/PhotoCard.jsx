@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Card from "@mui/material/Card";
-import { Box, Container, Grid, Button,} from "@mui/material";
+import { Box, Container, Grid, Button } from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -19,6 +19,7 @@ import httpClient from "../../utils/axios";
 export default function PhotoCard(props) {
   const navigate = useNavigate();
   const photo = props.photo;
+  var imgPath = process.env.REACT_APP_IMG_ROOT + "/" + photo.img;
   // 클릭하면 디테일 페이지로
   const moveToDetail = () => {
     const url = "/photobook/detail/" + photo.id;
@@ -34,11 +35,11 @@ export default function PhotoCard(props) {
       <CardMedia
         component="img"
         height="150px"
-        image={photo.img}
+        image={imgPath}
         sx={{ borderRadius: 1 }}
         style={{ cursor: "pointer" }}
         onClick={moveToDetail}
-        />
+      />
     </>
   );
 }
