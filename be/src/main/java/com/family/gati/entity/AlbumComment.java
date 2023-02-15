@@ -38,6 +38,15 @@ public class AlbumComment {
     @Column(name = "NICKNAME", nullable = false, length = 20)
     private String nickname;
 
+    public AlbumComment(BoardComment boardComment, Integer albumId) {
+        this.albumId = albumId;
+        this.userId = boardComment.getUserId();
+        this.content = boardComment.getContent();
+        this.createTime = boardComment.getCreateTime();
+        this.updateTime = boardComment.getUpdateTime();
+        this.nickname = boardComment.getNickname();
+    }
+
     private AlbumComment(AlbumComment.AlbumCommentBuilder builder) {
         this.id = builder.id;
         this.albumId = builder.albumId;

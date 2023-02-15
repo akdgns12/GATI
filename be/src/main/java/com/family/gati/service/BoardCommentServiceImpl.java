@@ -1,8 +1,10 @@
 package com.family.gati.service;
 
 import com.family.gati.dto.BoardCommentDto;
+import com.family.gati.entity.Album;
 import com.family.gati.entity.Board;
 import com.family.gati.entity.BoardComment;
+import com.family.gati.repository.AlbumRepository;
 import com.family.gati.repository.BoardCommentRepository;
 import com.family.gati.repository.BoardRepository;
 import com.family.gati.repository.UserRepository;
@@ -19,6 +21,7 @@ import java.util.List;
 public class BoardCommentServiceImpl implements BoardCommentService{
     private final BoardCommentRepository boardCommentRepository;
     private final BoardRepository boardRepository;
+    private final AlbumRepository albumRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -40,6 +43,11 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         Board board = boardRepository.findById(boardComment.getBoardId()).get();
         board.plusComments(1);
         boardRepository.save(board);
+        if (board.getAlbumId() != null) {
+            Album album = albumRepository.findById(board.getAlbumId()).get();
+            album.plusComments(1);
+            albumRepository.save(album);
+        }
         return new BoardCommentDto.BoardCommentDtoBuilder(boardCommentRepository.save(boardComment)).build();
     }
 
@@ -57,6 +65,11 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         Board board = boardRepository.findById(boardComment.getBoardId()).get();
         board.plusComments(-1);
         boardRepository.save(board);
+        if (board.getAlbumId() != null) {
+            Album album = albumRepository.findById(board.getAlbumId()).get();
+            album.plusComments(-1);
+            albumRepository.save(album);
+        }
         boardCommentRepository.deleteById(id);
     }
 
