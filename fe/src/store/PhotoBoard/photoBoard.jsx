@@ -47,6 +47,10 @@ const albumSlice = createSlice({
     updatePage: (state, action) => {
       state.currentPage = action.payload;
     },
+    clearPhoto: (state) => {
+      console.log("clear all");
+      state.photoInfo = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadPhotoBook.pending, (state) => {});
@@ -82,4 +86,4 @@ const albumSlice = createSlice({
 });
 
 export default albumSlice.reducer;
-export const { updatePage } = albumSlice.actions;
+export const { updatePage, clearPhoto } = albumSlice.actions;
