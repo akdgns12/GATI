@@ -80,13 +80,13 @@ export default function GoTogether() {
 
   return (
     <Container>
-      <Box sx={{ height: "100vh" }}>
+      <Box>
         <Box sx={{ bgcolor: "white", borderRadius: 1, margin: 3 }}>
           {cities.map((city, index) => {
             return (
-              <Card>
-                <City key={index} city={city} />;
-              </Card>
+              <Box>
+                <City key={index} city={city} value="hiiii" />
+              </Box>
             );
           })}
         </Box>

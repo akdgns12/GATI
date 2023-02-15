@@ -13,6 +13,9 @@ function Calendar({ weeks }) {
     if (!id) return;
     setModalOpen({ state: true, id });
   };
+
+  const what = blocks;
+  console.log(what);
   return (
     <Month>
       <Week style={{ borderBottom: "solid 2px white" }}>
