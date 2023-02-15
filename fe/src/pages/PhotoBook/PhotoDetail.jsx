@@ -57,10 +57,6 @@ const PhotoDetail = () => {
 
   return (
     <Box>
-      {/* 위 내용이 상단 바에 가려서 임의로 200px 추가해 뒀습니다 */}
-      <div style={{ height: "200px" }}>
-        이거 지워야합니당 : pages/PhotoBook/PhotoDetail.jsx : 60정도
-      </div>
       <IconButton className="mv-back" onClick={mvBack}>
         <ArrowBackIosIcon />
       </IconButton>
