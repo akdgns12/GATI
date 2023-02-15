@@ -1,6 +1,7 @@
 package com.family.gati.dto;
 
 import com.family.gati.entity.AlbumComment;
+import com.family.gati.entity.BoardComment;
 import com.family.gati.util.CommonBuilder;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,6 +26,16 @@ public class AlbumCommentDto {
     private Timestamp updateTime;
     @ApiModelProperty(example = "akdgns12")
     private String nickname;
+
+    public AlbumCommentDto(BoardComment boardComment, Integer albumId) {
+        this.id = boardComment.getId();
+        this.albumId = albumId;
+        this.userId = boardComment.getUserId();
+        this.content = boardComment.getContent();
+        this.createTime = boardComment.getCreateTime();
+        this.updateTime = boardComment.getUpdateTime();
+        this.nickname = boardComment.getNickname();
+    }
 
     private AlbumCommentDto(AlbumCommentDto.AlbumCommentDtoBuilder builder) {
         this.id = builder.id;

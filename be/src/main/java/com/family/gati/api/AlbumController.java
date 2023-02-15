@@ -126,7 +126,6 @@ public class AlbumController {
     public ResponseEntity<?> getAlbumById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id,
                                           @RequestParam String userId) {
         AlbumDto findDto = albumService.findById(id, userId);
-        findDto.setAlbumCommentDtos(albumCommentService.findByAlbumId(id));
         return ResponseEntity.ok(findDto);
     }
 
@@ -172,15 +171,17 @@ public class AlbumController {
             value = "Album 수정"
             , notes = "Album을 수정한다.")
     @PutMapping("/album")
-    public ResponseEntity<?> updateAlbum(@ApiParam(value = "The file to upload", required = true)@RequestPart MultipartFile file,
+    public ResponseEntity<?> updateAlbum(@ApiParam(value = "The file to upload", required = false)@RequestPart(required = false) MultipartFile file,
                                          @ApiParam(value = "The DTO object", required = true) @ModelAttribute AlbumUpdateDto albumUpdateDto){
         AlbumDto albumDto = new AlbumDto();
-        String path;
-        try {
-            path = fileService.fileUpload(file, "album");
-        } catch (Exception e) {
-            // 에러코드 전송
-            throw new RuntimeException(e);
+        String path = null;
+        if (file != null) {
+            try {
+                path = fileService.fileUpload(file, "album");
+            } catch (Exception e) {
+                // 에러코드 전송
+                throw new RuntimeException(e);
+            }
         }
         albumDto.setId(albumUpdateDto.getId());
         albumDto.setContent(albumUpdateDto.getContent());
