@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Box, Button, FormControl, Input, OutlinedInput } from "@mui/material";
-
+import axios from "axios";
 import httpClient from "../../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -102,66 +102,85 @@ const CreatePhoto = (props) => {
     return str;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    console.log("submit form");
+    // console.log(imgURL)
+    // console.log("submit form");
     // console.log(event.target.img.files[0].name);
-    console.log(event.target.content.value);
-    console.log(event.target.tag.value);
-    const tagObjs = parseTags(event.target.tag.value);
-    const formData = {
+    // console.log(event.target.content.value);
+    // console.log(event.target.tag.value);
+    let tagObjs = parseTags(event.target.tag.value);
+    let formData = {
       content: event.target.content.value,
       tagDtos: tagObjs,
       // img: event.target.img.files[0].name,
-      img: "image",
+      // img: {imgURL},
     };
-    console.log(formData);
+   
+    let param = {
+      ...formData,
+      userId: loginUser.userId,
+      groupId: 1,
+    }
 
-    if (variant === "create") {
-      const postData = {
-        ...formData,
-        userId: loginUser.userId,
-        // userId: 'userid',
-        groupId: 1,
-      };
-      console.log(postData);
-      httpClient.post("/albums/album/", postData)
-        .then((data) => {
-          console.log(data)
-          alert("album posted");
-          navigate("/photobook");
-        })
-        .catch((error) => {
-          console.log(error)
-          alert("failed to post album");
-        });
-    }
-    else if (variant === "modify") {
-      const putData = {
-        ...formData,
-        id: photoId,
-      };
-      console.log(putData);
-      httpClient.put("/albums/album/", putData)
-        .then((data) => {
-          console.log(data);
-          alert("modified");
-          navigate("/");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("failed to modify data");
-        })
-    }
+    const imgData = new FormData();
+    imgData.append('img', imgURL)
+
+    await axios.post('https://i8a805.p.ssafy.io/api/albums/album', imgData, {
+      headers: {
+        "Content-Type": 'multipart/form-data',
+      },
+      params: param
+    })
+      .then((response) => {
+        console.log(response, '성공')
+      })
+      .catch((e) => {console.log(e)})
+    // if (variant === "create") {
+    //   const postData = {
+    //     ...formData,
+    //     userId: loginUser.userId,
+    //     // userId: 'userid',
+    //     groupId: 1,
+    //   };
+    //   console.log(postData);
+    //   httpClient.post("/albums/album/", postData)
+    //     .then((data) => {
+    //       console.log(data)
+    //       alert("album posted");
+    //       navigate("/photobook");
+    //     })
+    //     .catch((error) => {
+    //       console.log(error)
+    //       alert("failed to post album");
+    //     });
+    // }
+    // else if (variant === "modify") {
+    //   const putData = {
+    //     ...formData,
+    //     id: photoId,
+    //   };
+    //   console.log(putData);
+    //   httpClient.put("/albums/album/", putData)
+    //     .then((data) => {
+    //       console.log(data);
+    //       alert("modified");
+    //       navigate("/");
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       alert("failed to modify data");
+    //     })
+    // }
   }
 
   function parseTags(str) {
-    console.log(str);
-    console.log(str.split(" "));
+    // console.log(str);
+    // console.log(str.split(" "));
     const tags = str.split(" ");
     let ret = [];
     tags.map((tag, index) => {
-      console.log(tag);
+      // console.log(tag);
       ret.push({ tagContent: tag });
     })
     return ret;
@@ -175,8 +194,13 @@ const CreatePhoto = (props) => {
   }
 
   function handleIMGChange(event) {
-    console.log(event.target.files[0]);
-    setImgURL(URL.createObjectURL(event.target.files[0]));
+    // console.log(event.target.files[0]);
+    // setImgURL(URL.createObjectURL(event.target.files[0]));
+    // console.log(imgURL)
+    event.preventDefault()
+    const imgFile = event.target.files[0]
+    setImgURL(imgFile)
+    console.log(imgURL)
   }
 
   return (

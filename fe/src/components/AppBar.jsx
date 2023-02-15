@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { Avatar, withStyles } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import { styled, useTheme } from "@mui/material/styles";
 
 import Drawer from "@mui/material/Drawer";
@@ -15,13 +16,9 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
 import Img from "../static/big-family.png";
 import { useState } from "react";
-import { persistor } from "../index.jsx";
 
 import MyInfo from "./SideBar/MyInfo";
 import Family from "./SideBar/Family";
@@ -30,7 +27,10 @@ import FamilyCreate from "./SideBar/FamilyCreate";
 import { useNavigate } from "react-router";
 import { doLogOut } from "../utils/logOutUtil";
 import CreateFamilyModal from "./SideBar/CreateFamilyModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import httpClient from "../utils/axios";
+import { loadNotification } from "../store/Nofitication/noti";
 
 const PrimaryAppBar = () => {
   const drawerWidth = "80%";
@@ -40,11 +40,21 @@ const PrimaryAppBar = () => {
   const [family, setFamily] = useState(false);
   const [familyinfo, setFamilyinfo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [groupIMG, setGroupIMG] = useState("");
 
   const { loginUser, mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const theme = useTheme();
+
+  useEffect(() => {
+    dispatch(loadNotification(loginUser.userId));
+  }, []);
+
+  useEffect(() => {
+    setGroupIMG(process.env.REACT_APP_IMG_ROOT + "/" + mainGroup.img);
+  }, [mainGroup]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -84,22 +94,47 @@ const PrimaryAppBar = () => {
     }
   };
 
+  const showmsg = (event) => {
+    event.stopPropagation();
+    navigate("/");
+  };
+
   return (
-    <Box sx={{ flexGrow: 1, height: "100px" }}>
-      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
-        <Toolbar sx={{ justifyContent: "space-between", height: "70px" }}>
-          <Box>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar
+        open={open}
+        position="fixed"
+        style={{ background: "rgb(255, 255, 255, 1.0)" }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: "70px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: "80%",
+            }}
+          >
             <Avatar
+              onClick={showmsg}
               sx={{
                 width: 50,
                 height: 50,
+                marginRight: 1.5,
               }}
               alt="gati img."
               src={Img}
-              style={{ display: "inline-block" }}
+              style={{ display: "inline-block", cursor: "pointer" }}
             />
             <Typography
-              variant="h5"
+              variant="h6"
               fontWeight="1000"
               color="rgb(32,32,32)"
               style={{ display: "inline-block" }}
@@ -107,7 +142,16 @@ const PrimaryAppBar = () => {
               {mainGroup != null && mainGroup.name != null && mainGroup.name}
             </Typography>
           </Box>
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <IconButton>
+              <NotificationsOutlinedIcon />
+            </IconButton>
             <IconButton
               size="large"
               edge="start"
@@ -137,8 +181,15 @@ const PrimaryAppBar = () => {
         >
           <Container>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <IconButton onClick={handleDrawerClose} sx={{ fontSize: "large" }}>
-                {theme.direction === "rtl" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              <IconButton
+                onClick={handleDrawerClose}
+                sx={{ fontSize: "large" }}
+              >
+                {theme.direction === "rtl" ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
               </IconButton>
               <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
             </Box>
@@ -148,7 +199,12 @@ const PrimaryAppBar = () => {
           </Container>
           <Divider />
           <Container>
-            <Box display="flex" spacing={1} justifyContent="space-between" sx={{ p: 1 }}>
+            <Box
+              display="flex"
+              spacing={1}
+              justifyContent="space-between"
+              sx={{ p: 1 }}
+            >
               <Button onClick={openMyinfo} variant="outlined">
                 내 정보
               </Button>

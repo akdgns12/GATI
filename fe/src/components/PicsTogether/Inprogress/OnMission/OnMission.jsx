@@ -68,7 +68,7 @@ export default function OnMission() {
           </IconButton>
         </Stack>
         {onDesc === true ? <Typography margin='20px' fontSize='13px'> {getMission.content}</Typography> : null}
-        {/* <Typography color='#888888'> {getMission.startDate} ~ {getMission.endDate} </Typography> */}
+        <Typography color='#888888'> {getMission.startDate} ~ {getMission.endDate} </Typography>
       </Paper>
 
       {/* 업로드된 이미지 보여주는 부분*/}
@@ -107,6 +107,7 @@ export default function OnMission() {
           display:'flex',
           flexDirection:'column',
           alignItems:'center',
+          justifyContent:'center',
           marginTop:'20px'
         }}>
         <UploadPic />
@@ -116,6 +117,7 @@ export default function OnMission() {
           size="medium"
           variant="contained"
           onClick={missionComplete}
+          style= {btnDisabled ? null :{backgroundColor: '#FF9494', color: 'white'} }
           disableElevation>
             미션 완료
         </Button>

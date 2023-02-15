@@ -1,43 +1,37 @@
-// redux ducks
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import httpClient from "../../utils/axios";
 
-// action types
-const RELOAD = 'noti/RELOAD';
-const ACCEPT = 'noti/ACCEPT';
-const REJECT = 'noti/REJECT';
-
-// action creators
-export const reload = () => ({ type: RELOAD });
-export const accept = () => ({ type: ACCEPT });
-export const reject = () => ({ type: REJECT });
-
+export const loadNotification = createAsyncThunk(
+  "noti/loadNotification",
+  async (reqData, { rejectWithValue }) => {
+    try {
+      const response = await httpClient.get(`/noti/${reqData}`);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
+  }
+);
 // initial state
 const initialState = {
   // userId: "tester",
-  notifications: {
-    invitations: [
-      { "hostId": "akdgns12", "groupName": "A805", "date": "2023-01-28 20:00" },
-      // { "hostId": "seotai78", "groupName": "SSAFY", "date": "2023-01-28 20:00" },
-    ],
-    likes: [],
-  }
-}
+  notifications: [],
+};
 
-// reducer
-export default function noti(state = initialState, action) {
-  switch (action.type) {
-    case RELOAD:
-      return {
-        ...state,
-      }
-    case ACCEPT:
-      return {
-        ...state,
-      }
-    case REJECT:
-      return {
-        ...state,
-      }
-    default:
-      return state;
-  }
-}
+const notiSlice = createSlice({
+  name: "noti",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(loadNotification.fulfilled, (state, action) => {
+      // console.log(action);
+      state.notifications = action.payload.data;
+    });
+    builder.addCase(loadNotification.rejected, (action) => {
+      console.log("REJECTED");
+    });
+  },
+});
+
+export default notiSlice.reducer;

@@ -39,21 +39,39 @@ export const loadPhotoDetail = createAsyncThunk(
 
 
 // initial state
-const initialState = {};
+const initialState = {
+  currentPage: 0,
+};
 
 // slice
 const albumSlice = createSlice({
   name: 'album',
   initialState,
   reducers: {
-
+    updatePage: (state, action) => {
+      state.currentPage = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(loadPhotoBook.pending, (state) => {
       
     })
     builder.addCase(loadPhotoBook.fulfilled, (state, action) => {
-      state.photoInfo = action.payload
+      if (state.photoInfo != null && state.photoInfo.length > 0) {
+        if (action.payload.length > 0) {
+          var lastIdx = state.photoInfo.findIndex(
+            (item) => item.id === action.payload[0].id
+          );
+          lastIdx = lastIdx === -1 ? state.photoInfo.length : lastIdx;
+          state.photoInfo = [
+            ...state.photoInfo.slice(0, lastIdx),
+            ...action.payload,
+          ];
+        } else console.log("Nothing to append");
+      } else {
+        console.log("loading inital feeds");
+        state.photoInfo = action.payload;
+      }
     })
     builder.addCase(loadPhotoBook.rejected, (state) => {
       console.log(state)
@@ -73,3 +91,4 @@ const albumSlice = createSlice({
 })
 
 export default albumSlice.reducer;
+export const { updatePage } = albumSlice.actions;

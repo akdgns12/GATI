@@ -1,5 +1,6 @@
 package com.family.gati.entity;
 
+import com.family.gati.util.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Family {
+public class Family extends BaseTimeEntity {
 
     @Id
     @Column(name = "ID")
@@ -36,8 +37,4 @@ public class Family {
     @Column(name = "MASTER_ID", length = 20)
     @NotNull
     private String masterId;
-
-    // 양방향 매핑을 위해 추가
-//    @OneToMany(mappedBy = "FAMILY")
-//    private List<FamilyMember> members = new ArrayList<>();
 }
