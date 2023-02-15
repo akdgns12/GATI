@@ -4,14 +4,15 @@ import { css } from "@emotion/react";
 import { Box, Button, Container, TextField, InputLabel } from "@mui/material";
 
 import { useNavigate } from "react-router";
+import httpClient from "../../utils/axios";
 
 const contStyle = css`
   max-width: 300px;
   width: 100%;
   margin-top: 33vh;
   border-radius: 10px;
-  background-color: rgba(255,255,255, 0.75);
-  .form-box{
+  background-color: rgba(255, 255, 255, 0.75);
+  .form-box {
     width: 100%;
     .labeled-box {
       margin-top: 8px;
@@ -19,7 +20,6 @@ const contStyle = css`
         display: flex;
         justify-content: space-between;
         .form-label {
-
         }
         .check-msg {
           font-size: x-small;
@@ -61,25 +61,28 @@ const FindID = () => {
   function submitForm(event) {
     event.preventDefault();
     const userEmail = event.target.email.value;
-    navigate("/login/findRes", { state: { mode: "ID", email: userEmail } });
+    httpClient
+      .post(`/user/findId/${userEmail}`)
+      .then(({ status }) => {
+        console.log(status);
+        if (status === 200) {
+          navigate("/login/findRes", { state: { mode: "ID", email: userEmail } });
+        } else {
+          window.alert("등록되지 않은 E-mail입니다. Email을 다시 확인 해 주세요");
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
   return (
     <Container css={contStyle}>
       <Box component="form" className="form-box" onSubmit={submitForm}>
         <h1>FORGOT ID?</h1>
-        <Box
-          className="labeled-box"
-        >
+        <Box className="labeled-box">
           <Box className="label-box">
             <InputLabel className="form-label">E-mail</InputLabel>
-            <span
-              className="check-msg"
-              style={{ color: validEmail ? "green" : "red" }}
-            >
-              {validEmail
-                ? "유효한 Email 입니다."
-                : "유효하지 않은 형식입니다."}
+            <span className="check-msg" style={{ color: validEmail ? "green" : "red" }}>
+              {validEmail ? "유효한 Email 입니다." : "유효하지 않은 형식입니다."}
             </span>
           </Box>
           <TextField
@@ -93,12 +96,7 @@ const FindID = () => {
           />
         </Box>
         <Box className="btn-group">
-          <Button
-            variant="outlined"
-            color="primary"
-            className="prev-btn"
-            onClick={toPrev}
-          >
+          <Button variant="outlined" color="primary" className="prev-btn" onClick={toPrev}>
             이전
           </Button>
           <Button
@@ -112,9 +110,8 @@ const FindID = () => {
           </Button>
         </Box>
       </Box>
-
     </Container>
-  )
-}
+  );
+};
 
 export default FindID;
