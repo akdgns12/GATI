@@ -52,6 +52,9 @@ public class Board {
     @Column(name = "NICKNAME", nullable = false, length = 20)
     private String nickname;
 
+    @Column(name = "ALBUM_ID", nullable = true)
+    private Integer albumId;
+
     public void plusComments(Integer num) {
         this.comments += num;
     }
