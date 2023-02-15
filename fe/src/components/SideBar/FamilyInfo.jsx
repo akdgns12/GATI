@@ -1,7 +1,16 @@
 import React, { useEffect } from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Grid, Typography, TextField, Button, Divider, Box, Container, Input } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Divider,
+  Box,
+  Container,
+  Input,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import httpClient from "../../utils/axios";
@@ -42,7 +51,9 @@ export default function FamilyInfo() {
   const { mainGroup, loginUser } = useSelector((state) => state.user);
   const [loaded, setLoaded] = useState(false);
   const [memberList, setMemberList] = useState([]);
-  const [imgURL, setImgURL] = useState(process.env.REACT_APP_IMG_ROOT + "/" + mainGroup.img);
+  const [imgURL, setImgURL] = useState(
+    process.env.REACT_APP_IMG_ROOT + "/" + mainGroup.img
+  );
   // const [imgURL, setImgURL] = useState(
   //   "https://i8a805.p.ssafy.io/image_dev/board/083100211_kakao_login_large_narrow.png"
   // );
@@ -55,7 +66,7 @@ export default function FamilyInfo() {
     httpClient
       .get(`/family/memberList/${mainGroup.id}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         if (data.msg === "success") {
           setMemberList(data["Info result"]);
           setLoaded(true);
@@ -76,7 +87,11 @@ export default function FamilyInfo() {
     const formData = new FormData();
     formData.append("id", mainGroup.id);
     formData.append("name", event.target.familyName.value);
-    formData.append("multipartFile", event.target.img.files[0], event.target.img.files[0].name);
+    formData.append(
+      "multipartFile",
+      event.target.img.files[0],
+      event.target.img.files[0].name
+    );
 
     httpClient
       .put("/family", formData)
@@ -84,8 +99,10 @@ export default function FamilyInfo() {
         // console.log(data);
         alert("정보 수정이 완료되었습니다");
         // update main group info here
+        // console.log(data["modifedFamily: {}"]);
         const modifiedData = {
           name: event.target.familyName.value,
+          img: data["modifedFamily: {}"].img,
         };
         dispatch(updateMainGroup(modifiedData));
       })
@@ -118,7 +135,13 @@ export default function FamilyInfo() {
   }
 
   return (
-    <Grid container justifyContent="center" alignItems="center" spacing={0} display="flex">
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      spacing={0}
+      display="flex"
+    >
       <Grid item m={1} xs={12}>
         <Typography>가족 프로필 설정</Typography>
       </Grid>
@@ -132,7 +155,12 @@ export default function FamilyInfo() {
         <Grid item xs={12} p={1}>
           <Box css={imgBoxStyle}>
             <Box className="photo-box">
-              <Box className="photo-prev" component="img" src={imgURL} alt="please select photo" />
+              <Box
+                className="photo-prev"
+                component="img"
+                src={imgURL}
+                alt="please select photo"
+              />
             </Box>
             <label htmlFor="select-img">
               <Button className="edit-btn" component="span">
@@ -172,7 +200,12 @@ export default function FamilyInfo() {
       <Grid item xs={12} display="flex">
         <Typography>가족 구성원 초대</Typography>
       </Grid>
-      <Grid container component="form" onSubmit={handleInvitation} justifyContent="center">
+      <Grid
+        container
+        component="form"
+        onSubmit={handleInvitation}
+        justifyContent="center"
+      >
         <TextField size="small" fullWidth label="member-id" name="memberId" />
         <Grid item xs={6} m={1}>
           <Button fullWidth variant="outlined" type="submit">

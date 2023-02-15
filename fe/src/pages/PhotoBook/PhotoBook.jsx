@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import SearchBar from "../../components/PhotoBook/SearchBar";
 import AddButton from "../../components/Main/AddButton";
 import PhotoCard from "../../components/PhotoBook/PhotoCard";
-import { loadPhotoBook, updatePage } from "../../store/PhotoBoard/photoBoard";
+import {
+  loadPhotoBook,
+  updatePage,
+  clearPhoto,
+} from "../../store/PhotoBoard/photoBoard";
 
 import { Grid, Box } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -22,8 +26,9 @@ const PhotoBook = () => {
     setSearch(event.target.value);
   };
   useEffect(() => {
-    // console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
+    console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
     // console.log(curPageNo);
+    dispatch(clearPhoto());
     if (mainGroup != null && mainGroup.id != null) {
       dispatch(
         loadPhotoBook({
@@ -38,7 +43,7 @@ const PhotoBook = () => {
         })
         .catch((error) => console.log(error));
     }
-  }, []);
+  }, [mainGroup]);
 
   // scroll
   useEffect(() => {
