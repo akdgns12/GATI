@@ -36,7 +36,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<CityDto> findAllOrderByTagCnt(){
-        List<City> cities = cityRepository.findAllOrderByTagCntDesc();
+        List<City> cities = cityRepository.findAllByOrderByTagCntDesc();
         List<CityDto> result = new ArrayList<>();
         for (int i=0; i<10;i++){
             City city = cities.get(i);
