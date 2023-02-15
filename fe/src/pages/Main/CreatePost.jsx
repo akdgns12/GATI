@@ -63,6 +63,7 @@ const contStyle = css`
 
 const CreatePost = (props) => {
   const variant = props.variant == null ? "create" : props.variant;
+  const API_URL = props.api == null ? "/boards/board" : "/albums/album";
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [imgURL, setImgURL] = useState(null);
@@ -123,18 +124,22 @@ const CreatePost = (props) => {
     for (let i = 0; i < tagArr.length; i++) {
       formData.append(`tagDtos[${i}].tagContent`, tagArr[i]);
     }
-    formData.append("file", event.target.img.files[0], event.target.img.files[0].name);
+    formData.append(
+      "file",
+      event.target.img.files[0],
+      event.target.img.files[0].name
+    );
 
     if (variant === "create") {
       formData.append("userId", loginUser.userId);
       formData.append("groupId", mainGroup.id);
       // console.log(formData);
       httpClient
-        .post("/boards/board/", formData)
+        .post(API_URL, formData)
         .then((data) => {
           console.log(data);
           alert("article posted");
-          navigate("/");
+          navigate(props.api == null ? "/" : "/photobook");
         })
         .catch((error) => {
           console.log(error);
@@ -143,11 +148,11 @@ const CreatePost = (props) => {
     } else if (variant === "modify") {
       formData.append("id", articleId);
       httpClient
-        .put("/boards/board/", formData)
+        .put(API_URL, formData)
         .then((data) => {
           // console.log(data);
           alert("modified");
-          navigate("/");
+          navigate(props.api == null ? "/" : "/photobook");
         })
         .catch((error) => {
           console.log(error);
@@ -184,7 +189,12 @@ const CreatePost = (props) => {
       <Box className="photo">
         <Box className="photo-label">사진 선택</Box>
         <Box className="photo-box">
-          <Box className="photo-prev" component="img" src={imgURL} alt="please select photo" />
+          <Box
+            className="photo-prev"
+            component="img"
+            src={imgURL}
+            alt="please select photo"
+          />
         </Box>
         <label htmlFor="select-img">
           <Button className="edit-btn" component="span">
