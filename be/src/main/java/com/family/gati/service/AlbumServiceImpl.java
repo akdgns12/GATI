@@ -105,7 +105,9 @@ public class AlbumServiceImpl implements AlbumService{
         List<City> cities = cityRepository.findAll();
         Album album = albumRepository.findById(albumDto.getId()).get();
         album.setContent(albumDto.getContent());
-        album.setImg(albumDto.getImg());
+        if (albumDto.getImg() != null) {
+            album.setImg(albumDto.getImg());
+        }
         album.setTag(new ArrayList<>());
         HashSet<City> cityHashSet = new HashSet<>();
         for (TagDto tagDto: albumDto.getTag()) {
