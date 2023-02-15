@@ -25,7 +25,8 @@ export default function UploadPic() {
   // reqData 
   const getMission = useSelector(state=>{return state.picsTg.getMission})
   const missionId = getMission.id
-  const userId = '1'
+  const userId = useSelector(state=>{return state.user.loginUser}).userId
+  console.log('userId',userId,'missionId',missionId)
   
   // 이미지 파일 업로드 함수
   const imgRef = useRef();
