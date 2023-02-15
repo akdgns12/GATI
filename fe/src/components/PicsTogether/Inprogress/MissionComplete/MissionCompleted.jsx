@@ -47,7 +47,7 @@ export default function MissionCompleted() {
         style={{
           display:'flex',
           justifyContent:'center',}}>
-        <Button onClick={deleteMission} size="medium" variant="contained" disableElevation>미션 삭제하기</Button>
+        <Button onClick={deleteMission} size="medium" variant="contained" style={{ backgroundColor: '#FF9494', color: 'white' }} disableElevation>미션 삭제하기</Button>
       </Box>
     </Paper>
   )
