@@ -68,7 +68,7 @@ public class UserApiController {
         newUser.setBirth(request.getBirth());
         newUser.setPhoneNumber(request.getPhoneNumber());
         newUser.setPlusMinus(request.getPlusMinus());
-        newUser.setRole(Role.ADMIN);
+        newUser.setRole(Role.USER);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setUpdateTime(LocalDateTime.now());
 
