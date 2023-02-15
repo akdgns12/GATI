@@ -94,6 +94,11 @@ const PrimaryAppBar = () => {
     }
   };
 
+  const showmsg = (event) => {
+    event.stopPropagation();
+    navigate("/");
+  };
+
   return (
     <Box sx={{ flexGrow: 1, height: "100px" }}>
       <AppBar
@@ -104,13 +109,14 @@ const PrimaryAppBar = () => {
         <Toolbar sx={{ justifyContent: "space-between", height: "70px" }}>
           <Box>
             <Avatar
+              onClick={showmsg}
               sx={{
                 width: 50,
                 height: 50,
               }}
               alt="gati img."
               src={Img}
-              style={{ display: "inline-block" }}
+              style={{ display: "inline-block", cursor: "pointer" }}
             />
             <Typography
               variant="h5"

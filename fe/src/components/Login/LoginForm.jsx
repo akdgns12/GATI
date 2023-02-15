@@ -1,17 +1,22 @@
 import { React } from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Box, Button, Container, TextField } from "@mui/material";
+import { Box, Button, Container, TextField, Paper } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { doLoginUser } from "../../store/User/user";
+
+import Lottie from "react-lottie-player";
+import Family from "../../static/family.json";
 
 const contStyle = css`
   width: 300px;
   background-color: rgba(255, 255, 255, 0.75);
   margin: 0 auto;
-  margin-top: 50vh;
+  margin-top: 20vh;
   border-radius: 10px;
+  padding: 10px;
+
   .input-form {
     widht: 80%;
     border-radius: 10px;
@@ -61,18 +66,17 @@ const LoginFrom = () => {
         if (data.payload.msg === "success") {
           alert("Hello");
           navigate("/");
-        }
-        else {
+        } else {
           console.log("failed to login");
           alert("Incorrect ID or PW");
         }
       })
       .catch((error) => console.log(error));
-
   }
 
   return (
-    <Container css={contStyle}>
+    <Paper css={contStyle} elevation={3}>
+      <Lottie loop animationData={Family} play style={{ margin: "0 auto" }} />
       <Box component="form" onSubmit={handleLogin}>
         <TextField
           margin="normal"
@@ -112,7 +116,7 @@ const LoginFrom = () => {
           <div>PW 찾기</div>
         </Link>
       </Box>
-    </Container>
+    </Paper>
   );
 };
 

@@ -1,53 +1,41 @@
-const initialState = {
-  cities: [
-    {
-      cityname: "서울",
-      cityimg: "https://picsum.photos/300/200?random=1",
-      placename: "한강",
-    },
-    {
-      cityname: "서울",
-      cityimg: "https://picsum.photos/300/200?random=2",
-      placename: "가로수길",
-    },
-    {
-      cityname: "서울",
-      cityimg: "https://picsum.photos/300/200?random=3",
-      placename: "멀티캠퍼스",
-    },
-    {
-      cityname: "서울",
-      cityimg: "https://picsum.photos/300/200?random=4",
-      placename: "뚝섬",
-    },
-    {
-      cityname: "부산",
-      cityimg: "https://picsum.photos/300/200?random=5",
-      placename: "명소1",
-    },
-    {
-      cityname: "부산",
-      cityimg: "https://picsum.photos/300/200?random=6",
-      placename: "명소2",
-    },
-    {
-      cityname: "부산",
-      cityimg: "https://picsum.photos/300/200?random=7",
-      placename: "광안리",
-    },
-    {
-      cityname: "부산",
-      cityimg: "https://picsum.photos/300/200?random=8",
-      placename: "해운대",
-    },
-  ],
-};
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import httpClient from "../../utils/axios";
 
-// reducer
-
-export default function city(state = initialState, action) {
-  switch (action.type) {
-    default:
-      return state;
+// actions
+export const loadCity = createAsyncThunk(
+  "cities/loadCities",
+  async (reqData, { rejectWithValue }) => {
+    // console.log(reqData);
+    try {
+      const response = await httpClient.get("/cities/tag", {
+        // params: reqData,
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
   }
-}
+);
+
+// initial state
+const initialState = {};
+
+// slice
+const citySlice = createSlice({
+  name: "album",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(loadCity.pending, (state) => {});
+    builder.addCase(loadCity.fulfilled, (state, action) => {
+      state.cities = action.payload;
+    });
+    builder.addCase(loadCity.rejected, (state) => {
+      console.log(state);
+    });
+  },
+});
+
+export default citySlice.reducer;
