@@ -23,12 +23,15 @@ body {
   --fa-beat-scale: 1.5;
 }
 
+.empty-bell{
+  color: #FF9494;
+}
+
 .fulfilled-bell{
   color: #FF9494;
   animation-name: fa-shake;
-  animation-duration: 0.7s;
+  animation-duration: 1s;
   animation-iteration-count:1;
-  --fa-beat-scale: 1.5;
 }
 
 /* 폰트 */
