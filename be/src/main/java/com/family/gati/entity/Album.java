@@ -52,6 +52,22 @@ public class Album {
     @Column(name = "NICKNAME", nullable = false, length = 20)
     private String nickname;
 
+    @Column(name = "BOARD_ID", nullable = true)
+    private Integer boardId;
+
+    public Album(Board board) {
+        this.groupId = board.getGroupId();
+        this.userId = board.getUserId();
+        this.content = board.getContent();
+        this.img = board.getImg();
+        this.likes = board.getLikes();
+        this.createTime = board.getCreateTime();
+        this.updateTime = board.getUpdateTime();
+        this.comments = board.getComments();
+        this.nickname = board.getNickname();
+        this.boardId = board.getId();
+    }
+
     public void plusComments(Integer num) {
         this.comments += num;
     }

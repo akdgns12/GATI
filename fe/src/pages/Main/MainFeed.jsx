@@ -93,7 +93,7 @@ const MainFeed = () => {
       )
         .then(({ payload }) => {
           // console.log(payload);
-          if (payload.length > 1) {
+          if (payload.length > 0) {
             console.log("new feeds");
             dispatch(updatePageNo(nextPageNo + 1));
             setLoaded(true);

@@ -140,15 +140,17 @@ public class BoardController {
             value = "Board 수정"
             , notes = "Board를 수정한다.")
     @PutMapping("/board")
-    public ResponseEntity<?> updateBoard(@ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file,
+    public ResponseEntity<?> updateBoard(@ApiParam(value = "The file to upload", required = false) @RequestPart(required = false) MultipartFile file,
                                          @ApiParam(value = "The DTO object", required = true) @ModelAttribute BoardUpdateDto boardUpdateDto){
         BoardDto boardDto = new BoardDto();
-        String path;
-        try {
-            path = fileService.fileUpload(file, "board");
-        } catch (Exception e) {
-            // 에러코드 전송
-            throw new RuntimeException(e);
+        String path = null;
+        if (file != null) {
+            try {
+                path = fileService.fileUpload(file, "board");
+            } catch (Exception e) {
+                // 에러코드 전송
+                throw new RuntimeException(e);
+            }
         }
         boardDto.setId(boardUpdateDto.getId());
         boardDto.setContent(boardUpdateDto.getContent());
@@ -229,6 +231,15 @@ public class BoardController {
             );
             notiService.saveLike(likeNotiDto);
         };
+        return ResponseEntity.ok(null);
+    }
+
+    @ApiOperation(
+            value = "Board에서 Album 저장"
+            , notes = "Board에서 Album 저장한다.")
+    @PostMapping("/save")
+    public ResponseEntity<?> addBoardLikes(@RequestParam Integer boardId) {
+        boardService.saveAlbum(boardId);
         return ResponseEntity.ok(null);
     }
 }
