@@ -50,6 +50,7 @@ const PrimaryAppBar = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [groupIMG, setGroupIMG] = useState("");
+  const [bell, setBell]= useState(false);
 
   const { loginUser, mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -111,6 +112,8 @@ const PrimaryAppBar = () => {
   function handleNotiOpen(event) {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
+    setBell(true)
+    setTimeout(()=>{setBell(false)},2000)
   }
 
   return (
@@ -160,10 +163,11 @@ const PrimaryAppBar = () => {
             }}
           >
             <IconButton
-              style={{ fontSize: "30px", color: "FF9494" }}
+              style={{ fontSize: "25px", color: "FF9494" }}
               onClick={handleNotiOpen}>
-              <FontAwesomeIcon className="fulfilled-bell" icon={fulfilledBell} />
-              {/* <FontAwesomeIcon className="empty-bell" icon={emptyBell} /> */}
+              {
+                bell ? <FontAwesomeIcon className="fulfilled-bell" icon={fulfilledBell} /> : <FontAwesomeIcon className="empty-bell" icon={emptyBell} />
+              }
               {/* <NotificationsOutlinedIcon
                 style={{ fontSize: "30px", color: "FF9494" }}
                 onClick={handleNotiOpen}
