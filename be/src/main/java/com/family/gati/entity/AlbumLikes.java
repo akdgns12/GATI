@@ -23,4 +23,9 @@ public class AlbumLikes {
 
     @Column(name = "ALBUM_ID", nullable = false)
     private Integer albumId;
+
+    public AlbumLikes(Integer albumId, String userId) {
+        this.albumId = albumId;
+        this.userId = userId;
+    }
 }

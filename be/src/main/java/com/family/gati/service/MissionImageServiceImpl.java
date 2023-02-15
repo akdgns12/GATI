@@ -5,6 +5,7 @@ import com.family.gati.entity.Mission;
 import com.family.gati.entity.MissionImage;
 import com.family.gati.repository.MissionImageRepository;
 import com.family.gati.repository.MissionRepository;
+import com.family.gati.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 public class MissionImageServiceImpl implements MissionImageService{
     private final MissionImageRepository missionImageRepository;
     private final MissionRepository missionRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<MissionImageDto> findByMissionId(Integer missionId) {
@@ -33,7 +35,9 @@ public class MissionImageServiceImpl implements MissionImageService{
 
     @Override
     public MissionImageDto insertMissionImage(MissionImageDto missionImageDto) {
-        return new MissionImageDto.MissionImageDtoBuilder(missionImageRepository.save(new MissionImage.MissionImageBuilder(missionImageDto).build())).build();
+        MissionImage missionImage = new MissionImage.MissionImageBuilder(missionImageDto).build();
+        missionImage.setNickName(userRepository.findByUserId(missionImage.getUserId()).getNickName());
+        return new MissionImageDto.MissionImageDtoBuilder(missionImageRepository.save(missionImage)).build();
     }
 
     @Override

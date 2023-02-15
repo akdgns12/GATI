@@ -5,11 +5,10 @@ import com.family.gati.dto.RecommandDto;
 import com.family.gati.service.CityService;
 import com.family.gati.service.RecommandService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +27,17 @@ public class CityApiController {
         return ResponseEntity.ok(dtos);
     }
     @GetMapping("/pushdb")
-    public ResponseEntity<?> pushDb() throws Exception {
+    public ResponseEntity<?> pushDb(@RequestParam String password) throws Exception {
+        if (!password.equals("gudwns"))
+            return ResponseEntity.ok(null);
         recommandService.apiResponseData();
         return ResponseEntity.ok(null);
     }
 
     @GetMapping("/pushcitydb")
-    public ResponseEntity<?> pushCityDb() throws Exception {
+    public ResponseEntity<?> pushCityDb(@RequestParam String password) throws Exception {
+        if (!password.equals("gudwns"))
+            return ResponseEntity.ok(null);
         cityService.pushCityDb();
         return ResponseEntity.ok(null);
     }

@@ -24,7 +24,7 @@ export default function OnMission() {
       setOnDesc(false)
     }
   }
-  
+
   // content Area : 업로드된 사진들이 놓여지는 공간
   let content = []
   let blankBox = 0
@@ -42,6 +42,7 @@ export default function OnMission() {
     content.push(<ShowPics key={i}/>)
   }
 
+
   // 사진을 모두 업로드하면 미션 완료 버튼 활성화
   let btnDisabled = true
   if (getMission.missionImageDtos && getMission.missionImageDtos.length === getMission.memNumber) {
@@ -56,20 +57,22 @@ export default function OnMission() {
   return (
     <Box>
       {/* 미션 설명하는 부분 */}
-      <Paper sx={{
+      <Box sx={{
         padding:3,
+        borderRadius:'16px',
+        backgroundColor:'#FEFBE9'
         }}>
         <Stack direction="row" spacing={2}>
           <Typography align='center' fontWeight='bold' fontSize='15px'> {getMission.title}</Typography>
           <IconButton
-            style={{marginLeft:'auto', padding:'0px'}}
+            style={{marginLeft:'auto', padding:'0px', color:'#F0A04B'}}
             onClick={switchDescription}>
-            {onDesc === false ? <ArrowDropDownIcon/>:<ArrowDropUpIcon/>}
-          </IconButton>
+            {onDesc === false ? <ArrowDropDownIcon sx={{fontSize:"30px"}}/>:<ArrowDropUpIcon sx={{fontSize:"30px"}} />}
+          </IconButton >
         </Stack>
         {onDesc === true ? <Typography margin='20px' fontSize='13px'> {getMission.content}</Typography> : null}
         <Typography color='#888888'> {getMission.startDate} ~ {getMission.endDate} </Typography>
-      </Paper>
+      </Box>
 
       {/* 업로드된 이미지 보여주는 부분*/}
       <Box
@@ -77,7 +80,11 @@ export default function OnMission() {
           display:'flex',
           justifyContent:'center',
           flexWrap:'wrap',
-          margin:'20px 0 20px 0',
+          margin:'30px 0 30px 0',
+          borderRadius:'16px',
+          backgroundColor:'white',
+          border:'2px solid #E1EEDD',
+          padding:'10px'
         }}>
         {content}
       </Box>

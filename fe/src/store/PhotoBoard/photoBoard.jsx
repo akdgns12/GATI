@@ -5,14 +5,11 @@ import httpClient from "../../utils/axios";
 export const loadPhotoBook = createAsyncThunk(
   "album/loadPhotoBook",
   async (reqData, { rejectWithValue }) => {
-    // console.log(reqData);
     try {
       const response = await httpClient.get("/albums/page", {
         params: reqData,
       });
-      // console.log(response.data)
       return response.data;
-      
     } catch (error) {
       console.log(error);
       return rejectWithValue(error);
@@ -37,7 +34,6 @@ export const loadPhotoDetail = createAsyncThunk(
   }
 );
 
-
 // initial state
 const initialState = {
   currentPage: 0,
@@ -45,17 +41,19 @@ const initialState = {
 
 // slice
 const albumSlice = createSlice({
-  name: 'album',
+  name: "album",
   initialState,
   reducers: {
     updatePage: (state, action) => {
-      state.currentPage = action.payload
-    }
+      state.currentPage = action.payload;
+    },
+    clearPhoto: (state) => {
+      console.log("clear all");
+      state.photoInfo = [];
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(loadPhotoBook.pending, (state) => {
-      
-    })
+    builder.addCase(loadPhotoBook.pending, (state) => {});
     builder.addCase(loadPhotoBook.fulfilled, (state, action) => {
       if (state.photoInfo != null && state.photoInfo.length > 0) {
         if (action.payload.length > 0) {
@@ -72,23 +70,20 @@ const albumSlice = createSlice({
         console.log("loading inital feeds");
         state.photoInfo = action.payload;
       }
-    })
+    });
     builder.addCase(loadPhotoBook.rejected, (state) => {
-      console.log(state)
+      console.log(state);
     });
 
-    builder.addCase(loadPhotoDetail.pending, (state) => {
-      
-    })
+    builder.addCase(loadPhotoDetail.pending, (state) => {});
     builder.addCase(loadPhotoDetail.fulfilled, (state, action) => {
-      state.photoDetail = action.payload
-    })
-    builder.addCase(loadPhotoDetail.rejected, (state) => {
-      console.log(state)
+      state.photoDetail = action.payload;
     });
-
-  }
-})
+    builder.addCase(loadPhotoDetail.rejected, (state) => {
+      console.log(state);
+    });
+  },
+});
 
 export default albumSlice.reducer;
-export const { updatePage } = albumSlice.actions;
+export const { updatePage, clearPhoto } = albumSlice.actions;

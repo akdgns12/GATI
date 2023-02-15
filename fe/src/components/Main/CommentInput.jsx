@@ -2,7 +2,13 @@ import { React } from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import { Box, CardContent, OutlinedInput, IconButton, FormControl } from "@mui/material";
+import {
+  Box,
+  CardContent,
+  OutlinedInput,
+  IconButton,
+  FormControl,
+} from "@mui/material";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 
 import httpClient from "../../utils/axios";
@@ -40,7 +46,8 @@ const CommentInput = (props) => {
         userId: loginUser.userId,
       })
       .then((data) => {
-        // console.log(data);
+        console.log(data);
+        window.alert("여기 이후 작동 작업해야함 : commentInput.jsx");
       })
       .catch((error) => {
         console.log(error);
@@ -59,7 +66,11 @@ const CommentInput = (props) => {
         {" "}
         Comments{" "}
       </Box>
-      <OutlinedInput className="comment-area" placeholder="댓글을 입력하세요." name="comment" />
+      <OutlinedInput
+        className="comment-area"
+        placeholder="댓글을 입력하세요."
+        name="comment"
+      />
 
       <IconButton type="submit" className="submit-btn">
         <ArrowCircleUpIcon color="primary" fontSize="large" />
