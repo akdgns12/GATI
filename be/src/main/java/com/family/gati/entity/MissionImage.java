@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,11 +29,15 @@ public class MissionImage {
     @Column(name = "IMG", nullable = false, length = 500)
     private String img;
 
+    @Column(name = "NICKNAME", nullable = false, length = 20)
+    private String nickName;
+
     private MissionImage(MissionImage.MissionImageBuilder builder) {
         this.id = builder.id;
         this.missionId = builder.missionId;
         this.userId = builder.userId;
         this.img = builder.img;
+        this.nickName = builder.nickName;
     }
 
     public static class MissionImageBuilder implements CommonBuilder<MissionImage> {
@@ -40,12 +45,14 @@ public class MissionImage {
         private Integer missionId;
         private String userId;
         private String img;
+        private String nickName;
 
         public MissionImageBuilder(MissionImageDto missionImageDto) {
             this.id = missionImageDto.getId();
             this.missionId = missionImageDto.getMissionId();
             this.userId = missionImageDto.getUserId();
             this.img = missionImageDto.getImg();
+            this.nickName = missionImageDto.getNickName();
         }
 
         public MissionImage build() {return new MissionImage(this);}
