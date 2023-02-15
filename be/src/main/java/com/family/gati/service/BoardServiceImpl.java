@@ -79,7 +79,9 @@ public class BoardServiceImpl implements BoardService{
         List<City> cities = cityRepository.findAll();
         Board board = boardRepository.findById(boardDto.getId()).get();
         board.setContent(boardDto.getContent());
-        board.setImg(boardDto.getImg());
+        if (boardDto.getImg() != null) {
+            board.setImg(boardDto.getImg());
+        }
         board.setTag(new ArrayList<>());
         HashSet<City> cityHashSet = new HashSet<>();
         for (TagDto tagDto: boardDto.getTag()) {
