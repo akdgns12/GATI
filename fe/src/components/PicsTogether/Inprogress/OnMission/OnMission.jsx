@@ -117,6 +117,7 @@ export default function OnMission() {
           size="medium"
           variant="contained"
           onClick={missionComplete}
+          style= {btnDisabled ? null :{backgroundColor: '#FF9494', color: 'white'} }
           disableElevation>
             미션 완료
         </Button>

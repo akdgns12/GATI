@@ -101,14 +101,24 @@ const PrimaryAppBar = () => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, height: "100px" }}>
+    <Box sx={{ flexGrow: 1,}}>
       <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
-        <Toolbar sx={{ justifyContent: "space-between", height: "70px" }}>
-          <Box>
+        <Toolbar sx={{
+          display:'flex', 
+          flexWrap:'wrap',  
+          alignItems:'center', 
+          justifyContent: "space-between", 
+          height: "70px"
+        }}>
+          <Box
+            sx={{
+              display:'flex', alignItems:'center', width:'80%'
+            }}>
             <Avatar
               sx={{
                 width: 50,
                 height: 50,
+                marginRight:1.5
               }}
               src={groupIMG}
               style={{ display: "inline-block" }}
@@ -116,7 +126,7 @@ const PrimaryAppBar = () => {
               <img src={Img} style={{ width: 50, height: 50 }} alt="X" />
             </Avatar>
             <Typography
-              variant="h5"
+              variant="h6"
               fontWeight="1000"
               color="rgb(32,32,32)"
               style={{ display: "inline-block" }}
@@ -124,7 +134,12 @@ const PrimaryAppBar = () => {
               {mainGroup != null && mainGroup.name != null && mainGroup.name}
             </Typography>
           </Box>
-          <Box>
+          <Box
+            sx={{
+              display:'flex',
+              justifyContent:'center',
+              alignItems:'center'
+            }}>
             <IconButton>
               <NotificationsOutlinedIcon />
             </IconButton>

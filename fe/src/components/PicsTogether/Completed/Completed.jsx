@@ -11,12 +11,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { asynGetMissionList } from '../../../store/PicsTogether/picsTg';
 import { useNavigate } from 'react-router';
 import MissionContribution from './MissionContribution';
+import CombinedImg from '../Inprogress/OnMission/CombinedImg';
 
 
 export default function Completed() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const groupId = 1
+  const groupId = useSelector(state=>{return state.user.mainGroup}).id
 
   // MissionList 데이터 가져오기
   React.useEffect(()=>{
@@ -24,7 +25,8 @@ export default function Completed() {
   },[])
   
   let getMissionList = useSelector(state=>{return state.picsTg.getMissionList})
-  console.log('getMissionList',getMissionList)
+  const completedMissions = getMissionList.filter(mission=>mission.completed == 2)
+  const imgURL = 'https://i8a805.p.ssafy.io/'
 
   return (
     <Box
@@ -34,24 +36,29 @@ export default function Completed() {
         flexWrap:'wrap',
       }}>
       <MissionContribution />
-      {getMissionList ? 
+      {completedMissions ? 
         <ImageList cols={3} rowHeight={164}>
-          {getMissionList.map((item) => (
-            <ImageListItem
+          {completedMissions.map((item) => (
+              <ImageListItem
               style={{ overflow: 'hidden', display: 'flex', width: '100%', }}
               key={item.img}
             >
               <Box onClick={()=>navigate('/pictg/detail/'+ item.id)}>
                 <img
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                  src={item.img}
-                  srcSet={item.img}
+                  src={imgURL + item.img}
+                  srcSet={imgURL + item.img}
                   alt={item.title}
                   loading="loading..."
                 />
                 <ImageListItemBar
-                  title={item.title}
-                  subtitle='2023.02.13'
+                  sx={{ padding: '0px' }}
+                  title=
+                    {
+                      <Typography variant="subtitle1" style={{ fontSize: 12 }}>
+                        {'Mission:'+ item.adminMissionId}
+                      </Typography>
+                    }
                 />
               </Box>
             </ImageListItem>

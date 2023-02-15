@@ -8,6 +8,8 @@ const CombinedImg = () => {
   
   const id = useSelector(state => {return state.picsTg.getMission}).id
   const imgList = useSelector(state=>{return state.picsTg.getMission}).missionImageDtos
+  // const imgList = [{img:'https://i.pinimg.com/474x/39/c3/ef/39c3ef7f58cd7766c668d530d76e0f46.jpg'}]
+  const imgURL = 'https://i8a805.p.ssafy.io/'
 
   const canvasRef = useRef(null);
   const [images, setImages] = useState([]);
@@ -20,7 +22,8 @@ const CombinedImg = () => {
           const image = new Image();
           // This will allow the image to be exported without any CORS restrictions:
           image.crossOrigin = 'anonymous'
-          image.src = obj.img;
+          image.src = imgURL + obj.img;
+          console.log(image.src)
           image.onload = () => {
             resolve(image);
           };
@@ -71,7 +74,7 @@ const CombinedImg = () => {
 
   return (
     <canvas
-      style={{ backgroundColor: '#F5F5F5', borderRadius:'16px' }} ref={canvasRef}
+      style={{ backgroundColor: '#FFFBEB', borderRadius:'16px' }} ref={canvasRef}
       width="100%"
       height="100%"
     />
