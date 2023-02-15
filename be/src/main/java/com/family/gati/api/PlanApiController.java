@@ -65,7 +65,7 @@ public class PlanApiController {
             List<Plan> planList = planService.getAllPlanByGroupId(groupId);
             if(planList.size() < 1) { // 일정 없으면 NO_CONTENT
                 resultMap.put("msg", FAIL);
-                status = HttpStatus.NO_CONTENT;
+                status = HttpStatus.BAD_REQUEST;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
             resultMap.put("msg", SUCCESS);
