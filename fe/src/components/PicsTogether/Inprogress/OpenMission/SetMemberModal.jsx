@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Box, Typography, Modal, Button, InputLabel, MenuItem, FormControl, Select} from '@mui/material';
+import {Box, Typography, Modal, Button, InputLabel, MenuItem, FormControl, Select, Paper,} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch, useSelector } from 'react-redux';
 import { asyncPutMission } from '../../../../store/PicsTogether/picsTg';
@@ -12,11 +12,12 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '50%',
+  width: '60%',
   bgcolor: 'background.paper',
   boxShadow: 24,
   padding:'10px'
 };
+
 
 export default function SetMemberModal(props) {
   const dispatch = useDispatch()
@@ -45,21 +46,27 @@ export default function SetMemberModal(props) {
 
   return (
     <Modal
+      PaperProps={{ style: { borderRadius: '40px' } }}
       open={props.open}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
+      <Paper sx={style}>
         <CloseIcon style={{marginLeft:'auto', marginBottom:'30px'}} onClick={props.onClose} />
         <Typography fontSize='18px' align="center" variant="h6" component="h2">
-          총 몇 장의 사진을 찍으실건가요?
+          총 몇 장의 사진을 <br></br>찍으실건가요?
         </Typography>
         <Typography fontSize='12px' align="center" sx={{ mt: 2 }}>
-          <b>'가치 한 장'</b>을 구성할 사진의 장 수를 선택해 주세요.
+          <b>'가치 한 장'</b>을 구성할 사진의 <br></br>장 수를 선택해 주세요.
         </Typography>
-        <Box sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Pics</InputLabel>
+        <Box sx={{ display:'flex', justifyContent:'center', minWidth: 120 }}>
+          <FormControl
+            sx={{marginTop:'30px', width:'60%'}}>
+            <InputLabel
+              id="demo-simple-select-label" 
+            >
+              Pics
+            </InputLabel >
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -84,9 +91,9 @@ export default function SetMemberModal(props) {
             justifyContent:'center',
             margin:'20px 20px'
           }}>
-          <Button onClick={onConfirm} size="medium" variant="contained" disableElevation>확인</Button>
+          <Button onClick={onConfirm} size="large" variant="contained" style={{ backgroundColor: '#FF9494', color: 'white' }} disableElevation>확인</Button>
         </div>
-      </Box>
+      </Paper >
     </Modal>
   );
 }

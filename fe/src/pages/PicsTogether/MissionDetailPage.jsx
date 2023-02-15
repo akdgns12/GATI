@@ -26,6 +26,7 @@ export default function MissionDetailPage() {
   // Mission 디테일 정보 가져오기
   const getMissionList = useSelector(state => {return state.picsTg.getMissionList})
   const mission = getMissionList.filter((mission)=> mission.id == id)[0]
+  const imageURL = 'https://i8a805.p.ssafy.io/'
 
   console.log(getMissionList)
   console.log(mission)
@@ -75,24 +76,23 @@ export default function MissionDetailPage() {
         <CardMedia
           component="img"
           width="100%"
-          image={mission.img}
+          image={imageURL + mission.img}
           alt="Mission Img"
         />
         <CardActions sx={{borderBottom: "1px dashed #D9D9D9"}} disableSpacing={true}>
-          <IconButton aria-label="add to favorites" >
+          {/* <IconButton aria-label="add to favorites" >
             <FavoriteIcon />
-          </IconButton>
+          </IconButton> */}
           <Box style={{ marginLeft: "auto" }}>
             <Typography
               variant="body4"
               style={{ fontWeight: "bold", marginRight: "10px" }}
             >
-              {/* {mission.startDat} ~ {mission.endData} */}
-              2023.01.27
+            {mission.endDate}
             </Typography>
-            <IconButton aria-label="add to album" >
+            {/* <IconButton aria-label="add to album" >
               <BookmarkIcon />
-            </IconButton>
+            </IconButton> */}
           </Box>
         </CardActions>
 

@@ -11,6 +11,7 @@ export default function MissionCompleted() {
   const getMission = useSelector(state => {
     return state.picsTg.getMission
   })
+  const imageURL = 'https://i8a805.p.ssafy.io/'
 
   // 미션 삭제 함수
   const deleteMission = () => {
@@ -38,7 +39,7 @@ export default function MissionCompleted() {
           marginBottom:'30px'
         }}>
         <img
-          src={getMission.img}
+          src={imageURL + getMission.img}
           alt='exampleImg'
           width='200px'/>
       </Box>
@@ -46,7 +47,7 @@ export default function MissionCompleted() {
         style={{
           display:'flex',
           justifyContent:'center',}}>
-        <Button onClick={deleteMission} size="medium" variant="contained" disableElevation>미션 삭제하기</Button>
+        <Button onClick={deleteMission} size="medium" variant="contained" style={{ backgroundColor: '#FF9494', color: 'white' }} disableElevation>미션 삭제하기</Button>
       </Box>
     </Paper>
   )
