@@ -171,7 +171,7 @@ const CreatePost = (props) => {
     let ret = [];
     tags.map((tag, index) => {
       // console.log(tag);
-      ret.push(tag);
+      if (tag != "") ret.push(tag);
     });
     return ret;
   }
