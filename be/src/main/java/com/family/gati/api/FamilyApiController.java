@@ -44,7 +44,7 @@ public class FamilyApiController {
     // 새로운 그룹 생성
     @ApiOperation(value = "그룹 생성", notes = "그룹 생성은 초기 멤버 1(본인)")
     @PostMapping("/create")
-    public ResponseEntity<?> Family(@RequestPart MultipartFile multipartFile,
+    public ResponseEntity<?> Family(@RequestPart(required = false) MultipartFile multipartFile,
                                     @ModelAttribute FamilySignUpDto familySignUpDto){
         logger.debug("familySignUpDto: {}", familySignUpDto);
         Map<String, Object> resultMap = new HashMap<>();
@@ -122,7 +122,7 @@ public class FamilyApiController {
     // 그룹 정보 수정
     @ApiOperation(value = "그룹 정보 수정", notes = "그룹 id, 바꿀 그룹 정보(img, name)")
     @PutMapping
-    public ResponseEntity<?> update(@RequestPart MultipartFile multipartFile,
+    public ResponseEntity<?> update(@RequestPart(required = false) MultipartFile multipartFile,
                                     @ModelAttribute FamilyUpdateDto familyUpdateDto){
         logger.debug("family: {}", familyUpdateDto);
         Map<String, Object> resultMap = new HashMap<>();
