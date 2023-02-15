@@ -3,8 +3,35 @@ body {
   /* background-color: #D9D9D9 */
 }
 
-/* 폰트 */
+/* fontawesome 애니메이션 적용 */
+.empty-heart{
+  color: #FF9494;
+}
 
+.empty-heart:hover{
+  animation-name: fa-beat;
+  animation-duration: 0.7s;
+  animation-iteration-count:infinite;
+  --fa-beat-scale: 1.5;
+}
+
+.fulfilled-heart{
+  color: #FF9494;
+  animation-name: fa-beat;
+  animation-duration: 0.7s;
+  animation-iteration-count:1;
+  --fa-beat-scale: 1.5;
+}
+
+.fulfilled-bell{
+  color: #FF9494;
+  animation-name: fa-shake;
+  animation-duration: 0.7s;
+  animation-iteration-count:1;
+  --fa-beat-scale: 1.5;
+}
+
+/* 폰트 */
 @font-face {
   font-family: 'ONE-Mobile-POP';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff') format('woff');
@@ -21,5 +48,5 @@ body {
 
 /* 앱 메인 폰트 */
 * {
-  font-family: 'SUIT-Regular', sans-serif !important;
+  font-family: 'SUIT-Regular', sans-serif;
 }

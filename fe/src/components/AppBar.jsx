@@ -33,6 +33,13 @@ import { useEffect } from "react";
 import httpClient from "../utils/axios";
 import { loadNotification } from "../store/Nofitication/noti";
 
+// fontawesome
+import '../App.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell as fulfilledBell} from '@fortawesome/free-solid-svg-icons';
+import { faBell as emptyBell } from '@fortawesome/free-regular-svg-icons';
+
+
 const PrimaryAppBar = () => {
   const drawerWidth = "80%";
   const [open, setOpen] = useState(false);
@@ -152,11 +159,15 @@ const PrimaryAppBar = () => {
               alignItems: "center",
             }}
           >
-            <IconButton>
-              <NotificationsOutlinedIcon
+            <IconButton
+              style={{ fontSize: "30px", color: "FF9494" }}
+              onClick={handleNotiOpen}>
+              <FontAwesomeIcon className="fulfilled-bell" icon={fulfilledBell} />
+              {/* <FontAwesomeIcon className="empty-bell" icon={emptyBell} /> */}
+              {/* <NotificationsOutlinedIcon
                 style={{ fontSize: "30px", color: "FF9494" }}
                 onClick={handleNotiOpen}
-              />
+              /> */}
             </IconButton>
             <IconButton
               size="large"

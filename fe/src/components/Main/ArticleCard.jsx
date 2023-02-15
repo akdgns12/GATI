@@ -19,6 +19,13 @@ import { useEffect } from "react";
 
 import noImgPath from "../../static/no_img_icon.png";
 
+// fontawesome
+import '../../App.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as fulfilledHeart} from '@fortawesome/free-solid-svg-icons';
+import { faHeart as emptyHeart } from '@fortawesome/free-regular-svg-icons';
+
+
 export default function ArticleCard(props) {
   const navigate = useNavigate();
   const { loginUser } = useSelector((state) => state.user);
@@ -113,11 +120,16 @@ export default function ArticleCard(props) {
 
         <CardActions disableSpacing={true}>
           <IconButton aria-label="add to favorites" onClick={toggleFav}>
-            <FavoriteIcon
+            {/* <FavoriteIcon
               style={{
                 color: (article.userLike === 1) ^ toggleLike ? "red" : "grey",
               }}
-            />
+            /> */}
+            {
+              (article.userLike === 1) ^ toggleLike ?
+              <FontAwesomeIcon className="fulfilled-heart" icon={fulfilledHeart} />:
+              <FontAwesomeIcon className="empty-heart" icon={emptyHeart}/>
+            }
           </IconButton>
           {article.likes + likeVar}
           <Box style={{ marginLeft: "auto" }}>
