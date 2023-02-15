@@ -8,7 +8,7 @@ export default function ShowPics(props) {
   const [boxStyle,setBoxStyle] = useState({
     width:'65px',
     height:'65px',
-    border:'3px dashed white',
+    border:'2px dashed #8888',
     borderRadius:'16px',
     margin:0.5,
   })
