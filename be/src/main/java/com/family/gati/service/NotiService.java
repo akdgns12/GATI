@@ -56,6 +56,7 @@ public class NotiService {
         noti.setNickname(commentNotiDto.getSenderNickname());
         noti.setType(2);
 
+
         notiRepository.save(noti);
     }
 
