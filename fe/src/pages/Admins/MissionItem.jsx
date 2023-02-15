@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 const MissionItem = (props) => {
   const navigate = useNavigate();
   // console.log(props);
-  const idx = props.mskey;
+  const idx = props.order;
   const mission = props.mission;
 
   // console.log(idx);

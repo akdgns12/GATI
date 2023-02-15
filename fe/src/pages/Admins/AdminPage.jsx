@@ -39,10 +39,19 @@ export default function AdminPage() {
         // console.log(res);
         if (Array.isArray(res.data)) {
           // console.log(res.data);
-          for (let i = 0; i < res.data.length; i++) {
+          var i;
+          for (i = 0; i < res.data.length; i++) {
             // console.log(res.data[i]);
-            setMissionList([...missionList, res.data[i]]);
+            let newList = missionList;
+            // newList.push(res.data[i]);
+            newList[i] = res.data[i];
+            setMissionList(newList);
             console.log(missionList);
+          }
+          for (let j = i; j < 5; j++) {
+            let newList = missionList;
+            newList[j] = undefined;
+            setMissionList(newList);
           }
           setLoaded(true);
         } else console.log("Failed to LOAD data");
@@ -64,8 +73,8 @@ export default function AdminPage() {
         {loaded &&
           missionList.length > 0 &&
           missionList.map((mission, index) => {
-            console.log(index);
-            return <MissionItem mskey={index} mission={mission} />;
+            // console.log(index);
+            return <MissionItem key={index} order={index} mission={mission} />;
           })}
       </Grid>
     </Container>
