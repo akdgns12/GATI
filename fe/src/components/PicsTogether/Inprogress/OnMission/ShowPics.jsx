@@ -15,9 +15,13 @@ export default function ShowPics(props) {
   const changeBoxStyle = () => {
     setBoxStyle({...boxStyle, border:'2px dashed white'})
   }
-  
+
+  console.log(props.dto)
+
   let variableBox = <Box sx={boxStyle} />
   if (props.dto) {
+    const imgURL = 'https://i8a805.p.ssafy.io/' + props.dto.img
+    const nickName = props.dto.userId
     variableBox =
       <Box
         sx={{
@@ -27,10 +31,10 @@ export default function ShowPics(props) {
         }}
       >
         <Box sx={boxStyle}>
-          <img src={props.dto.img} width="100%" height="100%" style={{borderRadius:'16px'}} alt='내가 업로드한 이미지' onLoad={changeBoxStyle} />
+          <img src={imgURL} width="100%" height="100%" style={{borderRadius:'16px'}} alt='내가 업로드한 이미지' onLoad={changeBoxStyle} />
           {/* <Typography sx={{textAlign:'right', padding:0.3}} color="#8888">By {props.dto.userId}</Typography> */}
         </Box>
-        <Typography sx={{textAlign:'right', padding:0.3}} color="#8888">귀여운짱구</Typography>
+        <Typography sx={{textAlign:'right', padding:0.3}} color="#8888">{nickName}</Typography>
       </Box>
   }
   

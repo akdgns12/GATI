@@ -20,6 +20,8 @@ export default function InProgressDefault() {
       elevation={2}
       sx={{
         padding:3,
+        backgroundColor:'#FFF5E4',
+        borderRadius: '20px',
       }}
     >
       <Typography align="center" style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
@@ -41,7 +43,15 @@ export default function InProgressDefault() {
         style={{
           display:'flex',
           justifyContent:'center',}}>
-        <Button onClick={openModal} size="medium" variant="contained" disableElevation>미션 참여하기</Button>
+        <Button
+          onClick={openModal} 
+          size="medium" 
+          variant="contained" 
+          style={{ backgroundColor: '#FF9494', color: 'white' }}
+          disableElevation
+        >
+          미션 참여하기
+        </Button>
       </Box>
       { modal === true ?
         <SetMemberModal
