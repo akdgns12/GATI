@@ -28,8 +28,8 @@
     "filepond-plugin-image-preview": "^4.6.11",
     "firebase": "^9.17.1",
     "font-awesome": "^4.7.0",
-    "fs": "^0.0.1-security",
     "framer-motion": "^9.0.2",
+    "fs": "^0.0.1-security",
     "image-gallery": "^0.3.1",
     "lottie-web": "^5.10.2",
     "material-ui-upload": "^1.2.1",
@@ -51,7 +51,8 @@
     "redux-thunk": "^2.4.2",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.6",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "file-loader": "^6.2.0",

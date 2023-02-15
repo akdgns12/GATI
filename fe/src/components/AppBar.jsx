@@ -101,7 +101,7 @@ const PrimaryAppBar = () => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1,}}>
+    <Box sx={{ flexGrow: 1, height:'70px'}}>
       <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
         <Toolbar sx={{
           display:'flex', 
@@ -112,7 +112,7 @@ const PrimaryAppBar = () => {
         }}>
           <Box
             sx={{
-              display:'flex', alignItems:'center', width:'80%'
+              display:'flex', alignItems:'center', width:'77%'
             }}>
             <Avatar
               sx={{
@@ -127,7 +127,7 @@ const PrimaryAppBar = () => {
             </Avatar>
             <Typography
               variant="h6"
-              fontWeight="1000"
+              sx={{fontFamily:'ONE-Mobile-POP'}}
               color="rgb(32,32,32)"
               style={{ display: "inline-block" }}
             >
@@ -140,8 +140,8 @@ const PrimaryAppBar = () => {
               justifyContent:'center',
               alignItems:'center'
             }}>
-            <IconButton>
-              <NotificationsOutlinedIcon />
+            <IconButton >
+              <NotificationsOutlinedIcon style={{ fontSize:'30px', color:'FF9494'}}/>
             </IconButton>
             <IconButton
               size="large"
@@ -152,7 +152,7 @@ const PrimaryAppBar = () => {
               onClick={handleDrawerOpen}
               sx={{ mr: 2, ...(open && { display: "none" }), m: 0, p: 0 }}
             >
-              <MenuIcon />
+              <MenuIcon style={{ fontSize:'30px', color:'FF9494'}} />
             </IconButton>
           </Box>
         </Toolbar>
