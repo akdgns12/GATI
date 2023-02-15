@@ -144,7 +144,7 @@ public class FamilyApiController {
         try{
             if(familyService.getFamilyById(familyUpdateDto.getId()) == null){
                 resultMap.put("msg", FAIL);
-                status = HttpStatus.NOT_FOUND;
+                status = HttpStatus.BAD_REQUEST;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
             Family family = familyService.updateFamily(familyDto);
