@@ -107,7 +107,7 @@ const PrimaryAppBar = () => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, height: "70px" }}>
+    <Box sx={{ flexGrow: 1, height: "100px" }}>
       <AppBar
         open={open}
         position="fixed"
