@@ -153,6 +153,7 @@ export const picsTgSlice = createSlice({
     builder.addCase(asyncDeleteMission.fulfilled, (state,action)=>{
       if (action.payload) {
         state.getMissionList = action.payload
+        console.log('엥',state.getMissionList)
         window.location.reload(true)
       } else {
         alert('에러가 발생했습니다.')
