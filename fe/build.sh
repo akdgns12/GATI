@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 
 IMAGE_NAME="gati-front-dev"
