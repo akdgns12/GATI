@@ -14,7 +14,7 @@ import AdminPage from "./pages/Admins/AdminPage";
 import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage"
 import AdminRouter from "./pages/Admins/AdminRouter";
 
-import { Container } from "@mui/material";
+import { Container, createTheme } from "@mui/material";
 
 import { useSelector, useDispatch } from "react-redux";
 import { updateToken } from "./store/User/user";
