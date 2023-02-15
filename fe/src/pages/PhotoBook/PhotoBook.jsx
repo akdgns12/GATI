@@ -1,19 +1,12 @@
 import { React, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReactDOM from "react-dom/client";
 
 import SearchBar from "../../components/PhotoBook/SearchBar";
-import NoImg from "../../components/PhotoBook/NoImg";
 import AddButton from "../../components/Main/AddButton";
 import PhotoCard from "../../components/PhotoBook/PhotoCard";
 import { loadPhotoBook, updatePage } from "../../store/PhotoBoard/photoBoard";
 
-import { Container, Grid, Box, Button } from "@mui/material";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import ClearIcon from "@mui/icons-material/Clear";
+import { Grid, Box } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const PhotoBook = () => {
@@ -49,7 +42,6 @@ const PhotoBook = () => {
 
   // scroll
   useEffect(() => {
-    console.log("add IOB");
     let iObserver;
     if (target) {
       iObserver = new IntersectionObserver(
@@ -66,10 +58,7 @@ const PhotoBook = () => {
   }, [target, currentPage]);
 
   useEffect(() => {
-    console.log("SHOW PHOTOS");
     if (photoInfo != null && photoInfo.length > 0) {
-      console.log("SHOW PHOTO");
-      console.log(photoInfo);
       setLoaded(true);
     } else {
       console.log("NOTHING TO LOAD");
@@ -78,7 +67,6 @@ const PhotoBook = () => {
   }, [photoInfo]);
 
   async function onIntersect(entries, nextPageNo) {
-    console.log(entries);
     if (entries[0].isIntersecting) {
       setLoaded(false);
       console.log("LOAD MORE");
@@ -90,8 +78,7 @@ const PhotoBook = () => {
         })
       )
         .then(({ payload }) => {
-          // console.log(payload);
-          if (payload.length > 1) {
+          if (payload.length > 0) {
             console.log("new feeds");
             dispatch(updatePage(nextPageNo + 1));
             setLoaded(true);
@@ -133,12 +120,12 @@ const PhotoBook = () => {
             );
           })}
       </Grid>
+      <AddButton />
       {loaded && (
         <Box ref={setTarget} style={{ textAlign: "center" }}>
           <RefreshIcon />
         </Box>
       )}
-      <AddButton />
     </Grid>
   );
 };

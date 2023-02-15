@@ -2,7 +2,13 @@ import { React } from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import { Box, CardContent, OutlinedInput, IconButton, FormControl } from "@mui/material";
+import {
+  Box,
+  CardContent,
+  OutlinedInput,
+  IconButton,
+  FormControl,
+} from "@mui/material";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 
 import httpClient from "../../utils/axios";
@@ -26,15 +32,13 @@ const contStyle = css`
 
 const CommentInput = (props) => {
   const { loginUser } = useSelector((state) => state.user);
-  const albumId = props.photoId
-  function writeComment2(event) {
-    
+  const albumId = props.photoId;
+  function writeComment(event) {
     httpClient
       .post("/albums/comment", {
         albumId: albumId,
         content: event.target.comment.value,
-        // userId: loginUser.userId,
-        userId: 'userid'
+        userId: loginUser.userId,
       })
       .then((data) => {
         // console.log(data);
@@ -45,7 +49,7 @@ const CommentInput = (props) => {
   }
 
   return (
-    <Box component="form" onSubmit={writeComment2} css={contStyle}>
+    <Box component="form" onSubmit={writeComment} css={contStyle}>
       <Box
         style={{
           fontWeight: "bold",
@@ -56,7 +60,11 @@ const CommentInput = (props) => {
         {" "}
         Comments{" "}
       </Box>
-      <OutlinedInput className="comment-area" placeholder="댓글을 입력하세요." name="comment" />
+      <OutlinedInput
+        className="comment-area"
+        placeholder="댓글을 입력하세요."
+        name="comment"
+      />
 
       <IconButton type="submit" className="submit-btn">
         <ArrowCircleUpIcon color="primary" fontSize="large" />

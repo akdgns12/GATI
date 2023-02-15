@@ -139,7 +139,7 @@ const CreatePost = (props) => {
         .then((data) => {
           console.log(data);
           alert("article posted");
-          navigate("/");
+          navigate(props.api == null ? "/" : "/photobook");
         })
         .catch((error) => {
           console.log(error);
@@ -152,7 +152,7 @@ const CreatePost = (props) => {
         .then((data) => {
           // console.log(data);
           alert("modified");
-          navigate("/");
+          navigate(props.api == null ? "/" : "/photobook");
         })
         .catch((error) => {
           console.log(error);
