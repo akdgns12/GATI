@@ -107,28 +107,19 @@ const PrimaryAppBar = () => {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, height: "70px" }}>
-      <AppBar
-        open={open}
-        position="fixed"
-        style={{ background: "rgb(255, 255, 255, 1.0)" }}
-      >
-        <Toolbar
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "space-between",
-            height: "70px",
-          }}
-        >
+    <Box sx={{ flexGrow: 1, height:'100px'}}>
+      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
+        <Toolbar sx={{
+          display:'flex', 
+          flexWrap:'wrap',  
+          alignItems:'center', 
+          justifyContent: "space-between", 
+          height: "70px"
+        }}>
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              width: "77%",
-            }}
-          >
+              display:"flex", alignItems:"center", width:"77%"
+            }}>
             <Avatar
               onClick={showmsg}
               sx={{
