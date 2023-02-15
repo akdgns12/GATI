@@ -52,6 +52,10 @@ const boardSlice = createSlice({
     clearFeed: (state) => {
       state.articles = [];
     },
+    updateComment: (state, action) => {
+      const newComment = action.payload;
+      state.article.boardCommentDtos = [...state.article.boardCommentDtos, newComment];
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(loadMainFeed.pending, (state) => {
@@ -86,4 +90,4 @@ const boardSlice = createSlice({
 });
 
 export default boardSlice.reducer;
-export const { clearFeed, updatePageNo } = boardSlice.actions;
+export const { clearFeed, updatePageNo, updateComment } = boardSlice.actions;
