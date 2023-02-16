@@ -5,6 +5,9 @@ import BlockModal from "../../components/Calendar/BlockModal";
 import { useRecoilValue } from "recoil";
 import { modalState } from "../../components/atoms";
 import { AnimatePresence } from "framer-motion";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import { Typography } from "@mui/material";
 export default function Calendar2() {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -66,14 +69,22 @@ export default function Calendar2() {
     }
   };
   return (
-
     <Container>
-      <Header>
-        <MonthButton onClick={() => onBtnPress("prev")}>◀</MonthButton>
-        <span>
+      <Header
+        style={{
+          display: "flex",
+          margin: "0 auto",
+        }}
+      >
+        <MonthButton onClick={() => onBtnPress("prev")}>
+          <KeyboardDoubleArrowLeftIcon fontSize="large" />
+        </MonthButton>
+        <Typography style={{ fontSize: "large" }}>
           {year}-{String(month + 1).padStart(2, 0)}
-        </span>
-        <MonthButton onClick={() => onBtnPress("next")}>▶</MonthButton>
+        </Typography>
+        <MonthButton onClick={() => onBtnPress("next")}>
+          <KeyboardDoubleArrowRightIcon fontSize="large" />
+        </MonthButton>
       </Header>
       <Calendar weeks={weeks} />
       {modalOpen.state && <BlockModal />}
@@ -93,7 +104,6 @@ const Container = styled.div`
 const Header = styled.div`
   flex-direction: row;
   margin-block: 10px;
-  
 `;
 const MonthButton = styled.button`
   border: none;
