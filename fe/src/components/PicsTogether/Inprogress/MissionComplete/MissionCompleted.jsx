@@ -12,8 +12,8 @@ export default function MissionCompleted() {
   const getMission = useSelector(state => {
     return state.picsTg.getMission
   })
-  const imageURL = 'https://i8a805.p.ssafy.io/'
-
+  const baseURL = process.env.REACT_APP_IMG_ROOT;
+  
   // 미션 삭제 함수
   const deleteMission = () => {
     if ( window.confirm('이번주 등록한 미션을 정말 삭제하시겠습니까?') == true) {
@@ -47,7 +47,7 @@ export default function MissionCompleted() {
           marginBottom:'30px'
         }}>
         <img
-          src={imageURL + getMission.img}
+          src={baseURL + getMission.img}
           alt='exampleImg'
           width='200px'/>
       </Box>

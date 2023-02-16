@@ -26,7 +26,7 @@ export default function MissionDetailPage() {
   // Mission 디테일 정보 가져오기
   const getMissionList = useSelector(state => {return state.picsTg.getMissionList})
   const mission = getMissionList.filter((mission)=> mission.id == id)[0]
-  const imageURL = 'https://i8a805.p.ssafy.io/'
+  const baseURL = process.env.REACT_APP_IMG_ROOT;
 
   console.log(getMissionList)
   console.log(mission)
@@ -76,7 +76,7 @@ export default function MissionDetailPage() {
         <CardMedia
           component="img"
           width="100%"
-          image={imageURL + mission.img}
+          image={baseURL + mission.img}
           alt="Mission Img"
         />
         <CardActions sx={{borderBottom: "1px dashed #D9D9D9"}} disableSpacing={true}>
