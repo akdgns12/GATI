@@ -1,7 +1,7 @@
 import React from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import FamilyItem from "./FamilyItem";
 const contStyle = css`
   width: 100%;
   .list-header {
+    margin-Top: 20px;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -19,7 +20,7 @@ const contStyle = css`
       text-align: left;
     }
     .create-btn {
-      width: 30%;
+      width: 40%;
     }
   }
 `;
@@ -48,9 +49,11 @@ export default function Family(props) {
   }, [groupList]);
 
   return (
-    <Box css={contStyle}>
-      <Box className="list-header">
-        <Box className="text-box">메인 그룹 설정</Box>
+    <Grid css={contStyle}>
+      <Grid className="list-header">
+      <Typography marginY={1} variant="h6" align="left" fontSize="18px" >
+          메인 그룹 설정
+        </Typography>
         <Button
           variant="outlined"
           onClick={() => setOpen(true)}
@@ -67,7 +70,7 @@ export default function Family(props) {
             그룹 만들기
           </span>
         </Button>
-      </Box>
+      </Grid>
       {loaded &&
         groupList.length > 0 &&
         groupList.map((group, index) => {
@@ -79,6 +82,6 @@ export default function Family(props) {
             />
           );
         })}
-    </Box>
+    </Grid>
   );
 }

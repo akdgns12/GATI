@@ -3,7 +3,6 @@ package com.family.gati.api;
 import com.family.gati.dto.PlanSignUpDto;
 import com.family.gati.dto.UpdatePlanDto;
 import com.family.gati.entity.Plan;
-import com.family.gati.entity.User;
 import com.family.gati.service.PlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -65,7 +63,7 @@ public class PlanApiController {
             List<Plan> planList = planService.getAllPlanByGroupId(groupId);
             if(planList.size() < 1) { // 일정 없으면 NO_CONTENT
                 resultMap.put("msg", FAIL);
-                status = HttpStatus.NO_CONTENT;
+                status = HttpStatus.BAD_REQUEST;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
             resultMap.put("msg", SUCCESS);
@@ -87,13 +85,6 @@ public class PlanApiController {
         HttpStatus status = null;
 
         try{
-            // 작성자 본인이 맞다면 변경
-            // 로그인한 userId != updatePlanDto.getUserId()
-//            if(updatePlanDto.getUserId() != userId) {
-//                resultMap.put("msg", FAIL);
-//                status = HttpStatus.NOT_ACCEPTABLE;
-//                return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//            }
             Plan modifiedPlan = planService.updatePlan(updatePlanDto);
             resultMap.put("msg", SUCCESS);
             resultMap.put("result", modifiedPlan);

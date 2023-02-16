@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME="gati-backend"
+IMAGE_NAME="gati-backend-dev"
 CONTAINER_ID="$(docker container ls |grep ${IMAGE_NAME}|awk '{print $1}')"
 IMAGE_ID="$(docker images -q ${IMAGE_NAME})"
 EMPTY_STR=""

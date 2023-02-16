@@ -11,11 +11,12 @@ import PortraitOutlinedIcon from "@mui/icons-material/PortraitOutlined";
 import { Link } from "react-router-dom";
 
 export default function SimpleBottomNavigation() {
-
   return (
-    <Box sx={{
-      height:55,
-    }}>
+    <Box
+      sx={{
+        height: 55,
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -25,45 +26,43 @@ export default function SimpleBottomNavigation() {
           left: 0,
           right: 0,
         }}
-        >
-        <BottomNavigation
-          showLabels
-          >
-          <BottomNavigationAction 
+      >
+        <BottomNavigation showLabels>
+          <BottomNavigationAction
             component={Link}
             to="/"
-            label="Home" 
+            label="Home"
             icon={<HomeOutlinedIcon fontSize="large" />}
-            style={{color: '#EF9A9A'}} 
-            />
+            style={{ color: "#FF9494" }}
+          />
           <BottomNavigationAction
             component={Link}
             to="/calendar"
             label="Calendar"
             icon={<CalendarMonthOutlinedIcon fontSize="large" />}
-            style={{color: '#EF9A9A'}}
-            />
+            style={{ color: "#FF9494" }}
+          />
           <BottomNavigationAction
             component={Link}
             to="/photobook"
             label="PhotoBook"
             icon={<PhotoOutlinedIcon fontSize="large" />}
-            style={{color: '#EF9A9A'}}
-            />
+            style={{ color: "#FF9494" }}
+          />
           <BottomNavigationAction
             component={Link}
             to="/gotg"
             label="가치가자"
             icon={<Diversity1OutlinedIcon fontSize="large" />}
-            style={{color: '#EF9A9A'}}
-            />
+            style={{ color: "#FF9494" }}
+          />
           <BottomNavigationAction
             component={Link}
             to="/pictg"
             label="가치한장"
             icon={<PortraitOutlinedIcon fontSize="large" />}
-            style={{color: '#EF9A9A'}}
-            />
+            style={{ color: "#FF9494" }}
+          />
         </BottomNavigation>
       </Box>
     </Box>

@@ -1,24 +1,25 @@
-import { React, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { React, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Box, IconButton } from '@mui/material';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useNavigate, useParams } from 'react-router';
+import { Box, IconButton } from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { useNavigate, useParams } from "react-router";
 
-import ArticleCard from '../../components/Main/ArticleCard';
-import CommentInput from '../../components/Main/CommentInput';
-import CommentView from '../../components/Main/CommentView';
+import ArticleCard from "../../components/Main/ArticleCard";
+import CommentInput from "../../components/Main/CommentInput";
+import CommentView from "../../components/Main/CommentView";
 
-import { loadPostDetail } from '../../store/Board/board';
+import { loadPostDetail } from "../../store/Board/board";
 
 const contStyle = css`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-top: -20px;
   .mv-back {
-    margin: 10px;
+    margin: 0px;
   }
 `;
 
@@ -39,38 +40,35 @@ const PostDetail = () => {
     };
     dispatch(loadPostDetail(reqData))
       .then((data) => {
-        // console.log(data);
         setLoaded(true);
       })
       .catch((error) => {
         console.log(error);
-      })
-  }, [])
+      });
+  }, []);
 
   function mvBack() {
-    navigate('/');
+    navigate("/");
   }
 
   return (
     <Box css={contStyle}>
-      <IconButton className='mv-back' onClick={mvBack}>
+      <IconButton className="mv-back" onClick={mvBack}>
         <ArrowBackIosIcon />
       </IconButton>
-      {
-        loaded == true &&
+      {loaded == true && (
         <>
-          <ArticleCard article={article} style={{ width: '100%' }} variant="detail" />
+          <ArticleCard article={article} style={{ width: "100%" }} variant="detail" />
           <CommentInput articleId={article.id} />
         </>
-      }
-      {
-        article != null && article.boardCommentDtos != null &&
+      )}
+      {article != null &&
+        Array.isArray(article.boardCommentDtos) &&
         article.boardCommentDtos.map((comm, index) => {
           return <CommentView key={index} comment={comm} />;
-        })
-      }
+        })}
     </Box>
   );
-}
+};
 
 export default PostDetail;

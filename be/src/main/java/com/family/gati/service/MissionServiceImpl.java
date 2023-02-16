@@ -66,8 +66,9 @@ public class MissionServiceImpl implements MissionService{
         AdminMission adminMission = adminMissionRepository.findByStartDateIsLessThanEqualAndEndDateGreaterThanEqual(date, date);
         Mission mission = missionRepository.findByGroupIdAndAdminMissionId(groupId, adminMission.getId());
         if (mission == null) {
-            MissionDto missionDto = new MissionDto.MissionDtoBuilder(missionRepository.save(new Mission(adminMission, groupId))).build();
-            missionDto.setMemNumber(familyRepository.findById(groupId).getFamilyTotal());
+            Mission newmission = new Mission(adminMission, groupId);
+            newmission.setMemNumber(familyRepository.findById(groupId).getFamilyTotal());
+            MissionDto missionDto = new MissionDto.MissionDtoBuilder(missionRepository.save(newmission)).build();
             return missionDto;
         }
         MissionDto missionDto = new MissionDto.MissionDtoBuilder(mission).build();

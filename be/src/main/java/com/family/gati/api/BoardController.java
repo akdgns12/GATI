@@ -1,10 +1,8 @@
 package com.family.gati.api;
 
 import com.family.gati.dto.*;
-import com.family.gati.service.BoardCommentService;
-import com.family.gati.service.BoardService;
-import com.family.gati.service.FileService;
-import com.family.gati.service.NotiService;
+import com.family.gati.entity.User;
+import com.family.gati.service.*;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +23,7 @@ public class BoardController {
     private final BoardCommentService boardCommentService;
     private final FileService fileService;
     private final NotiService notiService;
+    private final UserService userService;
 
 //    @ApiOperation(
 //            value = "현재 그룹의 Board 조회"
@@ -140,15 +139,17 @@ public class BoardController {
             value = "Board 수정"
             , notes = "Board를 수정한다.")
     @PutMapping("/board")
-    public ResponseEntity<?> updateBoard(@ApiParam(value = "The file to upload", required = true) @RequestPart MultipartFile file,
+    public ResponseEntity<?> updateBoard(@ApiParam(value = "The file to upload", required = false) @RequestPart(required = false) MultipartFile file,
                                          @ApiParam(value = "The DTO object", required = true) @ModelAttribute BoardUpdateDto boardUpdateDto){
         BoardDto boardDto = new BoardDto();
-        String path;
-        try {
-            path = fileService.fileUpload(file, "board");
-        } catch (Exception e) {
-            // 에러코드 전송
-            throw new RuntimeException(e);
+        String path = null;
+        if (file != null) {
+            try {
+                path = fileService.fileUpload(file, "board");
+            } catch (Exception e) {
+                // 에러코드 전송
+                throw new RuntimeException(e);
+            }
         }
         boardDto.setId(boardUpdateDto.getId());
         boardDto.setContent(boardUpdateDto.getContent());
@@ -173,12 +174,15 @@ public class BoardController {
         boardCommentDto.setUpdateTime(new Timestamp(new Date().getTime()));
 
         boardCommentService.insertBoardComment(boardCommentDto);
+        User user = userService.getUserByUserId(boardCommentDto.getUserId());
+        String nickName = user.getNickName();
+
         BoardDto resultDto = boardService.findById(boardCommentDto.getBoardId(), boardCommentDto.getUserId());
 
         CommentNotiDto commentNotiDto = new CommentNotiDto(
                 resultDto.getUserId(),
                 resultDto.getId(),
-                resultDto.getNickname(),
+                nickName,
                 2
         );
         notiService.saveComment(commentNotiDto);
@@ -224,11 +228,22 @@ public class BoardController {
     public ResponseEntity<?> addBoardLikes(@RequestParam Integer boardId, @RequestParam String userId) {
         if (boardService.findLikes(boardId, userId)) {
             String receiverId = boardService.findById(boardId, userId).getUserId();
+            User user = userService.getUserByUserId(userId);
+            String nickName = user.getNickName();
             LikeNotiDto likeNotiDto = new LikeNotiDto(
-                    receiverId, boardId, userId, 3
+                    receiverId, boardId, nickName, 3
             );
             notiService.saveLike(likeNotiDto);
         };
+        return ResponseEntity.ok(null);
+    }
+
+    @ApiOperation(
+            value = "Board에서 Album 저장"
+            , notes = "Board에서 Album 저장한다.")
+    @PostMapping("/save")
+    public ResponseEntity<?> addBoardLikes(@RequestParam Integer boardId) {
+        boardService.saveAlbum(boardId);
         return ResponseEntity.ok(null);
     }
 }

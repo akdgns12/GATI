@@ -2,8 +2,6 @@ package com.family.gati.service;
 
 import com.family.gati.dto.FamilyDto;
 import com.family.gati.dto.FamilyInviteDto;
-import com.family.gati.dto.FamilySignUpDto;
-import com.family.gati.dto.FamilyUpdateDto;
 import com.family.gati.entity.Family;
 import com.family.gati.entity.FamilyMember;
 import com.family.gati.entity.User;

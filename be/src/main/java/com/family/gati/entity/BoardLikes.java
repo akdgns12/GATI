@@ -23,4 +23,9 @@ public class BoardLikes {
 
     @Column(name = "BOARD_ID", nullable = false)
     private Integer boardId;
+
+    public BoardLikes(Integer boardId, String userId) {
+        this.boardId = boardId;
+        this.userId = userId;
+    }
 }

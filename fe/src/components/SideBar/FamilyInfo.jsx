@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import {
   Grid,
   Typography,
@@ -7,29 +9,57 @@ import {
   Divider,
   Box,
   Container,
+  Input,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { FilePond } from "react-filepond";
 import { useState } from "react";
 import httpClient from "../../utils/axios";
 import FamilyMemberItem from "./FamilyMemberItem";
 import { updateMainGroup } from "../../store/User/user";
 
+const imgBoxStyle = css`
+  width: 100%;
+  // display: flex;
+  justify-content: center;
+  .photo-box {
+    background-color: #dddddd;
+    width: 150px;
+    height: 150px;
+    // padding-bottom: 80%;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(128,128,128, 0.5);
+    text-align: center;
+    display: inline-flex;
+    overflow: hidden;
+    .photo-prev {
+      background-color: white;
+      max-width: 100%;
+      max-height: 100%;
+      margin: auto;
+    }
+  }
+  .edit-btn {
+    // display: inline-block;
+    vertical-align: bottom;
+  }
+  .
+`;
+
 export default function FamilyInfo() {
   const { mainGroup, loginUser } = useSelector((state) => state.user);
-  const [file, setFile] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [memberList, setMemberList] = useState([]);
+  const [imgURL, setImgURL] = useState(
+    process.env.REACT_APP_IMG_ROOT + "/" + mainGroup.img
+  );
+
   const dispatch = useDispatch();
 
+  // console.log(imgURL);
   useEffect(() => {
-    // console.log("LOAD FAMILY MEMBERS");
     setMemberList([]);
-    //   newList.push({
-    //     userId: `user${i}`,
-    //     userBD: "YYYY-MM-DD",
-    //     phoneNumber: "010-XXXX-XXXX",
-    //   });
     httpClient
       .get(`/family/memberList/${mainGroup.id}`)
       .then(({ data }) => {
@@ -40,26 +70,33 @@ export default function FamilyInfo() {
         }
       })
       .catch((error) => console.log(error));
-    // setLoaded(true);
   }, []);
 
   function handleModify(event) {
     event.preventDefault();
-    // console.log("MODIFY");
-    const reqData = {
-      id: mainGroup.id,
-      img: "string",
-      name: event.target.familyName.value,
-    };
-    // console.log(reqData);
+
+    const formData = new FormData();
+    formData.append("id", mainGroup.id);
+    formData.append("name", event.target.familyName.value);
+    if (event.target.img.files[0] != undefined) {
+      formData.append(
+        "multipartFile",
+        event.target.img.files[0],
+        event.target.img.files[0].name
+      );
+    }
+
     httpClient
-      .put("/family", reqData)
-      .then(({ data }) => {
-        // console.log(data);
+      .put("/family", formData)
+      .then((res) => {
+        console.log(res);
+        const data = res.data;
         alert("정보 수정이 완료되었습니다");
         // update main group info here
+        // console.log(data["modifedFamily: {}"]);
         const modifiedData = {
-          name: reqData.name,
+          name: event.target.familyName.value,
+          img: data["modifedFamily: {}"].img,
         };
         dispatch(updateMainGroup(modifiedData));
       })
@@ -76,7 +113,7 @@ export default function FamilyInfo() {
       receiverId: event.target.memberId.value,
     };
     // console.log(reqData);
-    httpClient.put("/family/", reqData).then(({ data }) => {
+    httpClient.post("/family/", reqData).then(({ data }) => {
       if (data.msg === "success") {
         window.alert("초대 메세지가 성공적으로 전송되었습니다.");
         event.target.memberId.value = "";
@@ -84,6 +121,11 @@ export default function FamilyInfo() {
         window.alert("등록되지 않은 사용자 입니다. ID를 확인해 주세요.");
       }
     });
+  }
+
+  function handleIMGChange(event) {
+    // console.log(event.target.files[0]);
+    setImgURL(URL.createObjectURL(event.target.files[0]));
   }
 
   return (
@@ -95,7 +137,9 @@ export default function FamilyInfo() {
       display="flex"
     >
       <Grid item m={1} xs={12}>
-        <Typography>가족 프로필 설정</Typography>
+        <Typography marginY={1} variant="h6" align="left" fontSize="18px">
+          가족 프로필 설정
+        </Typography>
       </Grid>
       <Grid
         container
@@ -104,13 +148,30 @@ export default function FamilyInfo() {
         justifyContent="center"
         id="modify-form"
       >
-        <Grid item xs={6}>
-          <FilePond
-            stylePanelLayout={"compact circle"}
-            files={file}
-            onupdatefiles={setFile}
-            allowMultiple={false}
-          />
+        <Grid item xs={12} p={1}>
+          <Box css={imgBoxStyle}>
+            <Box className="photo-box">
+              <Box
+                className="photo-prev"
+                component="img"
+                src={imgURL}
+                alt="please select photo"
+              />
+            </Box>
+            <label htmlFor="select-img">
+              <Button className="edit-btn" component="span">
+                edit
+              </Button>
+            </label>
+            <Input
+              inputProps={{ accept: "image/*" }}
+              type="file"
+              id="select-img"
+              name="img"
+              style={{ display: "none" }}
+              onChange={handleIMGChange}
+            />
+          </Box>
         </Grid>
         <Grid item xs={12}>
           <TextField

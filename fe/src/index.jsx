@@ -15,6 +15,10 @@ import { PersistGate } from "redux-persist/integration/react";
 
 // 달력용 recoil
 import { RecoilRoot } from "recoil";
+import { createTheme, ThemeProvider } from "@mui/material";
+
+// CSS - 폰트
+import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -36,20 +40,60 @@ const store = configureStore({
   middleware: customizedMiddleware,
 });
 
+// font : MUI 컴포넌트에 폰트 적용
+const theme = createTheme({
+  typography: {
+    h6: {
+      fontFamily: "ONE-Mobile-POP",
+    },
+    h5: {
+      fontFamily: "ONE-Mobile-POP",
+    },
+    h4: {
+      fontFamily: "ONE-Mobile-POP",
+    },
+    h3: {
+      fontFamily: "ONE-Mobile-POP",
+    },
+    side: {
+      fontFamily: "ONE-Mobile-POP",
+      fontSize: "18px",
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontFamily: "ONE-Mobile-POP",
+        },
+      },
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          fontFamily: "ONE-Mobile-POP",
+        },
+      },
+    },
+  },
+});
+
 export const persistor = persistStore(store);
 
 root.render(
-  <React.StrictMode>
+  <ThemeProvider theme={theme}>
+    {/* <React.StrictMode> */}
     <BrowserRouter>
       <RecoilRoot>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <App />
-        </PersistGate>
-      </Provider>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
       </RecoilRoot>
     </BrowserRouter>
-  </React.StrictMode>
+    {/* </React.StrictMode> */}
+  </ThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

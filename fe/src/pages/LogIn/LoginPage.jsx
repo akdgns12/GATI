@@ -10,28 +10,31 @@ import LoginFrom from "../../components/Login/LoginForm";
 import SignUpForm from "../../components/Login/SignUpForm";
 import FindID from "../../components/Login/FindID";
 import FindPW from "../../components/Login/FindPW";
-
 import FindResult from "../../components/Login/FindResult";
-
 import imgPath from "../../static/home_with_door.png";
+
+import Lottie from "react-lottie-player";
+import Family from "../../static/family.json";
 
 const contStyle = css`
   width: 100%;
-  height: 100vh;
-  background-image: url(${imgPath});
+  height: 100%;
   background-size: auto 100vh;
   background-position: center;
   text-align: center;
-  .bg-test {
-    width: 100%;
-  }
 `;
 
 const Login = () => {
   function doSth() {}
   return (
     <div css={contStyle}>
-      <div className="bg-text">Awesome Background</div>
+      {/* <div className="bg-text">A_805</div> */}
+      {/* <Lottie
+        loop
+        animationData={Family}
+        play
+        style={{ margin: "0 auto", width: "60%", height: "50%" }}
+      /> */}
       <Container className="router-cont">
         <Routes>
           <Route path="/" element={<LoginFrom />} />

@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import {Typography, Paper, Button, Box} from '@mui/material';
 import { asyncDeleteMission } from "../../../../store/PicsTogether/picsTg";
+import { borderRadius } from "@mui/system";
 
 
 export default function MissionCompleted() {
@@ -11,6 +12,7 @@ export default function MissionCompleted() {
   const getMission = useSelector(state => {
     return state.picsTg.getMission
   })
+  const imageURL = 'https://i8a805.p.ssafy.io/'
 
   // 미션 삭제 함수
   const deleteMission = () => {
@@ -26,11 +28,18 @@ export default function MissionCompleted() {
         padding:3,
       }}
     >
-      <Typography align="center" variant="h4" fontWeight={800} marginBottom="30px">이번주 미션 완료</Typography>
-      <Typography style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
-      <Typography style={{ marginBottom:'30px'}}>
-        {getMission.content}
-      </Typography>
+      <Typography color='#0081B4' textAlign="center" variant="h4" fontWeight={500} marginBottom="30px" >이번주 미션 완료</Typography>
+      <Box
+        sx={{
+          padding:'10px',
+          backgroundColor:'#FFF5E4',
+          borderRadius:'20px'
+        }}>
+        <Typography variant="h6" fontSize="18px" textAlign="center" style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
+        <Typography style={{ marginBottom:'30px'}}>
+          {getMission.content}
+        </Typography>
+      </Box>
       <Box
         style={{
           display:'flex',
@@ -38,7 +47,7 @@ export default function MissionCompleted() {
           marginBottom:'30px'
         }}>
         <img
-          src={getMission.img}
+          src={imageURL + getMission.img}
           alt='exampleImg'
           width='200px'/>
       </Box>
@@ -46,7 +55,7 @@ export default function MissionCompleted() {
         style={{
           display:'flex',
           justifyContent:'center',}}>
-        <Button onClick={deleteMission} size="medium" variant="contained" disableElevation>미션 삭제하기</Button>
+        <Button onClick={deleteMission} size="medium" variant="contained" style={{ backgroundColor: '#FF9494', color: 'white' }} disableElevation>미션 삭제하기</Button>
       </Box>
     </Paper>
   )

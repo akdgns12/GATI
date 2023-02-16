@@ -27,7 +27,7 @@ const contStyle = css`
       border-radius: 10px;
       text-align: center;
       display: inline-flex;
-      // display: flex;
+      overflow: hidden;
       .photo-prev {
         max-width: 100%;
         max-height: 100%;
@@ -37,6 +37,7 @@ const contStyle = css`
     .edit-btn {
       display: inline-block;
       vertical-align: bottom;
+      color: #ff9494;
     }
   }
   .input-label {
@@ -62,16 +63,20 @@ const contStyle = css`
 `;
 
 const CreatePost = (props) => {
-  const variant = (props.variant == null) ? "create" : props.variant;
+  const variant = props.variant == null ? "create" : props.variant;
+  const API_URL = props.api == null ? "/boards/board" : "/albums/album";
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [imgURL, setImgURL] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [serializedTag, setSerializedTag] = useState("");
+  const [isIMG, setIsIMG] = useState(false);
+  const [isContent, setIsContent] = useState(false);
+  const [isTag, setIsTag] = useState(false);
 
   const articleId = useParams().articleId;
   const { article } = useSelector((state) => state.board);
-  const { loginUser } = useSelector((state) => state.user);
+  const { loginUser, mainGroup } = useSelector((state) => state.user);
 
   useEffect(() => {
     console.log("mounted");
@@ -85,13 +90,14 @@ const CreatePost = (props) => {
           // console.log(data);
           console.log(data.payload.img);
           // setImgURL(URL.createObjectURL(event.target.files[0]));
-          setImgURL("https://picsum.photos/400/300");
+          var imgPath = process.env.REACT_APP_IMG_ROOT + "/" + data.payload.img;
+          setImgURL(imgPath);
           setSerializedTag(serializeTag(data.payload.tag));
           setLoaded(true);
         })
         .catch((error) => {
           console.log(error);
-        })
+        });
     }
   }, []);
 
@@ -102,9 +108,9 @@ const CreatePost = (props) => {
       tagObjs.map((tagObj) => {
         str += tagObj.tagContent;
         str += " ";
-      })
+      });
     }
-    console.log(str);
+    // console.log(str);
     return str;
   }
 
@@ -114,49 +120,53 @@ const CreatePost = (props) => {
     // console.log(event.target.img.files[0].name);
     // console.log(event.target.content.value);
     // console.log(event.target.tag.value);
-    const tagObjs = parseTags(event.target.tag.value);
-    const formData = {
-      content: event.target.content.value,
-      tagDtos: tagObjs,
-      // img: event.target.img.files[0].name,
-      img: "image",
-    };
-    // console.log(formData);
+    const tagArr = parseTags(event.target.tag.value);
+
+    const formData = new FormData();
+    formData.append("content", event.target.content.value);
+    // formData.append('tagDtos', tagObjs);
+    for (let i = 0; i < tagArr.length; i++) {
+      formData.append(`tagDtos[${i}].tagContent`, tagArr[i]);
+    }
+
+    if (event.target.img.files[0] != undefined) {
+      formData.append(
+        "file",
+        event.target.img.files[0],
+        event.target.img.files[0].name
+      );
+    } else {
+      console.log("NO IMAGE");
+    }
 
     if (variant === "create") {
-      const postData = {
-        ...formData,
-        userId: loginUser.userId,
-        groupId: 1,
-      };
-      // console.log(postData);
-      httpClient.post("/boards/board/", postData)
+      formData.append("userId", loginUser.userId);
+      formData.append("groupId", mainGroup.id);
+      // console.log(formData);
+      httpClient
+        .post(API_URL, formData)
         .then((data) => {
-          // console.log(data)
+          console.log(data);
           alert("article posted");
-          navigate("/");
+          navigate(props.api == null ? "/" : "/photobook");
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           alert("failed to post article");
         });
-    }
-    else if (variant === "modify") {
-      const putData = {
-        ...formData,
-        id: articleId,
-      };
-      // console.log(putData);
-      httpClient.put("/boards/board/", putData)
+    } else if (variant === "modify") {
+      formData.append("id", articleId);
+      httpClient
+        .put(API_URL, formData)
         .then((data) => {
           // console.log(data);
           alert("modified");
-          navigate("/");
+          navigate(props.api == null ? "/" : "/photobook");
         })
         .catch((error) => {
           console.log(error);
           alert("failed to modify data");
-        })
+        });
     }
   }
 
@@ -166,8 +176,8 @@ const CreatePost = (props) => {
     let ret = [];
     tags.map((tag, index) => {
       // console.log(tag);
-      ret.push({ tagContent: tag });
-    })
+      if (tag != "") ret.push(tag);
+    });
     return ret;
   }
 
@@ -179,8 +189,19 @@ const CreatePost = (props) => {
   }
 
   function handleIMGChange(event) {
-    console.log(event.target.files[0]);
+    // console.log(event.target.files[0]);
     setImgURL(URL.createObjectURL(event.target.files[0]));
+    setIsIMG(true);
+  }
+
+  function handleContentChange(event) {
+    if (event.target.value === "") setIsContent(false);
+    else setIsContent(true);
+  }
+
+  function handleTagChange(event) {
+    if (event.target.value === "") setIsTag(false);
+    else setIsTag(true);
   }
 
   return (
@@ -188,7 +209,12 @@ const CreatePost = (props) => {
       <Box className="photo">
         <Box className="photo-label">사진 선택</Box>
         <Box className="photo-box">
-          <Box className="photo-prev" component="img" src={imgURL} alt="please select photo" />
+          <Box
+            className="photo-prev"
+            component="img"
+            src={imgURL}
+            alt="please select photo"
+          />
         </Box>
         <label htmlFor="select-img">
           <Button className="edit-btn" component="span">
@@ -213,7 +239,8 @@ const CreatePost = (props) => {
           multiline={true}
           name="content"
           style={{ height: "150px" }}
-          defaultValue={(variant === "modify" && loaded) ? article.content : ""}
+          defaultValue={variant === "modify" && loaded ? article.content : ""}
+          onChange={handleContentChange}
         />
       </FormControl>
       <FormControl variant="standard" style={{ width: "100%" }}>
@@ -223,14 +250,26 @@ const CreatePost = (props) => {
           placeholder="사진의 태그를 입력하세요."
           multiline={true}
           name="tag"
-          defaultValue={(variant === "modify" && loaded) ? serializedTag : ""}
+          defaultValue={variant === "modify" && loaded ? serializedTag : ""}
+          onChange={handleTagChange}
         />
       </FormControl>
       <Box className="button-group">
-        <Button type="submit" variant="contained">
+        <Button
+          type="submit"
+          variant="text"
+          style={{ color: "black" }}
+          disabled={
+            variant == "modify" || (isIMG && isContent && isTag) ? false : true
+          }
+        >
           확인
         </Button>
-        <Button variant="outlined" onClick={backToMain}>
+        <Button
+          style={{ color: "#ff9494" }}
+          variant="text"
+          onClick={backToMain}
+        >
           취소
         </Button>
       </Box>
