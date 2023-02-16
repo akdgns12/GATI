@@ -8,7 +8,7 @@ const CombinedImg = () => {
   
   const id = useSelector(state => {return state.picsTg.getMission}).id
   const imgList = useSelector(state=>{return state.picsTg.getMission}).missionImageDtos
-  const baseUrl = 'https://ggati.site/'
+  const baseUrl = 'https://ggati.site'
   const newImgList = imgList.map(dto=> {return {src : baseUrl + dto.img}} )
 
   const canvasRef = useRef(null);
