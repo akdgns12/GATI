@@ -8,7 +8,9 @@ import Fade from "@mui/material/Fade";
 import httpClient from "../../utils/axios";
 import { Button, Input, OutlinedInput } from "@mui/material";
 import { FilePond } from "react-filepond";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+import { updateMainGroup } from "../../store/User/user";
 
 const modalStyle = {
   position: "absolute",
@@ -55,33 +57,37 @@ const CreateFamilyModal = (props) => {
   const handleClose = () => props.setOpen(false);
 
   const [file, setFile] = React.useState(null);
+  const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.user.loginUser);
 
   function handleSubmit(event) {
     event.preventDefault();
-    // console.log(event.target.fileTag.files[0]);
-    // console.log(file[0].file);
-    // console.log(event.target.familyName.value);
-    // console.log(userId);
 
-    const formData = new FormData();
-    formData.append("name", event.target.familyName.value);
-    formData.append("multipartFile", file[0].file, file[0].file.name);
-    // console.log(file[0].file);
-    formData.append("userId", userId);
-    // console.log(formData);
-    httpClient
-      .post(`/family/create`, formData)
-      .then(({ data }) => {
-        // console.log(data);
-        if (data != null && data.msg != null && data.msg === "success") {
-          alert("가족 그룹이 생성되었습니다");
-        }
-      })
-      .catch((error) => {
-        alert("FAILED TO CREATE GROUP");
-        console.log(error);
-      });
+    if (file == null) alert("사진을 등록 해 주세요");
+    else {
+      const formData = new FormData();
+      formData.append("name", event.target.familyName.value);
+      formData.append("multipartFile", file[0].file, file[0].file.name);
+      formData.append("userId", userId);
+
+      // console.log(formData);
+      httpClient
+        .post(`/family/create`, formData)
+        .then(({ data }) => {
+          // console.log(data);
+          if (data.msg === "success") {
+            const createdFamily = data["created Family"];
+            alert("가족 그룹이 생성되었습니다. " + createdFamily.name + " 으로 이동합니다.");
+            dispatch(updateMainGroup(createdFamily));
+            handleClose();
+            if (props.setSideOpen != undefined) props.setSideOpen(false);
+          }
+        })
+        .catch((error) => {
+          alert("가족 그룹 생성에 실패하였습니다.\n 다시 시도해 주세요");
+          console.log(error);
+        });
+    }
   }
 
   return (
@@ -107,6 +113,7 @@ const CreateFamilyModal = (props) => {
                 />
               </Box>
               <OutlinedInput
+                required
                 className="name-input"
                 type="text"
                 name="familyName"

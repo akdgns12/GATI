@@ -6,7 +6,6 @@ import { blocksState, modalState } from "../atoms";
 import httpClient from "../../utils/axios";
 import { useSelector } from "react-redux";
 import { dataState } from "../atoms";
-import axios from "axios";
 import { useEffect } from "react";
 
 const DAYS_OF_WEEK = ["일", "월", "화", "수", "목", "금", "토"];
@@ -28,14 +27,14 @@ const BlockModal = () => {
   };
 
   planData.map((data) => {
-    console.log(data.memo);
+    // console.log(data.memo);
   });
 
   useEffect(() => {
     getData();
   }, []);
   const a = planData;
-  console.log(a);
+  // console.log(a);
   const date = modalOpen.id && [
     modalOpen.id.slice(0, 4),
     modalOpen.id.slice(4, 6),
@@ -68,20 +67,16 @@ const BlockModal = () => {
         newBlocks[modalOpen.id] = newBlocks[modalOpen.id].concat([
           { id: Date.now(), content: value, done: false, category },
         ]);
-        console.log(newBlocks[modalOpen.id]);
+        // console.log(newBlocks[modalOpen.id]);
       } else {
         newBlocks = {
           ...blocks,
-          [modalOpen.id]: [
-            { id: Date.now(), content: value, done: false, category },
-          ],
+          [modalOpen.id]: [{ id: Date.now(), content: value, done: false, category }],
         };
       }
     } else {
       newBlocks = {
-        [modalOpen.id]: [
-          { id: Date.now(), content: value, done: false, category },
-        ],
+        [modalOpen.id]: [{ id: Date.now(), content: value, done: false, category }],
       };
     }
 
@@ -102,7 +97,7 @@ const BlockModal = () => {
       })
 
       .then((res) => {
-        console.log("success");
+        // console.log("success");
       })
       .catch((e) => {
         console.log(e);
@@ -110,9 +105,7 @@ const BlockModal = () => {
   };
   const deleteSchedule = (id) => {
     const newBlocks = { ...blocks };
-    newBlocks[modalOpen.id] = newBlocks[modalOpen.id].filter(
-      (value) => value.id !== id
-    );
+    newBlocks[modalOpen.id] = newBlocks[modalOpen.id].filter((value) => value.id !== id);
     setBlocks(newBlocks);
   };
   const doneSchecule = (id) => {
@@ -130,14 +123,8 @@ const BlockModal = () => {
   };
   return (
     <AnimatePresence>
-      <Modal
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        <Overlay
-          onClick={() => setModalOpen({ state: false, id: null })}
-        ></Overlay>
+      <Modal initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <Overlay onClick={() => setModalOpen({ state: false, id: null })}></Overlay>
         <ModalView>
           <div>
             {dateFormat && (
@@ -156,19 +143,13 @@ const BlockModal = () => {
                   key={idx}
                 >
                   <span>
-                    <span
-                      style={{ cursor: "pointer" }}
-                      onClick={() => doneSchecule(data.id)}
-                    >
+                    <span style={{ cursor: "pointer" }} onClick={() => doneSchecule(data.id)}>
                       {data.done ? "✅" : "⬜"}
                     </span>
                     <span style={{ marginLeft: "5px" }}>[{data.category}]</span>
                     <span style={{ marginLeft: "5px" }}>{data.content}</span>
                   </span>
-                  <span
-                    style={{ cursor: "pointer" }}
-                    onClick={() => deleteSchedule(data.id)}
-                  >
+                  <span style={{ cursor: "pointer" }} onClick={() => deleteSchedule(data.id)}>
                     ❌
                   </span>
                 </ModalBlock>
@@ -181,12 +162,7 @@ const BlockModal = () => {
               value={category}
               placeholder="카테고리"
             />
-            <BlockInput
-              width={80}
-              onChange={onChangeText}
-              value={value}
-              placeholder="일정"
-            />
+            <BlockInput width={80} onChange={onChangeText} value={value} placeholder="일정" />
             <button style={{ display: "none" }} type="submit"></button>
           </BlockForm>
         </ModalView>
