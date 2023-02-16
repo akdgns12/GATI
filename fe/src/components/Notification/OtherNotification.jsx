@@ -16,10 +16,14 @@ export default function OtherNotification(props) {
   const noti = props.noti;
   var notiMsg;
   if (noti == null || noti.type == undefined) notiMsg = "";
-  else if (noti.type === 2) notiMsg = `${noti.nickname} 님이 회원님의 게시글에 댓글을 남겼습니다`;
-  else if (noti.type === 3) notiMsg = `${noti.nickname} 님이 회원님의 사진을 좋아합니다`;
-  else if (noti.type === 4) notiMsg = `${noti.groupName}에서 이번주 미션이 시작외었어요!`;
-  else if (noti.type === 5) notiMsg = `${noti.groupName}의 이번주 미션이 완료되었습니다!`;
+  else if (noti.type === 2)
+    notiMsg = `${noti.nickname} 님이 회원님의 게시글에 댓글을 남겼습니다`;
+  else if (noti.type === 3)
+    notiMsg = `${noti.nickname} 님이 회원님의 사진을 좋아합니다`;
+  else if (noti.type === 4)
+    notiMsg = `${noti.groupName}에서 이번주 미션이 시작외었어요!`;
+  else if (noti.type === 5)
+    notiMsg = `${noti.groupName}의 이번주 미션이 완료되었습니다!`;
   else notiMsg = "";
 
   if (!checked)

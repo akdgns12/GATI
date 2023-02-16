@@ -37,6 +37,7 @@ const contStyle = css`
     .edit-btn {
       display: inline-block;
       vertical-align: bottom;
+      color: #ff9494;
     }
   }
   .input-label {
@@ -129,7 +130,11 @@ const CreatePost = (props) => {
     }
 
     if (event.target.img.files[0] != undefined) {
-      formData.append("file", event.target.img.files[0], event.target.img.files[0].name);
+      formData.append(
+        "file",
+        event.target.img.files[0],
+        event.target.img.files[0].name
+      );
     } else {
       console.log("NO IMAGE");
     }
@@ -204,7 +209,12 @@ const CreatePost = (props) => {
       <Box className="photo">
         <Box className="photo-label">사진 선택</Box>
         <Box className="photo-box">
-          <Box className="photo-prev" component="img" src={imgURL} alt="please select photo" />
+          <Box
+            className="photo-prev"
+            component="img"
+            src={imgURL}
+            alt="please select photo"
+          />
         </Box>
         <label htmlFor="select-img">
           <Button className="edit-btn" component="span">
@@ -247,12 +257,19 @@ const CreatePost = (props) => {
       <Box className="button-group">
         <Button
           type="submit"
-          variant="contained"
-          disabled={variant == "modify" || (isIMG && isContent && isTag) ? false : true}
+          variant="text"
+          style={{ color: "black" }}
+          disabled={
+            variant == "modify" || (isIMG && isContent && isTag) ? false : true
+          }
         >
           확인
         </Button>
-        <Button variant="outlined" onClick={backToMain}>
+        <Button
+          style={{ color: "#ff9494" }}
+          variant="text"
+          onClick={backToMain}
+        >
           취소
         </Button>
       </Box>

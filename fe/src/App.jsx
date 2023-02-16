@@ -1,9 +1,15 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation, Navigate, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import AppBar from "./components/AppBar";
-
+import Error from "./components/Error";
 import Home from "./pages/Main/MainPage";
 
 import Calendar2 from "./pages/Calendar/Calendar2";
@@ -11,7 +17,7 @@ import PhotoBookPage from "./pages/PhotoBook/PhotoBookPage";
 import GoTogether from "./pages/GoTogether/GoTogetherPage";
 import Login from "./pages/LogIn/LoginPage";
 import AdminPage from "./pages/Admins/AdminPage";
-import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage"
+import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage";
 import AdminRouter from "./pages/Admins/AdminRouter";
 
 import { Container, createTheme } from "@mui/material";
@@ -47,34 +53,36 @@ const App = () => {
           console.log("UNAUTHORIZED !!!");
           const refreshToken = loginUser.refreshToken;
           // console.log(refreshToken);
-          const response = refreshClient.get("/refresh",
-            {
-              headers: {
-                token: refreshToken,
-              }
-            });
-          response.then((res) => {
-            console.log("REFRESH !!!")
-            // console.log(res);
-            if (res != null && res.data.msg === "success") {
-              dispatch(updateToken(res.data['new accessToken']));
-              console.log("NEW Access token : " + res.data['new accessToken']);
-              originalRequest.headers.Authorization = `Bearer ${res.data['new accessToken']}`;
-              // console.log(originalRequest);
-              const finalResponse = httpClient(originalRequest);
-              // finalResponse.then((res) => { console.log(res) }).catch((error) => console.log(error));
-              console.log(finalResponse);
-              return finalResponse;
-            }
-            else {
-              console.log("FAILED TO REFRESH TOKEN");
-              return error;
-            }
-          }).catch((error) => {
-            console.log(error);
-            doLogOut();
-            navigate("/login");
+          const response = refreshClient.get("/refresh", {
+            headers: {
+              token: refreshToken,
+            },
           });
+          response
+            .then((res) => {
+              console.log("REFRESH !!!");
+              // console.log(res);
+              if (res != null && res.data.msg === "success") {
+                dispatch(updateToken(res.data["new accessToken"]));
+                console.log(
+                  "NEW Access token : " + res.data["new accessToken"]
+                );
+                originalRequest.headers.Authorization = `Bearer ${res.data["new accessToken"]}`;
+                // console.log(originalRequest);
+                const finalResponse = httpClient(originalRequest);
+                // finalResponse.then((res) => { console.log(res) }).catch((error) => console.log(error));
+                console.log(finalResponse);
+                return finalResponse;
+              } else {
+                console.log("FAILED TO REFRESH TOKEN");
+                return error;
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              doLogOut();
+              navigate("/login");
+            });
         }
         return error;
       }
@@ -83,7 +91,9 @@ const App = () => {
 
   useEffect(() => {
     console.log("Token modified");
-    httpClient.defaults.headers.common["Authorization"] = `Bearer ${loginUser.accessToken}`;
+    httpClient.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${loginUser.accessToken}`;
   }, [loginUser]);
 
   function excludeHeader() {
@@ -96,7 +106,9 @@ const App = () => {
     if (isLoginPage) return false;
     if (logIn) {
       // console.log("add to header : " + loginUser.accessToken);
-      httpClient.defaults.headers.common["Authorization"] = `Bearer ${loginUser.accessToken}`;
+      httpClient.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${loginUser.accessToken}`;
       return false;
     }
     return true;
@@ -114,6 +126,7 @@ const App = () => {
         <Route path="/pictg/*" element={<PictureTogetherPage />} />
         <Route path="/login/*" element={<Login />} />
         <Route path="/admin/*" element={<AdminRouter />} />
+        <Route path="/error" element={<Error />} />
       </Routes>
       {!excludeHeader() && <NavBar />}
     </Container>
