@@ -74,7 +74,7 @@ export default function GoTogether() {
         <Box sx={{ bgcolor: "white", borderRadius: 1, margin: 3 }}>
           {cities.map((city, index) => {
             return (
-              <Box>
+              <Box key={index}>
                 <City key={index} city={city} value="hiiii" />
               </Box>
             );

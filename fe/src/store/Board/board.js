@@ -10,7 +10,7 @@ export const loadMainFeed = createAsyncThunk(
       const response = await httpClient.get("/boards/page", {
         params: reqData,
       });
-      return response.data;
+      return response == undefined ? response : response.data;
     } catch (error) {
       console.log(error);
       return rejectWithValue(error);
