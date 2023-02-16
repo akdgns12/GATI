@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -27,8 +28,10 @@ public class NotiService {
         List<Noti> noties = notiRepository.findByUserId(userId);
         int size = noties.size();
         List<NotiDto> result = new ArrayList<>();
-        for (int i=1; i<size; i++) {
-            if(i > 15) break;
+        int cnt = 0;
+        for (int i=size-1; i>=0; i--) {
+            cnt++;
+            if(cnt > 15) break;
             NotiDto noti = new NotiDto.NotiDtoBuilder(noties.get(i)).build();
             result.add(noti);
         }
