@@ -5,6 +5,9 @@ import SetMemberModal from './SetMemberModal';
 
 
 export default function InProgressDefault() {
+
+  const baseURL = process.env.REACT_APP_IMG_ROOT;
+
   // 이번주 Mission 데이터 가져오기
   const getMission = useSelector(state => {
     return state.picsTg.getMission
@@ -36,7 +39,7 @@ export default function InProgressDefault() {
           marginBottom:'30px'
         }}>
         <img
-          src={getMission.img}
+          src={baseURL + getMission.img}
           alt='exampleImg'
           width='200px'/>
       </Box>
