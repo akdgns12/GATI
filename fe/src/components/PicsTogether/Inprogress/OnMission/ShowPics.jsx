@@ -20,7 +20,8 @@ export default function ShowPics(props) {
 
   let variableBox = <Box sx={boxStyle} />
   if (props.dto) {
-    const imgURL = 'https://i8a805.p.ssafy.io/' + props.dto.img
+    const baseURL = process.env.REACT_APP_IMG_ROOT;
+    const imgURL = baseURL + props.dto.img
     const nickName = props.dto.nickName
     variableBox =
       <Box
