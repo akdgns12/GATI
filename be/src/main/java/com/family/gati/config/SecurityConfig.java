@@ -98,7 +98,7 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://3.34.141.63:3001");
         configuration.addAllowedOrigin("http://3.34.141.63:443");
-        configuration.addAllowedOrigin("https://ggati.site");
+        configuration.addAllowedOrigin("https://i8a805.p.ssafy.io");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
