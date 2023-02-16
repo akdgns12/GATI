@@ -118,20 +118,12 @@ const PrimaryAppBar = () => {
   }
 
   return (
-<<<<<<< HEAD
-    <Box sx={{ flexGrow: 1, height:'100px'}}>
-=======
     <Box sx={{ flexGrow: 1, height: "100px" }}>
-<<<<<<< HEAD
->>>>>>> 0676e031dd58db1f35a58ea38c7ceffcfb32b62b
-      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
-=======
       <AppBar
         open={open}
         position="fixed"
         style={{ background: "rgb(255, 255, 255, 1.0)" }}
       >
->>>>>>> 3015814ebc23f37c885950d1b6842960eded89ac
         <Toolbar
           sx={{
             display: "flex",
