@@ -27,7 +27,7 @@ export default function MissionCompleted() {
         padding:3,
       }}
     >
-      <Typography align="center" variant="h4" fontWeight={800} marginBottom="30px">이번주 미션 완료</Typography>
+      <Typography color='#0081B4' align="center" variant="h4" fontWeight={500} marginBottom="30px" >이번주 미션 완료</Typography>
       <Typography style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
       <Typography style={{ marginBottom:'30px'}}>
         {getMission.content}

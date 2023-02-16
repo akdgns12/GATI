@@ -24,6 +24,7 @@ import MyInfo from "./SideBar/MyInfo";
 import Family from "./SideBar/Family";
 import Logout from "./SideBar/Logout";
 import FamilyCreate from "./SideBar/FamilyCreate";
+import NotificationMenu from "./Notification/NotificationMenu";
 import { useNavigate } from "react-router";
 import { doLogOut } from "../utils/logOutUtil";
 import CreateFamilyModal from "./SideBar/CreateFamilyModal";
@@ -31,6 +32,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import httpClient from "../utils/axios";
 import { loadNotification } from "../store/Nofitication/noti";
+
+// fontawesome
+import '../App.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell as fulfilledBell} from '@fortawesome/free-solid-svg-icons';
+import { faBell as emptyBell } from '@fortawesome/free-regular-svg-icons';
+
 
 const PrimaryAppBar = () => {
   const drawerWidth = "80%";
@@ -40,7 +48,9 @@ const PrimaryAppBar = () => {
   const [family, setFamily] = useState(false);
   const [familyinfo, setFamilyinfo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [groupIMG, setGroupIMG] = useState("");
+  const [bell, setBell]= useState(false);
 
   const { loginUser, mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -99,20 +109,36 @@ const PrimaryAppBar = () => {
     navigate("/");
   };
 
+  function handleNotiOpen(event) {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
+    setBell(true)
+    setTimeout(()=>{setBell(false)},2000)
+  }
+
   return (
+<<<<<<< HEAD
     <Box sx={{ flexGrow: 1, height:'100px'}}>
+=======
+    <Box sx={{ flexGrow: 1, height: "100px" }}>
+>>>>>>> 0676e031dd58db1f35a58ea38c7ceffcfb32b62b
       <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
-        <Toolbar sx={{
-          display:'flex', 
-          flexWrap:'wrap',  
-          alignItems:'center', 
-          justifyContent: "space-between", 
-          height: "70px"
-        }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: "70px",
+          }}
+        >
           <Box
             sx={{
-              display:"flex", alignItems:"center", width:"77%"
-            }}>
+              display: "flex",
+              alignItems: "center",
+              width: "77%",
+            }}
+          >
             <Avatar
               onClick={showmsg}
               sx={{
@@ -121,12 +147,12 @@ const PrimaryAppBar = () => {
                 marginRight: 1.5,
               }}
               alt="gati img."
-              src={Img}
+              src={groupIMG}
               style={{ display: "inline-block", cursor: "pointer" }}
             />
             <Typography
               variant="h6"
-              sx={{fontFamily:'ONE-Mobile-POP'}}
+              sx={{ fontFamily: "ONE-Mobile-POP" }}
               color="rgb(32,32,32)"
               style={{ display: "inline-block" }}
             >
@@ -135,12 +161,21 @@ const PrimaryAppBar = () => {
           </Box>
           <Box
             sx={{
-              display:"flex",
-              justifyContent:"center",
-              alignItems:"center"
-            }}>
-            <IconButton >
-              <NotificationsOutlinedIcon style={{ fontSize:"30px", color:"FF9494"}}/>
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <IconButton
+              style={{ fontSize: "25px", color: "FF9494" }}
+              onClick={handleNotiOpen}>
+              {
+                bell ? <FontAwesomeIcon className="fulfilled-bell" icon={fulfilledBell} /> : <FontAwesomeIcon className="empty-bell" icon={emptyBell} />
+              }
+              {/* <NotificationsOutlinedIcon
+                style={{ fontSize: "30px", color: "FF9494" }}
+                onClick={handleNotiOpen}
+              /> */}
             </IconButton>
             <IconButton
               size="large"
@@ -151,7 +186,7 @@ const PrimaryAppBar = () => {
               onClick={handleDrawerOpen}
               sx={{ mr: 2, ...(open && { display: "none" }), m: 0, p: 0 }}
             >
-              <MenuIcon style={{ fontSize:'30px', color:'FF9494'}} />
+              <MenuIcon style={{ fontSize: "30px", color: "FF9494" }} />
             </IconButton>
           </Box>
         </Toolbar>
@@ -171,15 +206,8 @@ const PrimaryAppBar = () => {
         >
           <Container>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <IconButton
-                onClick={handleDrawerClose}
-                sx={{ fontSize: "large" }}
-              >
-                {theme.direction === "rtl" ? (
-                  <ChevronLeftIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
+              <IconButton onClick={handleDrawerClose} sx={{ fontSize: "large" }}>
+                {theme.direction === "rtl" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
               </IconButton>
               <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
             </Box>
@@ -189,12 +217,7 @@ const PrimaryAppBar = () => {
           </Container>
           <Divider />
           <Container>
-            <Box
-              display="flex"
-              spacing={1}
-              justifyContent="space-between"
-              sx={{ p: 1 }}
-            >
+            <Box display="flex" spacing={1} justifyContent="space-between" sx={{ p: 1 }}>
               <Button onClick={openMyinfo} variant="outlined">
                 내 정보
               </Button>
@@ -220,6 +243,7 @@ const PrimaryAppBar = () => {
         </Drawer>
       </Box>
       <CreateFamilyModal open={modalOpen} setOpen={setModalOpen} />
+      <NotificationMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </Box>
   );
 };
