@@ -46,8 +46,8 @@ export default function Completed() {
               <Box onClick={()=>navigate('/pictg/detail/'+ item.id)}>
                 <img
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                  src={baseURL + item.img}
-                  srcSet={baseURL + item.img}
+                  src={baseURL + '/' + item.img}
+                  srcSet={baseURL + '/' + item.img}
                   alt={item.title}
                   loading="loading..."
                 />
