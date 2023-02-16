@@ -58,7 +58,7 @@ export default function UploadPic() {
   let content = null
   if (myUpload != 0) {
     const baseURL = process.env.REACT_APP_IMG_ROOT;
-    const imgURL = baseURL + myUpload[0].img
+    const imgURL = baseURL + '/' + myUpload[0].img
     console.log(imgURL)
     
     content =
