@@ -53,16 +53,6 @@ spring:
   h2:
     console:
       enabled: true
-#security:
-#  oauth2:
-#    client:
-#      registration:
-#        google:
-#          client-id: 152956967648-0uksl64kpstokcucj62slbbv0gp1gv5m.apps.googleusercontent.com
-#          client-secret:  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
-#          redirectUri: "http://3.34.141.63:8080/oauth2/callback/google"
-#          scope: profile, email
-
 
 app:
   jwtSecret: jwtsigntutorialasdfasdfasdfasdfasdf
