@@ -18,7 +18,7 @@ import { RecoilRoot } from "recoil";
 import { createTheme, ThemeProvider } from "@mui/material";
 
 // CSS - 폰트
-import './App.css'
+import './index.css'
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -41,12 +41,44 @@ const store = configureStore({
   middleware: customizedMiddleware,
 });
 
-// MUI 컴포넌트에 폰트 적용
+// font : MUI 컴포넌트에 폰트 적용
 const theme = createTheme({
-  typography : {
-    fontFamily:'ONE-Mobile-POP'
-  }
-})
+  typography: {
+    h6 : {
+      fontFamily: 'ONE-Mobile-POP',
+    },
+    h5 : {
+      fontFamily: 'ONE-Mobile-POP',
+    },
+    h4 : {
+      fontFamily: 'ONE-Mobile-POP',
+    },
+    h3 : {
+      fontFamily: 'ONE-Mobile-POP',
+    },
+    side : {
+      fontFamily: 'ONE-Mobile-POP',
+      fontSize: '18px'
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'ONE-Mobile-POP',
+        },
+      },
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'ONE-Mobile-POP',
+        },
+      },
+    },
+  },
+});
+
 
 export const persistor = persistStore(store);
 

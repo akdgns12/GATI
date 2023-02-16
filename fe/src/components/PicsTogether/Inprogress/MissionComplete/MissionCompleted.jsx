@@ -35,7 +35,7 @@ export default function MissionCompleted() {
           backgroundColor:'#FFF5E4',
           borderRadius:'20px'
         }}>
-        <Typography textAlign="center" style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
+        <Typography variant="h6" fontSize="18px" textAlign="center" style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
         <Typography style={{ marginBottom:'30px'}}>
           {getMission.content}
         </Typography>

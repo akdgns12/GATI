@@ -24,7 +24,7 @@ import refreshClient from "./utils/refreshClient";
 import { doLogOut } from "./utils/logOutUtil";
 
 // css
-import './App.css'
+import './index.css'
 
 const App = () => {
   const location = useLocation();

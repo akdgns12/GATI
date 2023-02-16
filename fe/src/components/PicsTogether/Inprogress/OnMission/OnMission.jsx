@@ -67,7 +67,7 @@ export default function OnMission() {
         }}
       >
         <Stack direction="row" spacing={2}>
-          <Typography align="center" fontWeight="bold" fontSize="15px">
+          <Typography variant="h6" align="center" fontWeight="bold" fontSize="18px">
             {" "}
             {getMission.title}
           </Typography>
