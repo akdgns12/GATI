@@ -47,7 +47,7 @@ export default function MissionCompleted() {
           marginBottom:'30px'
         }}>
         <img
-          src={baseURL + getMission.img}
+          src={baseURL + '/' + getMission.img}
           alt='exampleImg'
           width='200px'/>
       </Box>

@@ -76,7 +76,7 @@ export default function MissionDetailPage() {
         <CardMedia
           component="img"
           width="100%"
-          image={baseURL + mission.img}
+          image={baseURL + '/' + mission.img}
           alt="Mission Img"
         />
         <CardActions sx={{borderBottom: "1px dashed #D9D9D9"}} disableSpacing={true}>
