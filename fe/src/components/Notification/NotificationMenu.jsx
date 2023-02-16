@@ -25,9 +25,6 @@ export default function NotificationMenu(props) {
     props.setAnchorEl(null);
   };
 
-  const type = notifications.length;
-  console.log(type);
-
   return (
     <Menu
       id="basic-menu"
@@ -49,7 +46,7 @@ export default function NotificationMenu(props) {
                 variant="notification"
               />
             );
-          } else return <OtherNotification noti={notification} />;
+          } else return <OtherNotification key={index} noti={notification} />;
         })}
     </Menu>
   );

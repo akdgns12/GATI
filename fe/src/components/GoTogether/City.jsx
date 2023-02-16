@@ -1,11 +1,7 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { Card, CardContent, CardHeader, CardMedia } from "@mui/material";
+import React, { Fragment } from "react";
+import { Card, CardContent, CardMedia } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import "./City.css";
-import Container from "@mui/material/Container";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -69,14 +65,14 @@ export default function City(props) {
       <Slider {...settings} style={{ height: "25vh" }}>
         {city.recommandDtos.map((img, idx) => {
           return (
-            <>
+            <Fragment key={idx}>
               <CardMedia height={170} component="img" image={img.firstimage} />
               <CardContent style={{ padding: "2px", margin: "2px" }}>
                 <Typography textAlign="center" color="#FF9494">
                   {img.title}
                 </Typography>
               </CardContent>
-            </>
+            </Fragment>
           );
         })}
       </Slider>
