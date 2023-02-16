@@ -57,7 +57,8 @@ export default function UploadPic() {
   // user가 이미 사진을 업로드 한 경우
   let content = null
   if (myUpload != 0) {
-    const imgURL = 'https://i8a805.p.ssafy.io/' + myUpload[0].img
+    const baseURL = process.env.REACT_APP_IMG_ROOT;
+    const imgURL = baseURL + myUpload[0].img
     console.log(imgURL)
     
     content =
