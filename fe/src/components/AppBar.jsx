@@ -57,6 +57,9 @@ const PrimaryAppBar = () => {
 
   const theme = useTheme();
 
+  const notifications = useSelector((state) => state.noti);
+  console.log(notifications);
+
   useEffect(() => {
     dispatch(loadNotification(loginUser.userId));
   }, []);
