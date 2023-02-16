@@ -15,13 +15,14 @@ export default function NotificationMenu(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadNotification(loginUser.userId))
-      .then((res) => {})
-      .catch((error) => console.log(error));
-  }, [props.anchorEl]);
+    if (open) {
+      dispatch(loadNotification(loginUser.userId)).catch((error) =>
+        console.log(error)
+      );
+    }
+  }, [open]);
 
   const handleClose = () => {
-    // console.log("close");
     props.setAnchorEl(null);
   };
 
@@ -34,7 +35,7 @@ export default function NotificationMenu(props) {
       MenuListProps={{
         "aria-labelledby": "basic-button",
       }}
-      PaperProps={{ style: { width: 300 } }}
+      PaperProps={{ style: { width: 300, maxHeight: "45vh" } }}
     >
       {Array.isArray(notifications) &&
         notifications.map((notification, index) => {

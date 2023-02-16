@@ -24,6 +24,7 @@ import "../../index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fulfilledHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
+import { Fragment } from "react";
 
 export default function ArticleCard(props) {
   const navigate = useNavigate();
@@ -92,14 +93,18 @@ export default function ArticleCard(props) {
 
   return (
     <>
-      <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
+      <Card
+        sx={{ borderRadius: 1 }}
+        style={{ marginBottom: "10px", width: "100%" }}
+      >
         <CardHeader
           action={
             <IconButton
               aria-label="settings"
               onClick={showOptions}
               style={{
-                display: article.userId == loginUser.userId ? "inline-block" : "none",
+                display:
+                  article.userId == loginUser.userId ? "inline-block" : "none",
               }}
             >
               <MoreHorizIcon />
@@ -131,14 +136,20 @@ export default function ArticleCard(props) {
               }}
             /> */}
             {(article.userLike === 1) ^ toggleLike ? (
-              <FontAwesomeIcon className="fulfilled-heart" icon={fulfilledHeart} />
+              <FontAwesomeIcon
+                className="fulfilled-heart"
+                icon={fulfilledHeart}
+              />
             ) : (
               <FontAwesomeIcon className="empty-heart" icon={emptyHeart} />
             )}
           </IconButton>
           {article.likes + likeVar}
           <Box style={{ marginLeft: "auto" }}>
-            <Typography variant="body4" style={{ fontWeight: "bold", marginRight: "10px" }}>
+            <Typography
+              variant="body4"
+              style={{ fontWeight: "bold", marginRight: "10px" }}
+            >
               {article.createTime != null && article.createTime.split("T")[0]}
             </Typography>
             {bookmark}
@@ -148,7 +159,7 @@ export default function ArticleCard(props) {
         {variant == "detail" &&
           article.tag != null &&
           article.tag.map((tag, index) => {
-            return <>#{tag.tagContent}&nbsp;</>;
+            return <Fragment>#{tag.tagContent}&nbsp;</Fragment>;
           })}
         <CardContent>
           <Typography variant="body2" style={{ textAlign: "left" }}>
