@@ -16,6 +16,8 @@ export default function PicsMainPage() {
   const mainGroup = useSelector(state=>{return state.user.mainGroup})
   console.log('userId', userId, 'mainGroup', mainGroup.id)
 
+  console.log('미션 메인 페이지')
+
   React.useEffect(()=>{
     dispatch(asyncGetMission(mainGroup.id))
   },[])

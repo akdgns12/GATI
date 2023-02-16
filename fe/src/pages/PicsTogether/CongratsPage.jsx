@@ -23,9 +23,9 @@ export default function CongratsPage() {
         }}>
       <Typography variant="h3" marginBottom="50px" color="#665c49" fontWeight="800">이번주 미션 성공</Typography>
       <img style={{width:'300px', height:'300px'}} src={imgPath} alt="congratulations"/>
-      <Box sx={{ display:'none'}} >
+      {/* <Box sx={{ display:'none'}} > */}
         <CombinedImg />
-      </Box>
+      {/* </Box> */}
     </div>
 
   )
