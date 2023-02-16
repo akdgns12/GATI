@@ -18,8 +18,7 @@ import { RecoilRoot } from "recoil";
 import { createTheme, ThemeProvider } from "@mui/material";
 
 // CSS - 폰트
-import './index.css'
-
+import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -44,57 +43,56 @@ const store = configureStore({
 // font : MUI 컴포넌트에 폰트 적용
 const theme = createTheme({
   typography: {
-    h6 : {
-      fontFamily: 'ONE-Mobile-POP',
+    h6: {
+      fontFamily: "ONE-Mobile-POP",
     },
-    h5 : {
-      fontFamily: 'ONE-Mobile-POP',
+    h5: {
+      fontFamily: "ONE-Mobile-POP",
     },
-    h4 : {
-      fontFamily: 'ONE-Mobile-POP',
+    h4: {
+      fontFamily: "ONE-Mobile-POP",
     },
-    h3 : {
-      fontFamily: 'ONE-Mobile-POP',
+    h3: {
+      fontFamily: "ONE-Mobile-POP",
     },
-    side : {
-      fontFamily: 'ONE-Mobile-POP',
-      fontSize: '18px'
+    side: {
+      fontFamily: "ONE-Mobile-POP",
+      fontSize: "18px",
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          fontFamily: 'ONE-Mobile-POP',
+          fontFamily: "ONE-Mobile-POP",
         },
       },
     },
     MuiToggleButton: {
       styleOverrides: {
         root: {
-          fontFamily: 'ONE-Mobile-POP',
+          fontFamily: "ONE-Mobile-POP",
         },
       },
     },
   },
 });
 
-
 export const persistor = persistStore(store);
 
 root.render(
   <ThemeProvider theme={theme}>
-    <React.StrictMode>
-      <BrowserRouter>
-        <RecoilRoot>
+    {/* <React.StrictMode> */}
+    <BrowserRouter>
+      <RecoilRoot>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <App />
           </PersistGate>
         </Provider>
-        </RecoilRoot>
-      </BrowserRouter>
-    </React.StrictMode>
+      </RecoilRoot>
+    </BrowserRouter>
+    {/* </React.StrictMode> */}
   </ThemeProvider>
 );
 
