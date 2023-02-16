@@ -18,7 +18,6 @@ export const postCalendar = createAsyncThunk(
 
     try {
       const response = await httpClient.post("/plan", Data);
-      console.log(response.data);
       return response.plan;
     } catch (error) {
       console.log(error);
