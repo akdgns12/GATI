@@ -28,8 +28,7 @@ import { doLogOut } from "../utils/logOutUtil";
 import CreateFamilyModal from "./SideBar/CreateFamilyModal";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { loadNotification } from "../store/Nofitication/noti";
-import { clearUserInfo } from "../store/User/user";
+import { clearUserInfo, updateToken } from "../store/User/user";
 
 // fontawesome
 import "../index.css";
@@ -55,9 +54,9 @@ const PrimaryAppBar = () => {
 
   const theme = useTheme();
 
-  useEffect(() => {
-    dispatch(loadNotification(loginUser.userId));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(loadNotification(loginUser.userId));
+  // }, []);
 
   useEffect(() => {
     setGroupIMG(process.env.REACT_APP_IMG_ROOT + "/" + mainGroup.img);
@@ -113,20 +112,17 @@ const PrimaryAppBar = () => {
 
   function handleNotiOpen(event) {
     event.preventDefault();
-    setAnchorEl(event.currentTarget);
-    setBell(true);
-    setTimeout(() => {
-      setBell(false);
-    }, 2000);
+    dispatch(updateToken("+++"));
+    // setAnchorEl(event.currentTarget);
+    // setBell(true);
+    // setTimeout(() => {
+    //   setBell(false);
+    // }, 2000);
   }
 
   return (
     <Box sx={{ flexGrow: 1, height: "100px" }}>
-      <AppBar
-        open={open}
-        position="fixed"
-        style={{ background: "rgb(255, 255, 255, 1.0)" }}
-      >
+      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
         <Toolbar
           sx={{
             display: "flex",
@@ -170,15 +166,9 @@ const PrimaryAppBar = () => {
               alignItems: "center",
             }}
           >
-            <IconButton
-              style={{ fontSize: "25px", color: "FF9494" }}
-              onClick={handleNotiOpen}
-            >
+            <IconButton style={{ fontSize: "25px", color: "FF9494" }} onClick={handleNotiOpen}>
               {bell ? (
-                <FontAwesomeIcon
-                  className="fulfilled-bell"
-                  icon={fulfilledBell}
-                />
+                <FontAwesomeIcon className="fulfilled-bell" icon={fulfilledBell} />
               ) : (
                 <FontAwesomeIcon className="empty-bell" icon={emptyBell} />
               )}
@@ -216,20 +206,10 @@ const PrimaryAppBar = () => {
         >
           <Container>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <IconButton
-                onClick={handleDrawerClose}
-                sx={{ fontSize: "large" }}
-              >
-                {theme.direction === "rtl" ? (
-                  <ChevronLeftIcon />
-                ) : (
-                  <ChevronRightIcon />
-                )}
+              <IconButton onClick={handleDrawerClose} sx={{ fontSize: "large" }}>
+                {theme.direction === "rtl" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
               </IconButton>
-              <HomeOutlinedIcon
-                fontSize="large"
-                sx={{ p: 1, color: "#0081B4" }}
-              />
+              <HomeOutlinedIcon fontSize="large" sx={{ p: 1, color: "#0081B4" }} />
             </Box>
             <Stack direction="row" marginTop={2}>
               <Typography
@@ -238,10 +218,7 @@ const PrimaryAppBar = () => {
               >
                 {loginUser != null ? loginUser.nickName : "?"}
               </Typography>
-              <Typography
-                variant="h5"
-                sx={{ p: 1, fontFamily: "ONE-Mobile-POP" }}
-              >
+              <Typography variant="h5" sx={{ p: 1, fontFamily: "ONE-Mobile-POP" }}>
                 님 안녕하세요
               </Typography>
             </Stack>
@@ -289,7 +266,7 @@ const PrimaryAppBar = () => {
           {/* <Divider /> */}
         </Drawer>
       </Box>
-      <CreateFamilyModal open={modalOpen} setOpen={setModalOpen} />
+      <CreateFamilyModal open={modalOpen} setOpen={setModalOpen} setSideOpen={setOpen} />
       <NotificationMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
     </Box>
   );

@@ -68,7 +68,6 @@ export default function ArticleCard(props) {
   }
 
   function addToPhotoBook() {
-    console.log("add article to Photo Book");
     if (window.confirm("소중한 추억을 앨범에 저장하시겠습니까?")) {
       httpClient
         .post("/boards/save/", null, {
@@ -76,7 +75,7 @@ export default function ArticleCard(props) {
         })
         .then((res) => {
           // console.log(res);
-          alert("소중한 추억 저장완료~ㅎ - akdgns12");
+          alert("소중한 추억 저장완료~ㅎ");
           // if (res.status === 200) alert("add article to photo book");
         });
     }
@@ -93,18 +92,14 @@ export default function ArticleCard(props) {
 
   return (
     <>
-      <Card
-        sx={{ borderRadius: 1 }}
-        style={{ marginBottom: "10px", width: "100%" }}
-      >
+      <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
         <CardHeader
           action={
             <IconButton
               aria-label="settings"
               onClick={showOptions}
               style={{
-                display:
-                  article.userId == loginUser.userId ? "inline-block" : "none",
+                display: article.userId == loginUser.userId ? "inline-block" : "none",
               }}
             >
               <MoreHorizIcon />
@@ -136,20 +131,14 @@ export default function ArticleCard(props) {
               }}
             /> */}
             {(article.userLike === 1) ^ toggleLike ? (
-              <FontAwesomeIcon
-                className="fulfilled-heart"
-                icon={fulfilledHeart}
-              />
+              <FontAwesomeIcon className="fulfilled-heart" icon={fulfilledHeart} />
             ) : (
               <FontAwesomeIcon className="empty-heart" icon={emptyHeart} />
             )}
           </IconButton>
           {article.likes + likeVar}
           <Box style={{ marginLeft: "auto" }}>
-            <Typography
-              variant="body4"
-              style={{ fontWeight: "bold", marginRight: "10px" }}
-            >
+            <Typography variant="body4" style={{ fontWeight: "bold", marginRight: "10px" }}>
               {article.createTime != null && article.createTime.split("T")[0]}
             </Typography>
             {bookmark}
@@ -157,9 +146,9 @@ export default function ArticleCard(props) {
         </CardActions>
 
         {variant == "detail" &&
-          article.tag != null &&
+          Array.isArray(article.tag) &&
           article.tag.map((tag, index) => {
-            return <Fragment>#{tag.tagContent}&nbsp;</Fragment>;
+            return <Fragment key={index}>#{tag.tagContent}&nbsp;</Fragment>;
           })}
         <CardContent>
           <Typography variant="body2" style={{ textAlign: "left" }}>

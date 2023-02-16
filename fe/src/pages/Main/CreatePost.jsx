@@ -79,7 +79,6 @@ const CreatePost = (props) => {
   const { loginUser, mainGroup } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log("mounted");
     if (variant === "modify") {
       const reqData = {
         articleId: articleId,
@@ -88,7 +87,6 @@ const CreatePost = (props) => {
       dispatch(loadPostDetail(reqData))
         .then((data) => {
           // console.log(data);
-          console.log(data.payload.img);
           // setImgURL(URL.createObjectURL(event.target.files[0]));
           var imgPath = process.env.REACT_APP_IMG_ROOT + "/" + data.payload.img;
           setImgURL(imgPath);
@@ -116,27 +114,17 @@ const CreatePost = (props) => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    // console.log("submit form");
-    // console.log(event.target.img.files[0].name);
-    // console.log(event.target.content.value);
-    // console.log(event.target.tag.value);
-    const tagArr = parseTags(event.target.tag.value);
 
+    const tagArr = parseTags(event.target.tag.value);
     const formData = new FormData();
     formData.append("content", event.target.content.value);
-    // formData.append('tagDtos', tagObjs);
+
     for (let i = 0; i < tagArr.length; i++) {
       formData.append(`tagDtos[${i}].tagContent`, tagArr[i]);
     }
 
     if (event.target.img.files[0] != undefined) {
-      formData.append(
-        "file",
-        event.target.img.files[0],
-        event.target.img.files[0].name
-      );
-    } else {
-      console.log("NO IMAGE");
+      formData.append("file", event.target.img.files[0], event.target.img.files[0].name);
     }
 
     if (variant === "create") {
@@ -146,13 +134,12 @@ const CreatePost = (props) => {
       httpClient
         .post(API_URL, formData)
         .then((data) => {
-          console.log(data);
-          alert("article posted");
+          alert("게시물이 등록되었습니다.");
           navigate(props.api == null ? "/" : "/photobook");
         })
         .catch((error) => {
           console.log(error);
-          alert("failed to post article");
+          alert("게시물 작성에 실패하였습니다.\n다시 시도해 주세요.");
         });
     } else if (variant === "modify") {
       formData.append("id", articleId);
@@ -160,12 +147,12 @@ const CreatePost = (props) => {
         .put(API_URL, formData)
         .then((data) => {
           // console.log(data);
-          alert("modified");
+          alert("게시물이 수정되었습니다.");
           navigate(props.api == null ? "/" : "/photobook");
         })
         .catch((error) => {
           console.log(error);
-          alert("failed to modify data");
+          alert("게시물 수정에 실패하였습니다.\n다시 시도해 주세요.");
         });
     }
   }
@@ -182,15 +169,14 @@ const CreatePost = (props) => {
   }
 
   function backToMain() {
-    if (window.confirm("cancel ?")) {
+    if (window.confirm("작성한 데이터는 저장되지 않습니다.\n취소 하시겠습니까?")) {
       // should be fixed
       navigate(-1);
     }
   }
 
   function handleIMGChange(event) {
-    // console.log(event.target.files[0]);
-    setImgURL(URL.createObjectURL(event.target.files[0]));
+    if (event.target.files[0] != undefined) setImgURL(URL.createObjectURL(event.target.files[0]));
     setIsIMG(true);
   }
 
@@ -209,12 +195,7 @@ const CreatePost = (props) => {
       <Box className="photo">
         <Box className="photo-label">사진 선택</Box>
         <Box className="photo-box">
-          <Box
-            className="photo-prev"
-            component="img"
-            src={imgURL}
-            alt="please select photo"
-          />
+          <Box className="photo-prev" component="img" src={imgURL} alt="please select photo" />
         </Box>
         <label htmlFor="select-img">
           <Button className="edit-btn" component="span">
@@ -259,17 +240,11 @@ const CreatePost = (props) => {
           type="submit"
           variant="text"
           style={{ color: "black" }}
-          disabled={
-            variant == "modify" || (isIMG && isContent && isTag) ? false : true
-          }
+          disabled={variant == "modify" || (isIMG && isContent && isTag) ? false : true}
         >
           확인
         </Button>
-        <Button
-          style={{ color: "#ff9494" }}
-          variant="text"
-          onClick={backToMain}
-        >
+        <Button style={{ color: "#ff9494" }} variant="text" onClick={backToMain}>
           취소
         </Button>
       </Box>
