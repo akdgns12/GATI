@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import {Typography, Paper, Button, Box} from '@mui/material';
 import { asyncDeleteMission } from "../../../../store/PicsTogether/picsTg";
+import { borderRadius } from "@mui/system";
 
 
 export default function MissionCompleted() {
@@ -27,11 +28,18 @@ export default function MissionCompleted() {
         padding:3,
       }}
     >
-      <Typography color='#0081B4' align="center" variant="h4" fontWeight={500} marginBottom="30px" >이번주 미션 완료</Typography>
-      <Typography style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
-      <Typography style={{ marginBottom:'30px'}}>
-        {getMission.content}
-      </Typography>
+      <Typography color='#0081B4' textAlign="center" variant="h4" fontWeight={500} marginBottom="30px" >이번주 미션 완료</Typography>
+      <Box
+        sx={{
+          padding:'10px',
+          backgroundColor:'#FFF5E4',
+          borderRadius:'20px'
+        }}>
+        <Typography textAlign="center" style={{ fontWeight:'bold', marginBottom:'20px'}}>{getMission.title}</Typography>
+        <Typography style={{ marginBottom:'30px'}}>
+          {getMission.content}
+        </Typography>
+      </Box>
       <Box
         style={{
           display:'flex',
