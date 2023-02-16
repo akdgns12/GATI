@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME="gati-front-dev"
+IMAGE_NAME="gati-front"
 CONTAINER_ID="$(docker container ls |grep ${IMAGE_NAME}|awk '{print $1}')"
 IMAGE_ID="$(docker images -q ${IMAGE_NAME})"
 EMPTY_STR=""
@@ -35,6 +35,6 @@ fi
 echo "image rm end"
 
 echo "docker run start"
-docker rm -f "gati-front-dev"
-docker run -dp 3001:3000 --mount type=bind,src=$(pwd)/src,target=/fe/src --name gati-front-dev ${IMAGE_NAME}
+docker rm -f "gati-front"
+docker run -dp 3000:3000 --mount type=bind,src=$(pwd)/src,target=/fe/src --name gati-front-dev ${IMAGE_NAME}
 echo "docker run end"
