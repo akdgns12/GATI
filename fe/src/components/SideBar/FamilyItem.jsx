@@ -48,7 +48,6 @@ const FamilyItem = (props) => {
     dispatch(updateMainGroup(props.group));
     props.setSideOpen(false);
     // do sth about main group
-    window.alert("메인 화면으로 돌리는 거 작업해야 함");
   }
 
   return (

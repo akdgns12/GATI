@@ -6,8 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { Avatar, Stack, withStyles } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
@@ -17,7 +16,6 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Img from "../static/big-family.png";
 import { useState } from "react";
 
 import MyInfo from "./SideBar/MyInfo";
@@ -30,16 +28,14 @@ import { doLogOut } from "../utils/logOutUtil";
 import CreateFamilyModal from "./SideBar/CreateFamilyModal";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import httpClient from "../utils/axios";
 import { loadNotification } from "../store/Nofitication/noti";
+import { clearUserInfo } from "../store/User/user";
 
 // fontawesome
-import '../index.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell as fulfilledBell} from '@fortawesome/free-solid-svg-icons';
-import { faBell as emptyBell } from '@fortawesome/free-regular-svg-icons';
-import { borderRadius } from "@mui/system";
-
+import "../index.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell as fulfilledBell } from "@fortawesome/free-solid-svg-icons";
+import { faBell as emptyBell } from "@fortawesome/free-regular-svg-icons";
 
 const PrimaryAppBar = () => {
   const drawerWidth = "80%";
@@ -59,9 +55,6 @@ const PrimaryAppBar = () => {
 
   const theme = useTheme();
 
-  const notifications = useSelector((state) => state.noti);
-  console.log(notifications);
-
   useEffect(() => {
     dispatch(loadNotification(loginUser.userId));
   }, []);
@@ -77,6 +70,8 @@ const PrimaryAppBar = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 
   const openMyinfo = () => {
     setMyinfo(true);
@@ -103,6 +98,9 @@ const PrimaryAppBar = () => {
     setFamilyinfo(false);
 
     if (window.confirm("LOG OUT ?")) {
+      console.log("DO LOG OUT ??");
+      dispatch(clearUserInfo());
+      await sleep(1000);
       doLogOut();
       navigate("/login");
     }
@@ -228,13 +226,22 @@ const PrimaryAppBar = () => {
                   <ChevronRightIcon />
                 )}
               </IconButton>
-              <HomeOutlinedIcon fontSize="large" sx={{ p: 1, color: '#0081B4' }} />
+              <HomeOutlinedIcon
+                fontSize="large"
+                sx={{ p: 1, color: "#0081B4" }}
+              />
             </Box>
-            <Stack direction='row' marginTop={2}>
-              <Typography variant="h5" sx={{ p: 1, color:'#0081B4', fontFamily: "ONE-Mobile-POP"}}>
+            <Stack direction="row" marginTop={2}>
+              <Typography
+                variant="h5"
+                sx={{ p: 1, color: "#0081B4", fontFamily: "ONE-Mobile-POP" }}
+              >
                 {loginUser != null ? loginUser.nickName : "?"}
               </Typography>
-              <Typography variant="h5" sx={{ p: 1, fontFamily: "ONE-Mobile-POP" }}>
+              <Typography
+                variant="h5"
+                sx={{ p: 1, fontFamily: "ONE-Mobile-POP" }}
+              >
                 님 안녕하세요
               </Typography>
             </Stack>
@@ -242,16 +249,32 @@ const PrimaryAppBar = () => {
           <Divider />
           <Container>
             <Stack direction="row" spacing={1} marginY={2}>
-              <Button sx={{borderRadius:'50px', border:'2px solid'}} onClick={openMyinfo} variant="outlined">
+              <Button
+                sx={{ borderRadius: "50px", border: "2px solid" }}
+                onClick={openMyinfo}
+                variant="outlined"
+              >
                 내 <br></br> 정보
               </Button>
-              <Button sx={{borderRadius:'50px', border:'2px solid'}} onClick={openFamily} variant="outlined">
+              <Button
+                sx={{ borderRadius: "50px", border: "2px solid" }}
+                onClick={openFamily}
+                variant="outlined"
+              >
                 가족 그룹
               </Button>
-              <Button sx={{borderRadius:'50px', border:'2px solid'}} onClick={openFamilyinfo} variant="outlined">
+              <Button
+                sx={{ borderRadius: "50px", border: "2px solid" }}
+                onClick={openFamilyinfo}
+                variant="outlined"
+              >
                 가족 등록
               </Button>
-              <Button sx={{borderRadius:'50px', border:'2px solid'}} onClick={openLogout} variant="outlined">
+              <Button
+                sx={{ borderRadius: "50px", border: "2px solid" }}
+                onClick={openLogout}
+                variant="outlined"
+              >
                 로그 아웃
               </Button>
             </Stack>

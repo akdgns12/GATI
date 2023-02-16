@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Routes,
-  Route,
-  useLocation,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import AppBar from "./components/AppBar";
@@ -20,29 +14,32 @@ import AdminPage from "./pages/Admins/AdminPage";
 import PictureTogetherPage from "./pages/PicsTogether/PicsTogetherPage";
 import AdminRouter from "./pages/Admins/AdminRouter";
 
-import { Container, createTheme } from "@mui/material";
+import { Container } from "@mui/material";
 
 import { useSelector, useDispatch } from "react-redux";
-import { updateToken } from "./store/User/user";
+import { updateToken, clearUserInfo } from "./store/User/user";
 
 import httpClient from "./utils/axios";
 import refreshClient from "./utils/refreshClient";
 import { doLogOut } from "./utils/logOutUtil";
 
 // css
-import './index.css'
+import "./index.css";
+import { useState } from "react";
 
 const App = () => {
   const location = useLocation();
   const { loginUser, logIn } = useSelector((state) => state.user);
+  const [prepared, setPrepared] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("RELOADED");
+    console.log("REFRESH TOKEN MODIFIED");
+    console.log("HAS TOKEN, USE INTERCEPTOR");
+
     httpClient.interceptors.response.use(
       function (response) {
-        // console.log(response);
         return response;
       },
       function (error) {
@@ -51,7 +48,11 @@ const App = () => {
         const originalRequest = error.config;
         if (error.response != null && error.response.status === 401) {
           console.log("UNAUTHORIZED !!!");
-          const refreshToken = loginUser.refreshToken;
+          const userStore = JSON.parse(
+            window.localStorage.getItem("persist:root")
+          );
+          const user = JSON.parse(userStore.user);
+          const refreshToken = user.loginUser.refreshToken;
           // console.log(refreshToken);
           const response = refreshClient.get("/refresh", {
             headers: {
@@ -61,12 +62,8 @@ const App = () => {
           response
             .then((res) => {
               console.log("REFRESH !!!");
-              // console.log(res);
               if (res != null && res.data.msg === "success") {
                 dispatch(updateToken(res.data["new accessToken"]));
-                console.log(
-                  "NEW Access token : " + res.data["new accessToken"]
-                );
                 originalRequest.headers.Authorization = `Bearer ${res.data["new accessToken"]}`;
                 // console.log(originalRequest);
                 const finalResponse = httpClient(originalRequest);
@@ -79,22 +76,32 @@ const App = () => {
               }
             })
             .catch((error) => {
+              console.log("REFRESH TOKEN EXPIRED, DO LOGOUT");
               console.log(error);
+              dispatch(clearUserInfo());
+              window.alert("세션이 만료되었습니다. 다시 로그인 해주세요");
               doLogOut();
               navigate("/login");
             });
         }
-        return error;
       }
     );
+    setPrepared(true);
   }, []);
 
+  // useEffect(() => {
+  //   console.log("refreshToken modified");
+  //   // if(loginUser.refreshToken == "") {
+  //   //   httpClient.interceptors.response.eject(tokenInterceptor);
+  //   // }
+  // }, [loginUser.refreshToken]);
+
   useEffect(() => {
-    console.log("Token modified");
+    console.log("ACCESS TOKEN MODIFIED");
     httpClient.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${loginUser.accessToken}`;
-  }, [loginUser]);
+  }, [loginUser.accessToken]);
 
   function excludeHeader() {
     if (location.pathname.startsWith("/login")) return true;
@@ -105,32 +112,32 @@ const App = () => {
     const isLoginPage = location.pathname.startsWith("/login") ? true : false;
     if (isLoginPage) return false;
     if (logIn) {
-      // console.log("add to header : " + loginUser.accessToken);
-      httpClient.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${loginUser.accessToken}`;
       return false;
     }
     return true;
   }
 
-  return (
-    <Container fixed maxWidth="lg" className="App">
-      {/* {doRedirect() && <Navigate to="/login" replace={true} />} */}
-      {!excludeHeader() && <AppBar />}
-      <Routes>
-        <Route path="/*" element={<Home />} />
-        <Route path="/calendar" element={<Calendar2 />} />
-        <Route path="/photobook/*" element={<PhotoBookPage />} />
-        <Route path="/gotg" element={<GoTogether />} />
-        <Route path="/pictg/*" element={<PictureTogetherPage />} />
-        <Route path="/login/*" element={<Login />} />
-        <Route path="/admin/*" element={<AdminRouter />} />
-        <Route path="/error" element={<Error />} />
-      </Routes>
-      {!excludeHeader() && <NavBar />}
-    </Container>
-  );
+  if (prepared) {
+    return (
+      <Container fixed maxWidth="lg" className="App">
+        {/* {doRedirect() && <Navigate to="/login" replace={true} />} */}
+        {!excludeHeader() && <AppBar />}
+        <Routes>
+          <Route path="/*" element={<Home />} />
+          <Route path="/calendar" element={<Calendar2 />} />
+          <Route path="/photobook/*" element={<PhotoBookPage />} />
+          <Route path="/gotg" element={<GoTogether />} />
+          <Route path="/pictg/*" element={<PictureTogetherPage />} />
+          <Route path="/login/*" element={<Login />} />
+          <Route path="/admin/*" element={<AdminRouter />} />
+          <Route path="/error" element={<Error />} />
+        </Routes>
+        {!excludeHeader() && <NavBar />}
+      </Container>
+    );
+  } else {
+    <Error />;
+  }
 };
 
 export default App;
