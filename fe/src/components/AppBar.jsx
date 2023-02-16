@@ -34,11 +34,10 @@ import httpClient from "../utils/axios";
 import { loadNotification } from "../store/Nofitication/noti";
 
 // fontawesome
-import '../App.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell as fulfilledBell} from '@fortawesome/free-solid-svg-icons';
-import { faBell as emptyBell } from '@fortawesome/free-regular-svg-icons';
-
+import "../App.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell as fulfilledBell } from "@fortawesome/free-solid-svg-icons";
+import { faBell as emptyBell } from "@fortawesome/free-regular-svg-icons";
 
 const PrimaryAppBar = () => {
   const drawerWidth = "80%";
@@ -50,7 +49,7 @@ const PrimaryAppBar = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [groupIMG, setGroupIMG] = useState("");
-  const [bell, setBell]= useState(false);
+  const [bell, setBell] = useState(false);
 
   const { loginUser, mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -112,13 +111,19 @@ const PrimaryAppBar = () => {
   function handleNotiOpen(event) {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
-    setBell(true)
-    setTimeout(()=>{setBell(false)},2000)
+    setBell(true);
+    setTimeout(() => {
+      setBell(false);
+    }, 2000);
   }
 
   return (
     <Box sx={{ flexGrow: 1, height: "100px" }}>
-      <AppBar open={open} position="fixed" style={{ background: "rgb(255, 255, 255, 1.0)" }}>
+      <AppBar
+        open={open}
+        position="fixed"
+        style={{ background: "rgb(255, 255, 255, 1.0)" }}
+      >
         <Toolbar
           sx={{
             display: "flex",
@@ -164,10 +169,16 @@ const PrimaryAppBar = () => {
           >
             <IconButton
               style={{ fontSize: "25px", color: "FF9494" }}
-              onClick={handleNotiOpen}>
-              {
-                bell ? <FontAwesomeIcon className="fulfilled-bell" icon={fulfilledBell} /> : <FontAwesomeIcon className="empty-bell" icon={emptyBell} />
-              }
+              onClick={handleNotiOpen}
+            >
+              {bell ? (
+                <FontAwesomeIcon
+                  className="fulfilled-bell"
+                  icon={fulfilledBell}
+                />
+              ) : (
+                <FontAwesomeIcon className="empty-bell" icon={emptyBell} />
+              )}
               {/* <NotificationsOutlinedIcon
                 style={{ fontSize: "30px", color: "FF9494" }}
                 onClick={handleNotiOpen}
@@ -202,8 +213,15 @@ const PrimaryAppBar = () => {
         >
           <Container>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <IconButton onClick={handleDrawerClose} sx={{ fontSize: "large" }}>
-                {theme.direction === "rtl" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              <IconButton
+                onClick={handleDrawerClose}
+                sx={{ fontSize: "large" }}
+              >
+                {theme.direction === "rtl" ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
               </IconButton>
               <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
             </Box>
@@ -213,7 +231,12 @@ const PrimaryAppBar = () => {
           </Container>
           <Divider />
           <Container>
-            <Box display="flex" spacing={1} justifyContent="space-between" sx={{ p: 1 }}>
+            <Box
+              display="flex"
+              spacing={1}
+              justifyContent="space-between"
+              sx={{ p: 1 }}
+            >
               <Button onClick={openMyinfo} variant="outlined">
                 내 정보
               </Button>
