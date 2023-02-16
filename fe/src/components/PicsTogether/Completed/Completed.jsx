@@ -26,7 +26,7 @@ export default function Completed() {
   
   let getMissionList = useSelector(state=>{return state.picsTg.getMissionList})
   const completedMissions = getMissionList.filter(mission=>mission.completed == 2)
-  const imgURL = 'https://i8a805.p.ssafy.io/'
+  const baseURL = process.env.REACT_APP_IMG_ROOT;
 
   return (
     <Box
@@ -46,8 +46,8 @@ export default function Completed() {
               <Box onClick={()=>navigate('/pictg/detail/'+ item.id)}>
                 <img
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                  src={imgURL + item.img}
-                  srcSet={imgURL + item.img}
+                  src={baseURL + item.img}
+                  srcSet={baseURL + item.img}
                   alt={item.title}
                   loading="loading..."
                 />

@@ -8,7 +8,7 @@ const CombinedImg = () => {
   
   const id = useSelector(state => {return state.picsTg.getMission}).id
   const imgList = useSelector(state=>{return state.picsTg.getMission}).missionImageDtos
-  const baseUrl = 'https://i8a805.p.ssafy.io/'
+  const baseUrl = process.env.REACT_APP_IMG_ROOT;
   const newImgList = imgList.map(dto=> {return {src : baseUrl + dto.img}} )
 
   const canvasRef = useRef(null);
