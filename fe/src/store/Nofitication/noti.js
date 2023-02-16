@@ -8,7 +8,7 @@ export const loadNotification = createAsyncThunk(
       const response = await httpClient.get(`/noti/${reqData}`);
       return response;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return rejectWithValue(error);
     }
   }
@@ -25,7 +25,6 @@ const notiSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loadNotification.fulfilled, (state, action) => {
-      // console.log(action);
       state.notifications = action.payload.data;
     });
     builder.addCase(loadNotification.rejected, (action) => {
