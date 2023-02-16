@@ -34,7 +34,7 @@ import httpClient from "../utils/axios";
 import { loadNotification } from "../store/Nofitication/noti";
 
 // fontawesome
-import '../App.css'
+import '../index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell as fulfilledBell} from '@fortawesome/free-solid-svg-icons';
 import { faBell as emptyBell } from '@fortawesome/free-regular-svg-icons';
@@ -228,13 +228,13 @@ const PrimaryAppBar = () => {
                   <ChevronRightIcon />
                 )}
               </IconButton>
-              <HomeOutlinedIcon fontSize="large" sx={{ p: 1, color: '#FF9494' }} />
+              <HomeOutlinedIcon fontSize="large" sx={{ p: 1, color: '#0081B4' }} />
             </Box>
             <Stack direction='row' marginTop={2}>
-              <Typography variant="h5" sx={{ p: 1, color:'#0081B4'}}>
+              <Typography variant="h5" sx={{ p: 1, color:'#0081B4', fontFamily: "ONE-Mobile-POP"}}>
                 {loginUser != null ? loginUser.nickName : "?"}
               </Typography>
-              <Typography variant="h5" sx={{ p: 1 }}>
+              <Typography variant="h5" sx={{ p: 1, fontFamily: "ONE-Mobile-POP" }}>
                 님 안녕하세요
               </Typography>
             </Stack>

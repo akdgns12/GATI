@@ -143,7 +143,9 @@ export default function FamilyInfo() {
       display="flex"
     >
       <Grid item m={1} xs={12}>
-        <Typography>가족 프로필 설정</Typography>
+        <Typography marginY={1} variant="h6" align="left" fontSize="18px">
+          가족 프로필 설정
+        </Typography>
       </Grid>
       <Grid
         container
