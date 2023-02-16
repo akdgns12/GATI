@@ -19,13 +19,17 @@ export default function UploadPic() {
     borderRadius:'16px',
   })
   const changeBoxStyle = () => {
-    setBoxStyle({...boxStyle, border:'2px dashed white'})
+    if (boxStyle.border === '2px dashed #8888') {
+      setBoxStyle({...boxStyle, border:'2px dashed white'})
+    } else {
+    setBoxStyle({...boxStyle, border:'2px dashed #8888'})
+    }
   }
-
   // reqData 
   const getMission = useSelector(state=>{return state.picsTg.getMission})
   const missionId = getMission.id
-  const userId = '1'
+  const userId = useSelector(state=>{return state.user.loginUser}).userId
+  console.log('userId',userId,'missionId',missionId)
   
   // 이미지 파일 업로드 함수
   const imgRef = useRef();
@@ -47,6 +51,7 @@ export default function UploadPic() {
   // 이미지 삭제
   const deleteImg = () => {
     dispatch(asyncDeleteImg(myUpload[0].id))
+    changeBoxStyle()
   }
   
   // user가 이미 사진을 업로드 한 경우

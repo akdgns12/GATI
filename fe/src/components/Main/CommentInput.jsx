@@ -2,18 +2,12 @@ import { React } from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import {
-  Box,
-  CardContent,
-  OutlinedInput,
-  IconButton,
-  FormControl,
-} from "@mui/material";
+import { Box, OutlinedInput, IconButton } from "@mui/material";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 
 import httpClient from "../../utils/axios";
-import { useNavigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateComment } from "../../store/Board/board";
 
 const contStyle = css`
   width: 100%;
@@ -32,6 +26,7 @@ const contStyle = css`
 
 const CommentInput = (props) => {
   const { loginUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   function writeComment(event) {
     event.preventDefault();
@@ -45,9 +40,11 @@ const CommentInput = (props) => {
         content: event.target.comment.value,
         userId: loginUser.userId,
       })
-      .then((data) => {
-        console.log(data);
-        window.alert("여기 이후 작동 작업해야함 : commentInput.jsx");
+      .then(({ data }) => {
+        // console.log(data);
+        dispatch(updateComment({ userId: loginUser.userId, content: event.target.comment.value }));
+        window.alert("댓글이 작성되었습니다.");
+        event.target.comment.value = "";
       })
       .catch((error) => {
         console.log(error);
@@ -66,11 +63,7 @@ const CommentInput = (props) => {
         {" "}
         Comments{" "}
       </Box>
-      <OutlinedInput
-        className="comment-area"
-        placeholder="댓글을 입력하세요."
-        name="comment"
-      />
+      <OutlinedInput className="comment-area" placeholder="댓글을 입력하세요." name="comment" />
 
       <IconButton type="submit" className="submit-btn">
         <ArrowCircleUpIcon color="primary" fontSize="large" />

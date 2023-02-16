@@ -37,6 +37,7 @@ const contStyle = css`
     .edit-btn {
       display: inline-block;
       vertical-align: bottom;
+      color: #ff9494;
     }
   }
   .input-label {
@@ -69,6 +70,9 @@ const CreatePost = (props) => {
   const [imgURL, setImgURL] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [serializedTag, setSerializedTag] = useState("");
+  const [isIMG, setIsIMG] = useState(false);
+  const [isContent, setIsContent] = useState(false);
+  const [isTag, setIsTag] = useState(false);
 
   const articleId = useParams().articleId;
   const { article } = useSelector((state) => state.board);
@@ -124,11 +128,16 @@ const CreatePost = (props) => {
     for (let i = 0; i < tagArr.length; i++) {
       formData.append(`tagDtos[${i}].tagContent`, tagArr[i]);
     }
-    formData.append(
-      "file",
-      event.target.img.files[0],
-      event.target.img.files[0].name
-    );
+
+    if (event.target.img.files[0] != undefined) {
+      formData.append(
+        "file",
+        event.target.img.files[0],
+        event.target.img.files[0].name
+      );
+    } else {
+      console.log("NO IMAGE");
+    }
 
     if (variant === "create") {
       formData.append("userId", loginUser.userId);
@@ -167,7 +176,7 @@ const CreatePost = (props) => {
     let ret = [];
     tags.map((tag, index) => {
       // console.log(tag);
-      ret.push(tag);
+      if (tag != "") ret.push(tag);
     });
     return ret;
   }
@@ -182,6 +191,17 @@ const CreatePost = (props) => {
   function handleIMGChange(event) {
     // console.log(event.target.files[0]);
     setImgURL(URL.createObjectURL(event.target.files[0]));
+    setIsIMG(true);
+  }
+
+  function handleContentChange(event) {
+    if (event.target.value === "") setIsContent(false);
+    else setIsContent(true);
+  }
+
+  function handleTagChange(event) {
+    if (event.target.value === "") setIsTag(false);
+    else setIsTag(true);
   }
 
   return (
@@ -220,6 +240,7 @@ const CreatePost = (props) => {
           name="content"
           style={{ height: "150px" }}
           defaultValue={variant === "modify" && loaded ? article.content : ""}
+          onChange={handleContentChange}
         />
       </FormControl>
       <FormControl variant="standard" style={{ width: "100%" }}>
@@ -230,13 +251,25 @@ const CreatePost = (props) => {
           multiline={true}
           name="tag"
           defaultValue={variant === "modify" && loaded ? serializedTag : ""}
+          onChange={handleTagChange}
         />
       </FormControl>
       <Box className="button-group">
-        <Button type="submit" variant="contained">
+        <Button
+          type="submit"
+          variant="text"
+          style={{ color: "black" }}
+          disabled={
+            variant == "modify" || (isIMG && isContent && isTag) ? false : true
+          }
+        >
           확인
         </Button>
-        <Button variant="outlined" onClick={backToMain}>
+        <Button
+          style={{ color: "#ff9494" }}
+          variant="text"
+          onClick={backToMain}
+        >
           취소
         </Button>
       </Box>

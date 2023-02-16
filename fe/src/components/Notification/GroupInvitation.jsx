@@ -1,14 +1,8 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Button } from "@mui/material";
 
 import httpClient from "../../utils/axios";
@@ -19,11 +13,9 @@ export default function GroupInvitation(props) {
   const { loginUser } = useSelector((state) => state.user);
   const [checked, setChecked] = useState(false);
   const invit = props.invitation;
+  const variant = props.variant == null ? "main" : props.variant;
   var invitMessage =
-    invit.nickname +
-    " 님이 당신을 " +
-    invit.groupName +
-    " 그룹으로 초대하였습니다.";
+    invit.nickname + " 님이 당신을 " + invit.groupName + " 그룹으로 초대하였습니다.";
 
   function acceptInvit(event) {
     event.preventDefault();
@@ -72,7 +64,7 @@ export default function GroupInvitation(props) {
       <Card sx={{ maxWidth: "100%" }} style={{ marginBottom: "10px" }}>
         <CardHeader
           title={invitMessage}
-          titleTypographyProps={{ variant: "body1" }}
+          titleTypographyProps={{ variant: variant === "main" ? "body1" : "body2" }}
           style={{
             textAlign: "left",
             borderWidth: "0 0 thin 0",
@@ -82,7 +74,9 @@ export default function GroupInvitation(props) {
         />
 
         <CardActions disableSpacing={true}>
-          <Typography>{invit.date}</Typography>
+          <Typography variant={variant == "main" ? "body1" : "body2"}>
+            {invit.createTime != null ? invit.createTime.split("T")[0] : ""}
+          </Typography>
           <div style={{ marginLeft: "auto" }}>
             <Button
               variant="outlined"
