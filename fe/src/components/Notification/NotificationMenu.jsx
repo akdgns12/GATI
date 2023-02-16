@@ -1,11 +1,10 @@
 import * as React from "react";
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import GroupInvitation from "./GroupInvitation";
+import OtherNotification from "./OtherNotification";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import httpClient from "../../utils/axios";
 import { loadNotification } from "../../store/Nofitication/noti";
 
 export default function NotificationMenu(props) {
@@ -26,6 +25,9 @@ export default function NotificationMenu(props) {
     props.setAnchorEl(null);
   };
 
+  const type = notifications.length;
+  console.log(type);
+
   return (
     <Menu
       id="basic-menu"
@@ -40,8 +42,14 @@ export default function NotificationMenu(props) {
       {Array.isArray(notifications) &&
         notifications.map((notification, index) => {
           if (notification.type === 1) {
-            return <GroupInvitation key={index} invitation={notification} />;
-          }
+            return (
+              <GroupInvitation
+                key={index}
+                invitation={notification}
+                variant="notification"
+              />
+            );
+          } else return <OtherNotification noti={notification} />;
         })}
     </Menu>
   );

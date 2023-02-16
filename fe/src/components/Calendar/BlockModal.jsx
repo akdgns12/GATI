@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { blocksState, modalState } from "../atoms";
-
+import httpClient from "../../utils/axios";
+import { useSelector } from "react-redux";
+import { dataState } from "../atoms";
+import axios from "axios";
+import { useEffect } from "react";
 
 const DAYS_OF_WEEK = ["일", "월", "화", "수", "목", "금", "토"];
 const BlockModal = () => {
@@ -11,11 +15,36 @@ const BlockModal = () => {
   const [blocks, setBlocks] = useRecoilState(blocksState);
   const [value, setValue] = useState("");
   const [category, setCategory] = useState("");
+  const { loginUser } = useSelector((state) => state.user);
+
+  // 플랜 데이터를 get 해서 저장할 변수
+  const [planData, setData] = useRecoilState(dataState);
+
+  // 데이터를 가져오는 비동기 함수
+  const getData = async () => {
+    await httpClient.get(`/plan/${groupId}`).then((res) => {
+      setData(res.data.result);
+    });
+  };
+
+  planData.map((data) => {
+    console.log(data.memo);
+  });
+
+  useEffect(() => {
+    getData();
+  }, []);
+  const a = planData;
+  console.log(a);
   const date = modalOpen.id && [
     modalOpen.id.slice(0, 4),
     modalOpen.id.slice(4, 6),
     modalOpen.id.slice(6, 8),
   ];
+
+  const groupId = useSelector((state) => {
+    return state.user.mainGroup.id;
+  });
 
   const dateFormat = date && new Date(date[0], Number(date[1]) - 1, date[2]);
   const onChangeText = (e) => {
@@ -55,9 +84,29 @@ const BlockModal = () => {
         ],
       };
     }
+
     setBlocks(newBlocks);
+    // value -> memo, category => title
     setValue("");
     setCategory("");
+
+    httpClient
+      .post("/plan", {
+        endDate: "1",
+        groupId: groupId,
+        memo: value,
+        place: "1",
+        startDate: "1",
+        title: category,
+        userId: loginUser.userId,
+      })
+
+      .then((res) => {
+        console.log("success");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
   const deleteSchedule = (id) => {
     const newBlocks = { ...blocks };

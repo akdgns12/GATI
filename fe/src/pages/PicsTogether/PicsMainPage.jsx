@@ -61,7 +61,7 @@ export default function PicsMainPage() {
         aria-label="Platform"
         style={{
           flex:'auto',
-          margin:'30px',
+          margin:'0 0 30px 0',
           width:'80vw'
         }}
         >

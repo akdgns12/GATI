@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { Avatar, withStyles } from "@mui/material";
+import { Avatar, Stack, withStyles } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import { styled, useTheme } from "@mui/material/styles";
@@ -33,6 +33,14 @@ import { useEffect } from "react";
 import httpClient from "../utils/axios";
 import { loadNotification } from "../store/Nofitication/noti";
 
+// fontawesome
+import '../index.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell as fulfilledBell} from '@fortawesome/free-solid-svg-icons';
+import { faBell as emptyBell } from '@fortawesome/free-regular-svg-icons';
+import { borderRadius } from "@mui/system";
+
+
 const PrimaryAppBar = () => {
   const drawerWidth = "80%";
   const [open, setOpen] = useState(false);
@@ -43,12 +51,16 @@ const PrimaryAppBar = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [groupIMG, setGroupIMG] = useState("");
+  const [bell, setBell] = useState(false);
 
   const { loginUser, mainGroup } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const theme = useTheme();
+
+  const notifications = useSelector((state) => state.noti);
+  console.log(notifications);
 
   useEffect(() => {
     dispatch(loadNotification(loginUser.userId));
@@ -104,6 +116,10 @@ const PrimaryAppBar = () => {
   function handleNotiOpen(event) {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
+    setBell(true);
+    setTimeout(() => {
+      setBell(false);
+    }, 2000);
   }
 
   return (
@@ -156,11 +172,22 @@ const PrimaryAppBar = () => {
               alignItems: "center",
             }}
           >
-            <IconButton>
-              <NotificationsOutlinedIcon
+            <IconButton
+              style={{ fontSize: "25px", color: "FF9494" }}
+              onClick={handleNotiOpen}
+            >
+              {bell ? (
+                <FontAwesomeIcon
+                  className="fulfilled-bell"
+                  icon={fulfilledBell}
+                />
+              ) : (
+                <FontAwesomeIcon className="empty-bell" icon={emptyBell} />
+              )}
+              {/* <NotificationsOutlinedIcon
                 style={{ fontSize: "30px", color: "FF9494" }}
                 onClick={handleNotiOpen}
-              />
+              /> */}
             </IconButton>
             <IconButton
               size="large"
@@ -201,33 +228,33 @@ const PrimaryAppBar = () => {
                   <ChevronRightIcon />
                 )}
               </IconButton>
-              <HomeOutlinedIcon fontSize="large" sx={{ p: 2 }} />
+              <HomeOutlinedIcon fontSize="large" sx={{ p: 1, color: '#0081B4' }} />
             </Box>
-            <Typography variant="h5" sx={{ p: 2 }}>
-              {loginUser != null ? loginUser.nickName : "?"} 님 안녕하세요
-            </Typography>
+            <Stack direction='row' marginTop={2}>
+              <Typography variant="h5" sx={{ p: 1, color:'#0081B4', fontFamily: "ONE-Mobile-POP"}}>
+                {loginUser != null ? loginUser.nickName : "?"}
+              </Typography>
+              <Typography variant="h5" sx={{ p: 1, fontFamily: "ONE-Mobile-POP" }}>
+                님 안녕하세요
+              </Typography>
+            </Stack>
           </Container>
           <Divider />
           <Container>
-            <Box
-              display="flex"
-              spacing={1}
-              justifyContent="space-between"
-              sx={{ p: 1 }}
-            >
-              <Button onClick={openMyinfo} variant="outlined">
-                내 정보
+            <Stack direction="row" spacing={1} marginY={2}>
+              <Button sx={{borderRadius:'50px', border:'2px solid'}} onClick={openMyinfo} variant="outlined">
+                내 <br></br> 정보
               </Button>
-              <Button onClick={openFamily} variant="outlined">
+              <Button sx={{borderRadius:'50px', border:'2px solid'}} onClick={openFamily} variant="outlined">
                 가족 그룹
               </Button>
-              <Button onClick={openFamilyinfo} variant="outlined">
+              <Button sx={{borderRadius:'50px', border:'2px solid'}} onClick={openFamilyinfo} variant="outlined">
                 가족 등록
               </Button>
-              <Button onClick={openLogout} variant="outlined">
+              <Button sx={{borderRadius:'50px', border:'2px solid'}} onClick={openLogout} variant="outlined">
                 로그 아웃
               </Button>
-            </Box>
+            </Stack>
           </Container>
           <Divider />
           <Container sx={{ height: "70%" }}>
