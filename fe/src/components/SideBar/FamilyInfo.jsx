@@ -34,7 +34,7 @@ const imgBoxStyle = css`
     display: inline-flex;
     overflow: hidden;
     .photo-prev {
-      background-color: red;
+      background-color: white;
       max-width: 100%;
       max-height: 100%;
       margin: auto;
@@ -54,14 +54,11 @@ export default function FamilyInfo() {
   const [imgURL, setImgURL] = useState(
     process.env.REACT_APP_IMG_ROOT + "/" + mainGroup.img
   );
-  // const [imgURL, setImgURL] = useState(
-  //   "https://i8a805.p.ssafy.io/image_dev/board/083100211_kakao_login_large_narrow.png"
-  // );
+
   const dispatch = useDispatch();
 
   // console.log(imgURL);
   useEffect(() => {
-    // console.log("LOAD FAMILY MEMBERS");
     setMemberList([]);
     httpClient
       .get(`/family/memberList/${mainGroup.id}`)
@@ -73,30 +70,27 @@ export default function FamilyInfo() {
         }
       })
       .catch((error) => console.log(error));
-    // setLoaded(true);
   }, []);
 
   function handleModify(event) {
     event.preventDefault();
-    // console.log("MODIFY");
-    // const reqData = {
-    //   id: mainGroup.id,
-    //   img: "string",
-    //   name: event.target.familyName.value,
-    // };
+
     const formData = new FormData();
     formData.append("id", mainGroup.id);
     formData.append("name", event.target.familyName.value);
-    formData.append(
-      "multipartFile",
-      event.target.img.files[0],
-      event.target.img.files[0].name
-    );
+    if (event.target.img.files[0] != undefined) {
+      formData.append(
+        "multipartFile",
+        event.target.img.files[0],
+        event.target.img.files[0].name
+      );
+    }
 
     httpClient
       .put("/family", formData)
-      .then(({ data }) => {
-        // console.log(data);
+      .then((res) => {
+        console.log(res);
+        const data = res.data;
         alert("정보 수정이 완료되었습니다");
         // update main group info here
         // console.log(data["modifedFamily: {}"]);
