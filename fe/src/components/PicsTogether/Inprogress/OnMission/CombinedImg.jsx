@@ -8,9 +8,7 @@ const CombinedImg = () => {
   
   const id = useSelector(state => {return state.picsTg.getMission}).id
   const imgList = useSelector(state=>{return state.picsTg.getMission}).missionImageDtos
-  // const imgList = [{img:'https://i.pinimg.com/474x/39/c3/ef/39c3ef7f58cd7766c668d530d76e0f46.jpg'}]
-  const imgURL = 'https://i8a805.p.ssafy.io/'
-  const baseUrl = 'https://i8a805.p.ssafy.io/'
+  const baseUrl = 'https://ggati.site/'
   const newImgList = imgList.map(dto=> {return {src : baseUrl + dto.img}} )
 
   const canvasRef = useRef(null);
