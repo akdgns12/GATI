@@ -1,7 +1,6 @@
 import * as React from "react";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
@@ -36,16 +35,17 @@ const CardOptionModal = (props) => {
   const navigate = useNavigate();
 
   function moveToModify() {
-    console.log("modify btn clicked");
     navigate(`/modify/${props.articleId}`);
   }
 
   function deleteArticle(event) {
-    if (window.confirm("Delete ?")) {
-      console.log("Delete this article : " + props.articleId);
-      httpClient.delete(`boards/board/${props.articleId}`)
-        .then((res) => {
-          alert(props.articleId + " has been deleted");
+    if (window.confirm("게시글을 삭제하시겠습니까?")) {
+      // console.log("Delete this article : " + props.articleId);
+      httpClient
+        .delete(`boards/board/${props.articleId}`)
+        .then(() => {
+          alert("게시글이 삭제되었습니다.");
+          window.location.reload();
         })
         .catch((error) => {
           console.log(error);

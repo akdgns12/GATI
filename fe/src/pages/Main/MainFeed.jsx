@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from "react";
-import ReactDOM from "react-dom/client";
 import { useDispatch, useSelector } from "react-redux";
 import { loadMainFeed, updatePageNo } from "../../store/Board/board";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -20,45 +19,34 @@ const MainFeed = () => {
   const [loaded, setLoaded] = useState(false);
   const { curPageNo } = useSelector((state) => state.board);
 
-  // console.log(state);
   const { articles } = useSelector((state) => state.board);
-  // const groupId = 11;
   const { mainGroup } = useSelector((state) => state.user);
-  // console.log(mainGroup);
-  // const groupId = null;
   const { notifications } = useSelector((state) => state.noti);
 
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    // console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
-    // console.log(curPageNo);
     dispatch(clearFeed());
-    if (mainGroup != null && mainGroup.id != null) {
-      dispatch(
-        loadMainFeed({
-          groupId: mainGroup.id,
-          userId: loginUser.userId,
-          page: 0,
-        })
-      )
-        .then((res) => {
-          // console.log(res);
-          dispatch(updatePageNo(1));
-        })
-        .catch((error) => console.log(error));
-    }
+    // if (mainGroup != null && mainGroup.id != null) {
+    dispatch(
+      loadMainFeed({
+        groupId: mainGroup.id,
+        userId: loginUser.userId,
+        page: 0,
+      })
+    )
+      .then((res) => {
+        dispatch(updatePageNo(1));
+      })
+      .catch((error) => console.log(error));
   }, [mainGroup]);
 
   useEffect(() => {
     let iObserver;
     if (target) {
-      iObserver = new IntersectionObserver(
-        (entries) => onIntersect(entries, curPageNo),
-        {
-          threshold: 1.0,
-        }
-      );
+      iObserver = new IntersectionObserver((entries) => onIntersect(entries, curPageNo), {
+        threshold: 1.0,
+      });
       iObserver.observe(target);
     }
     return () => iObserver && iObserver.disconnect();
@@ -66,18 +54,12 @@ const MainFeed = () => {
 
   useEffect(() => {
     if (articles != null && articles.length > 0) {
-      console.log("articles loaded");
       setLoaded(true);
     } else {
       setLoaded(false);
       console.log("No content to load");
     }
   }, [articles]);
-
-  // useEffect(() => {
-  //   console.log("YOUR MAIN GROUP HAS BEEN MODIFIED");
-  //   dispatch(updatePageNo(0));
-  // }, [mainGroup]);
 
   async function onIntersect(entries, nextPageNo) {
     // console.log(entries);
@@ -100,7 +82,6 @@ const MainFeed = () => {
           }
         })
         .catch((error) => console.log(error));
-      // console.log(articles);
     }
   }
 
@@ -133,9 +114,7 @@ const MainFeed = () => {
           ? notifications.map((notification, index) => {
               // console.log(notification);
               if (notification.type === 1)
-                return (
-                  <GroupInvitation key={index} invitation={notification} />
-                );
+                return <GroupInvitation key={index} invitation={notification} />;
             })
           : null}
         <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
