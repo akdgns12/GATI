@@ -20,7 +20,7 @@ import { useEffect } from "react";
 import noImgPath from "../../static/no_img_icon.png";
 
 // fontawesome
-import "../../App.css";
+import "../../index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fulfilledHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
