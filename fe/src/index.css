@@ -34,7 +34,7 @@ body {
   animation-iteration-count:1;
 }
 
-/* 폰트 */
+/* 폰트 (MUI 개별 폰트 적용은 index.jsx 파일 확인 */
 @font-face {
   font-family: 'ONE-Mobile-POP';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff') format('woff');
