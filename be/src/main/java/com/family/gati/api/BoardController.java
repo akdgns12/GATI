@@ -1,10 +1,8 @@
 package com.family.gati.api;
 
 import com.family.gati.dto.*;
-import com.family.gati.service.BoardCommentService;
-import com.family.gati.service.BoardService;
-import com.family.gati.service.FileService;
-import com.family.gati.service.NotiService;
+import com.family.gati.entity.User;
+import com.family.gati.service.*;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +23,7 @@ public class BoardController {
     private final BoardCommentService boardCommentService;
     private final FileService fileService;
     private final NotiService notiService;
+    private final UserService userService;
 
 //    @ApiOperation(
 //            value = "현재 그룹의 Board 조회"
@@ -175,12 +174,15 @@ public class BoardController {
         boardCommentDto.setUpdateTime(new Timestamp(new Date().getTime()));
 
         boardCommentService.insertBoardComment(boardCommentDto);
+        User user = userService.getUserByUserId(boardCommentDto.getUserId());
+        String nickName = user.getNickName();
+
         BoardDto resultDto = boardService.findById(boardCommentDto.getBoardId(), boardCommentDto.getUserId());
 
         CommentNotiDto commentNotiDto = new CommentNotiDto(
                 resultDto.getUserId(),
                 resultDto.getId(),
-                resultDto.getNickname(),
+                nickName,
                 2
         );
         notiService.saveComment(commentNotiDto);
@@ -226,8 +228,10 @@ public class BoardController {
     public ResponseEntity<?> addBoardLikes(@RequestParam Integer boardId, @RequestParam String userId) {
         if (boardService.findLikes(boardId, userId)) {
             String receiverId = boardService.findById(boardId, userId).getUserId();
+            User user = userService.getUserByUserId(userId);
+            String nickName = user.getNickName();
             LikeNotiDto likeNotiDto = new LikeNotiDto(
-                    receiverId, boardId, userId, 3
+                    receiverId, boardId, nickName, 3
             );
             notiService.saveLike(likeNotiDto);
         };
