@@ -57,6 +57,12 @@ const userSlice = createSlice({
       // console.log(action);
       state.loginUser.nickName = action.payload;
     },
+    clearUserInfo: (state) => {
+      console.log(state);
+      state.loginUser.refreshToken = "";
+      console.log("CLEARED");
+      console.log(state);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(doLoginUser.pending, (state) => {});
@@ -86,4 +92,5 @@ export const {
   updateMainGroup,
   updateDefaultGroup,
   updateUserNickName,
+  clearUserInfo,
 } = userSlice.actions;
