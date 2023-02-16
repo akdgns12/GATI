@@ -25,7 +25,7 @@ export default function CongratsPage() {
       <img style={{width:'300px', height:'300px'}} src={imgPath} alt="congratulations"/>
       {/* <Box sx={{ display:'none'}} > */}
         <CombinedImg />
-       {/* </Box> */}
+      {/* </Box> */}
     </div>
 
   )

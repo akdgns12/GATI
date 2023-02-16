@@ -8,11 +8,11 @@ const CombinedImg = () => {
   
   const id = useSelector(state => {return state.picsTg.getMission}).id
   const imgList = useSelector(state=>{return state.picsTg.getMission}).missionImageDtos
-  const baseUrl = 'https://ggati.site'
+  const baseUrl = process.env.REACT_APP_IMG_ROOT;
   const newImgList = imgList.map(dto=> {return {src : baseUrl + dto.img}} )
 
   const canvasRef = useRef(null);
-
+  
   useEffect(() => {
     let images = []
     // Load the images and create an Image object for each image
@@ -27,17 +27,6 @@ const CombinedImg = () => {
       });
     });
 
-    // 대안) canvas 데이터 url 형식으로 받는 방법
-    // 주의) The canvasRef.current will only have a value after the canvas element has been rendered, which occurs after the component has been mounted.
-    // const dataURL = canvasRef.current.toDataURL('image/jpeg');
-    // console.log('dataURL',dataURL)
-    
-    // 합쳐진 이미지 파일 formData 형식으로 미션 완료 axios 보내기
-    canvasRef.current.toBlob((blob) => {
-      const formData = new FormData();
-      formData.append('id', id);
-      formData.append('file', blob, 'combined-image.jpg');
-      dispatch(asyncPostMission(formData))
     Promise.all(promises).then(() => {
       // Once all the images have loaded, we can draw them on the canvas
       const ctx = canvasRef.current.getContext('2d');
@@ -59,6 +48,18 @@ const CombinedImg = () => {
         ctx.drawImage(image, xPos, yPos, imageWidth, imageHeight);
       });
   
+      // 대안) canvas 데이터 url 형식으로 받는 방법
+      // 주의) The canvasRef.current will only have a value after the canvas element has been rendered, which occurs after the component has been mounted.
+      // const dataURL = canvasRef.current.toDataURL('image/jpeg');
+      // console.log('dataURL',dataURL)
+      
+      // 합쳐진 이미지 파일 formData 형식으로 미션 완료 axios 보내기
+      canvasRef.current.toBlob((blob) => {
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('file', blob, 'combined-image.jpg');
+        console.log('file',blob)
+        dispatch(asyncPostMission(formData))
       })
     })
   }, []);
@@ -68,8 +69,6 @@ const CombinedImg = () => {
     <canvas
       style={{ backgroundColor: '#FFFBEB', borderRadius:'16px' }}
       ref={canvasRef}
-      width="100%"
-      height="100%"
       width="100%"
       height="100%"
     />
