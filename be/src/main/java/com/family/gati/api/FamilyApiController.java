@@ -128,12 +128,14 @@ public class FamilyApiController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
-        String path;
-        try {
-            path = fileService.fileUpload(multipartFile, "family");
-        } catch (Exception e) {
-            // 에러코드 전송
-            throw new RuntimeException(e);
+        String path = null;
+        if(multipartFile != null){
+            try {
+                path = fileService.fileUpload(multipartFile, "family");
+            } catch (Exception e) {
+                // 에러코드 전송
+                throw new RuntimeException(e);
+            }
         }
 
         FamilyDto familyDto = new FamilyDto();

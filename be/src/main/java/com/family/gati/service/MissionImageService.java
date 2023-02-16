@@ -2,7 +2,6 @@ package com.family.gati.service;
 
 import com.family.gati.dto.MissionDto;
 import com.family.gati.dto.MissionImageDto;
-import com.family.gati.dto.MissionImageRegistDto;
 import com.family.gati.dto.MissionImageUpdateDto;
 
 import java.util.List;
