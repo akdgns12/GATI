@@ -1,6 +1,5 @@
 package com.family.gati.service;
 
-import com.family.gati.api.UserApiController;
 import com.family.gati.dto.MailDto;
 import com.family.gati.dto.UserSelectMainDto;
 import com.family.gati.dto.UserUpdateDto;

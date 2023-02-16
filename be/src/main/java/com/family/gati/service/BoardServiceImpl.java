@@ -24,6 +24,12 @@ public class BoardServiceImpl implements BoardService{
     private final BoardLikesRepository boardLikesRepository;
     private final UserRepository userRepository;
     private final CityRepository cityRepository;
+
+    public User findByUserId(String userId){
+        return userRepository.findByUserId(userId);
+    }
+
+
     @Override
     public List<BoardDto> findByGroupId(Integer groupId, String userId) {
         List<Board> boards = boardRepository.findByGroupIdOrderByCreateTimeDesc(groupId);
