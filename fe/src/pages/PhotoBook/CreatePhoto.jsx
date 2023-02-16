@@ -31,6 +31,7 @@ const contStyle = css`
     }
     .edit-btn {
       display: inline-block;
+      color: #ff9494;
     }
   }
   .input-label {
@@ -56,7 +57,7 @@ const contStyle = css`
 `;
 
 const CreatePhoto = (props) => {
-  const variant = (props.variant == null) ? "create" : props.variant;
+  const variant = props.variant == null ? "create" : props.variant;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [imgURL, setImgURL] = useState(null);
@@ -85,7 +86,7 @@ const CreatePhoto = (props) => {
         })
         .catch((error) => {
           console.log(error);
-        })
+        });
     }
   }, []);
 
@@ -96,7 +97,7 @@ const CreatePhoto = (props) => {
       tagObjs.map((tagObj) => {
         str += tagObj.tagContent;
         str += " ";
-      })
+      });
     }
     console.log(str);
     return str;
@@ -116,26 +117,29 @@ const CreatePhoto = (props) => {
       // img: event.target.img.files[0].name,
       // img: {imgURL},
     };
-   
+
     let param = {
       ...formData,
       userId: loginUser.userId,
       groupId: 1,
-    }
+    };
 
     const imgData = new FormData();
-    imgData.append('img', imgURL)
+    imgData.append("img", imgURL);
 
-    await axios.post('https://i8a805.p.ssafy.io/api/albums/album', imgData, {
-      headers: {
-        "Content-Type": 'multipart/form-data',
-      },
-      params: param
-    })
-      .then((response) => {
-        console.log(response, '성공')
+    await axios
+      .post("https://i8a805.p.ssafy.io/api/albums/album", imgData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        params: param,
       })
-      .catch((e) => {console.log(e)})
+      .then((response) => {
+        console.log(response, "성공");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     // if (variant === "create") {
     //   const postData = {
     //     ...formData,
@@ -182,7 +186,7 @@ const CreatePhoto = (props) => {
     tags.map((tag, index) => {
       // console.log(tag);
       ret.push({ tagContent: tag });
-    })
+    });
     return ret;
   }
 
@@ -197,10 +201,10 @@ const CreatePhoto = (props) => {
     // console.log(event.target.files[0]);
     // setImgURL(URL.createObjectURL(event.target.files[0]));
     // console.log(imgURL)
-    event.preventDefault()
-    const imgFile = event.target.files[0]
-    setImgURL(imgFile)
-    console.log(imgURL)
+    event.preventDefault();
+    const imgFile = event.target.files[0];
+    setImgURL(imgFile);
+    console.log(imgURL);
   }
 
   return (
@@ -208,7 +212,12 @@ const CreatePhoto = (props) => {
       <Box className="photo">
         <Box className="photo-label">사진 선택</Box>
         <Box className="photo-box">
-          <Box className="photo-prev" component="img" src={imgURL} alt="please select photo" />
+          <Box
+            className="photo-prev"
+            component="img"
+            src={imgURL}
+            alt="please select photo"
+          />
         </Box>
         <label htmlFor="select-img">
           <Button className="edit-btn" component="span">
@@ -233,7 +242,7 @@ const CreatePhoto = (props) => {
           multiline={true}
           name="content"
           style={{ height: "150px" }}
-          defaultValue={(variant === "modify" && loaded) ? photoInfo.content : ""}
+          defaultValue={variant === "modify" && loaded ? photoInfo.content : ""}
         />
       </FormControl>
       <FormControl variant="standard" style={{ width: "100%" }}>
@@ -243,7 +252,7 @@ const CreatePhoto = (props) => {
           placeholder="사진의 태그를 입력하세요."
           multiline={true}
           name="tag"
-          defaultValue={(variant === "modify" && loaded) ? serializedTag : ""}
+          defaultValue={variant === "modify" && loaded ? serializedTag : ""}
         />
       </FormControl>
       <Box className="button-group">

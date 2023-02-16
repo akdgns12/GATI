@@ -25,6 +25,9 @@ export default function NotificationMenu(props) {
     props.setAnchorEl(null);
   };
 
+  const type = notifications.length;
+  console.log(type);
+
   return (
     <Menu
       id="basic-menu"
@@ -39,7 +42,13 @@ export default function NotificationMenu(props) {
       {Array.isArray(notifications) &&
         notifications.map((notification, index) => {
           if (notification.type === 1) {
-            return <GroupInvitation key={index} invitation={notification} variant="notification" />;
+            return (
+              <GroupInvitation
+                key={index}
+                invitation={notification}
+                variant="notification"
+              />
+            );
           } else return <OtherNotification noti={notification} />;
         })}
     </Menu>
