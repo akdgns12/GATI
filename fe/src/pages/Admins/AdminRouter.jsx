@@ -5,7 +5,7 @@ import AdminPage from "./AdminPage";
 import AdminCreate from "./AdminCreate";
 import AdminEdit from "./AdminEdit";
 
-import PrivateRouter from "../../utils/PrivateRouter";
+import PrivateRoute from "../../utils/PrivateRoute";
 import { doLoginUser } from "../../store/User/user";
 
 export default function AdminRouter(props) {
@@ -14,7 +14,7 @@ export default function AdminRouter(props) {
       <Route path="/" element={<AdminPage />} />
       <Route
         path="/edit"
-        element={<PrivateRouter auth={doLoginUser.role} component={<AdminEdit />} />}
+        element={<PrivateRoute auth={doLoginUser.role} component={<AdminEdit />} />}
       />
       <Route path="/create" element={<AdminCreate />} />
     </Routes>
