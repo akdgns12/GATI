@@ -122,18 +122,20 @@ public class FamilyApiController {
     // 그룹 정보 수정
     @ApiOperation(value = "그룹 정보 수정", notes = "그룹 id, 바꿀 그룹 정보(img, name)")
     @PutMapping
-    public ResponseEntity<?> update(@RequestPart MultipartFile multipartFile,
+    public ResponseEntity<?> update(@RequestPart(required = false) MultipartFile multipartFile,
                                     @ModelAttribute FamilyUpdateDto familyUpdateDto){
         logger.debug("family: {}", familyUpdateDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
-        String path;
-        try {
-            path = fileService.fileUpload(multipartFile, "family");
-        } catch (Exception e) {
-            // 에러코드 전송
-            throw new RuntimeException(e);
+        String path = null;
+        if(multipartFile != null){
+            try {
+                path = fileService.fileUpload(multipartFile, "family");
+            } catch (Exception e) {
+                // 에러코드 전송
+                throw new RuntimeException(e);
+            }
         }
 
         FamilyDto familyDto = new FamilyDto();
@@ -144,7 +146,7 @@ public class FamilyApiController {
         try{
             if(familyService.getFamilyById(familyUpdateDto.getId()) == null){
                 resultMap.put("msg", FAIL);
-                status = HttpStatus.NOT_FOUND;
+                status = HttpStatus.BAD_REQUEST;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
             Family family = familyService.updateFamily(familyDto);

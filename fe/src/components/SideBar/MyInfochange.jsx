@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, TextField, Button } from "@mui/material";
+import { Grid, TextField, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -55,9 +55,12 @@ export default function MyInfochange() {
   }
   return (
     <Grid component="form" onSubmit={handleSubmit}>
+      <Typography marginY={1} variant="h6" align="left" fontSize="18px">
+        회원 탈퇴
+      </Typography>
       {loaded == true && (
         <>
-          <Grid p={1} display="flex" justifyContent="center">
+          <Grid p={1} display="flex" justifyContent="center" marginTop={1}>
             <TextField
               label="닉네임"
               variant="outlined"

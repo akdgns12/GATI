@@ -24,11 +24,12 @@ export default function AddButton(props) {
         aria-label="add"
         style={{
         zIndex: "1000", width: "60px", height: "60px",
-        position: "fixed", right: "20px", bottom: "60px",
-        backgroundColor: '#0095FF4D',
+        position: "fixed", right: "20px", bottom: "70px",
+        backgroundColor: '#FF9494',
+        boxShadow: '0px 4px 4px rgba(255, 0, 0, 0.25)'
       }}
         >
-        <AddIcon />
+        <AddIcon sx={{fontSize:'2rem', color:'white'}}/>
       </Fab>
     </Box>
   );

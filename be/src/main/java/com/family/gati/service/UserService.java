@@ -101,7 +101,7 @@ public class UserService {
         mail.setTitle("Gati 임시비밀번호 안내 이메일 입니다.");
         mail.setMessage("안녕하세요. Gati 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 "
                 + str + " 입니다." + "로그인 후에 비밀번호를 변경을 해주세요");
-        updatePassword(str,email);
+        updatePassword(str, email);
 
         return mail;
     }
@@ -141,7 +141,7 @@ public class UserService {
         String userPassword = str;
         User user = userRepository.findByEmail(email);
 
-        user.setPassword(str);
+        user.setPassword(passwordEncoder.encode(str));
         userRepository.save(user);
     }
 

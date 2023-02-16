@@ -54,6 +54,39 @@ public class AlbumController {
 //    }
 
     @ApiOperation(
+            value = "현재 그룹의 Album page 검색어를 통해 조회"
+            , notes = "GroupId와 page 번호(0부터 시작)와 검색어를 통해 현재 그룹의 Album page를 최신순으로 8개 조회한다.")
+    @ApiResponses({
+            @ApiResponse(
+                    code = 200
+                    , message = "조회 성공"
+                    , response = AlbumDto.class
+                    , responseContainer = "List"
+            )
+//            , @ApiResponse(
+//            code = 201
+//            , message = "생성된 자원 정보"
+//            , response = ResponseDTO.class
+//            , responseContainer = "List"
+//    )
+//            , @ApiResponse(
+//            code = 409
+//            , message = "로직 수행 불가 모순 발생"
+//            , response = ErrorDTO.class
+//            , responseContainer = "List"
+//    )
+    })
+    @GetMapping("/search")
+    public ResponseEntity<?> getAlbumsByGroupIdAndPageAndSearchCondition(@RequestParam Integer groupId, @RequestParam Integer page, @RequestParam String userId, @RequestParam String search) {
+        List<AlbumDto> albumDtos = albumService.findByGroupIdAndSearchCondition(groupId, userId, search);
+        List<AlbumDto> findDtos = new ArrayList<>();
+        for (int i = page*8; i < Math.min((page+1)*8, albumDtos.size()); i++) {
+            findDtos.add(albumDtos.get(i));
+        }
+        return ResponseEntity.ok(findDtos);
+    }
+
+    @ApiOperation(
             value = "현재 그룹의 Album page 조회"
             , notes = "GroupId와 page 번호(0부터 시작)를 통해 현재 그룹의 Album page를 최신순으로 8개 조회한다.")
     @ApiResponses({
@@ -93,7 +126,6 @@ public class AlbumController {
     public ResponseEntity<?> getAlbumById(@ApiParam(value = "path로 id 전달받음")@PathVariable("id") Integer id,
                                           @RequestParam String userId) {
         AlbumDto findDto = albumService.findById(id, userId);
-        findDto.setAlbumCommentDtos(albumCommentService.findByAlbumId(id));
         return ResponseEntity.ok(findDto);
     }
 
@@ -139,15 +171,17 @@ public class AlbumController {
             value = "Album 수정"
             , notes = "Album을 수정한다.")
     @PutMapping("/album")
-    public ResponseEntity<?> updateAlbum(@ApiParam(value = "The file to upload", required = true)@RequestPart MultipartFile file,
+    public ResponseEntity<?> updateAlbum(@ApiParam(value = "The file to upload", required = false)@RequestPart(required = false) MultipartFile file,
                                          @ApiParam(value = "The DTO object", required = true) @ModelAttribute AlbumUpdateDto albumUpdateDto){
         AlbumDto albumDto = new AlbumDto();
-        String path;
-        try {
-            path = fileService.fileUpload(file, "album");
-        } catch (Exception e) {
-            // 에러코드 전송
-            throw new RuntimeException(e);
+        String path = null;
+        if (file != null) {
+            try {
+                path = fileService.fileUpload(file, "album");
+            } catch (Exception e) {
+                // 에러코드 전송
+                throw new RuntimeException(e);
+            }
         }
         albumDto.setId(albumUpdateDto.getId());
         albumDto.setContent(albumUpdateDto.getContent());

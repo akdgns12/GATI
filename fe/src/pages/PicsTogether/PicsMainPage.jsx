@@ -10,12 +10,15 @@ import MissionCompleted from '../../components/PicsTogether/Inprogress/MissionCo
 
 export default function PicsMainPage() {
   const dispatch = useDispatch();
-  const groupId = 1;
+
+  // 유저 정보 받아오기
+  const userId = useSelector(state=>{return state.user.loginUser.userId})
+  const mainGroup = useSelector(state=>{return state.user.mainGroup})
+  console.log('userId', userId, 'mainGroup', mainGroup.id)
+
   React.useEffect(()=>{
-    dispatch(asyncGetMission(groupId))
+    dispatch(asyncGetMission(mainGroup.id))
   },[])
-    // .then(data=>console.log(data))
-    // .catch(err=>console.log(err))
 
   // 진행 중, 완료 모드 토글 전환
   const mode = useSelector(state => {
@@ -29,8 +32,8 @@ export default function PicsMainPage() {
   }).completed
 
   // test
-  console.log('mode',mode)
-  console.log('missionStatus',missionStatus)
+  console.log('메인 mode',mode)
+  console.log('메인 missionStatus',missionStatus)
   
   // mode에 따라 달라질 content
   let content = null
@@ -43,7 +46,6 @@ export default function PicsMainPage() {
   } else {
     content = <Completed />
   }
-
 
   return (
     <Box
@@ -59,19 +61,33 @@ export default function PicsMainPage() {
         aria-label="Platform"
         style={{
           flex:'auto',
-          margin:'30px',
+          margin:'0 0 30px 0',
           width:'80vw'
         }}
         >
         <ToggleButton
           onClick={()=>{dispatch(changeMode('inprogress'))}}
           value="inprogress"
-          style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>진행 중
+          style={{
+            flex:1, 
+            height:'40px', 
+            color: mode === 'inprogress' ? 'white' :'#FF9494',
+            backgroundColor: mode === 'inprogress' ? '#FF9494' : 'white',
+            border:'1px solid',
+            fontSize: mode === 'inprogress' ? '16px' :'14px',
+          }}>
+            진행 중
         </ToggleButton>
         <ToggleButton
           onClick={()=>{dispatch(changeMode('completed'))}}
           value="completed"
-          style={{ flex:1, height:'40px', backgroundColor:'white', border:'1px solid'}}>완료
+          style={{ 
+            flex:1, 
+            height:'40px', 
+            color: mode === 'completed' ? 'white' :'#FF9494',
+            backgroundColor: mode === 'completed' ? '#FF9494' : 'white',
+            fontSize: mode === 'completed' ? '16px' :'14px',
+            border:'1px solid'}}>완료
         </ToggleButton>
       </ToggleButtonGroup>
       <Box

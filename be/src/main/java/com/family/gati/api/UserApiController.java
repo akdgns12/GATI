@@ -108,14 +108,14 @@ public class UserApiController {
         try{
             if(user == null){
                 resultMap.put("msg", FAIL);
-                status = HttpStatus.NO_CONTENT;
+                status = HttpStatus.BAD_REQUEST;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
             if(!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())){
                 logger.debug("비밀번호 불일치: {}", user.getPassword());
                 resultMap.put("msg", FAIL);
-                status = HttpStatus.NO_CONTENT;
+                status = HttpStatus.BAD_REQUEST;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
 
@@ -159,7 +159,7 @@ public class UserApiController {
             User userInfo =  userService.getUserByUserSeq(userSeq);
             logger.debug("userInfo: {}", userInfo);
             if(userInfo == null){ // 해당 유저가 없을 때
-                status = HttpStatus.NO_CONTENT;
+                status = HttpStatus.BAD_REQUEST;
             }else{
                 resultMap.put("msg", SUCCESS);
                 resultMap.put("userInfo", userInfo);
@@ -201,7 +201,7 @@ public class UserApiController {
 
             logger.debug("userInfo: {}", userInfoResponseDto);
             if(userInfoResponseDto == null){
-                status = HttpStatus.NO_CONTENT;
+                status = HttpStatus.BAD_REQUEST;
             }else{
                 resultMap.put("msg", SUCCESS);
                 resultMap.put("userInfo", userInfoResponseDto);
@@ -247,7 +247,7 @@ public class UserApiController {
         try{
             Family mainFamily = familyService.getMainFamilyByUserId(userId);
 
-            if(mainFamily == null) status = HttpStatus.NO_CONTENT;
+            if(mainFamily == null) status = HttpStatus.BAD_REQUEST;
             else{
                 resultMap.put("Main family", mainFamily);
                 resultMap.put("msg", SUCCESS);
@@ -313,16 +313,30 @@ public class UserApiController {
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+    @Data
+    public static class FindPasswordRequestDto {
+        String userId;
+        String email;
+    }
+
     // 비밀번호 찾기
     @ApiOperation(value = "비밀번호 찾기", notes = "입력받은 이메일로 임시 비밀번호 전달")
-    @PostMapping("/findPassword/{email}")
-    public ResponseEntity<?> findPassword(@PathVariable("email") String email){
-        logger.debug("email: {}", email);
+    @PostMapping("/findPassword")
+    public ResponseEntity<?> findPassword(@RequestBody FindPasswordRequestDto findPasswordRequestDto){
+        logger.debug("email: {}", findPasswordRequestDto);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
 
         try{
-            MailDto mail = userService.createMailAndChangePassword(email);
+            User user = userRepository.findByEmail(findPasswordRequestDto.getEmail());
+            log.debug("DB에서 불러온 user INFO", user);
+            if(!user.getUserId().equals(findPasswordRequestDto.getUserId())){
+                log.debug("유저 아이디 불일치");
+                resultMap.put("msg", FAIL);
+                status = HttpStatus.BAD_REQUEST;
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
+            MailDto mail = userService.createMailAndChangePassword(findPasswordRequestDto.getEmail());
             userService.mailSend(mail, from);
             resultMap.put("msg", SUCCESS);
             status = HttpStatus.OK;
@@ -381,7 +395,7 @@ public class UserApiController {
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }else{
                 resultMap.put("msg", "비밀번호 틀림");
-                status = HttpStatus.UNAUTHORIZED;
+                status = HttpStatus.BAD_REQUEST;
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
         }catch (Exception e){

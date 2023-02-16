@@ -1,15 +1,21 @@
 
 .slick-slide > div {
-  margin: 0 10px
+  margin: 0 5px;
+  height: auto;
 }
 
 .slick-list {
-  margin: 0 -10px
+  margin: 0 -5px
 }
 
-.card{
+.slick-track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+/* .card{
   border: 1px solid #fff;
-  background: #FFFBEB;
   border-radius: 10px;
   height: 100%;
 }
@@ -22,4 +28,4 @@
 
 .card-bottom {
   margin: 15px 10px;
-}
+} */

@@ -17,16 +17,19 @@ export default function UploadPic() {
     height:'200px',
     border:'2px dashed #8888',
     borderRadius:'16px',
-    margin:3
   })
   const changeBoxStyle = () => {
-    setBoxStyle({...boxStyle, border:'2px dashed white'})
+    if (boxStyle.border === '2px dashed #8888') {
+      setBoxStyle({...boxStyle, border:'2px dashed white'})
+    } else {
+    setBoxStyle({...boxStyle, border:'2px dashed #8888'})
+    }
   }
-
   // reqData 
   const getMission = useSelector(state=>{return state.picsTg.getMission})
   const missionId = getMission.id
-  const userId = '1'
+  const userId = useSelector(state=>{return state.user.loginUser}).userId
+  console.log('userId',userId,'missionId',missionId)
   
   // 이미지 파일 업로드 함수
   const imgRef = useRef();
@@ -34,11 +37,10 @@ export default function UploadPic() {
     console.log('upload 함수 실행')
     const file = imgRef.current.files[0];
     const formData = new FormData()
-    formData.append('img', file, 'image.jpg')
+    formData.append('file', file, 'image.jpg')
     formData.append('missionId', missionId)
     formData.append('userId', userId)
     dispatch(asyncPostImg(formData))
-    console.log('formData',formData)
     };
 
   // myUpload : 내가 올린 사진 정보
@@ -49,33 +51,49 @@ export default function UploadPic() {
   // 이미지 삭제
   const deleteImg = () => {
     dispatch(asyncDeleteImg(myUpload[0].id))
+    changeBoxStyle()
   }
   
   // user가 이미 사진을 업로드 한 경우
   let content = null
   if (myUpload != 0) {
-      const imgURL = myUpload[0].img
-      content =
-      <Box>
-        <img style={{width:'100%', height:'100%', borderRadius:'16px'}} src={imgURL} objectfit="cover" alt="업로드된 이미지" loading="로딩중..." onLoad={changeBoxStyle} />
-        <IconButton onClick={deleteImg} sx={{position: 'absolute', top: '49%', left: '75%',}}>
+    const imgURL = 'https://i8a805.p.ssafy.io/' + myUpload[0].img
+    console.log(imgURL)
+    
+    content =
+    <Box sx={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+      <Box sx={{display:'flex', width:'240px'}} >
+        <IconButton onClick={deleteImg} sx={{marginLeft:'auto'}} >
           <CancelIcon fontSize='medium' />
         </IconButton>
       </Box>
+      <Box sx={boxStyle}>
+        <img style={{width:'100%', height:'100%', borderRadius:'16px'}} src={imgURL} objectfit="cover" alt="업로드된 이미지" loading="로딩중..." onLoad={changeBoxStyle} />
+      </Box>
+    </Box>
     }
   
   // user가 아직 업로드를 안 한 경우
   else {
     content =
-    <IconButton sx={{margin:'auto'}} component="label">
-      <input hidden accept="image/png, image/jpeg" type="file" onInput={upload} onChange={changeBoxStyle} ref={imgRef} />
-      <AddIcon fontSize="large"/>
-    </IconButton>
+    <Box sx={boxStyle}>
+      <IconButton sx={{padding:0}} component="label">
+        <input hidden accept="image/png, image/jpeg" type="file" onInput={upload} ref={imgRef} />
+        <AddIcon fontSize="large"/>
+      </IconButton>
+    </Box>
   }
 
   return (
-    <Box sx={boxStyle}>
-      {content}
+    <Box
+      sx={{
+        display:'flex',
+        flexDirection:"column",
+        alignItems:'center',
+        width:'250px',
+        marginBottom:'20px'
+      }}>
+        {content}
     </Box>
   )
 }
