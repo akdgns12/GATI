@@ -51,7 +51,7 @@ const albumSlice = createSlice({
       state.currentPage = action.payload;
     },
     clearPhoto: (state) => {
-      console.log("clear all");
+      // console.log("clear all");
       state.photoInfo = [];
     },
   },
@@ -69,7 +69,7 @@ const albumSlice = createSlice({
             ...action.payload,
           ];
         } else {
-          console.log("Nothing to append");
+          // console.log("Nothing to append");
         }
       } else {
         // console.log("loading inital feeds");

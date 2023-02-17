@@ -54,8 +54,11 @@ const boardSlice = createSlice({
     },
     updateComment: (state, action) => {
       const newComment = action.payload;
-      state.article.boardCommentDtos = [...state.article.boardCommentDtos, newComment];
-    }
+      state.article.boardCommentDtos = [
+        ...state.article.boardCommentDtos,
+        newComment,
+      ];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadMainFeed.pending, (state) => {
@@ -73,9 +76,10 @@ const boardSlice = createSlice({
             ...state.articles.slice(0, lastIdx),
             ...action.payload,
           ];
-        } else console.log("Nothing to append");
+        }
+        // else console.log("Nothing to append");
       } else {
-        console.log("loading inital feeds");
+        // console.log("loading inital feeds");
         state.articles = action.payload;
       }
       // console.log(state.articles);
