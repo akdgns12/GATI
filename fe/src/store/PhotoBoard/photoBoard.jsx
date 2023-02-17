@@ -10,7 +10,7 @@ export const loadPhotoBook = createAsyncThunk(
         params: reqData,
       });
       // console.log(response);
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
       return rejectWithValue(error);
@@ -23,9 +23,12 @@ export const loadPhotoDetail = createAsyncThunk(
   async (reqData, { rejectWithValue }) => {
     try {
       // console.log(reqData);
-      const response = await httpClient.get("/albums/album/" + reqData.photoId, {
-        params: { userId: reqData.userId },
-      });
+      const response = await httpClient.get(
+        "/albums/album/" + reqData.photoId,
+        {
+          params: { userId: reqData.userId },
+        }
+      );
       return response.data;
     } catch (error) {
       console.log(error);
@@ -57,9 +60,14 @@ const albumSlice = createSlice({
     builder.addCase(loadPhotoBook.fulfilled, (state, action) => {
       if (state.photoInfo != null && state.photoInfo.length > 0) {
         if (action.payload.length > 0) {
-          var lastIdx = state.photoInfo.findIndex((item) => item.id === action.payload[0].id);
+          var lastIdx = state.photoInfo.findIndex(
+            (item) => item.id === action.payload[0].id
+          );
           lastIdx = lastIdx === -1 ? state.photoInfo.length : lastIdx;
-          state.photoInfo = [...state.photoInfo.slice(0, lastIdx), ...action.payload];
+          state.photoInfo = [
+            ...state.photoInfo.slice(0, lastIdx),
+            ...action.payload,
+          ];
         } else {
           console.log("Nothing to append");
         }
