@@ -42,7 +42,7 @@ const PhotoDetail = () => {
     httpClient
       .delete("/albums/album/" + reqData)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         alert("album deleted");
         navigate("/photobook");
       })
