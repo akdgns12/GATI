@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import AppBar from "./components/AppBar";
@@ -52,7 +58,9 @@ const App = () => {
         const originalRequest = error.config;
         if (error.response != undefined && error.response.status === 401) {
           console.log("UNAUTHORIZED !!!");
-          const userStore = JSON.parse(window.localStorage.getItem("persist:root"));
+          const userStore = JSON.parse(
+            window.localStorage.getItem("persist:root")
+          );
           const user = JSON.parse(userStore.user);
           const refreshToken = user.loginUser.refreshToken;
           // console.log(refreshToken);
@@ -99,7 +107,9 @@ const App = () => {
 
   useEffect(() => {
     // console.log("ACCESS TOKEN MODIFIED");
-    httpClient.defaults.headers.common["Authorization"] = `Bearer ${loginUser.accessToken}`;
+    httpClient.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${loginUser.accessToken}`;
   }, [loginUser.accessToken]);
 
   function excludeHeader() {
