@@ -84,9 +84,6 @@ const boardSlice = createSlice({
       }
       // console.log(state.articles);
     });
-    builder.addCase(loadMainFeed.rejected, (state) => {
-      console.log(state);
-    });
     builder.addCase(loadPostDetail.fulfilled, (state, action) => {
       state.article = action.payload;
     });
