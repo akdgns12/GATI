@@ -97,7 +97,7 @@ const PrimaryAppBar = () => {
     setFamilyinfo(false);
 
     if (window.confirm("LOG OUT ?")) {
-      console.log("DO LOG OUT ??");
+      // console.log("DO LOG OUT ??");
       dispatch(clearUserInfo());
       await sleep(1000);
       doLogOut();
@@ -226,10 +226,10 @@ const PrimaryAppBar = () => {
                   <ChevronRightIcon />
                 )}
               </IconButton>
-              <HomeOutlinedIcon
+              {/* <HomeOutlinedIcon
                 fontSize="large"
                 sx={{ p: 1, color: "#0081B4" }}
-              />
+              /> */}
             </Box>
             <Stack direction="row" marginTop={2}>
               <Typography

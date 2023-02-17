@@ -89,7 +89,7 @@ export default function FamilyInfo() {
     httpClient
       .put("/family", formData)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const data = res.data;
         alert("정보 수정이 완료되었습니다");
         // update main group info here
