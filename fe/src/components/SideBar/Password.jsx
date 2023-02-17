@@ -1,5 +1,14 @@
 import React from "react";
-import { Grid, TextField, Button, Typography, Divider, Stack, IconButton, Box } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Button,
+  Typography,
+  Divider,
+  Stack,
+  IconButton,
+  Box,
+} from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import httpClient from "../../utils/axios";
@@ -46,10 +55,14 @@ export default function Password() {
     if (event.target.value === newPw) setConfirmed(true);
     else setConfirmed(false);
   }
+
+  function handleDelete() {
+    alert("어림없징ㅋ");
+  }
   return (
     <Grid>
       <Grid component="form" onSubmit={handleSubmit} marginBottom={2}>
-        <Typography marginY={1} variant="h6" align="left" fontSize="18px" >
+        <Typography marginY={1} variant="h6" align="left" fontSize="18px">
           비밀번호 변경
         </Typography>
         <Grid>
@@ -85,29 +98,37 @@ export default function Password() {
           </Grid>
         </Grid>
         <Grid p={1} display="flex" justifyContent="center">
-          <Button variant="outlined" type="submit" disabled={confirmed ? false : true}>
+          <Button
+            variant="outlined"
+            type="submit"
+            disabled={confirmed ? false : true}
+          >
             저장
           </Button>
         </Grid>
       </Grid>
-      <Divider/>
+      <Divider />
       <Grid marginTop={2}>
         <Stack direction="row" spacing={2}>
-          <Typography marginY={1} variant="h6" align="left" fontSize="18px" >
+          <Typography marginY={1} variant="h6" align="left" fontSize="18px">
             회원 탈퇴
           </Typography>
           <IconButton
-            style={{ marginLeft: "auto", padding: "0px",}}
-            onClick={()=>{setDeleteAccount(!deleteAccount)}}>
-            {deleteAccount ?
+            style={{ marginLeft: "auto", padding: "0px" }}
+            onClick={() => {
+              setDeleteAccount(!deleteAccount);
+            }}
+          >
+            {deleteAccount ? (
               <ArrowDropUpIcon sx={{ fontSize: "30px" }} />
-              : <ArrowDropDownIcon sx={{ fontSize: "30px" }} />
-            }
+            ) : (
+              <ArrowDropDownIcon sx={{ fontSize: "30px" }} />
+            )}
           </IconButton>
         </Stack>
         {deleteAccount ? (
-          <Box sx={{display:'flex', justifyContent:'center', margin:2}}>
-            <Button fullwidth variant="outlined" type="submit">
+          <Box sx={{ display: "flex", justifyContent: "center", margin: 2 }}>
+            <Button variant="outlined" onClick={handleDelete}>
               계정 삭제를 진행하시겠습니까?
             </Button>
           </Box>
