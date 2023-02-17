@@ -76,7 +76,7 @@ public class FamilyApiController {
             }
             resultMap.put("created Family", newFamily);
             resultMap.put("msg", SUCCESS);
-            status = HttpStatus.CREATED;
+            status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("그룹 생성 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
