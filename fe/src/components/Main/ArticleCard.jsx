@@ -70,7 +70,7 @@ export default function ArticleCard(props) {
   function addToPhotoBook() {
     if (window.confirm("소중한 추억을 앨범에 저장하시겠습니까?")) {
       httpClient
-        .post("/boards/save/", null, {
+        .post("/boards/save", null, {
           params: { boardId: article.id },
         })
         .then((res) => {
@@ -92,14 +92,18 @@ export default function ArticleCard(props) {
 
   return (
     <>
-      <Card sx={{ borderRadius: 1 }} style={{ marginBottom: "10px", width: "100%" }}>
+      <Card
+        sx={{ borderRadius: 1 }}
+        style={{ marginBottom: "10px", width: "100%" }}
+      >
         <CardHeader
           action={
             <IconButton
               aria-label="settings"
               onClick={showOptions}
               style={{
-                display: article.userId == loginUser.userId ? "inline-block" : "none",
+                display:
+                  article.userId == loginUser.userId ? "inline-block" : "none",
               }}
             >
               <MoreHorizIcon />
@@ -131,14 +135,20 @@ export default function ArticleCard(props) {
               }}
             /> */}
             {(article.userLike === 1) ^ toggleLike ? (
-              <FontAwesomeIcon className="fulfilled-heart" icon={fulfilledHeart} />
+              <FontAwesomeIcon
+                className="fulfilled-heart"
+                icon={fulfilledHeart}
+              />
             ) : (
               <FontAwesomeIcon className="empty-heart" icon={emptyHeart} />
             )}
           </IconButton>
           {article.likes + likeVar}
           <Box style={{ marginLeft: "auto" }}>
-            <Typography variant="body4" style={{ fontWeight: "bold", marginRight: "10px" }}>
+            <Typography
+              variant="body4"
+              style={{ fontWeight: "bold", marginRight: "10px" }}
+            >
               {article.createTime != null && article.createTime.split("T")[0]}
             </Typography>
             {bookmark}
