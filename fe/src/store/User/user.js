@@ -40,20 +40,16 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     updateToken: (state, action) => {
-      // console.log(action);
       state.loginUser.accessToken = action.payload;
       // console.log(state.loginUser.accessToken);
     },
     updateMainGroup: (state, action) => {
-      // console.log(action);
       state.mainGroup = { ...state.mainGroup, ...action.payload };
     },
     updateDefaultGroup: (state, action) => {
-      console.log(action);
       state.defaultGroup = action.payload;
     },
     updateUserNickName: (state, action) => {
-      // console.log(action);
       state.loginUser.nickName = action.payload;
     },
     clearUserInfo: (state) => {
