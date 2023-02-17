@@ -41,7 +41,6 @@ const userSlice = createSlice({
   reducers: {
     updateToken: (state, action) => {
       // console.log(action);
-      console.log("STATE TOKEN HAS BEEN MODIFIED !");
       state.loginUser.accessToken = action.payload;
       // console.log(state.loginUser.accessToken);
     },
@@ -58,10 +57,8 @@ const userSlice = createSlice({
       state.loginUser.nickName = action.payload;
     },
     clearUserInfo: (state) => {
-      console.log(state);
       state.loginUser.refreshToken = "";
-      console.log("CLEARED");
-      console.log(state);
+      // console.log("CLEARED");
     },
   },
   extraReducers: (builder) => {
@@ -80,7 +77,7 @@ const userSlice = createSlice({
     });
     builder.addCase(doLoginUser.rejected, (state) => {});
     builder.addCase(PURGE, (state) => {
-      console.log("PURGE !");
+      // console.log("PURGE !");
       state = initialState;
     });
   },

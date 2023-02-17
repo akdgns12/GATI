@@ -56,7 +56,7 @@ export default function MyInfochange() {
   return (
     <Grid component="form" onSubmit={handleSubmit}>
       <Typography marginY={1} variant="h6" align="left" fontSize="18px">
-        회원 탈퇴
+        내 정보 수정
       </Typography>
       {loaded == true && (
         <>
