@@ -75,8 +75,9 @@ public class FamilyService {
         Family family = familyRepository.findById(id);
 
         family.setName(familyDto.getName());
-        family.setImg(familyDto.getImg());
-        System.out.println(family);
+        if(familyDto.getImg() != null){
+            family.setImg(familyDto.getImg());
+        }
         familyRepository.save(family);
 
         return family;
