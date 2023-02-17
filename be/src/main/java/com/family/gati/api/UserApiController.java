@@ -75,7 +75,7 @@ public class UserApiController {
         try{
             userService.join(newUser);
             resultMap.put("msg", SUCCESS);
-            status = HttpStatus.CREATED;
+            status = HttpStatus.OK;
         }catch (Exception e){
             logger.debug("회원가입 실패: {}", e.getMessage());
             resultMap.put("msg", FAIL);
