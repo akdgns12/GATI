@@ -28,8 +28,8 @@ import java.util.Map;
 public class JwtTokenProvider {
 
     private final String SECRET_KEY;
-    private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 10;		// 1시간
-    private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 1;	// 1주
+    private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60;		// 1시간
+    private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 1;	// 1일
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;

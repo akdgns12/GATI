@@ -44,9 +44,12 @@ const MainFeed = () => {
   useEffect(() => {
     let iObserver;
     if (target) {
-      iObserver = new IntersectionObserver((entries) => onIntersect(entries, curPageNo), {
-        threshold: 1.0,
-      });
+      iObserver = new IntersectionObserver(
+        (entries) => onIntersect(entries, curPageNo),
+        {
+          threshold: 1.0,
+        }
+      );
       iObserver.observe(target);
     }
     return () => iObserver && iObserver.disconnect();
@@ -57,7 +60,7 @@ const MainFeed = () => {
       setLoaded(true);
     } else {
       setLoaded(false);
-      console.log("No content to load");
+      // console.log("No content to load");
     }
   }, [articles]);
 
@@ -65,7 +68,7 @@ const MainFeed = () => {
     // console.log(entries);
     if (entries[0].isIntersecting) {
       setLoaded(false);
-      console.log("LOAD MORE");
+      // console.log("LOAD MORE");
       dispatch(
         loadMainFeed({
           groupId: mainGroup.id,
@@ -76,7 +79,7 @@ const MainFeed = () => {
         .then(({ payload }) => {
           // console.log(payload);
           if (payload.length > 0) {
-            console.log("new feeds");
+            // console.log("new feeds");
             dispatch(updatePageNo(nextPageNo + 1));
             setLoaded(true);
           }
@@ -114,7 +117,9 @@ const MainFeed = () => {
           ? notifications.map((notification, index) => {
               // console.log(notification);
               if (notification.type === 1)
-                return <GroupInvitation key={index} invitation={notification} />;
+                return (
+                  <GroupInvitation key={index} invitation={notification} />
+                );
             })
           : null}
         <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
