@@ -41,15 +41,21 @@ export default function NoGroupAlertDialog(props) {
   };
 
   function mvToRegister() {
-    console.log("move to group register page");
-    alert("move page");
     props.onClose();
+    props.setModalOpen(true);
   }
 
   return (
     <div>
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={props.show}>
-        <DialogTitleWithClose id="customized-dialog-title" onClose={handleClose}>
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={props.show}
+      >
+        <DialogTitleWithClose
+          id="customized-dialog-title"
+          onClose={handleClose}
+        >
           알림
         </DialogTitleWithClose>
         <DialogContent dividers>

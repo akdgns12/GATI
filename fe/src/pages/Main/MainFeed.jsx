@@ -9,6 +9,7 @@ import NotInGroup from "../../components/Main/NotInGroup";
 import AddButton from "../../components/Main/AddButton";
 import NoGroupAlertDialog from "../../components/Main/NoGroupAlert";
 import GroupInvitation from "../../components/Notification/GroupInvitation";
+import CreateFamilyModal from "../../components/SideBar/CreateFamilyModal";
 
 import { clearFeed } from "../../store/Board/board";
 
@@ -17,6 +18,7 @@ const MainFeed = () => {
   const { loginUser } = useSelector((state) => state.user);
   const [target, setTarget] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const { curPageNo } = useSelector((state) => state.board);
 
   const { articles } = useSelector((state) => state.board);
@@ -122,10 +124,15 @@ const MainFeed = () => {
                 );
             })
           : null}
-        <NoGroupAlertDialog show={show} onClose={() => setShow(false)} />
+        <NoGroupAlertDialog
+          show={show}
+          onClose={() => setShow(false)}
+          setModalOpen={setModalOpen}
+        />
         <div style={{ marginTop: "40%" }}>
           <NotInGroup />
         </div>
+        <CreateFamilyModal open={modalOpen} setOpen={setModalOpen} />
       </div>
     );
   }
