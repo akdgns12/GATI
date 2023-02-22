@@ -195,8 +195,8 @@ src
 
 ---
 
-- [포팅메뉴얼]
-- [최종발표자료]
+- [포팅메뉴얼](https://lab.ssafy.com/s08-webmobile2-sub2/S08P12A805/-/blob/master/exec/%EA%B0%80%ED%8B%B0_%ED%8F%AC%ED%8C%85%EB%A9%94%EB%89%B4%EC%96%BC.docx)
+- [최종발표자료](https://lab.ssafy.com/-/ide/project/s08-webmobile2-sub2/S08P12A805/tree/master/-/exec/%EC%84%9C%EC%9A%B8_8%EB%B0%98_A805_%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C%20(1).pptx/)
 
 ## :family: GATI 서비스 화면
 
