@@ -9,13 +9,11 @@ server:
 spring:
   datasource:
     #        driver-class-name: org.mariadb.jdbc.Driver
-    #    url: jdbc:mariadb://3.34.141.63:8100/gati_dev?useUnicode=true&characterEncoding=utf-8
-    #    username: rladuddnd
-    #    password: a80515
+
     #  output.ansi.enabled: always
-    url : jdbc:mysql://3.34.141.63:8100/gati?useUnicode=true&characterEncoding=utf-8
-    username : rladuddnd
-    password : a80515
+    url :
+    username :
+    password :
     driver-class-name : com.mysql.cj.jdbc.Driver
   #   output.ansi.enabled: always
   jpa:
@@ -45,8 +43,8 @@ spring:
   mail:
     host: smtp.naver.com
     port: 465
-    username: ggatiggati@naver.com
-    password: a805a805
+    username:
+    password:
     properties:
       mail.smtp.auth: true
       mail.smtp.ssl.enable: true
@@ -69,9 +67,9 @@ app:
       secret-key: "6B64DCA4E72F58EDIKU9AAB215FE7"
       refresh-cookie-key: "refresh"
   oauth2:
-    authorizedRedirectUri: "http://3.34.141.63:3000/oauth2/redirect"
+    authorizedRedirectUri:
   cors:
-    allowedOrigins: http://3.34.141.63:3000,http://3.34.141.63:8080
+    allowedOrigins:
 
 
 logging.level:
